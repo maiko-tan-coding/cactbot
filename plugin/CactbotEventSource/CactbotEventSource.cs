@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Cactbot {
+I am a build error, hi!
 
   // TODO: remove this in favor of the rainbowmage ilogger
   public interface ILogger {
