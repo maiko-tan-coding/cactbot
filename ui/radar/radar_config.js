@@ -6,6 +6,9 @@ UserConfig.registerOptions('radar', {
       id: 'BRankEnabled',
       name: {
         en: 'B-Rank enabled',
+        fr: 'Rang-B activé',
+        ja: 'ランクBモブ',
+        cn: '开启B怪探测',
       },
       type: 'checkbox',
       default: true,
