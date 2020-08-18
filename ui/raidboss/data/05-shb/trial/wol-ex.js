@@ -105,6 +105,16 @@ const translate = (data, obj) => {
       },
     },
     {
+      id: 'WOLEx Bait Confiteor',
+      netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '4F43', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '4F43', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F43', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F43', capture: false }),
+      infoText: {
+        en: 'Bait Confiteor',
+      },
+    },
+    {
       id: 'WOLEx To The Limit',
       netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '4F3[456]' }),
       netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '4F3[456]' }),
@@ -272,6 +282,16 @@ const translate = (data, obj) => {
       response: Responses.aoe(),
     },
     {
+      id: 'WOLEx Add Phase',
+      netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '5151', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '5151', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '5151', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '5151', capture: false }),
+      run: function(data) {
+        data.isAddPhase = true;
+      },
+    },
+    {
       id: 'WOLEx Fatal Cleave / Blade Of Shadow',
       // Either tank buster, but don't be too noisy
       netRegex: NetRegexes.startsUsing({ source: ['Spectral Warrior', 'Spectral Dark Knight'], id: '515[47]', capture: false }),
@@ -338,25 +358,34 @@ const translate = (data, obj) => {
     },
     {
       id: 'WOLEx Ultimate Crossover',
-      netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '515[23]', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '515[23]', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '515[23]', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '515[23]', capture: false }),
+      netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '5152', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '5152', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '5152', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '5152', capture: false }),
+      condition: (data) => data.role === 'tank',
+      alarmText: {
+        en: 'TANK LB!!',
+        de: 'TANK LB!!',
+        ja: 'タンクLB!!',
+        fr: 'LB TANK !!',
+        ko: '리미트 브레이크!!',
+        cn: '坦克LB!!',
+      },
       run: function(data) {
+        data.isAddPhase = false;
         data.ultimateSeen = true;
       },
     },
     {
       id: 'WOLEx Spectral Black Mage / White Mage',
-      // Twincast tell.  Technically we could also call on 4F35 from WOL,
-      // but at best that's a 50% chance of a 2 second earlier callout.
+      // Twincast tell (after Spectral and Limit, unfortunately).
       netRegex: NetRegexes.startsUsing({ source: 'Spectral Black Mage', id: '4F3D', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ source: 'Phantom-Schwarzmagier', id: '4F3D', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Mage Noir Spectral', id: '4F3D', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '幻光の黒魔道士', id: '4F3D', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      infoText: {
+      alertText: {
         en: 'Black Mage + White Mage',
         de: 'Schwarzmagier + Weißmagier',
         ja: '黒魔導士 + 白魔導士',
@@ -373,7 +402,7 @@ const translate = (data, obj) => {
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF[34]', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      infoText: {
+      alertText: {
         en: 'Summoner + Warrior',
         de: 'Beschwörer + Krieger',
         ja: '召喚師 + 戦士',
@@ -383,14 +412,15 @@ const translate = (data, obj) => {
     },
     {
       id: 'WOLEx Spectral Bard / Dark Knight',
-      // Solemn Confiteor tell.  This happens in Spectral Ninja, but calledSpectral covers it.
+      // Solemn Confiteor tell (after Limit).
+      // This action happens in Spectral Ninja, but calledSpectral suppresses calling Ninja there.
       netRegex: NetRegexes.startsUsing({ source: 'Warrior Of Light', id: '4F43', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '4F43', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F43', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F43', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      infoText: {
+      alertText: {
         en: 'Dark Knight + Bard',
         de: 'Dunkelritter + Barde',
         ja: '暗黒騎士 + 吟遊詩人',
@@ -407,7 +437,7 @@ const translate = (data, obj) => {
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF[56]', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      infoText: {
+      alertText: {
         en: 'Ninja',
         de: 'Ninja',
         ja: '忍者',
@@ -432,10 +462,10 @@ const translate = (data, obj) => {
     {
       // Katon: San and Absolute Holy share markers
       id: 'WOLEx Spectral Ninja Cleanup',
-      netRegex: NetRegexes.startsUsing({ source: 'Spectral Ninja', id: '4EFD', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Phantom-Ninja', id: '4EFD', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Ninja Spectral', id: '4EFD', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '幻光の忍者', id: '4EFD', capture: false }),
+      netRegex: NetRegexes.startsUsing({ source: ['Warrior Of Light', 'Spectral Ninja'], id: '4EFD', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: ['Krieger Des Lichts', 'Phantom-Ninja'], id: '4EFD', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: ['Guerrier De La Lumière Primordial', 'Ninja Spectral'], id: '4EFD', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: ['ウォーリア・オブ・ライト', '幻光の忍者'], id: '4EFD', capture: false }),
       delaySeconds: 30,
       run: function(data) {
         delete data.ninja;
@@ -443,17 +473,19 @@ const translate = (data, obj) => {
     },
     {
       id: 'WOLEx Suiton: San',
-      netRegex: NetRegexes.startsUsing({ source: 'Spectral Ninja', id: '4EFD', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Phantom-Ninja', id: '4EFD', capture: false }),
-      netRegexFr: NetRegexes.startsUsing({ source: 'Ninja Spectral', id: '4EFD', capture: false }),
-      netRegexJa: NetRegexes.startsUsing({ source: '幻光の忍者', id: '4EFD', capture: false }),
+      // It's possible for this cast to originate from the Warrior of Light instead.
+      // Allow for either so the callout isn't missed.
+      netRegex: NetRegexes.startsUsing({ source: ['Warrior Of Light', 'Spectral Ninja'], id: '4EFD', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: ['Krieger Des Lichts', 'Phantom-Ninja'], id: '4EFD', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: ['Guerrier De La Lumière Primordial', 'Ninja Spectral'], id: '4EFD', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: ['ウォーリア・オブ・ライト', '幻光の忍者'], id: '4EFD', capture: false }),
       delaySeconds: 7,
       response: Responses.knockback(),
     },
     {
       id: 'WOLEx Katon: San',
       netRegex: NetRegexes.headMarker({ id: '00A1', capture: false }),
-      condition: (data) => data.ultimateSeen && data.ninja,
+      condition: (data) => data.ultimateSeen && data.ninja || data.isAddPhase,
       suppressSeconds: 2,
       response: Responses.stack(),
     },
@@ -501,7 +533,7 @@ const translate = (data, obj) => {
     {
       id: 'WOLEx Absolute Holy',
       netRegex: NetRegexes.headMarker({ id: '00A1' }),
-      condition: (data) => !data.deluge && !data.ninja,
+      condition: (data) => !data.deluge && !data.ninja && !data.isAddPhase,
       response: Responses.stackOn(),
     },
     {
@@ -762,12 +794,11 @@ const translate = (data, obj) => {
         'Flare Breath': 'フレアブレス',
         'Imbued Coruscance': '魔法剣技：ブライトセイバー',
         'Imbued Fire/Ice': '魔法剣 (火／氷)',
-        'Imbued Holy/Stone': '魔法剣 (光／土)',
+        'Imbued Holy': '魔法剣 (光)',
         'Imbued Ice/Fire': '魔法剣 (氷／火)',
-        'Imbued Stone/Holy': '魔法剣 (土／光)',
+        'Imbued Stone': '魔法剣 (土)',
         'Katon\\: San': '火遁の術：参',
-        '(?<! )Limit 1/3': '幻光召喚フェイス 1/3',
-        '(?<! )Limit 2/3': '幻光召喚フェイス 2/3',
+        '(?<! )Limit(?! Break)': 'リミットチャージ',
         'Limit Break': 'リミットブレイク',
         'Meteor Impact': 'メテオインパクト',
         '(?<= )NIN': '忍者',
