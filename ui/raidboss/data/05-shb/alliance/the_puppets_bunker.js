@@ -44,6 +44,8 @@
         }
         return {
           en: 'Avoid tank buster',
+          de: 'Tank buster ausweichen',
+          ko: '탱버 피하기',
         };
       },
       run: (data) => delete data.busterTargets,
@@ -51,8 +53,13 @@
     {
       id: 'Puppet Aegis Beam Cannons',
       netRegex: NetRegexes.startsUsing({ source: '813P-Operated Aegis Unit', id: '5073', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '5073', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '5073', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '5073', capture: false }),
       alertText: {
         en: 'Go To Narrow Intersection',
+        de: 'Geh zu der nahen Überschneidung',
+        ko: '조금 겹친 곳으로 이동',
       },
     },
     {
@@ -61,23 +68,35 @@
       condition: (data, matches) => data.me === matches.target && data.phase !== 'superior',
       alarmText: {
         en: 'Chasing Laser: Get Away',
+        de: 'Verfolgende Laser: Weg gehen',
+        ko: '추격 레이저: 이동',
       },
     },
     {
       id: 'Puppet Aegis Refraction Cannons 1',
       netRegex: NetRegexes.startsUsing({ source: '813P-Operated Aegis Unit', id: '5080', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '5080', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '5080', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '5080', capture: false }),
       alertText: function(data) {
         return {
           en: 'Get Under Wings',
+          de: 'Gehe unter die Flügel',
+          ko: '날개 뒤로 이동',
         };
       },
     },
     {
       id: 'Puppet Aegis Refraction Cannons 2',
       netRegex: NetRegexes.startsUsing({ source: '813P-Operated Aegis Unit', id: '507F', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '507F', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '507F', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '507F', capture: false }),
       alertText: function(data) {
         return {
           en: 'Get Between Wings',
+          de: 'Geh Zwischen die Flügel',
+          ko: '날개 사이로 이동',
         };
       },
     },
@@ -85,21 +104,32 @@
       id: 'Puppet Aegis High-Powered Laser',
       // This is also head marker 003E, but since there's three stacks, just say "stack".
       netRegex: NetRegexes.startsUsing({ source: '813P-Operated Aegis Unit', id: '508F', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '508F', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '508F', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '508F', capture: false }),
       response: Responses.stack(),
     },
     {
       id: 'Puppet Aegis Life\'s Last Song',
       netRegex: NetRegexes.startsUsing({ source: '813P-Operated Aegis Unit', id: '53B3', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '53B3', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '53B3', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '53B3', capture: false }),
       // This is more a "if you haven't done this ever or in a while, here's a reminder."
       // Tell it once, but as this repeats nearly continously forever, only say it once.
       suppressSeconds: 9999,
       infoText: {
         en: 'Dodge into ring gap',
+        de: 'In die Lücke des Ringes ausweichen',
+        ko: '고리 사이로 이동',
       },
     },
     {
       id: 'Puppet Light Volt Array',
       netRegex: NetRegexes.startsUsing({ source: 'Light Artillery Unit', id: '5211' }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5211' }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5211' }),
+      netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5211' }),
       condition: (data) => data.CanSilence(),
       // Multiple of these cast at the same time.
       suppressSeconds: 5,
@@ -118,12 +148,18 @@
     {
       id: 'Puppet Light Maneuver Martial Arm Target',
       netRegex: NetRegexes.startsUsing({ source: 'Light Artillery Unit', id: '5213' }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213' }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213' }),
+      netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213' }),
       condition: Conditions.targetIsYou(),
       response: Responses.tankBuster('alert'),
     },
     {
       id: 'Puppet Light Maneuver Martial Arm Collect',
       netRegex: NetRegexes.startsUsing({ source: 'Light Artillery Unit', id: '5213' }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213' }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213' }),
+      netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213' }),
       run: function(data, matches) {
         data.busterTargets = data.busterTargets || [];
         data.busterTargets.push(matches.target);
@@ -132,6 +168,9 @@
     {
       id: 'Puppet Light Maneuver Martial Arm Healer',
       netRegex: NetRegexes.startsUsing({ source: 'Light Artillery Unit', id: '5213', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 5,
       infoText: function(data) {
@@ -174,6 +213,8 @@
       condition: (data, matches) => data.me === matches.target && data.phase === 'superior',
       alertText: {
         en: 'Fire Puddle on YOU',
+        de: 'Feuer Fläche auf DIR',
+        ko: '불 장판 대상자',
       },
     },
     {
@@ -183,6 +224,8 @@
       suppressSeconds: 5,
       alertText: {
         en: 'Line Stack (Point Outside)',
+        de: 'Auf einer Linie sammeln (nach außen zeigen)',
+        ko: '쉐어 레이저 (밖으로 유도)',
       },
     },
     {
@@ -195,6 +238,8 @@
       suppressSeconds: 5,
       alertText: {
         en: 'Dodge Sword Charges',
+        de: 'Schwerteransturm ausweichen',
+        ko: '돌진 피하기',
       },
     },
     {
@@ -234,6 +279,8 @@
         }
         return {
           en: 'Avoid tank buster',
+          de: 'Tank buster ausweichen',
+          ko: '탱버 피하기',
         };
       },
       run: (data) => delete data.busterTargets,
@@ -300,19 +347,30 @@
     {
       id: 'Puppet Heavy Volt Array',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '5006', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5006', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5006', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5006', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
     {
       id: 'Puppet Heavy Active Laser Turret Initial',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '4FED', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FED', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FED', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FED', capture: false }),
       alertText: {
         en: 'Get Outside Upper Laser',
+        de: 'Raus aus dem oberen Laser',
+        ko: '높은 레이저 쪽 밖으로 이동',
       },
     },
     {
       id: 'Puppet Heavy Active Laser Turret Move',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '5086', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5086', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5086', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5086', capture: false }),
       delaySeconds: 5.3,
       suppressSeconds: 5,
       response: Responses.move('info'),
@@ -323,28 +381,40 @@
       condition: Conditions.targetIsYou(),
       alertText: {
         en: 'Voltage cleave on YOU',
+        de: 'Spannungs-Cleave auf DIR',
+        ko: '전압 장판 대상자',
       },
     },
     {
       id: 'Puppet Heavy Revolving Laser',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '5000', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5000', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5000', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5000', capture: false }),
       response: Responses.getIn(),
     },
     {
       id: 'Puppet Heavy High-Powered Laser',
       // There's only one starts using, but it targets all the tanks sequentially.
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '5001' }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5001' }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5001' }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5001' }),
       response: function(data, matches) {
         if (data.role === 'tank' || matches.target === data.me) {
           return {
             alertText: {
               en: 'Tank Laser Cleave on YOU',
+              de: 'Tank Laser cleave auf DIR',
+              ko: '탱커 레이저 대상자',
             },
           };
         }
         return {
           infoText: {
             en: 'Avoid tank laser cleaves',
+            de: 'Tank Laser cleave ausweichen',
+            ko: '탱커 레이저 피하기',
           },
         };
       },
@@ -352,6 +422,9 @@
     {
       id: 'Puppet Heavy Support Pod',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '4FE9', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FE9', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FE9', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FE9', capture: false }),
       // This is approximately when the pods appear.
       delaySeconds: 6,
       alertText: function(data) {
@@ -362,21 +435,30 @@
           // The safe spot in both cases is the same direction.
           return {
             en: 'Get Outside Between Pods',
+            de: 'Zwischen den Pods raus gehen',
+            ko: '포드 사이로 이동',
           };
         }
         // There's nothing in the log that indicates what the screens do.
         // TODO: could check logs for tether target/source and say shift left/right?
         return {
           en: 'Get Between Lasers (Watch Tethers)',
+          de: 'Zwischen Laser gehen (auf die Verbindungen achten)',
+          ko: '레이저 사이로 이동 (연결된 모니터 확인)',
         };
       },
     },
     {
       id: 'Puppet Heavy Synthesize Compound',
       netRegex: NetRegexes.startsUsing({ source: '905P-Operated Heavy Artillery Unit', id: '4FEC', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FEC', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FEC', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FEC', capture: false }),
       // TODO: should this say "towers"? or...something else to indicate variable people needed?
       alertText: {
         en: 'Turn Towers Blue',
+        de: 'Türme zu Blau ändern',
+        ko: '장판이 파랑색이 되도록 들어가기',
       },
     },
     {
@@ -385,11 +467,16 @@
       condition: Conditions.targetIsYou(),
       infoText: {
         en: 'Laser on YOU',
+        de: 'Laser auf DIR',
+        ko: '레이저 대상자',
       },
     },
     {
       id: 'Puppet Compound Mechanical Laceration',
       netRegex: NetRegexes.startsUsing({ source: 'The Compound', id: '51B8', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B8', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B8', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B8', capture: false }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
       run: (data) => data.phase = 'compound',
@@ -397,16 +484,25 @@
     {
       id: 'Puppet Compound Mechanical Dissection',
       netRegex: NetRegexes.startsUsing({ source: 'The Compound', id: '51B3', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B3', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B3', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B3', capture: false }),
       response: Responses.goSides(),
     },
     {
       id: 'Puppet Compound Mechanical Decapitation',
       netRegex: NetRegexes.startsUsing({ source: 'The Compound', id: '51B4', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B4', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B4', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B4', capture: false }),
       response: Responses.getIn(),
     },
     {
       id: 'Puppet Compound 2P Centrifugal Slice',
       netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: '51B8', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: '51B8', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: '51B8', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: '51B8', capture: false }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.aoe(),
       // Cover this phase for the checkpoint as well.
@@ -415,16 +511,25 @@
     {
       id: 'Puppet Compound 2P Prime Blade Out',
       netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: ['541F', '5198'], capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['541F', '5198'], capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['541F', '5198'], capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['541F', '5198'], capture: false }),
       response: Responses.getOut(),
     },
     {
       id: 'Puppet Compound 2P Prime Blade Behind',
-      netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: '5420', capture: false }),
+      netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: ['5420', '5199'], capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['5420', '5199'], capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['5420', '5199'], capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['5420', '5199'], capture: false }),
       response: Responses.getBehind(),
     },
     {
       id: 'Puppet Compound 2P Prime Blade In',
       netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: ['5421', '519A'], capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['5421', '519A'], capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['5421', '519A'], capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['5421', '519A'], capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -486,15 +591,23 @@
         return {
           '004F': {
             en: 'Jump #1 on YOU',
+            de: 'Sprung #1 auf DIR',
+            ko: '점프 #1 대상자',
           },
           '0050': {
             en: 'Cleave #1 on YOU',
+            de: 'Cleave #1 auf DIR',
+            ko: '직선공격 #1 대상자',
           },
           '0051': {
             en: 'Jump #2 on YOU',
+            de: 'Sprung #2 auf DIR',
+            ko: '점프 #2 대상자',
           },
           '0052': {
             en: 'Cleave #2 on YOU',
+            de: 'Cleave #2 auf DIR',
+            ko: '직선공격 #2 대상자',
           },
         }[matches.id];
       },
@@ -502,6 +615,9 @@
     {
       id: 'Puppet Compound 2P Energy Compression',
       netRegex: NetRegexes.startsUsing({ source: 'Compound 2P', id: '51A6', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: '51A6', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: '51A6', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: '51A6', capture: false }),
       delaySeconds: 4,
       infoText: {
         en: 'Get Towers',
@@ -515,25 +631,38 @@
     {
       id: 'Puppet Compound Pod R011: Laser',
       netRegex: NetRegexes.startsUsing({ source: 'Compound Pod', id: '541B', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Pod: Fusion', id: '541B', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Pod : Amalgame', id: '541B', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: 'ポッド：融合体', id: '541B', capture: false }),
       suppressSeconds: 2,
       // TODO: maybe this could be smarter and we could tell you where to go??
       infoText: {
         en: 'Avoid Lasers',
+        de: 'Laser ausweichen',
+        ko: '레이저 피하기',
       },
     },
     {
       id: 'Puppet Puppet 2P Prime Blade Puppet Guaranteed In',
       netRegex: NetRegexes.startsUsing({ source: 'Puppet 2P', id: '5421', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '5421', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '5421', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '5421', capture: false }),
       suppressSeconds: 2,
       // TODO: have only seen this happen for the guaranteed Puppet In at 6250.7 with 4 clones.
       // TODO: can this happen at other times??
       alertText: {
         en: 'Get Under Clone Corner',
+        de: 'Unter den Klon in einer Ecke gehen',
+        ko: '구석의 분신 아래로 이동',
       },
     },
     {
       id: 'Puppet Puppet 2P Prime Blade Puppet In',
       netRegex: NetRegexes.startsUsing({ source: 'Puppet 2P', id: '519A', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '519A', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '519A', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '519A', capture: false }),
       suppressSeconds: 2,
       // TODO: when I've seen this happen at 6379.4, it's been two clones, that start
       // at corners and then teleport to two cardinals across from each other with fake
@@ -541,16 +670,23 @@
       // TODO: fix this if these clones can go to corners.
       alertText: {
         en: 'Get Under Cardinal Clone',
+        de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
+        ko: '분신 아래로 이동',
       },
     },
     {
       id: 'Puppet Puppet 2P Prime Blade Puppet Out Corner',
       netRegex: NetRegexes.startsUsing({ source: 'Puppet 2P', id: '5198', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '5198', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '5198', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '5198', capture: false }),
       suppressSeconds: 2,
-      // TODO: have only seen this where the 4 clones stay out at 6379.4.
-      // TODO: have seen a report on a guide that the clones can teleport in??
-      // TODO: fix this if the clones can do something else here
-      response: Responses.goMiddle('alert'),
+      // Have seen this be either:
+      // * 4 clones teleporting around the outside of the arena (corner to corner)
+      // * 4 clones teleporting in (to cardinals)
+      alertText: {
+        en: 'Away From Clones',
+      },
     },
   ],
   timelineReplace: [
