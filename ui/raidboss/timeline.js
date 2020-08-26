@@ -1,5 +1,24 @@
 'use strict';
 
+const timelineInstructions = {
+  en: [
+    'These lines are',
+    'debug timeline entries.',
+    'If you lock the overlay,',
+    'they will disappear!',
+    'Real timelines automatically',
+    'appear when supported.',
+  ],
+  ko: [
+    '이 막대바는 디버그용',
+    '타임라인 입니다.',
+    '오버레이를 위치잠금하면,',
+    '이 막대바도 사라집니다.',
+    '지원되는 구역에서 타임라인이',
+    '자동으로 표시됩니다.',
+  ],
+};
+
 function computeBackgroundColorFrom(element, classList) {
   let div = document.createElement('div');
   let classes = classList.split('.');
@@ -579,8 +598,8 @@ class TimelineUI {
   constructor(options) {
     this.options = options;
     this.init = false;
-
-    this.InitDebugUI();
+    this.lang = Options.TimelineLanguage || Options.ParserLanguage || 'en';
+    this.AddDebugInstructions();
   }
 
   Init() {
@@ -589,7 +608,7 @@ class TimelineUI {
     this.init = true;
 
     this.root = document.getElementById('timeline-container');
-    this.root.classList.add('lang-' + Options.TimelineLanguage || Options.ParserLanguage || 'en');
+    this.root.classList.add('lang-' + this.lang);
     if (Options.Skin)
       this.root.classList.add('skin-' + Options.Skin);
 
@@ -602,18 +621,15 @@ class TimelineUI {
     this.expireTimers = {};
   }
 
-  InitDebugUI() {
-    let timelineText = [
-      'These lines are',
-      'debug timeline entries.',
-      'If you lock the overlay,',
-      'they will disappear!',
-      'Real timelines automatically',
-      'appear when supported.',
-    ];
+  AddDebugInstructions() {
+    const lang = this.lang in timelineInstructions ? this.lang : 'en';
+    const instructions = timelineInstructions[lang];
 
     // Helper for positioning/resizing when locked.
     let helper = document.getElementById('timeline-resize-helper');
+    const rows = Math.max(6, this.options.MaxNumberOfTimerBars);
+    helper.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
+
     for (let i = 0; i < this.options.MaxNumberOfTimerBars; ++i) {
       let helperBar = document.createElement('div');
       helperBar.classList.add('text');
@@ -621,14 +637,18 @@ class TimelineUI {
       helperBar.classList.add('timeline-bar-color');
       if (i < 1)
         helperBar.classList.add('soon');
-      if (i < timelineText.length)
-        helperBar.innerText = timelineText[i];
+      if (i < instructions.length)
+        helperBar.innerText = instructions[i];
       else
-        helperBar.innerText = 'Test bar ' + (i + 1);
+        helperBar.innerText = i + 1;
       helper.appendChild(helperBar);
     }
 
+    // For simplicity in code, always make debugElement valid,
+    // however it does not exist in the raid emulator.
     this.debugElement = document.getElementById('timeline-debug');
+    if (!this.debugElement)
+      this.debugElement = document.createElement('div');
   }
 
   SetPopupTextInterface(popupText) {

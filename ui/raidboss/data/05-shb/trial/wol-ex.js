@@ -113,6 +113,7 @@ const translate = (data, obj) => {
       infoText: {
         en: 'Bait Confiteor',
         de: 'Confiteor ködern',
+        ko: '장판 유도하기',
       },
     },
     {
@@ -363,6 +364,8 @@ const translate = (data, obj) => {
       netRegexDe: NetRegexes.startsUsing({ source: 'Krieger Des Lichts', id: '5152', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '5152', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '5152', capture: false }),
+      // This is still 1 second before this cast goes off, giving ~7 seconds before LB is needed.
+      delaySeconds: 4,
       alarmText: function(data) {
         if (data.role === 'tank') {
           return {
