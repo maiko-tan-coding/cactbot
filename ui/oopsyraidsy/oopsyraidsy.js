@@ -131,7 +131,7 @@ let kFieldDamage = 9;
 // It appears a little bit that flags come in pairs of values, but it's unclear
 // what these mean.
 let kShiftFlagValues = ['3E', '113', '213', '313'];
-let kFlagInstantDeath = 'XX'; // FIXME
+let kFlagInstantDeath = '36'; // Always 36 ?
 // miss, damage, block, parry, instant death
 let kAttackFlags = ['01', '03', '05', '06', kFlagInstantDeath];
 
@@ -209,7 +209,12 @@ function ShortNamify(name) {
   return idx < 0 ? name : name.substr(0, idx);
 }
 
+// Turns a scrambled string damage field into an integer.
+// Since fields are modified in place right now, this does nothing if called
+// again with an integer.  This is kind of a hack, sorry.
 function UnscrambleDamage(field) {
+  if (typeof field !== 'string')
+    return field;
   const len = field.length;
   if (len <= 4)
     return 0;

@@ -45,6 +45,7 @@
         return {
           en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
+          fr: 'Évitez le tank buster',
           ko: '탱버 피하기',
         };
       },
@@ -59,6 +60,7 @@
       alertText: {
         en: 'Go To Narrow Intersection',
         de: 'Geh zu der nahen Überschneidung',
+        fr: 'Allez sur l\'intersection étroite',
         ko: '조금 겹친 곳으로 이동',
       },
     },
@@ -69,6 +71,7 @@
       alarmText: {
         en: 'Chasing Laser: Get Away',
         de: 'Verfolgende Laser: Weg gehen',
+        fr: 'Soutien aérien : Évitez',
         ko: '추격 레이저: 이동',
       },
     },
@@ -80,9 +83,8 @@
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '5080', capture: false }),
       alertText: function(data) {
         return {
-          en: 'Get Under Wings',
-          de: 'Gehe unter die Flügel',
-          ko: '날개 뒤로 이동',
+          en: 'Go Left, Behind Wing',
+          de: 'Geh links hinter den Flügel',
         };
       },
     },
@@ -94,9 +96,8 @@
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '507F', capture: false }),
       alertText: function(data) {
         return {
-          en: 'Get Between Wings',
-          de: 'Geh Zwischen die Flügel',
-          ko: '날개 사이로 이동',
+          en: 'Go Right, Behind Wing',
+          de: 'Geh rechts hinter den Flügel',
         };
       },
     },
@@ -121,6 +122,7 @@
       infoText: {
         en: 'Dodge into ring gap',
         de: 'In die Lücke des Ringes ausweichen',
+        fr: 'Esquivez en vous plaçant dans l\'ouverture',
         ko: '고리 사이로 이동',
       },
     },
@@ -214,6 +216,7 @@
       alertText: {
         en: 'Fire Puddle on YOU',
         de: 'Feuer Fläche auf DIR',
+        fr: 'Zone au sol de feu sur VOUS',
         ko: '불 장판 대상자',
       },
     },
@@ -225,6 +228,7 @@
       alertText: {
         en: 'Line Stack (Point Outside)',
         de: 'Auf einer Linie sammeln (nach außen zeigen)',
+        fr: 'Package en ligne (orientez vers l\'extérieur)',
         ko: '쉐어 레이저 (밖으로 유도)',
       },
     },
@@ -239,6 +243,7 @@
       alertText: {
         en: 'Dodge Sword Charges',
         de: 'Schwerteransturm ausweichen',
+        fr: 'Esquivez les charges',
         ko: '돌진 피하기',
       },
     },
@@ -280,6 +285,7 @@
         return {
           en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
+          fr: 'Évitez le tank buster',
           ko: '탱버 피하기',
         };
       },
@@ -362,6 +368,7 @@
       alertText: {
         en: 'Get Outside Upper Laser',
         de: 'Raus aus dem oberen Laser',
+        fr: 'Éloignez-vous des lasers supérieurs',
         ko: '높은 레이저 쪽 밖으로 이동',
       },
     },
@@ -382,6 +389,7 @@
       alertText: {
         en: 'Voltage cleave on YOU',
         de: 'Spannungs-Cleave auf DIR',
+        fr: 'Arcs : Cleave sur VOUS',
         ko: '전압 장판 대상자',
       },
     },
@@ -406,6 +414,7 @@
             alertText: {
               en: 'Tank Laser Cleave on YOU',
               de: 'Tank Laser cleave auf DIR',
+              fr: 'Tank Laser cleave sur VOUS',
               ko: '탱커 레이저 대상자',
             },
           };
@@ -414,6 +423,7 @@
           infoText: {
             en: 'Avoid tank laser cleaves',
             de: 'Tank Laser cleave ausweichen',
+            fr: 'Évitez les cleaves du laser sur les tanks',
             ko: '탱커 레이저 피하기',
           },
         };
@@ -436,6 +446,7 @@
           return {
             en: 'Get Outside Between Pods',
             de: 'Zwischen den Pods raus gehen',
+            fr: 'À l\'extérieur entre les Pods',
             ko: '포드 사이로 이동',
           };
         }
@@ -444,6 +455,7 @@
         return {
           en: 'Get Between Lasers (Watch Tethers)',
           de: 'Zwischen Laser gehen (auf die Verbindungen achten)',
+          fr: 'Allez entre les lasers (regardez les liens)',
           ko: '레이저 사이로 이동 (연결된 모니터 확인)',
         };
       },
@@ -458,6 +470,7 @@
       alertText: {
         en: 'Turn Towers Blue',
         de: 'Türme zu Blau ändern',
+        fr: 'Changez les tours en bleu',
         ko: '장판이 파랑색이 되도록 들어가기',
       },
     },
@@ -468,6 +481,7 @@
       infoText: {
         en: 'Laser on YOU',
         de: 'Laser auf DIR',
+        fr: 'Laser sur VOUS',
         ko: '레이저 대상자',
       },
     },
@@ -592,21 +606,25 @@
           '004F': {
             en: 'Jump #1 on YOU',
             de: 'Sprung #1 auf DIR',
+            fr: 'Saut #1 sur VOUS',
             ko: '점프 #1 대상자',
           },
           '0050': {
             en: 'Cleave #1 on YOU',
             de: 'Cleave #1 auf DIR',
+            fr: 'Cleave #1 sur VOUS',
             ko: '직선공격 #1 대상자',
           },
           '0051': {
             en: 'Jump #2 on YOU',
             de: 'Sprung #2 auf DIR',
+            fr: 'Saut #2 sur VOUS',
             ko: '점프 #2 대상자',
           },
           '0052': {
             en: 'Cleave #2 on YOU',
             de: 'Cleave #2 auf DIR',
+            fr: 'Cleave #2 sur VOUS',
             ko: '직선공격 #2 대상자',
           },
         }[matches.id];
@@ -639,6 +657,7 @@
       infoText: {
         en: 'Avoid Lasers',
         de: 'Laser ausweichen',
+        fr: 'Évitez les lasers',
         ko: '레이저 피하기',
       },
     },
@@ -654,6 +673,7 @@
       alertText: {
         en: 'Get Under Clone Corner',
         de: 'Unter den Klon in einer Ecke gehen',
+        fr: 'Allez dans un coin sous un clone',
         ko: '구석의 분신 아래로 이동',
       },
     },
@@ -671,6 +691,7 @@
       alertText: {
         en: 'Get Under Cardinal Clone',
         de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
+        fr: 'Allez sous un clone dans un point cardinal',
         ko: '분신 아래로 이동',
       },
     },
@@ -686,6 +707,8 @@
       // * 4 clones teleporting in (to cardinals)
       alertText: {
         en: 'Away From Clones',
+        de: 'Weg von den Klonen',
+        fr: 'Éloignez vous des clones',
       },
     },
   ],
