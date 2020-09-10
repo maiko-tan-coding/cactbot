@@ -28,10 +28,7 @@ let UserConfig = {
       overlay: 'options',
     });
 
-    callOverlayHandler({
-      call: 'cactbotLoadUser',
-      source: location.href,
-    }).then(async (e) => {
+    const loadUser = async (e) => {
       let localFiles = e.detail.localUserFiles;
       let basePath = e.detail.userLocation;
       let jsFile = overlayName + '.js';
@@ -131,6 +128,20 @@ let UserConfig = {
         callback();
 
       callOverlayHandler({ call: 'cactbotRequestState' });
+    };
+
+    callOverlayHandler({
+      call: 'cactbotLoadUser',
+      source: location.href,
+    }).then((e) => {
+      // Wait for DOMContentLoaded if needed.
+      if (document.readyState !== 'loading') {
+        loadUser(e);
+        return;
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        loadUser(e);
+      });
     });
   },
   handleSkin: function(skinName) {
@@ -203,6 +214,8 @@ let UserConfig = {
   addUnlockText: (lang) => {
     const unlockText = {
       en: '🔓 Unlocked (lock overlay before using)',
+      de: '🔓 Entsperrt (Sperre das Overlay vor der Nutzung)',
+      fr: '🔓 Débloqué (Bloquez l\'overlay avant utilisation)',
     };
 
     const id = 'cactbot-unlocked-text';

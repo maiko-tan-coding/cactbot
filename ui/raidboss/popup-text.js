@@ -82,8 +82,8 @@ class PopupText {
     this.parserLang = this.options.ParserLanguage || 'en';
     this.displayLang = this.options.AlertsLanguage || this.options.DisplayLanguage || this.options.ParserLanguage || 'en';
 
-    if (this.options.BrowserTTS) {
-      this.ttsEngine = new BrowserTTSEngine();
+    if (this.options.IsRemoteRaidboss || this.options.BrowserTTS) {
+      this.ttsEngine = new BrowserTTSEngine(this.displayLang);
       this.ttsSay = function(text) {
         this.ttsEngine.play(text);
       };
@@ -96,7 +96,7 @@ class PopupText {
 
     // check to see if we need user interaction to play audio
     // only if audio is enabled in options
-    if (Options.audioAllowed)
+    if (Options.AudioAllowed)
       AutoplayHelper.CheckAndPrompt();
 
     this.partyTracker = new PartyTracker();
@@ -123,7 +123,7 @@ class PopupText {
     addOverlayListener('PartyChanged', (e) => {
       this.partyTracker.onPartyChanged(e);
     });
-    addOverlayListener('onPlayerChangedEvent', (e) => {
+    addPlayerChangedOverrideListener(Options.PlayerNameOverride, (e) => {
       this.OnPlayerChange(e);
     });
     addOverlayListener('ChangeZone', (e) => {
@@ -145,21 +145,6 @@ class PopupText {
   }
 
   OnPlayerChange(e) {
-    // allow override of player via query parameter
-    // only apply override if player is in party
-    if (Options.PlayerNameOverride !== null) {
-      let tmpJob = null;
-      if (Options.PlayerJobOverride !== null)
-        tmpJob = Options.PlayerJobOverride;
-      else if (this.partyTracker.inParty(Options.PlayerNameOverride))
-        tmpJob = this.partyTracker.jobName(this.me);
-      // if there's any issue with looking up player name for
-      // override, don't perform override
-      if (tmpJob !== null) {
-        e.detail.job = tmpJob;
-        e.detail.name = Options.PlayerNameOverride;
-      }
-    }
     if (this.job != e.detail.job || this.me != e.detail.name)
       this.OnJobChange(e);
     this.data.currentHP = e.detail.currentHP;
@@ -624,7 +609,7 @@ class PopupText {
       triggerHelper.spokenAlertsEnabled = false;
       triggerHelper.groupSpokenAlertsEnabled = false;
     }
-    if (!this.options.audioAllowed) {
+    if (!this.options.AudioAllowed) {
       triggerHelper.soundAlertsEnabled = false;
       triggerHelper.spokenAlertsEnabled = false;
       triggerHelper.groupSpokenAlertsEnabled = false;
