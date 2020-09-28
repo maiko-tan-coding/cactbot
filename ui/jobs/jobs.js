@@ -148,6 +148,10 @@ const kAbility = {
   EnergySiphon: '407E',
   DreadwyrmTrance: 'DFD',
   FirebirdTrance: '40A5',
+  Aero: '79',
+  Aero2: '84',
+  Dia: '4094',
+  Assize: 'DF3',
 };
 
 const kMeleeWithMpJobs = ['DRK', 'PLD'];
@@ -1075,13 +1079,33 @@ class Bars {
 
     this.contentType = 0;
 
+    this.crafting = false;
+
     const lang = this.options.ParserLanguage;
     this.countdownStartRegex = LocaleRegex.countdownStart[lang] || LocaleRegex.countdownStart['en'];
     this.countdownCancelRegex = LocaleRegex.countdownCancel[lang] || LocaleRegex.countdownCancel['en'];
-    this.craftingStartRegex = LocaleRegex.craftingStart[lang] || LocaleRegex.craftingStart['en'];
-    this.craftingFinishRegex = LocaleRegex.craftingFinish[lang] || LocaleRegex.craftingFinish['en'];
-    this.craftingFailRegex = LocaleRegex.craftingFail[lang] || LocaleRegex.craftingFail['en'];
-    this.craftingCancelRegex = LocaleRegex.craftingCancel[lang] || LocaleRegex.craftingCancel['en'];
+    const craftingStartRegex = LocaleRegex.craftingStart[lang] || LocaleRegex.craftingStart['en'];
+    const trialCraftingStartRegex = LocaleRegex.trialCraftingStart[lang] || LocaleRegex.trialCraftingStart['en'];
+    const craftingFinishRegex = LocaleRegex.craftingFinish[lang] || LocaleRegex.craftingFinish['en'];
+    const trialCraftingFinishRegex = LocaleRegex.trialCraftingFinish[lang] || LocaleRegex.trialCraftingFinish['en'];
+    const craftingFailRegex = LocaleRegex.craftingFail[lang] || LocaleRegex.craftingFail['en'];
+    const craftingCancelRegex = LocaleRegex.craftingCancel[lang] || LocaleRegex.craftingCancel['en'];
+    const trialCraftingFailRegex = LocaleRegex.trialCraftingFail[lang] || LocaleRegex.trialCraftingFail['en'];
+    const trialCraftingCancelRegex = LocaleRegex.trialCraftingCancel[lang] || LocaleRegex.trialCraftingCancel['en'];
+    this.craftingStartRegexes = [
+      craftingStartRegex,
+      trialCraftingStartRegex,
+    ];
+    this.craftingFinishRegexes = [
+      craftingFinishRegex,
+      trialCraftingFinishRegex,
+    ];
+    this.craftingStopRegexes = [
+      craftingFailRegex,
+      craftingCancelRegex,
+      trialCraftingFailRegex,
+      trialCraftingCancelRegex,
+    ];
   }
 
   UpdateJob() {
@@ -2381,11 +2405,101 @@ class Bars {
   }
 
   setupWhm() {
+    const lilyBox = this.addResourceBox({
+      classList: ['whm-color-lily'],
+    });
+    const lilysecondBox = this.addResourceBox({
+      classList: ['whm-color-lilysecond'],
+    });
+
+    const diaBox = this.addProcBox({
+      id: 'whm-procs-dia',
+      fgColor: 'whm-color-dia',
+    });
+    const assizeBox = this.addProcBox({
+      id: 'whm-procs-assize',
+      fgColor: 'whm-color-assize',
+    });
+    const lucidBox = this.addProcBox({
+      id: 'whm-procs-lucid',
+      fgColor: 'whm-color-lucid',
+    });
+
+    // BloodLily Guage
+    const stacksContainer = document.createElement('div');
+    stacksContainer.id = 'whm-stacks';
+    this.addJobBarContainer().appendChild(stacksContainer);
+    const bloodlilyContainer = document.createElement('div');
+    bloodlilyContainer.id = 'whm-stacks-bloodlily';
+    stacksContainer.appendChild(bloodlilyContainer);
+    const bloodlilyStacks = [];
+    for (let i = 0; i < 3; ++i) {
+      const d = document.createElement('div');
+      bloodlilyContainer.appendChild(d);
+      bloodlilyStacks.push(d);
+    }
+
+    this.jobFuncs.push((jobDetail) => {
+      const lily = jobDetail.lilyStacks;
+      // this milliseconds is countup, so use floor instead of ceil.
+      const lilysecond = Math.floor(jobDetail.lilyMilliseconds / 1000);
+
+      lilyBox.innerText = lily;
+      if (lily == 3)
+        lilysecondBox.innerText = '';
+      else
+        lilysecondBox.innerText = 30 - lilysecond;
+
+      const bloodlilys = jobDetail.bloodlilyStacks;
+      for (let i = 0; i < 3; ++i) {
+        if (bloodlilys > i)
+          bloodlilyStacks[i].classList.add('active');
+        else
+          bloodlilyStacks[i].classList.remove('active');
+      }
+
+      const l = lilysecondBox.parentNode;
+      if ((lily == 2 && 30 - lilysecond <= 5) || lily == 3)
+        l.classList.add('full');
+      else
+        l.classList.remove('full');
+    });
+
+    this.abilityFuncMap[kAbility.Aero] = () => {
+      diaBox.duration = 0;
+      diaBox.duration = 18 + 1;
+    };
+    this.abilityFuncMap[kAbility.Aero2] = () => {
+      diaBox.duration = 0;
+      diaBox.duration = 18 + 1;
+    };
+    this.abilityFuncMap[kAbility.Dia] = () => {
+      diaBox.duration = 0;
+      diaBox.duration = 30;
+    };
+    this.abilityFuncMap[kAbility.Assize] = () => {
+      assizeBox.duration = 0;
+      assizeBox.duration = 45;
+    };
+    this.abilityFuncMap[kAbility.LucidDreaming] = () => {
+      lucidBox.duration = 0;
+      lucidBox.duration = 60;
+    };
+
     this.gainEffectFuncMap[EffectId.PresenceOfMind] = () => {
       this.presenceOfMind = 1;
     };
     this.loseEffectFuncMap[EffectId.PresenceOfMind] = () => {
       this.presenceOfMind = 0;
+    };
+
+    this.statChangeFuncMap['WHM'] = () => {
+      diaBox.valuescale = this.gcdSpell();
+      diaBox.threshold = this.gcdSpell() + 1;
+      assizeBox.valuescale = this.gcdSpell();
+      assizeBox.threshold = this.gcdSpell() + 1;
+      lucidBox.valuescale = this.gcdSpell();
+      lucidBox.threshold = this.gcdSpell() + 1;
     };
   }
 
@@ -2689,6 +2803,43 @@ class Bars {
     }
   }
 
+  OnCraftingLog(log) {
+    // Hide CP Bar when not crafting
+    const container = document.getElementById('jobs-container');
+
+    const anyRegexMatched = (line, array) => {
+      for (const regex of array) {
+        if (regex.test(line))
+          return true;
+      }
+      return false;
+    };
+
+    if (!this.crafting) {
+      if (anyRegexMatched(log, this.craftingStartRegexes))
+        this.crafting = true;
+    } else {
+      if (anyRegexMatched(log, this.craftingStopRegexes)) {
+        this.crafting = false;
+      } else {
+        for (const regex of this.craftingFinishRegexes) {
+          const m = regex.exec(log);
+          if (m) {
+            if (m.groups.player === undefined || m.groups.player == this.me) {
+              this.crafting = false;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (this.crafting)
+      container.classList.remove('hide');
+    else
+      container.classList.add('hide');
+  }
+
   OnPlayerChanged(e) {
     if (this.me !== e.detail.name) {
       this.me = e.detail.name;
@@ -2873,20 +3024,8 @@ class Bars {
           this.UpdateJobBarGCDs();
           continue;
         }
-        // Hide CP Bar when not crafting
-        const container = document.getElementById('jobs-container');
-        if (this.craftingStartRegex.test(log)) {
-          container.classList.remove('hide');
-          continue;
-        }
-        r = this.craftingFinishRegex.exec(log);
-        if ((r && (r.groups.player === undefined ||
-              (r.groups.player && r.groups.player == this.me))) ||
-          this.craftingFailRegex.test(log) ||
-          this.craftingCancelRegex.test(log)) {
-          container.classList.add('hide');
-          continue;
-        }
+        if (Util.isCraftingJob(this.job))
+          this.OnCraftingLog(log);
       } else if (log[15] == '1') {
         // TODO: consider flags for missing.
         // flags:damage is 1:0 in most misses.
