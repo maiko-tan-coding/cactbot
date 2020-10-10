@@ -38,7 +38,8 @@ for example you're irritated at some style usage and want to make everything con
 it's especially best to put that in a separate pull request.
 
 Generally, changes will be squashed and rebased together.
-If you want your changes to be in separate commits.
+If you want your changes to be in separate commits,
+then say so explicitly.
 
 ### Development Workflow
 
@@ -104,6 +105,14 @@ can be added to the branch you've selected
 and tested in real time by pointing cactbot to use
 `<username>.github.io/cactbot/ui/<module>/<module>.html`
 as its source.
+
+#### VSCode extension for cactbot
+
+If you are using VSCode, there is an extension [cactbot-highlight](https://github.com/MaikoTan/cactbot-highlight) created by Maiko Tan,
+providing timeline highlighting and some useful snippets.
+
+This extension is still in development, if you have any suggestions or bug reports,
+feel free to leave an issue/pull request in the repository.
 
 ### Code Review Culture
 
