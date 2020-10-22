@@ -1,27 +1,27 @@
-# Potential errors and workarounds
+# 潜在错误与解决方式
 
-1. [General FFXIV ACT Troubleshooting](#general-ffxiv-act-troubleshooting)
-1. [Problems using Cactbot](#problems-using-cactbot)
-1. [Fisher Module](#fisher-module)
-1. [Other Issues](#other-issues)
+1. [通用 FFXIV ACT 疑难解答](#general-ffxiv-act-troubleshooting)
+1. [Cactbot相关问题](#problems-using-cactbot)
+1. [捕鱼人模块](#fisher-module)
+1. [其他问题](#other-issues)
 
-## General FFXIV ACT Troubleshooting
+## 通用 FFXIV ACT 疑难解答
 
-ngld (developer of the [OverlayPlugin](https://github.com/ngld/OverlayPlugin) used by Cactbot) has written an excellent FAQ for common FFXIV ACT Plugin and OverlayPlugin issues, which you can find [here](https://gist.github.com/ngld/e2217563bbbe1750c0917217f136687d).
+ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactbot依赖于此插件) 关于FFXIV ACT Plugin与OverlayPlugin的问题撰写了一篇毛举缕析的常见问题解答，您可以点击 [此处](https://gist.github.com/ngld/e2217563bbbe1750c0917217f136687d) 直达该文章。
 
-If you get an error that it can't find **FFXIV_ACT_Plugin.dll**, make sure the **FFXIV_ACT_Plugin.dll** is in the `%APPDATA%\Advanced Combat Tracker\Plugins` folder. You can install **FFXIV_ACT_Plugin.dll** from the ACT Startup Wizard.
+若您遇到无法找到 **FFXIV_ACT_Plugin.dll**的错误，请确保 `%APPDATA%\Advanced Combat Tracker\Plugins` 文件夹中存在 **FFXIV_ACT_Plugin.dll** 文件。 您可以通过ACT开始向导 **FFXIV_ACT_Plugin.dll**。
 
-## Problems during Cactbot installation
+## Cactbot安装中问题
 
-If you get an error in the OverlayPlugin console similar to `Error: JS Handler call failed: System.Exception: Tried to call missing handler "cactbotLoadUser"!` then you are still using the hibiyasleep version of OverlayPlugin and need to upgrade to the latest version of the ngld [OverlayPlugin](https://github.com/ngld/OverlayPlugin/releases/latest) instead.
+如果您在OverlayPlugin的日志窗口中见到如下或类似的错误： `Error: JS Handler call failed: System.Exception: Tried to call missing handler "cactbotLoadUser"!`，说明你依旧在用hibiyasleep版本的OverlayPlugin插件，您需要更新至ngld版本的[OverlayPlugin](https://github.com/ngld/OverlayPlugin/releases/latest) 。
 
-If you get an error in the OverlayPlugin console similar to `Error: LoadAddons: Cactbot.PluginLoader: RainbowMage.OverlayPlugin.TinyIoCResolutionException: Unable to resolve type: Cactbot.CactbotEventSource` then you have likely installed the `CactbotOverlay.dll` into the `OverlayPlugin/addons` folder.  Please move the Cactbot files to their own separate folder, as described in the [Installing Cactbot](https://github.com/quisquous/cactbot#installing-cactbot) instructions.
+如果您在OverlayPlugin的日志窗口中见到如下或类似的错误：`Error: LoadAddons: Cactbot.PluginLoader: RainbowMage.OverlayPlugin.TinyIoCResolutionException: Unable to resolve type: Cactbot.CactbotEventSource`，则您很有可能将`CactbotOverlay.dll` 安装至 `OverlayPlugin/addons`。  请按照[安装Cactbot](https://github.com/quisquous/cactbot#installing-cactbot)操作步骤中的描述，将cactbot移动至独立文件夹中。
 
-If you get an error in the OverlayPlugin console similar to `System.MissingMethodException: Method not found: '!!0[] System.Array.Empty()` then you have installed the wrong .NET framework version.  Please install the [.NET Framework](https://www.microsoft.com/net/download/framework) version 4.6.1 or above.
+如果您在OverlayPlugin日志窗口中见到如下或类似的错误：`System.MissingMethodException: Method not found: '!!0[] System.Array.Empty()`，则您安装了错误的 .Net framework 版本。  请安装4.6.1版本及以上的[.NET Framework](https://www.microsoft.com/net/download/framework)。
 
-If you get a [CAS policy](https://blogs.msdn.microsoft.com/drew/2009/12/23/xunit-and-td-net-fixing-the-attempt-was-made-to-load-an-assembly-from-a-network-location-problem/) error on starting the OverlayPlugin, such as `An attempt was made to load an assembly from a network location which would have caused the assembly to be sandboxed in previous version of the .NET Framework.` then this means that you have forgotten to unblock some/all of your DLLs (either hibiyasleep or cactbot).  First, stop ACT.  Then, unblock everything; the easiest way is to unblock the original zip file and re-extract rather than unblocking every file individually.  Finally, restart ACT again.
+如果您在启用OverlayPlugin时见到 [CAS policy](https://blogs.msdn.microsoft.com/drew/2009/12/23/xunit-and-td-net-fixing-the-attempt-was-made-to-load-an-assembly-from-a-network-location-problem/) 错误，类似于`An attempt was made to load an assembly from a network location which would have caused the assembly to be sandboxed in previous version of the .NET Framework.`，这意味着您没有解锁DLL文件 (hibiyasleep 或 cactbot)。  首先，终止ACT。  其次，解锁所有文件：相对于多次解锁单个文件，最便捷的方式是解锁原本的zip文件，然后重新解压即可。  最后，重启ACT。
 
-If you get an overlay plugin error similar to `Error: (overlay): Exception in SendFastRateEvents: Could not load file or assembly 'FFXIV_ACT_Plugin, Version=(version), Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.` then you likely need to unblock the ffxiv plugin.  See the instructions above for unblocking DLLs.
+如果您见到类似于如下错误：`Error: (overlay): Exception in SendFastRateEvents: Could not load file or assembly 'FFXIV_ACT_Plugin, Version=(version), Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.`，可能意味着您需要解锁FFXIV插件。  详见上方的DLL解锁步骤。
 
 If you get an error that says `Plugin Load Failure` and `The downloaded file did not contain a plugin that could be loaded`, there could be several potential issues.
 
