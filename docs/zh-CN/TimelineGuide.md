@@ -1,77 +1,77 @@
-# Timeline Guide
+# 时间轴指南
 
-This is a guide for people who want to write timelines, primarily for cactbot.
+本指南旨在解释时间轴文件，主要基于cactbot的格式。
 
 ![import screenshot](images/timelineguide_timeline.png)
 
-cactbot uses the [raidboss module](https://github.com/quisquous/cactbot#raidboss-module) for triggers and timelines. These are combined together so that you can make triggers that are based on actions or triggers that are based on timelines themselves.
+cactbot在 [raidboss模块](https://github.com/quisquous/cactbot#raidboss-module) 中定义触发器和时间轴。 这两者是紧密结合的，因此您既可以基于技能编写触发器， 也可以基于时间轴编写触发器。
 
-## Table of Contents
+## 目录
 
-* [History](#history)
-* [Timeline File Syntax](#timeline-file-syntax)
-  * [Comments](#comments)
-  * [Entries](#entries)
-  * [Commands](#commands)
-  * [Examples](#examples)
-  * [Testing](#testing)
-  * [Shasta Kota Guide](#shasta-kota-guide)
-* [Cactbot Style Guide](#cactbot-style-guide)
-* [Timeline Triggers](#timeline-triggers)
-* [Timeline Injection](#timeline-injection)
-* [Timeline Translation](#timeline-translation)
-* [Example Timeline Creation](#example-timeline-creation)
-  * [Run the fight a few times](#run-the-fight-a-few-times)
-  * [Software prerequisites](#software-prerequisites)
-  * [Timeline Skeleton](#timeline-skeleton)
-  * [Generating an initial timeline file](#generating-an-initial-timeline-file)
-  * [Building Loops](#building-loops)
-  * [Adding Phases](#adding-phases)
-  * [Next phase](#next-phase)
-  * [Final Phase](#final-phase)
-  * [Boilerplate glue](#boilerplate-glue)
-  * [Making loops loop](#making-loops-loop)
-  * [Putting it all together](#putting-it-all-together)
-  * [Testing Timelines](#testing-timelines)
-  * [Test against other timelines](#test-against-other-timelines)
+* [历史](#history)
+* [时间轴文件语法](#timeline-file-syntax)
+  * [注释](#comments)
+  * [条目](#entries)
+  * [指令](#commands)
+  * [示例](#examples)
+  * [测试](#testing)
+  * [Shasta Kota的指南](#shasta-kota-guide)
+* [Cactbot样式指南](#cactbot-style-guide)
+* [基于时间轴的触发器](#timeline-triggers)
+* [时间轴注入](#timeline-injection)
+* [时间轴翻译](#timeline-translation)
+* [创建时间轴示例](#example-timeline-creation)
+  * [多次攻略副本](#run-the-fight-a-few-times)
+  * [软件需求](#software-prerequisites)
+  * [时间轴基础骨架](#timeline-skeleton)
+  * [生成初始时间轴文件](#generating-an-initial-timeline-file)
+  * [构建循环](#building-loops)
+  * [添加战斗阶段](#adding-phases)
+  * [下一个阶段](#next-phase)
+  * [最终阶段](#final-phase)
+  * [样板附注](#boilerplate-glue)
+  * [循环循环](#making-loops-loop)
+  * [珠联璧合](#putting-it-all-together)
+  * [测试时间轴](#testing-timelines)
+  * [测试其他时间轴](#test-against-other-timelines)
 
-## History
+## 历史
 
-Back in 2016, Shasta Kota on the Death and Taxes website made this [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) to use with  anoyetta's [ACT timeline plugin](https://github.com/anoyetta/ACT.Hojoring). That plugin is now part of Hojoring.
+让我们回到2016年，Shasta Kota在死亡与税收网站上发布了一篇关于使用anoyetta的 [ACT timeline 插件](https://github.com/anoyetta/ACT.Hojoring) 的 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)。 此插件现在已经成为了Hojoring的一部分。
 
-There's also an older [kaizoban](https://github.com/090/act_timeline/releases) version of the plugin that some people have used that predates anoyetta's work.
+在anoyetta之前也有过一个更旧 [kaizoban](https://github.com/090/act_timeline/releases) 版本，有一部分玩家也曾使用过该插件。
 
-cactbot timeline files were originally intended to be backwards compatible with these, and so cactbot-specific extensions are injected later from the triggers file.
+cactbot的时间轴文件原本设计为后向兼容这些文件格式， 因此cactbot的扩展语法需要通过触发器文件注入。
 
-## Timeline File Syntax
+## 时间轴文件语法
 
-Each line in a timeline file is considered its own timeline entry. There is no ordering at all. The fact that timeline files are ordered is as a convenience to the reader.
+时间轴文件的每一行都会被当作时间轴的条目。 条目之间没有绝对的顺序。 时间轴文件中按一定顺序排列仅仅是方便读者阅读而已。
 
-### Comments
+### 注释
 
-On any line, a hash character `#` signifies a comment. Everything after that on the current line will be ignored.
+任何一行中，`#` 符号用于定义注释。 其后的所有文字均会被忽略。
 
-### Entries
+### 条目
 
-Here is some grammar examples of timeline entries. Every timeline entry begins with the ability time and the ability name.
+以下是一些时间轴条目的语法示例。 每一行的条目均以能力技时间和能力技名称开始。
 
-`Number "String" (duration Number)`
+`数字 "字符串" (duration 数字)`
 
-`Number "String" sync /Regex/ (window Number,Number) (jump Number) (duration Number)`
+`数字 "字符串" sync /正则/ (window 数字,数字) (jump 数字) (duration 数字)`
 
-The parentheses here indicate optionality and are not literal parentheses.
+此处的括号表示可选部分，并不是语法的组成部分。
 
-Number can be an integer, e.g. `34`, or a float, e.g. `84.381`.
+数字可以是整数，如 `34`；也可以是浮点数，如 `84.381`。
 
-String is a character string, e.g. `"Liftoff"` or `"Double Attack"`
+字符串即字符组成的串，如 `"坠落"` 或 `"双重攻击"`。
 
-Regex is a [Javascript regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).
+正则是一个标准的 [Javascript 正则表达式](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions)。
 
-The ability time and ability name always need to come first, but `window`, `jump`, `duration`, and `sync` do not have to be in any order with respect to each other. Stylistically, usually sync is put first.
+能力技时间与能力技名称永远在最前方，但 `window`、`jump`、`duration`、以及 `sync` 并没有明确的顺序规定。 但是在代码规范里，sync通常放在前面。
 
-`duration Number` is a time in seconds to show the action. Usually, timeline entries disappear immediately, but sometimes an action is ongoing, like 5x Bahamut's Claw in a row. You can use `duration` to show the action for that length of time. It does not need a sync to do this.
+`duration 数字` 规定了显示该技能的时间长度。 通常情况下，时间轴条目会立刻消失。但有时需要使用此参数表示一个正在释放的技能，例如使用单行条目表示五次的巴哈姆特之爪。 您就可以使用 `duration` 参数规定显示时间长度。 而不需要sync属性。
 
-`window Number,Number` is the time frame in which to consider the sync. By default, if `window` is not specified, cactbot considers it the same as specifying `window 2.5,2.5`.  In other words, 2.5 seconds before the ability time and 2.5 seconds after. As an example, for the line `3118.9 "Lancing Bolt" sync /:Raiden:3876:/`, if the regular expression `/:Raiden:3876:/` is encountered anywhere between 3116.4 and 3121.4 then it will resync the timeline playback to 3118.9. Often timelines will use very large windows for unique abilities, to make sure that timelines sync to the right place even if started mid-fight.
+`window 数字,数字` 规定了同步时间帧。 若 `window` 未设置，cactbot默认将其视同为设置了 `window 2.5,2.5`。  也就是，相对于当前能力技时间的前2.5秒至后2.5秒之间。 例如，对于此时间轴条目：`3118.9 "Lancing Bolt" sync /:Raiden:3876:/`， 当正则表达式`/:Raiden:3876:/` 匹配到位于 3116.4 与 3121.4 之间的任意时间点， 则时间轴会同步并回溯至 3118.9。 Often timelines will use very large windows for unique abilities, to make sure that timelines sync to the right place even if started mid-fight.
 
 `jump Number` tells the timeline playback to jump to a particular time if the sync is encountered. If you jump to time 0, the timeline will stop playback. This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
 
