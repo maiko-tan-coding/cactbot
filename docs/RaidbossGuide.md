@@ -5,6 +5,7 @@
 ```javascript
 [{
   zoneId: ZoneId.TheWeaponsRefrainUltimate,
+  overrideTimelineFile: false,
   timelineFile: 'filename.txt',
   timeline: `hideall`,
   timelineReplace: [
@@ -47,6 +48,11 @@ A trigger set must have one of zoneId or zoneRegex to specify the zone
 **zoneRegex**
 A regular expression that matches against the zone name (coming from ACT).
 If the regular expression matches, then the triggers will apply to that zone.
+
+**overrideTimelineFile**
+An optional boolean value that specifies that the `timelineFile` and `timeline`
+specified in this trigger set override all timelines previously found.
+This is a way to replace timelines in user files and is not used inside cactbot itself.
 
 **timelineFile**
 An optional timeline file to load for this zone. These files live alongside their parent trigger file in the appropriate folder. (As for example `raidboss/data/04-sb/raid/`).
@@ -97,8 +103,16 @@ Boolean, defaults to true. If true, timelines and triggers will reset automatica
 ### Trigger Elements
 
 **id string**
- An id string for the trigger, used to disable triggers. Every built-in trigger that has a text/sound output should have an id so it can be disabled.
-(User-defined triggers not intended for inclusion in the cactbot repository need not have one.)
+ An id string for the trigger.
+ Every built-in trigger in cactbot has a unique id,
+ and it is recommended but not required that user triggers also have them.
+
+Trigger ids must be unique.
+If a trigger is found with the same id as a previous trigger,
+then the first trigger will be skipped entirely
+and the second trigger will override it and take its place.
+This allows easier for copying and pasting of triggers into user overrides for edits.
+Triggers without ids cannot be overridden.
 
 The current structure for `Regexes/NetRegexes` does not require that the ability/effect/whatever name be present as part of the expression.
 Because of this, it is extremely important that that information is somewhere close by.
@@ -221,6 +235,23 @@ Trigger elements are evaluated in this order, and must be listed in this order:
 - groupTTS
 - tts
 - run
+
+## Regular Expression Extensions
+
+If you're familiar with regular expressions,
+you'll note the the `\y{Name}` and `\y{AbilityCode}` are unfamiliar.
+These are extensions provided by cactbot for convenience
+to avoid having to match against all possible unicode characters
+or to know the details of how the FFXIV ACT plugin writes things.
+
+The set of extensions are:
+
+- `\y{Float}`: Matches a floating-point number, accounting for locale-specific encodings.
+- `\y{Name}`: Matches any character name (including empty strings which the FFXIV ACT plugin can generate when unknown).
+- `\y{ObjectId}`: Matches the 8 hex character object id in network log lines.
+- `\y{AbilityCode}`: Matches the FFXIV ACT plugin's format for the number code of a spell or ability.
+- `\y{Timestamp}`: Matches the time stamp at the front of each log event such as `[10:23:34.123]`.
+- `\y{LogType}`: Matches the FFXIV ACT plugin's format for the number code describing the type of log event, found near the front of each log event.
 
 ## Canned Helper Functions
 

@@ -120,6 +120,11 @@ const gBossFightTriggers = [
     startRegex: /:Omega:336C:/,
     preventAutoStart: true,
   },
+  {
+    zoneId: ZoneId.TheBozjanSouthernFront,
+    countdownStarts: false,
+    preventAutoStart: true,
+  },
 ];
 
 
@@ -300,7 +305,7 @@ class PullCounter {
   }
 }
 
-UserConfig.getUserConfigLocation('pullcounter', function() {
+UserConfig.getUserConfigLocation('pullcounter', Options, function() {
   gPullCounter = new PullCounter(document.getElementById('pullcounttext'));
 
   addOverlayListener('onLogEvent', (e) => gPullCounter.OnLogEvent(e));

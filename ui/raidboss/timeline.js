@@ -153,6 +153,14 @@ class Timeline {
     let uniqueid = 1;
     let texts = {};
 
+    // Make all regexes case insensitive, and parse any special \y{} groups.
+    if (triggers) {
+      for (const trigger of triggers) {
+        if (trigger.regex)
+          trigger.regex = Regexes.parse(trigger.regex);
+      }
+    }
+
     let lines = text.split('\n');
     for (let i = 0; i < lines.length; ++i) {
       let lineNumber = i + 1;
@@ -277,11 +285,27 @@ class Timeline {
       }
     }
 
-    for (let i = 0; i < this.events.length; ++i) {
-      let e = this.events[i];
+    // Validate that all timeline triggers match something.
+    if (triggers) {
+      for (const trigger of triggers) {
+        let found = false;
+        for (const event of this.events) {
+          if (event.name.match(trigger.regex)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          const text = `No match for timeline trigger ${trigger.regex} in ${trigger.id}`;
+          this.errors.push({ error: text });
+          console.error(`*** ERROR: ${text}`);
+        }
+      }
+    }
+
+    for (const e of this.events) {
       if (e.name in texts) {
-        for (let j = 0; j < texts[e.name].length; ++j) {
-          let matchedTextEvent = texts[e.name][j];
+        for (const matchedTextEvent of texts[e.name]) {
           let t = {
             type: matchedTextEvent.type,
             time: e.time - matchedTextEvent.secondsBefore,
@@ -294,8 +318,7 @@ class Timeline {
       // Rather than matching triggers at run time, pre-match all the triggers
       // against timeline text and insert them as text events to run.
       if (triggers) {
-        for (let t = 0; t < triggers.length; ++t) {
-          let trigger = triggers[t];
+        for (const trigger of triggers) {
           let m = e.name.match(trigger.regex);
           if (!m)
             continue;
@@ -630,7 +653,7 @@ class TimelineUI {
   constructor(options) {
     this.options = options;
     this.init = false;
-    this.lang = Options.TimelineLanguage || Options.ParserLanguage || 'en';
+    this.lang = this.options.TimelineLanguage || this.options.ParserLanguage || 'en';
     this.AddDebugInstructions();
   }
 
@@ -641,8 +664,8 @@ class TimelineUI {
 
     this.root = document.getElementById('timeline-container');
     this.root.classList.add('lang-' + this.lang);
-    if (Options.Skin)
-      this.root.classList.add('skin-' + Options.Skin);
+    if (this.options.Skin)
+      this.root.classList.add('skin-' + this.options.Skin);
 
     this.barColor = computeBackgroundColorFrom(this.root, 'timeline-bar-color');
     this.barExpiresSoonColor = computeBackgroundColorFrom(this.root, 'timeline-bar-color.soon');
@@ -951,6 +974,13 @@ if (typeof require !== 'undefined') {
   var Regexes = require('../../resources/regexes.js');
   var NetRegexes = require('../../resources/netregexes.js');
 }
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = Timeline;
 /* eslint-enable */
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    Timeline: Timeline,
+    TimelineUI: TimelineUI,
+    TimelineController: TimelineController,
+    TimelineLoader: TimelineLoader,
+  };
+}

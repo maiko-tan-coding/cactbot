@@ -66,6 +66,46 @@ function onTriggerException(trigger, e) {
     console.error(lines[i]);
 }
 
+// Helper for handling trigger overrides.
+//
+// asList will return a list of triggers in the same order as append was called, except:
+// If a later trigger has the same id as a previous trigger, it will replace the previous trigger
+// and appear in the same order that the previous trigger appeared.
+// e.g. a, b1, c, b2 (where b1 and b2 share the same id) yields [a, b2, c] as the final list.
+//
+// JavaScript dictionaries are *almost* ordered automatically as we would want,
+// but want to handle missing ids and integer ids (you shouldn't, but just in case).
+class OrderedTriggerList {
+  constructor() {
+    this.idToIndex = {};
+    this.triggers = [];
+  }
+
+  push(trigger) {
+    if (trigger.id && trigger.id in this.idToIndex) {
+      const idx = this.idToIndex[trigger.id];
+
+      // TODO: be verbose now while this is fresh, but hide this output behind debug flags later.
+      const triggerFile = (trigger) => trigger.filename ? `'${trigger.filename}'` : 'user override';
+      const oldFile = triggerFile(this.triggers[idx]);
+      const newFile = triggerFile(trigger);
+      console.log(`Overriding '${trigger.id}' from ${oldFile} with ${newFile}.`);
+
+      this.triggers[idx] = trigger;
+      return;
+    }
+
+    // Normal case of a new trigger, with no overriding.
+    if (trigger.id)
+      this.idToIndex[trigger.id] = this.triggers.length;
+    this.triggers.push(trigger);
+  }
+
+  asList() {
+    return this.triggers;
+  }
+}
+
 class PopupText {
   constructor(options) {
     this.options = options;
@@ -96,7 +136,7 @@ class PopupText {
 
     // check to see if we need user interaction to play audio
     // only if audio is enabled in options
-    if (Options.AudioAllowed)
+    if (this.options.AudioAllowed)
       AutoplayHelper.CheckAndPrompt();
 
     this.partyTracker = new PartyTracker();
@@ -123,7 +163,7 @@ class PopupText {
     addOverlayListener('PartyChanged', (e) => {
       this.partyTracker.onPartyChanged(e);
     });
-    addPlayerChangedOverrideListener(Options.PlayerNameOverride, (e) => {
+    addPlayerChangedOverrideListener(this.options.PlayerNameOverride, (e) => {
       this.OnPlayerChange(e);
     });
     addOverlayListener('ChangeZone', (e) => {
@@ -151,7 +191,7 @@ class PopupText {
   }
 
   OnDataFilesRead(e) {
-    this.triggerSets = Options.Triggers;
+    this.triggerSets = [];
     for (let filename in e.detail.files) {
       if (!filename.endsWith('.js'))
         continue;
@@ -181,6 +221,9 @@ class PopupText {
       }
       Array.prototype.push.apply(this.triggerSets, json);
     }
+
+    // User triggers must come last so that they override built-in files.
+    Array.prototype.push.apply(this.triggerSets, this.options.Triggers);
   }
 
   OnChangeZone(e) {
@@ -206,6 +249,9 @@ class PopupText {
     let timelineTriggers = [];
     let timelineStyles = [];
     this.resetWhenOutOfCombat = true;
+
+    const orderedTriggers = new OrderedTriggerList();
+    const orderedNetTriggers = new OrderedTriggerList();
 
     // Recursively/iteratively process timeline entries for triggers.
     // Functions get called with data, arrays get iterated, strings get appended.
@@ -233,9 +279,15 @@ class PopupText {
         console.error(`Trigger set must include exactly one of zoneRegex or zoneId property`);
         continue;
       }
+      if (haveZoneId && set.zoneId === undefined) {
+        const filename = set.filename ? `'${set.filename}'` : '(user file)';
+        console.error(`Trigger set has zoneId, but with nothing specified in ${filename}.  ` +
+                      `Did you misspell the ZoneId.ZoneName?`);
+        continue;
+      }
 
       if (set.zoneId) {
-        if (set.zoneId !== ZoneId.MatchAll && set.zoneId !== this.zoneId)
+        if (set.zoneId !== ZoneId.MatchAll && set.zoneId !== this.zoneId && !(typeof set.zoneId == 'object' && set.zoneId.includes(this.zoneId)))
           continue;
       } else if (set.zoneRegex) {
         let zoneRegex = set.zoneRegex;
@@ -287,13 +339,13 @@ class PopupText {
           let regex = trigger[regexParserLang] || trigger.regex;
           if (regex) {
             trigger.localRegex = Regexes.parse(regex);
-            this.triggers.push(trigger);
+            orderedTriggers.push(trigger);
           }
 
           let netRegex = trigger[netRegexParserLang] || trigger.netRegex;
           if (netRegex) {
             trigger.localNetRegex = Regexes.parse(netRegex);
-            this.netTriggers.push(trigger);
+            orderedNetTriggers.push(trigger);
           }
 
           if (!regex && !netRegex) {
@@ -303,15 +355,28 @@ class PopupText {
         }
       }
 
+      if (set.overrideTimelineFile) {
+        const filename = set.filename ? `'${set.filename}'` : '(user file)';
+        console.log(`Overriding timeline from ${filename}.`);
+
+        // If the timeline file override is set, all previously loaded timeline info is dropped.
+        // Styles, triggers, and translations are kept, as they may still apply to the new one.
+        timelineFiles = [];
+        timelines = [];
+      }
+
       // And set the timeline files/timelines from each set that matches.
       if (set.timelineFile) {
         if (set.filename) {
           let dir = set.filename.substring(0, set.filename.lastIndexOf('/'));
           timelineFiles.push(dir + '/' + set.timelineFile);
         } else {
+          // Note: For user files, this should get handled by raidboss_config.js,
+          // where `timelineFile` should get converted to `timeline`.
           console.error('Can\'t specify timelineFile in non-manifest file:' + set.timelineFile);
         }
       }
+
       if (set.timeline)
         addTimeline(set.timeline);
       if (set.timelineReplace)
@@ -323,6 +388,10 @@ class PopupText {
       if (set.resetWhenOutOfCombat !== undefined)
         this.resetWhenOutOfCombat &= set.resetWhenOutOfCombat;
     }
+
+    // Store all the collected triggers in order.
+    this.triggers = orderedTriggers.asList();
+    this.netTriggers = orderedNetTriggers.asList();
 
     this.timelineLoader.SetTimelines(
         timelineFiles,
@@ -373,8 +442,8 @@ class PopupText {
       return '???';
     }
 
-    if (name in Options.PlayerNicks)
-      return Options.PlayerNicks[name];
+    if (name in this.options.PlayerNicks)
+      return this.options.PlayerNicks[name];
 
     let idx = name.indexOf(' ');
     return idx < 0 ? name : name.substr(0, idx);
@@ -396,7 +465,7 @@ class PopupText {
       parserLang: this.parserLang,
       displayLang: this.displayLang,
       currentHP: preserveHP,
-      options: Options,
+      options: this.options,
       ShortName: this.ShortNamify,
       StopCombat: () => this.SetInCombat(false),
       ParseLocaleFloat: parseFloat,
@@ -896,3 +965,10 @@ class PopupTextGenerator {
 }
 
 let gPopupText;
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    PopupText: PopupText,
+    PopupTextGenerator: PopupTextGenerator,
+  };
+}
