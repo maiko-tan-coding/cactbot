@@ -1,19 +1,19 @@
 # Cactbot自定义教程
 
-- [使用cactbot配置界面](#using-the-cactbot-ui)
-- [用户文件夹概览](#user-directory-overview)
-- [设置您自己的用户文件夹](#setting-your-user-directory)
-- [样式自定义](#customizing-appearance)
-- [Raidboss触发器自定义](#overriding-raidboss-triggers)
-  - [例1：改变输出文本](#example-1--changing-the-output-text)
-  - [例2：使挑衅提示适用于全职业](#example-2--making-provoke-work-for-all-jobs)
-  - [例3：添加自定义触发器](#example-3--adding-custom-triggers)
-- [Raidboss时间轴自定义](#overriding-raidboss-timelines)
-- [行为自定义](#customizing-behavior)
-- [用户文件的调试](#debugging-user-files)
-  - [检查OverlayPlugin的错误日志](#check-the-overlayplugin-log-for-errors)
-  - [检查文件是否加载](#check-if-your-file-is-loaded)
-  - [检查文件是否有错误](#check-if-your-user-file-has-errors)
+- [使用cactbot配置界面](#使用cactbot配置界面)
+- [用户文件夹概览](#用户文件夹概览)
+- [设置您自己的用户文件夹](#设置您自己的用户文件夹)
+- [样式自定义](#样式自定义)
+- [Raidboss触发器自定义](#raidboss触发器自定义)
+  - [例1：改变输出文本](#例1：改变输出文本)
+  - [例2：使挑衅提示适用于全职业](#例2：使挑衅提示适用于全职业)
+  - [例3：添加自定义触发器](#例3：添加自定义触发器)
+- [Raidboss时间轴自定义](#raidboss时间轴自定义)
+- [行为自定义](#行为自定义)
+- [用户文件的调试](#用户文件的调试)
+  - [检查OverlayPlugin的错误日志](#检查OverlayPlugin的错误日志)
+  - [检查文件是否加载](#检查文件是否加载)
+  - [检查文件是否有错误](#检查文件是否有错误)
 
 ## 使用cactbot配置界面
 
@@ -72,7 +72,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 **注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有导出所有的可配置项。 如果您有特别的需求，但是您不知道如何修改此进度条，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
 
-**警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您应当承担您的自定义CSS的问题的风险。
+**警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您需知晓您的自定义CSS有在将来出现问题的风险。
 
 ## Raidboss触发器自定义
 
