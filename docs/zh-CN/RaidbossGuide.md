@@ -222,26 +222,26 @@
 },
 ```
 
-正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 Attempting to use a bare regex will cause a build failure when the pull request is submitted. If a bare regex must be used for whatever reason (if, say, a new log line is added to ACT,) pull requests to update `regexes.js` are strongly encouraged.
+正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 目前在拉取请求发布时使用正则表达式字面量会导致构建失败。 当的确存在特定的需求，不得不使用正则表达式字面量时 (例如ACT新增了其他类型的日志行)， 我们强烈推荐开启一个拉取请求，直接更新 `regexes.js` 文件。
 
-(Note that if you are writing triggers for just your personal use, you are free to do what you want. This deprecation applies only to work intended for the cactbot repository.)
+(当然，若您正在撰写仅用于您个人的触发器，您可以随意发挥。 此处的警告仅针对想为cactbot项目提交贡献的人们。)
 
-Use of canned conditions and responses is recommended where possible, although given Square's extremely talented fight design team, it's not always going to *be* possible.
+若程序中可以使用在conditions和responses中定义的高阶函数时，直接使用这些函数是推荐的做法。然而对SE的战斗天才设计组来说，这个方法也不*是*通用的。
 
-## Timeline Info
+## 关于时间轴
 
-The trigger subfolders may contain timeline text files in the format defined by ACT Timeline plugin, which described in here: <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
+触发器子目录内可能包含了一部分采用 ACT Timeline 插件格式定义的时间轴文本文件，您可以通过此链接了解： <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
 
-Each timeline file Cactbot uses has to be loaded by a relative directory reference from the given [TRIGGER-FILE].js. Typically the filename for the timeline file will match the name of the trigger file, and for specific encounters the filenames should at least loosely match the zone name.
+Cactbot的每一个时间轴文件均由同文件夹下某个对应的 [TRIGGER-FILE].js 加载。 通常情况下，时间轴文件的名称需与触发器文件一致，同时此文件名应当至少与副本区域名称可以一一对应，即不具有歧义。
 
-Cactbot implements some extensions to the original format. These extensions can appear in the file itself or in the `timeline` field in the triggers:
+Cactbot在原基础上实现了一部分扩展语法。 扩展语法可以在文本文件内或 `timeline` 属性中使用。
 
-**infotext "event name" before 1** Show a info-priority text popup on screen before an event will occur. The `event name` matches a timed event in the file and will be shown before each occurrence of events with that name. By default the name of the event will be shown, but you may specify the text to be shown at the end of the line if it should be different. The `before` parameter must be present, but can be 0 if the text should be shown at the same time the event happens. Negative values can be used to show the text after the event.
+**infotext "event name" before 1** 在某个事件发生之前显示一个信息警报文本。 `event name` 与文件中的某个特定时间的事件名称匹配，并且在此事件发生前均会显示指定文本。 默认显示的文本为事件名称，但若您需要显示其他文本，添加指定文本至行末即可。 `before` 参数是必填项，但您可以将其设置为0，则文本显示时间会与事件发生的时间相同。 当您需要使文本在时间之后显示，也可以设置负值。
 
-**Example infotext which shows the event name 1s before the event happens** `infotext "event name" before 1`
+**例子：在事件发生前1秒时显示信息警报** `infotext "event name" before 1`
 
-**Example infotext which specifies different text to be shown earlier** `infotext "event name" before 2.3 "alternate text"`
+**例子：在事件发生更早时间显示的信息警报，并修改了默认文本** `infotext "event name" before 2.3 "alternate text"`
 
-**Example alert-priority popups using the same parameters** `alerttext "event name" before 1` `alerttext "event name" before 2.3 "alternate text"`
+**例子：与前述同事件名的警告文本** `alerttext "event name" before 1` `alerttext "event name" before 2.3 "alternate text"`
 
-**Example alarm-priority popups using the same parameters** `alarmtext "event name" before 1` `alarmtext "event name" before 2.3 "alternate text"`
+**例子：与前述同事件名的警报文本** `alarmtext "event name" before 1` `alarmtext "event name" before 2.3 "alternate text"`
