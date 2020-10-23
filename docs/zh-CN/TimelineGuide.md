@@ -184,15 +184,15 @@ Cactbot默认并不包含这些配置，这个功能更适用于用户自行配�
 
 ## 创建时间轴示例
 
-这里有一个例子，展示了如何使用cactbot提供的工具制作里塔提恩强攻战的时间轴。 This is pretty straightforward and only requires one person to test, so is a good first example.
+这里有一个例子，展示了如何使用cactbot提供的工具制作里塔提恩强攻战的时间轴。 这个副本的逻辑非常简单，而且可以单人进行测试，是一个绝佳的实例副本。
 
-### Run the fight a few times
+### 多次攻略副本
 
-The first step in making a timeline is generating a few ACT logs.
+制作时间轴的第一步是生成一些ACT日志。
 
-cactbot will also let you make timelines from fflogs clears, but this drops many log lines. In particular, you can't get rp text lines, the text for the zone sealing/unsealing, and new combatants.
+您也可以通过fflogs的通关记录生成时间轴，但这个方式能提供更多类型的日志行。 尤其是，当您需要NPC话语，区域封锁/解锁的提示文本，以及对象实体刷新信息的时候。
 
-Once you've run the combat, you'll have generated a couple of [network log files](LogGuide.md#network-log-lines).
+当您攻略副本之后，您可以获得一些 [网络日志行](LogGuide.md#network-log-lines)。
 
 Follow those links, click **Raw**, then right click and **Save As** to save them to disk.
 
