@@ -73,15 +73,15 @@ cactbot的时间轴文件原本设计为后向兼容这些文件格式， 因此
 
 `window 数字,数字` 规定了同步时间帧。 若 `window` 未设置，cactbot默认将其视同为设置了 `window 2.5,2.5`。  也就是，相对于当前能力技时间的前2.5秒至后2.5秒之间。 例如，对于此时间轴条目：`3118.9 "Lancing Bolt" sync /:Raiden:3876:/`， 当正则表达式`/:Raiden:3876:/` 匹配到位于 3116.4 与 3121.4 之间的任意时间点， 则时间轴会同步并回溯至 3118.9。 时间轴通常在独一无二的技能上使用较大的window值， 以确保时间轴即使在战斗中启动也可以正确地同步到正确的位置。
 
-`jump 数字` 告诉时间轴在匹配sync成功时跳转至指定的时间点。 跳转至0意味着停止时间轴。 This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
+`jump 数字` 告诉时间轴在匹配sync成功时跳转至指定的时间点。 跳转至0意味着停止时间轴。 通常用于阶段跳转或循环。 尽管我们一般跳转至时间轴中已有的其他条目的时间点， 但并不意味着它必须是已有的时间点。
 
-### Commands
+### 指令
 
-To hide all instances of an ability, you can use the `hideall` command. Most timelines start with the line `hideall "--sync--"` to hide syncs that are just used to keep the timeline on track but should not be shown to the player.
+您可以使用 `hideall` 隐藏某个技能名。 绝大多数时间轴都会定义 `hideall "--sync--"`， 用于隐藏与游戏战斗阶段同步化的条目， 玩家不需知晓这些控制性条目。
 
-There are a number of other commands for generating alerts based on timeline entries. These are still supported but are not documented. Instead, alerts based on timelines in cactbot should use [timeline triggers](#timeline-triggers).
+此外还有一些基于时间轴条目的用于生成警报文本的指令。 尽管目前依旧支持，但并没有文档记载。 在cactbot中您应当使用 [基于时间轴的触发器](#timeline-triggers) 实现此需求。
 
-### Examples
+### 示例
 
 ```bash
 677.0 "Heavensfall Trio"
@@ -89,38 +89,38 @@ There are a number of other commands for generating alerts based on timeline ent
 35.2 "Flare Breath x3" duration 4
 1608.1 "Petrifaction" sync /:Melusine:7B1:/ window 1610,5
 1141.4 "Leg Shot" sync /:Mustadio:3738:/ duration 20
-# I am just a comment
+# 这是一个注释
 hideall "--sync--"
 
 28.0 "Damning Edict?" sync /:Chaos:3150:/ window 30,10 jump 2028.0
 524.9 "Allagan Field" sync /:The Avatar:7C4:/ duration 31 jump 444.9
-1032.0 "Control Tower" duration 13.5 sync /:Hashmal, Bringer Of Order starts using Control Tower on Hashmal/ window 20,20 # start of cast -> tower fall
+1032.0 "Control Tower" duration 13.5 sync /:Hashmal, Bringer Of Order starts using Control Tower on Hashmal/ window 20,20 # 从开始读条到塔坠落
 ```
 
-### Testing
+### 测试
 
-In cactbot, running `npm run test` will run **test/check_timelines.js** in node to verify syntax.
+在cactbot中运行 `npm run test` 会在node中执行 **test/check_timelines.js** 以验证语法。
 
-### Shasta Kota Guide
+### Shasta Kota的指南
 
-It is also worth reading Shasta Kota's original [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) which is still excellent.
+您也可以阅读Shasta Kota的原版 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)， 至今看来仍然十分优秀。
 
-## Cactbot Style Guide
+## Cactbot样式指南
 
-These are guidelines that cactbot tries to follow for timelines.
+以下是cactbot中对于时间轴的推荐方案。
 
-* add syncs for everything possible
-* always add an Engage! entry, but add syncs in case there's no /countdown
-* if the first boss action is an auto-attack, add a sync to start the timeline asap. (Note that sometimes boss auto-attacks are not literally "Attack"!)
-* include the command line used to generate the timeline in a comment at the top
-* prefer actions for syncs over rp text, but rp text syncs if that's the only option
-* if you do sync a phase with rp text, add a large window sync for an action
-* sync regexes should be short
-* use original names as much as possible
-* loops should use `jump` instead of having previous abilities have large windows
-* liberally use whitespace and comments to make the timeline readable
-* do not put any triggers or tts or alerts in the timeline file itself
-* use [timeline triggers](#timeline-triggers) for any alerts
+* 添加所有可能发动的技能的同步正则
+* 总是添加Engage!(战斗开始！) 的独立条目，但仍然需要添加同步正则，以防玩家没有使用倒计时。
+* 若Boss的第一个技能是自动攻击，则添加最早发动的独立技能用于启动时间轴。 (需要注意的是，有的Boss的自动攻击的技能名并不是“攻击”)
+* 在顶部的注释中添加用于生成时间轴的命令行参数
+* 添加同步正则时，除非同步NPC的话语是唯一的可行方式，否则应当优先考虑技能。
+* 当添加NPC话语用于同步至阶段时，应当为技能添加一个较大的window值
+* 同步正则尽可能短
+* 尽可能使用游戏中的原名
+* 循环应当使用 `jump`，而不是给先前的技能设定较大的window
+* 采用空行和注释提升时间轴的可读性
+* 触发器/TTS/提示文本应当与时间轴分离
+* 对于提示文本，应当使用 [基于时间轴的触发器](#timeline-triggers)
 * add at least a 30 second lookahead window for loops
 * comment out syncs from any abilities that are within 7 seconds of each other (This preserves the ability ID for future maintainers.)
 
