@@ -178,13 +178,13 @@ Cactbot默认并不包含这些配置，这个功能更适用于用户自行配�
 
 其一是针对工具软件，为触发器自动生成正则表达式翻译。
 
-其二则是针对运行中的时间轴。 cactbot会使用 `replaceSync` 部分自动替换 `sync /text`/ 中的任意文字， 同理可证 `replaceText` 部分则用于自动替换技能名文字。
+其二则是针对运行中的时间轴。 cactbot会使用 `replaceSync` 部分自动替换 `sync /text`/ 中的任意文字， 同样地，`replaceText` 部分则用于自动替换技能名文字。
 
-正则表达式仅匹配上述定义的部分文字，不匹配整行。 Care is needed to make sure that replacements are not overzealous.
+正则表达式仅匹配上述定义的部分文字，不匹配整行。 因此您需要格外注意，替换的正则表达式可能匹配到非预期的元素导致翻译错误。
 
-## Example Timeline Creation
+## 创建时间轴示例
 
-Here's an example of using cactbot's tools to make a timeline file for Cape Westwind. This is pretty straightforward and only requires one person to test, so is a good first example.
+这里有一个例子，展示了如何使用cactbot提供的工具制作里塔提恩强攻战的时间轴。 This is pretty straightforward and only requires one person to test, so is a good first example.
 
 ### Run the fight a few times
 
