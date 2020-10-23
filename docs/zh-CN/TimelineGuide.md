@@ -71,9 +71,9 @@ cactbot的时间轴文件原本设计为后向兼容这些文件格式， 因此
 
 `duration 数字` 规定了显示该技能的时间长度。 通常情况下，时间轴条目会立刻消失。但有时需要使用此参数表示一个正在释放的技能，例如使用单行条目表示五次的巴哈姆特之爪。 您就可以使用 `duration` 参数规定显示时间长度。 而不需要sync属性。
 
-`window 数字,数字` 规定了同步时间帧。 若 `window` 未设置，cactbot默认将其视同为设置了 `window 2.5,2.5`。  也就是，相对于当前能力技时间的前2.5秒至后2.5秒之间。 例如，对于此时间轴条目：`3118.9 "Lancing Bolt" sync /:Raiden:3876:/`， 当正则表达式`/:Raiden:3876:/` 匹配到位于 3116.4 与 3121.4 之间的任意时间点， 则时间轴会同步并回溯至 3118.9。 Often timelines will use very large windows for unique abilities, to make sure that timelines sync to the right place even if started mid-fight.
+`window 数字,数字` 规定了同步时间帧。 若 `window` 未设置，cactbot默认将其视同为设置了 `window 2.5,2.5`。  也就是，相对于当前能力技时间的前2.5秒至后2.5秒之间。 例如，对于此时间轴条目：`3118.9 "Lancing Bolt" sync /:Raiden:3876:/`， 当正则表达式`/:Raiden:3876:/` 匹配到位于 3116.4 与 3121.4 之间的任意时间点， 则时间轴会同步并回溯至 3118.9。 时间轴通常在独一无二的技能上使用较大的window值， 以确保时间轴即使在战斗中启动也可以正确地同步到正确的位置。
 
-`jump Number` tells the timeline playback to jump to a particular time if the sync is encountered. If you jump to time 0, the timeline will stop playback. This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
+`jump 数字` 告诉时间轴在匹配sync成功时跳转至指定的时间点。 跳转至0意味着停止时间轴。 This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
 
 ### Commands
 
