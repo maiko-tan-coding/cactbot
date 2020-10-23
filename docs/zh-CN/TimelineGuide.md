@@ -2,7 +2,7 @@
 
 本指南旨在解释时间轴文件，主要基于cactbot的格式。
 
-![import screenshot](images/timelineguide_timeline.png)
+![导入屏幕截图](../images/timelineguide_timeline.png)
 
 cactbot在 [raidboss模块](https://github.com/quisquous/cactbot#raidboss-module) 中定义触发器和时间轴。 这两者是紧密结合的，因此您既可以基于技能编写触发器， 也可以基于时间轴编写触发器。
 
@@ -121,66 +121,66 @@ hideall "--sync--"
 * 采用空行和注释提升时间轴的可读性
 * 触发器/TTS/提示文本应当与时间轴分离
 * 对于提示文本，应当使用 [基于时间轴的触发器](#timeline-triggers)
-* add at least a 30 second lookahead window for loops
-* comment out syncs from any abilities that are within 7 seconds of each other (This preserves the ability ID for future maintainers.)
+* 在循环中添加至少30秒的后续时间轴
+* 将7秒内发动的技能的同步正则注释在后方 (使将来的维护人员可以很方便地获知技能ID)
 
-### Trigger Filenames
+### 触发器文件名
 
-The general goal of filenames is to be consistent with what the community calls these fights. Trials get called by the name of the boss, raids get abbreviated and numbered, dungeons are called by their zone.
+通常触发器的文件名应与玩家社区对此副本的称呼一致。 讨伐战一般以Boss名字称呼， raid则通常有带有数字的缩写， 而迷宫挑战通常采用副本区域名称。
 
-For filenames, use underscores to separate words. For trials like `nm` (normal mode), `hm` (hard mode), and `ex` (extreme mode), separate with a hyphen. Dungeons with hard in the name can spell out "Hard" as a full word. Articles like `The` can be dropped. Raids are numbered through the tier, e.g. `t1` through `t13` and `a1s` through `a12s`. Savage fights should have an `s` suffix while normal fights have an 'n' suffix. (However, this does not apply to coil raids.)
+文件名中应使用下划线分割单词。 讨伐战中的 `nm` (假神)，`hm` (真神) 与 `ex` (极神)， 则以减号分割。 高难度迷宫挑战的名字中应当写出完整的单词“hard”。 冠词如 `The` 则可以移除。 Raid通常会有一定顺序的数字称呼。 例如 `t1` 到 `t13` 以及 `a1s` 到 `a12s` 等。 零式讨伐通常需要加上 `s` 后缀， 而普通难度则采用'n'后缀。 (然而，众所周知巴哈姆特大迷宫里没有分难度。)
 
-Examples:
+示例:
 
-* The Grand Cosmos: `grand_cosmos`
-* Titan Extreme: `titan-ex`
-* Ruby Weapon Extreme: `ruby_weapon-ex`
-* The Great Gubal Library (Hard): `great_gubal_library_hard`
-* Sigmascape V2.0 (Savage): `o6s`
-* Alexander - The Arm of the Father: `a3n`
-* The Final Coil of Bahamut: `t13`
+* 魔法宫殿宇宙宫(The Grand Cosmos): `grand_cosmos`
+* 泰坦歼殛战(Titan Extreme): `titan-ex`
+* 红宝石神兵狂想作战(Ruby Weapon Extreme): `ruby_weapon-ex`
+* 秘本宝库迦巴勒幻想图书馆(The Great Gubal Library (Hard)): `great_gubal_library_hard`
+* 欧米茄零式时空狭缝 西格玛幻境2(Sigmascape V2.0 (Savage)): `o6s`
+* 亚历山大机神城 启动之章3(Alexander - The Arm of the Father): `a3n`
+* 巴哈姆特大迷宫 真源之章4(The Final Coil of Bahamut): `t13`
 
-## Timeline Triggers
+## 基于时间轴的触发器
 
-Trigger files in cactbot support adding timeline triggers. Because people may have preferences about what triggers they want enabled by default, and because cactbot timeline syntax extensions are not compatible with other timeline plugins, cactbot adds all of its timeline triggers from the timeline file.
+Cactbot的触发器文件支持添加基于时间轴的触发器。 这是由于人们对于默认启用的触发器有特定的偏好， cactbot时间轴语法扩展又与其他时间轴插件不兼容， cactbot在触发器文件中添加了基于时间轴的触发器的功能。
 
-This is done by adding a `timelineTriggers` section to the triggers file.
+您只需要添加 `timelineTriggers` 至触发器文件即可。
 
-Examples:
+示例:
 
-* [Orbonne Monastery](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/alliance/orbonne_monastery.js)
+* [乐欲之所瓯博讷修道院](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/alliance/orbonne_monastery.js)
 * [T9](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/02-arr/raid/t9.js)
-* [O12 normal](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/raid/o12n.js)
+* [O12 普通难度](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/raid/o12n.js)
 
-These triggers have the [same syntax](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/README.txt) as normal triggers. They still allow you to use functions if you want to return something. You can use a [condition](https://github.com/quisquous/cactbot/blob/5a7011c662d65f44c12c2fbff255484f2d31b8ef/ui/raidboss/data/02-arr/raid/t9.js#L10) to have it only trigger for a particular job or role.
+这些触发器和普通的触发器拥有 [相同的语法](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/README.txt)。 这意味着您依旧可以使用函数，返回任何您想要的东西。 您也可以使用 [condition](https://github.com/quisquous/cactbot/blob/5a7011c662d65f44c12c2fbff255484f2d31b8ef/ui/raidboss/data/02-arr/raid/t9.js#L10)，使其仅针对特定职业/职能激活。
 
-However there are a few differences:
+但是，他们之间仍然有一些区别：
 
-The `regex` should not be translated and should be based off of whatever is exactly in the timeline file. It matches against the ability name in quotes on the timeline line. The `matches` parameter to functions will return this.
+例如 `regex` 部分不能翻译，而且必须与时间轴文件中的某个条目完全一致。 也就是说，它需要匹配时间轴的某一行中用双引号括起来的技能名。 函数中的 `matches` 参数也返回此名字。
 
-They support a `beforeSeconds` parameter, that allows you to specify how long before the ability to show the trigger.
+此触发器还支持 `beforeSeconds` 参数， 使您可以指定触发器相对于技能提前提示的时间。
 
-## Timeline Injection
+## 时间轴注入
 
-The timeline files themselves are constructed in a way that should be useful for everybody. However, sometimes people want to hide parts of timelines or add other things to timelines.
+理论上经过精心构造的时间轴适用于任何人。 但是，有时候人们想要隐藏时间轴的某些部分，或者添加一些其他项。
 
-This is not something that cactbot does by default anywhere, and so it is more a user configuration feature.
+Cactbot默认并不包含这些配置，这个功能更适用于用户自行配置。
 
-The triggers file supports a `timeline` entry which is an array of things to add to the timeline. If those things are strings, it will add them directly. If those things are functions, it will call the function and add the return value. (The `data` parameter passed only contains a player's role and job and not other things.)
+触发器文件有一个名为 `timeline` 的参数入口， 这是一个数组，其中元素会添加到时间轴中。 若元素都是字符串，则会直接添加。 若元素是函数，那么cactbot会调用该函数，并添加其返回值至时间轴中。 (但是传入函数的 `data` 参数仅仅包含了玩家的职能和职业，不包含其他参数。)
 
-The test timeline in Summerford Farms that you can start by doing a /countdown or /bow-ing to a Striking Dummy has examples of this.  See: [test.js](https://github.com/quisquous/cactbot/blob/79239abda888dd7a277da0501a7d4ac60d8cf963/ui/raidboss/data/triggers/test.js#L10).
+测试时间轴可以在盛夏农庄通过倒计时或对木人行礼后触发。  另行参见：[test.js](https://github.com/quisquous/cactbot/blob/79239abda888dd7a277da0501a7d4ac60d8cf963/ui/raidboss/data/triggers/test.js#L10)。
 
-You can also add timeline entries to your **cactbot/user/raidboss.js** file for personalized timeline entries and triggers.  See: [user/raidboss.js](https://github.com/quisquous/cactbot-user/blob/641488590e3ea499cc3b54cc9f2f2f856dee4ad8/raidboss.js#L28)
+您也可以在 **cactbot/user/raidboss.js** 文件中添加定制化的时间轴和触发器。  另行参见：[user/raidboss.js](https://github.com/quisquous/cactbot-user/blob/641488590e3ea499cc3b54cc9f2f2f856dee4ad8/raidboss.js#L28)。
 
-## Timeline Translation
+## 时间轴翻译
 
-To support multiple languages, cactbot trigger files support a `timelineReplace` section. You can see an example in [o12s.js](https://github.com/quisquous/cactbot/blob/ecbb723f097328c7bd0476352e5135bd5f776248/ui/raidboss/data/triggers/o12s.js#L608). This section contains a bunch of regular expressions to replace in syncs, texts, and effects. This has two purposes.
+为支持多语言，cactbot的触发器文件中新增了 `timelineReplace` 参数。 [o12s.js](https://github.com/quisquous/cactbot/blob/ecbb723f097328c7bd0476352e5135bd5f776248/ui/raidboss/data/triggers/o12s.js#L608) 是一个不错的例子。 这一部分包含了许多用于替换同步正则、文字和效果名的正则表达式。 这里有两个目的。
 
-The first purpose is for tools, to autogenerate regular expression translations for triggers.
+其一是针对工具软件，为触发器自动生成正则表达式翻译。
 
-The second purpose is for timelines at runtime. cactbot will use the `replaceSync` section to auto-replace anything inside a `sync /text`/ on a timeline line, and the `replaceText` section to auto-replace anything inside the ability text.
+其二则是针对运行中的时间轴。 cactbot会使用 `replaceSync` 部分自动替换 `sync /text`/ 中的任意文字， 同理可证 `replaceText` 部分则用于自动替换技能名文字。
 
-These match only the exact text of the regex within the line, not the entire line. Care is needed to make sure that replacements are not overzealous.
+正则表达式仅匹配上述定义的部分文字，不匹配整行。 Care is needed to make sure that replacements are not overzealous.
 
 ## Example Timeline Creation
 
