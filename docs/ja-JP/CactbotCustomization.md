@@ -9,49 +9,49 @@
   - [例２：挑発の示すトリガーを全ジョブに適用する](#example-2--making-provoke-work-for-all-jobs)
   - [例３：カスタムトリガーを追加する](#example-3--adding-custom-triggers)
 - [Raidbossタイムラインのオーバーライド](#overriding-raidboss-timelines)
-- [Customizing Behavior](#customizing-behavior)
-- [Debugging User Files](#debugging-user-files)
-  - [Check the OverlayPlugin log for errors](#check-the-overlayplugin-log-for-errors)
-  - [Check if your file is loaded](#check-if-your-file-is-loaded)
-  - [Check if your user file has errors](#check-if-your-user-file-has-errors)
+- [動作のカスタマイズ](#customizing-behavior)
+- [ユーザーファイルのデバッグ](#debugging-user-files)
+  - [OverlayPlugin logにエラーを確認する](#check-the-overlayplugin-log-for-errors)
+  - [ファイルがロードされているかどうかを確認する](#check-if-your-file-is-loaded)
+  - [ユーザーファイルにエラーがないか確認する](#check-if-your-user-file-has-errors)
 
-## Using the cactbot UI
+## Cactbot UIの使用
 
-The best way to customize cactbot is to use the cactbot configuration UI. This is under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot.
+Cactbot設定UIを使用してcactbotをカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
 
-This has options for things like:
+次のようなオプションがあります：
 
-- setting triggers to tts
-- disabling triggers
-- changing your cactbot language
-- volume settings
-- getting rid of that cheese icon
+- トリガーのTTS設定
+- トリガーの無効化
+- cactbot言語の変更
+- 音量設定
+- チーズアイコンを隠す
 
-It is not possible to configure everything you might want through the cactbot configuration UI. However, it is the easiest place to start with. Over time, more options will be added there.
+Cactbot設定UIは、いくつかのオプションのみが提供します。 ただし、最初は最も簡単な方法です。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. You should not need to edit that file directly.
+それらのオプションは`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`に保存されます。 そのファイルを直接編集する必要はありません。
 
-## User Directory Overview
+## ユーザーディレクトリ概要
 
-If the cactbot UI doesn't have the option you are looking for, then you may need to consider user file overrides. At this point, you are writing JavaScript and CSS, and so you might need a little bit of programming savvy.
+Cactbot UIに必要なオプションがない場合は、 ユーザーファイルのオーバーライドを考慮することがあります。 つまり、JavaScriptとCSSを書くことです。 そのために、プログラミングにいくつか知識が必要です。
 
-The general philosophy of cactbot is that any user configuration should only go in files in the user directory. This will prevent your changes from being overwritten during future cactbot updates. Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
+Cactbotの設計哲学には、 すべてのユーザー設定は、ユーザーディレクトリ内のファイルにのみ配置することがあります。 これにより、cactbotの更新時に変更が上書きされるのを防ぐこともできます。 さらに、将来的には、cactbotリリースから直接cactbotファイルを変更しても、 ビルド手順を実行しないと、正しく機能しませぬことがあります。
 
-All cactbot UI modules can load user settings from the [user/](../user/) directory. The `raidboss` module loads `user/raidboss.js` and `user/raidboss.css`. The `oopsyraidsy` module loads `user/oopsyraidsy.js` and `user/oopsyraidsy.css`. And so on, for each module. These files are included after cactbot's files and can override its settings.
+すべてのcactbot UIモジュールは、[user/](../../user/)ディレクトリからユーザー設定をロードできます。 つまり、`raidboss` モジュールは`user/raidboss.js` と `user/raidboss.css` をロードする。 `Oopsyraidsy` モジュールなら、`user/oopsyraidsy.js` と `user/oopsyraidsy.css` をロードします。 このように、全てのモジュールは、ロード機能があります。 これらのファイルはcactbotのファイルがロードした後に含まれ、元の設定を上書きできます。
 
-The `user/` directory already includes some example configuration files, which you can rename and use. For example the [user/raidboss-example.js](../user/raidboss-example.js) file can be renamed to `user/raidboss.js` and edited to change the behavior of the `raidboss` module.
+` user/ `ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更して使用することができます。 たとえば、[ user/raidboss-example.js ](../../user/raidboss-example.js)ファイルの名前を` user/raidboss.js `に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
 
-After making any changes to these files, pressing the "Reload overlay" button for the appropriate overlay in ACT's OverlayPlugin settings will apply the changes.
+これらのファイルに変更をした後、 「オーバーレイの再読み込み」ボタンを押し、 ACTのOverlayPluginに対応したオーバーレイに対して、変更が適用されます。
 
-## Setting Your User Directory
+## ユーザーディレクトリを設定
 
-The cactbot user directory can be set via the cactbot configuration UI: ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbot user directory. Click the `Choose Directory` button and select a folder on disk.
+Cactbotユーザーディレクトリは、cactbot設定UIを介して設定できます。 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbotユーザーディレクトリ。 「`ディレクトリを選択`」ボタンを押し、ディスクに任意フォルダを選択します。
 
 If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
 
-Ideally, you should select the `cactbot/user` folder from your cactbot installation. This is often in `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`. [This folder](../docs) has example customization files.
+Cactbotインストールディレクトリにある`cactbot/user `フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 [This folder](../docs) has example customization files.
 
-## Customizing Appearance
+## 外観カスタム化
 
 The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
 
