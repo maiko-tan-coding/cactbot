@@ -15,7 +15,7 @@
   - [ファイルがロードされているかどうかを確認する](#check-if-your-file-is-loaded)
   - [ユーザーファイルにエラーがないか確認する](#check-if-your-user-file-has-errors)
 
-## Cactbot UIの使用
+## Cactbot UIを利用
 
 Cactbot設定UIを使用してcactbotをカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
 
@@ -47,17 +47,17 @@ Cactbotの設計哲学には、 すべてのユーザー設定は、ユーザー
 
 Cactbotユーザーディレクトリは、cactbot設定UIを介して設定できます。 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbotユーザーディレクトリ。 「`ディレクトリを選択`」ボタンを押し、ディスクに任意フォルダを選択します。
 
-If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
+選択が取り消されたら、設定値はcactbotのインストールパスに基づく、デフォルト値となります。
 
-Cactbotインストールディレクトリにある`cactbot/user `フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 [This folder](../docs) has example customization files.
+Cactbotインストールディレクトリにある`cactbot/user `フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
 
 ## 外観カスタム化
 
-The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
+`user/<name>.css`ファイルを変更することにより、UIモジュールの位置、サイズ、色などをカスタマイズできます。 カスタマイズ可能なセレクターは`ui/<name>/<name>.css`にあります。
 
-For example in [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css), you see the `#popup-text-container` and `#timeline-container` which can be changed via `user/raidboss.css` to different positions as desired. You can use `user/raidboss.css` to add additional styling.
+例えば、[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css)には、 `#popup-text-container` や `#timeline-container`があります。 `user/raidboss.css`に介してUIコンポーネントの位置をカスタマイズすることができます。 `user/raidboss.css` にスタイルを追加することができます。
 
-The size and color of info text alerts can also be changed by making a CSS rule for the `.info-text` class such as below:
+情報テキストのサイズと色も変更できます。 以下のように、`.info-text `クラスのCSS規則を作成すれば：
 
 ```css
 .info-text {
@@ -66,21 +66,21 @@ The size and color of info text alerts can also be changed by making a CSS rule 
 }
 ```
 
-You can think about the CSS in the user file as being appended to the end of any built-in cactbot CSS file. Therefore, you need to keep in mind [CSS specificity rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity), possibly adding `!important` to force your rule to override. Additionally, you may need to unset properties by setting them to `auto`.
+簡単に言えば、cactbotはユーザーファイルにあるCSS規則を内蔵されたCSSファイルの後ろに追加されると思われることができます。 このときは、[CSS詳細度](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)を覚えておく必要があります。 例えば `!important` を追加して、規則を強制的に上書きされます。 もう一方、とある属性をデフォルトの `auto` 値にリセットする必要があります。
 
-The best way to debug CSS issues is to use [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools). You can open DevTools for an overlay by going to ACT -> Plugins -> OverlayPlugin.dll -> your overlay -> Open DevTools.
+CSSをデバッグするには、[Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools)というツールがおすすめです。 ACT -> Plugins -> OverlayPlugin.dll -> 対応オーバーレイ -> DevToolsを開く でDevToolsが起動できます。
 
-**Note**: some things are hard or impossible to customize, such as the timeline bars. This is because they use custom elements, and they don't expose a lot of knobs to tune. If you have particular things you want to change about the timeline bars that you can't, please feel free to submit a [github issue](https://github.com/quisquous/cactbot/issues/new/choose).
+**メモ**：タイムラインバーなど、いくつかのコンポーネントのカスタマイズは難しいや、不可能とも言えます。 それらはカスタムエレメントを使っているから、エクスポートした設定項目が少ないです。 もしタイムラインバーに対して特別な要求があるのに、調整方法がわからないなら、自由的に[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出しよう。
 
-**Warning**: cactbot makes no guarantees about preserving CSS backwards compatability. Future changes to cactbot may rearrange elements, change element names and classes, or change styling entirely. In general, you are on your own if you want to style cactbot with CSS.
+**注意**：cactbotはCSSの後方互換性が保証しません。 将来の更新により、cactbotはエレメントの組み換えや、 エレメントの名前とクラスの書き換え、 さらにスタイル全体的に行う変更の可能性があります。 つまり、カスタムCSSは将来問題が発生する可能性があることに注意する必要があります。
 
-## Overriding Raidboss Triggers
+## Raidbossトリガーのオーバーライド
 
-You can use your `cactbot/user/raidboss.js` to override how triggers behave. You can change the text that they output, what jobs they run for, and how long they stay on screen, and anything else.
+`cactbot/user/raidboss.js` ファイルを利用して、トリガーの振る舞いを上書きすることができます。 例えば、出力テキストや、 適用ジョブや、 表示時間などの変更が可能です。
 
-In `cactbot/user/raidboss.js`, there is an `Options.Triggers` list that contains a list of trigger sets. You can use this to append new triggers and modify existing triggers. If a user file contains a trigger with the same id as any previous trigger (including triggers in cactbot), then that trigger will override it.
+`cactbot/user/raidboss.js` ファイルに、 変数`Options.Triggers`はトリガーセットを含まれたリストです。 この変数を使い、新規トリガーや既存トリガーの変更が可能です。 ユーザーファイルに登録した新規トリガーのIDは既存のトリガー （cactbotが提供した内臓トリガー）と同じでしたら、そのトリガーが上書きされます。
 
-If you are going to modify triggers, it is worth reading the [trigger guide](RaidbossGuide.md) to understand what the various fields of each trigger means.
+[トリガーガイド](RaidbossGuide.md)にはトリガーの属性や仕様が記載されます。 トリガーを変更する前に、このガイドを読むことがおすすめです。
 
 In general, the pattern to follow is to add a block of code to your `cactbot/user/raidboss.js` line that looks like this:
 
