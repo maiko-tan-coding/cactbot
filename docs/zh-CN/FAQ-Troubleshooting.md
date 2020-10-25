@@ -23,12 +23,12 @@ ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactb
 
 如果您见到类似于如下错误：`Error: (overlay): Exception in SendFastRateEvents: Could not load file or assembly 'FFXIV_ACT_Plugin, Version=(version), Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.`，可能意味着您需要解锁FFXIV插件。  详见上方的DLL解锁步骤。
 
-If you get an error that says `Plugin Load Failure` and `The downloaded file did not contain a plugin that could be loaded`, there could be several potential issues.
+如果您见到错误窗口提示 `Plugin Load Failure` 以及 `The downloaded file did not contain a plugin that could be loaded`， 则可能有多个潜在问题。
 
-- Make sure you have [installed OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin).
-- Check your OverlayPlugin version in **Plugins** -> **Plugin Listing** -> **OverlayPlugin.dll**. If this is not the same version as [this release](https://github.com/ngld/OverlayPlugin/releases/latest), then remove it and re-follow the [installation instructions](https://github.com/quisquous/cactbot#install-ngld-overlayplugin).
-- Make sure you are running x64 ACT (`Advanced Combat Tracker.exe`) and not x86 ACT (`ACTx86.exe`).
-- Finally, make sure you have reloaded ACT once you have installed OverlayPlugin.
+- 请确认您是否正确 [安装 OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
+- 从 **Plugins** -> **Plugin Listing** -> **OverlayPlugin.dll** 检查 OverlayPlugin 版本。 若与 [该版本](https://github.com/ngld/OverlayPlugin/releases/latest)不匹配， 则将其移除并重新 [安装ngld版本地OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
+- 请确认您正在运行的是x64版本的ACT (`Advanced Combat Tracker.exe`) 而非x86 (`ACTx86.exe`)。
+- 最后，在成功安装OverlayPlugin之后必须重新启动ACT。
 
 If you get an error similar to `Invalid Plugin: This assembly does not have a class that implements ACT's plugin interface, or scanning the assembly threw an error.` or `Load Error: Method 'LoadConfig' in type 'CactbotEventSource' etc etc does not have an implementation` then you should make sure that `CactbotOverlay.dll` is listed after `OverlayPlugin.dll` in **Plugins** -> **Plugin Listing**.
 
