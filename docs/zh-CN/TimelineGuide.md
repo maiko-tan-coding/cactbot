@@ -194,35 +194,35 @@ Cactbot默认并不包含这些配置，这个功能更适用于用户自行配�
 
 当您攻略副本之后，您可以获得一些 [网络日志行](LogGuide.md#network-log-lines)。
 
-Follow those links, click **Raw**, then right click and **Save As** to save them to disk.
+找到对应的副本攻略记录，点击 **Raw**，然后右键选择 **Save As**，将其保存到磁盘上。
 
-Good guidelines for getting good logs are:
+也就是说，获取日志的步骤如下：
 
-1. run long enough to see the enrage
-1. have enough people to see all the mechanics (e.g. t11 tethers don't appear without two people)
-1. per phase, run long enough to see the mechanics loop
-1. run several times so you can test it
+1. 尽量延长攻略时间，直到狂暴
+1. 有足够的队员数量以看到所有机制 (例如 t11 中连线机制至少要两人才出现)
+1. 对于每个阶段，延长时间直到看到机制循环
+1. 攻略多次以便于之后的测试
 
-### Software prerequisites
+### 软件需求
 
 * [Python 3](https://www.python.org/downloads/release/python-373/)
-* A copy of cactbot's [source code](https://github.com/quisquous/cactbot/archive/main.zip)
+* 一份cactbot的 [源代码](https://github.com/quisquous/cactbot/archive/main.zip)拷贝
 
-You should do a system-wide installation of Python 3 if you can, as this will put Python into your Windows PATH so that you can easily run it from the command line.
+安装Python 3时，推荐为该系统上的所有用户安装， 这是因为此安装方式会将Python写入Windows的PATH变量中， 使您可以从命令提示符方便地运行Python。
 
-### Timeline Skeleton
+### 时间轴基础骨架
 
-There are three things you need to add a new timeline to cactbot.
+在cactbot中创建时间轴有三大步骤。
 
-(1) Create a blank timeline file.
+(1) 创建一个空文件。
 
-Add a new file called **ui/raidboss/data/timelines/cape_westwind.txt**. You can leave it blank.
+新建一个文本文件名为 **ui/raidboss/data/timelines/cape_westwind.txt**。 内容保持空白即可。
 
-(2) Add a new triggers file, if it doesn't exist.
+(2) 若触发器文件不存在，则新建一个。
 
-Create **ui/raidboss/data/02-arr/trial/cape_westwind.js**. This can be named whatever you want. Timeline files can only be loaded via triggers files, so the triggers file is always required.
+新建 **ui/raidboss/data/02-arr/trial/cape_westwind.js**。 此文件可任意命名。 时间轴文件仅能被触发器文件加载， 因此触发器文件总是必须的。
 
-An initial triggers file should look like the following:
+最初的触发器文件应当如下所示：
 
 ```javascript
 'use strict';
@@ -235,32 +235,32 @@ An initial triggers file should look like the following:
 }];
 ```
 
-(3) Update the manifest file.
+(3) 更新manifest文件。
 
-Update **ui/raidboss/data/manifest.txt** with both the name of the new triggers file and the new timeline file.
+在 **ui/raidboss/data/manifest.txt** 文件中添加您所新建的触发器文件与时间轴文件的路径。
 
-(4) Reload raidboss
+(4) 重载raidboss悬浮窗
 
-If you've changed any of these files, reload your cactbot raidboss plugin to pick up the changes.
+若您已经对这些文件进行了修改，则可以通过重载cactbot的raidboss悬浮窗以应用更改。
 
-### Generating an initial timeline file
+### 生成初始时间轴文件
 
-Once you have a network log file, you need to find the start and the finish.
+在你准备处理网络日志文件时，您应该找到战斗的开始与结束时间点。
 
-[View the logs in ACT](LogGuide.md#viewing-logs-after-a-fight) and find the start and the end.
+[在ACT中查看日志](LogGuide.md#viewing-logs-after-a-fight)，然后找到开始与结束。
 
 ![encounter logs screenshot](images/timelineguide_encounterlogs.png)
 
-For example, in this fight, these are the relevant log lines and times:
+例如，对于此战斗记录，您可以看到与之关联的日志行与时间。
 
 ```log
 [18:42:23.614] 15:105E5703:Potato Chippy:2E:Tomahawk:4000EE16:Rhitahtyn sas Arvina:710003:9450000:1C:2E8000:0:0:0:0:0:0:0:0:0:0:0:0:140279:140279:8010:8010:1000:1000:-707.8608:-822.4221:67.74045:3858:74095:4560:0:1000:1000:-693.7162:-816.4633:65.55687:
 [18:49:22.934] 19:Rhitahtyn Sas Arvina was defeated by Potato Chippy.
 ```
 
-(Known bug: sometimes network logs from other people's timezones require converting the time from what the act log lines.  Patches welcome.)
+(已知缺陷：有时处理来自于他人的网络日志时可能需要转换时差。  欢迎补充相关代码。)
 
-You can then make a timeline from those times by running the following command.
+基于这些时间，您可以通过下面的命令生成时间轴。
 
 ```bash
 python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934
@@ -356,7 +356,7 @@ python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934
 402.4 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
 ```
 
-(Note that you can also use the `-lf` parameter to list the encounters in the combat log.
+(注意 您也可以通过 `-lf` 列出网络日志中所有的独立战斗记录。
 
 ```bash
 python make_timeline.py -f CapeWestwind.log -lf
@@ -368,23 +368,23 @@ python make_timeline.py -f CapeWestwind.log -lf
 6. 19:40:20.606 19:46:44.342 Cape Westwind
 ```
 
-From here, you can then rerun the command with the number of the encounter you want to use, as `-lf 3`.)
+基于此，您可以加上战斗记录id然后重新运行命令，比如`-lf 3`。)
 
-This isn't really a workable timeline yet, but it's a start. Paste this into **ui/raidboss/data/timelines/cape_westwind.txt**.
+当然，此时间轴仍无法使用，但是千里之行，始于足下。 将输出粘贴至**ui/raidboss/data/timelines/cape_westwind.txt**。
 
-If you are using Windows cmd.exe or MINGW32 as your terminal, you can copy this by clicking the upper left hand corner icon, selecting **Edit**, and then **Mark**. You can highlight what you want with your mouse, and then hit the Enter key, and that will copy that so you can paste it elsewhere.
+若您正在使用的终端是Windows的命令提示符或者MINGW32， 则您可以点击窗口左上方的图标， 然后分别点击**编辑** -> **标记**。 然后您可以用鼠标选择文本，被选中的文本会高亮显示。 按下回车键后选中的文本会复制到剪贴板，然后您就可以随意粘贴了。
 
 ![mark screenshot](images/timelineguide_copy.png)
 
-The first thing to note from this log is that there's a bunch of junk from adds. Most of the time, you can't count on adds to have reliable timing relative to the main boss, so it's usually better to remove them.
+应当注意的是，日志中来自于小怪的无用日志行不胜枚举。 大多数情况下，我们不可依赖小怪的时间去推测Boss的机制， 因此通常我们会移除小怪的相关日志。
 
-The make_timeline.py script has two options to do this. One is "ignore combatants" and the other is "ignore id". Either `-ic "7Th Cohort Optio"` or `-ii 0A 2CD 2CE 194 14` will remove all of these abilities. We'll go with ids.
+make_timeline.py 脚本支持两个选项以提供此功能。 其一为“忽略实体”，其一为“忽略id”。 如 `-ic "7Th Cohort Optio"` 或 `-ii 0A 2CD 2CE 194 14` 就可以隐藏这些技能。 我们在这里使用忽略id的功能。
 
-Run the command again with this ignore to have a cleaned up version: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14`
+重新运行命令，这次带上忽略id的选项： `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14`
 
-At this point, it may also be worth going through and finding other lines to add. Usually, these are [added combatant](LogGuide.md#03-addcombatant) lines or [game log lines](LogGuide.md#00-logline) for rp text. You can look at the time and figure out where they go yourself. (Patches welcome to add either of these into **make_timeline.py** automatically.)
+此时，您可以再次阅览生成的时间轴，确认是否需要添加更多的条目。 我们通常要手动添加 [added combatant (添加实体)](LogGuide.md#03-addcombatant) 或用于匹配的NPC话语的 [game log lines (游戏日志行)](LogGuide.md#00-logline)。 此时您可以自己研究如何将其添加进时间轴中。 (欢迎向 **make_timeline.py** 贡献代码以自动实现这一步骤。)
 
-The relevant lines here are:
+相关日志应如下所示：
 
 ```log
 [18:45:27.041] 03:Added new combatant 7Th Cohort Optio.  Job: 0 Level: 49 Max HP: 24057 Max MP: 8010 Pos: (-665.5159,-804.6631,62.33055).
@@ -395,13 +395,13 @@ The relevant lines here are:
 [18:48:27.000] 00:0044:Rhitahtyn sas Arvina:Ungh... Though it cost me my life...I will strike you down!
 ```
 
-You can subtract the times from the start time to figure out about where they are. For instance, the adds pop at t=183.5 (which is 18:45:27.041 - 18:42:23.614).
+您可以将其出现的时间与战斗开始时间相减，即可得到正确的相对时间。 对于此实例，小怪出现在183.5秒 (通过 18:45:27.041 - 18:42:23.614 得到)。
 
-### Building Loops
+### 构建循环
 
-The next step is to build some loops around the phases. From observation, it looks like there's a number of phase pushes.
+下一步是在每个阶段内构建循环。 观察可得，此处有若干个不同阶段。
 
-Here's what the initial phase looks like, with some extra line breaks for clarity.
+这是我们的初始阶段划分，此处加了一些空行以便清晰的分辨。
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -420,9 +420,9 @@ Here's what the initial phase looks like, with some extra line breaks for clarit
 80.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
 ```
 
-It's pretty clear that there's a loop of roughly 27.8 or 27.9 seconds. Let's just assume it's 27.8
+可以看出来，这里的循环长度大约在27.8到27.9之间。 我们假定它是27.8吧。
 
-The best tool for making perfect loops is **util/timeline_adjust.py**. This script will walk through a timeline file and print out the same timeline file, adjusted by any amount, positive or negative. (Note: it will not adjust jumps.)
+对于构建循环，我们有个优秀的工具**util/timeline_adjust.py**。 这个脚本可以遍历整个时间轴文件，并以可正可负的一定偏移值调整时间轴， 最后将调整后的时间轴输出。 (注意：该脚本不会调整jump。)
 
 Here's an abbreviated version of the output from running this command:
 
