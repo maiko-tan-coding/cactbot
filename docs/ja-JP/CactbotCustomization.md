@@ -39,7 +39,7 @@ Cactbotの設計哲学には、 すべてのユーザー設定は、ユーザー
 
 すべてのcactbot UIモジュールは、[user/](../../user/)ディレクトリからユーザー設定をロードできます。 つまり、`raidboss` モジュールは`user/raidboss.js` と `user/raidboss.css` をロードする。 `Oopsyraidsy` モジュールなら、`user/oopsyraidsy.js` と `user/oopsyraidsy.css` をロードします。 このように、全てのモジュールは、ロード機能があります。 これらのファイルはcactbotのファイルがロードした後に含まれ、元の設定を上書きできます。
 
-` user/ `ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更して使用することができます。 たとえば、[ user/raidboss-example.js ](../../user/raidboss-example.js)ファイルの名前を` user/raidboss.js `に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
+`user/`ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更して使用することができます。 たとえば、[user/raidboss-example.js](../../user/raidboss-example.js)ファイルの名前を`user/raidboss.js`に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
 
 これらのファイルに変更をした後、 「オーバーレイの再読み込み」ボタンを押し、 ACTのOverlayPluginに対応したオーバーレイに対して、変更が適用されます。
 
@@ -49,7 +49,7 @@ Cactbotユーザーディレクトリは、cactbot設定UIを介して設定で�
 
 選択が取り消されたら、設定値はcactbotのインストールパスに基づく、デフォルト値となります。
 
-Cactbotインストールディレクトリにある`cactbot/user `フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
+Cactbotインストールディレクトリにある`cactbot/user`フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
 
 ## 外観カスタム化
 
@@ -57,7 +57,7 @@ Cactbotインストールディレクトリにある`cactbot/user `フォルダ�
 
 例えば、[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css)には、 `#popup-text-container` や `#timeline-container`があります。 `user/raidboss.css`に介してUIコンポーネントの位置をカスタマイズすることができます。 `user/raidboss.css` にスタイルを追加することができます。
 
-情報テキストのサイズと色も変更できます。 以下のように、`.info-text `クラスのCSS規則を作成すれば：
+情報テキストのサイズと色も変更できます。 以下のように、`.info-text`クラスのCSS規則を作成すれば：
 
 ```css
 .info-text {
@@ -70,7 +70,7 @@ CactbotはユーザーファイルにあるCSS規則を内蔵されたCSSファ�
 
 CSSをデバッグするには、[Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools)というツールがおすすめです。 ACT -> Plugins -> OverlayPlugin.dll -> 対応オーバーレイ -> DevToolsを開く でDevToolsが起動できます。
 
-**メモ**：タイムラインバーなど、いくつかのコンポーネントのカスタマイズは難しいや、不可能とも言えます。 それらはカスタムエレメントを使っている、エクスポートした設定項目が少ないだから。 もしタイムラインバーに対して特別な要求があるのに、調整方法がわからないなら、自由的に[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出しよう。
+**メモ**：タイムラインバーなど、いくつかのコンポーネントのカスタマイズは難しいや、不可能とも言えます。 それらはカスタムエレメントを使っている、エクスポートした設定項目が少ないだから。 もしタイムラインバーに対して特別な要求があるのに、調整方法がわからないなら、ご遠慮なく[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出しよう。
 
 **注意**：cactbotはCSSの後方互換性が保証しません。 将来の更新により、cactbotはエレメントの組み換えや、 エレメントの名前とクラスの書き換え、 さらにスタイル全体的に行う変更の可能性があります。 つまり、カスタムCSSは将来問題が発生する可能性があることに注意する必要があります。
 
@@ -104,7 +104,7 @@ Options.Triggers.push({
 
 ### 例１：出力テキストを変更する
 
-Let's say hypothetically that you are doing UCOB and your group decides that they are going to do fire out first instead of fire in first like cactbot calls it by default.
+例えば、今あなたのチームは絶バハムート討滅戦を攻略している、 cactbotがすすめたのはチーム全員が１回目のファイルボールを受けることなのに、 自分のチームには「１回目のファイアボールなら一人で受けよう！」という攻略法が確立したことと仮定しましょう。
 
 One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
 
