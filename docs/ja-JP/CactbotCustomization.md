@@ -6,7 +6,7 @@
 - [外観カスタム化](#customizing-appearance)
 - [Raidbossトリガーの上書き](#overriding-raidboss-triggers)
   - [例１：出力テキストを変更する](#example-1--changing-the-output-text)
-  - [例２：挑発の示すトリガーを全ジョブに適用する](#example-2--making-provoke-work-for-all-jobs)
+  - [例２：挑発トリガーを全ジョブに適用する](#example-2--making-provoke-work-for-all-jobs)
   - [例３：カスタムトリガーを追加する](#example-3--adding-custom-triggers)
 - [Raidbossタイムラインの上書き](#overriding-raidboss-timelines)
 - [動作のカスタマイズ](#customizing-behavior)
@@ -86,7 +86,7 @@ CSSをデバッグするには、[Chrome DevTools](https://developers.google.com
 
 ```javascript
 Options.Triggers.push({
-  // ファイルの上にあるZoneIdを探します
+  // ファイルの先頭にZoneIdを探します
   // 例：ZoneId.MatchAll (全てのゾーン) や ZoneId.TheBozjanSouthernFront など
   zoneId: ZoneId.PutTheZoneFromTheTopOfTheFileHere,
   triggers: [
@@ -106,9 +106,9 @@ Options.Triggers.push({
 
 例えば、今あなたのチームは絶バハムート討滅戦を攻略している、 cactbotがすすめたのはチーム全員が１回目のファイルボールを受けることなのに、 自分のチームには「１回目のファイアボールなら一人で受けよう！」という攻略法が確立したことと仮定しましょう。
 
-One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
+そのために、トリガーの出力テキストを調整しましょう。 元の fireball #1トリガーは [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743)に探せます。
 
-This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
+以降のコードを `cactbot/user/raidboss.js` に貼り付きましょう。
 
 ```javascript
 Options.Triggers.push({
@@ -124,7 +124,7 @@ Options.Triggers.push({
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 99999,
-      // The infoText is what appears on screen in green.
+      // infoText は緑のテキストです。
       infoText: {
         en: 'Fire OUT',
       },
@@ -136,15 +136,15 @@ Options.Triggers.push({
 });
 ```
 
-This edit also replaced the `tts` section and removed other languages other than English.
+ここは `tts` の部分や、英語以外の言語も削除しました。
 
-### Example 2: making provoke work for all jobs
+### 例２：挑発トリガーを全ジョブに適用する
 
-Currently, provoke only works for players in your alliance and not for all jobs. This example shows how to make it work for all players. The provoke trigger can be found in [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30).
+現在、挑発トリガーはアライアンスメンバーや、一部のジョブしか適用しません。 この例は、すべてのプレーヤーに適用させる方法を示しています。 元の挑発トリガーは [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30)に探せます。
 
-Here is a modified version with a different `condition` function. Because this shares the same `General Provoke` id with the built-in cactbot trigger, it will override the built-in version.
+こちらの例に、 `condition` 関数を変更しましょう。 トリガーのidは `General Provoke`、 cactbotに内蔵されたトリガーと同じidですから、 元のトリガーに上書きされます。
 
-This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
+以降のコードを `cactbot/user/raidboss.js` に貼り付きましょう。
 
 ```javascript
 Options.Triggers.push([{
@@ -154,8 +154,8 @@ Options.Triggers.push([{
       id: 'General Provoke',
       netRegex: NetRegexes.ability({ id: '1D6D' }),
       condition: function(data, matches) {
-        // I want to see all provokes, even they are not in the party,
-        // or I am not a tank.
+        // すべての挑発メッセージを見たい！
+        // パーティーメンバーじゃなくや、自分がタンクじゃなくでも。
         return true;
       },
       infoText: function(data, matches) {
@@ -174,13 +174,13 @@ Options.Triggers.push([{
 ]);
 ```
 
-You could also just delete the `condition` function entirely here, as triggers without conditions will always run when their regex matches.
+もとより、`condition`関数を丸ごと削除することも方法でしょう。条件関数がないなら、トリガー自体は正規表現がマッチ毎に起動できます。
 
-### Example 3: adding custom triggers
+### 例３：カスタムトリガーを追加する
 
-You can also use this same pattern to add your own custom triggers.
+カスタムトリガーを追加することも簡単なのです。
 
-Here's an example of a custom trigger that prints "Get out!!!", one second after you receive an effect called "Forked Lightning".
+こちらはトリガーの例があります。「Forked Lightning」という効果が受けたから１秒後、「Get out!!!」が表示しようとする。
 
 ```javascript
 Options.Triggers.push([
@@ -188,7 +188,7 @@ Options.Triggers.push([
     zoneId: ZoneId.MatchAll,
     triggers: [
       {
-        // This id is made up, and is not overriding a cactbot trigger.
+        // カスタムidだから、内蔵されたトリガーに上書きしません。
         id: 'Personal Forked Lightning',
         regex: Regexes.gainsEffect({ effect: 'Forked Lightning' }),
         condition: (data, matches) => { return matches.target === data.me; },
@@ -196,29 +196,29 @@ Options.Triggers.push([
         alertText: 'Get out!!!',
       },
 
-      // ... other triggers here, if you want
+      // ... 他のトリガー
     ],
   },
 
-  // ... other zones here, if you want
+  // ... 他のゾーン
 ]);
 ```
 
-Your best resources for learning how to write cactbot triggers is the [trigger guide](RaidbossGuide.md) and also reading through existing triggers in [ui/raidboss/data](../ui/raidboss/data).
+トリガーを実装する前に、[トリガーガイド](RaidbossGuide.md)を読むことがおすすめです。 [ui/raidboss/data](../../ui/raidboss/data) ディレクトリにトリガーコードも参考になれる。
 
-## Overriding Raidboss Timelines
+## Raidbossタイムラインの上書き
 
-Overriding a raidboss timeline is similar to [overriding a trigger](#overriding-raidboss-triggers).
+Raidbossタイムラインの上書きは[トリガーの上書き](#overriding-raidboss-triggers)と似ています。
 
-The steps to override a timeline are:
+操作手順は以下のように：
 
-1) Copy the timeline text file out of cactbot and into your user folder
+1) Cactbotからタイムラインテキストファイルをコピーし、ユーザーディレクトリに貼り付けましょう。
 
-    For example, you could copy
+    例えば、
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
-    to `user/the_epic_of_alexander.txt`.
+    を `user/the_epic_of_alexander.txt`にコピーしましょう。
 
-1) Add a section to your user/raidboss.js file to override this.
+1) user/raidboss.js にコードを追加しよう。
 
     Like adding a trigger, you add a section with the `zoneId`,
     along with `overrideTimelineFile: true`,
