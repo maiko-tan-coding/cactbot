@@ -184,7 +184,7 @@ Options.Triggers.push([{
 
 您也可以添加您的自定义触发器。
 
-这是一个示例触发器，当您受到“Forked Lightning”的效果后会输出“Get out!!!”。
+这是一个示例触发器，当您中了“Forked Lightning”效果时，会在1秒后显示“Get out!!!”。
 
 ```javascript
 Options.Triggers.push([
