@@ -53,11 +53,11 @@ Cactbotのインストール先に`cactbot/user`フォルダを選択してく�
 
 ## 外観カスタム化
 
-`user/<name>.css`ファイルを変更することにより、UIモジュールの位置、サイズ、色などをカスタマイズできます。 カスタマイズ可能なセレクターは`ui/<name>/<name>.css`にあります。
+`user/<name>.css`ファイルを変更することにより、UIモジュールの位置、サイズ、色などをカスタマイズできます。 カスタマイズできるセレクターは`ui/<name>/<name>.css`ファイルを参照してください。
 
-例えば、[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css)には、 `#popup-text-container` や `#timeline-container`があります。 `user/raidboss.css`に介してUIコンポーネントの位置をカスタマイズすることができます。 `user/raidboss.css` にスタイルを追加することができます。
+例えば、[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css)には、 `#popup-text-container` や `#timeline-container`があります。 `user/raidboss.css`に介してUIコンポーネントの位置をカスタマイズすることができます。 `user/raidboss.css` に他のCSS規則も追加しましょう。
 
-情報テキストのサイズと色も変更できます。 以下のように、`.info-text`クラスのCSS規則を作成すれば：
+情報テキストのサイズと色は、以下のような `.info-text`クラスのCSS規則を作成することで 変更することもできます：
 
 ```css
 .info-text {
@@ -66,17 +66,17 @@ Cactbotのインストール先に`cactbot/user`フォルダを選択してく�
 }
 ```
 
-CactbotはユーザーファイルにあるCSS規則を内蔵されたCSSファイルの後ろに追加されると考えられます。 このときは、[CSS詳細度](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)を覚えておく必要があります。 例えば `!important` を追加して、規則を強制的に上書きされます。 もう一方、とある属性をデフォルトの `auto` 値にリセットする必要があります。
+ユーザーファイルのCSS規則は、Cactbotの組み込みのCSSファイルの最後に追加されていると考えましょう。 そのため、[CSS詳細度](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)を覚えておく必要があります。 時には、規則を強制的に上書きさせるために`!important`を追加しましょう。 さらに、一部の属性をデフォルトの`auto`値にリセットする必要があります。
 
-CSSをデバッグするには、[Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools)というツールがおすすめです。 ACT -> Plugins -> OverlayPlugin.dll -> 対応オーバーレイ -> DevToolsを開く でDevToolsが起動できます。
+CSSをデバッグするには、[Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools)というツールがおすすめです。 ACT -> Plugins -> OverlayPlugin.dll -> 対応オーバーレイ -> DevToolsを開く によって、オーバーレイのDevToolsを起動しましょう。
 
-**メモ**：タイムラインバーなど、いくつかのコンポーネントのカスタマイズは難しいや、不可能とも言えます。 それらはカスタムエレメントを使っている、エクスポートした設定項目が少ないだから。 もしタイムラインバーに対して特別な要求があるのに、調整方法がわからないなら、ご遠慮なく[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出しよう。
+**メモ**：タイムラインバーなど、カスタマイズが難しいものや、カスタマイズ不可能なものがあります。 それらはカスタムエレメントを使っている、エクスポートした設定項目が少ないだから。 もしタイムラインバーについて変更したいことがあれば、[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出してください。
 
-**注意**：cactbotはCSSの後方互換性が保証しません。 将来の更新により、cactbotはエレメントの組み換えや、 エレメントの名前とクラスの書き換え、 さらにスタイル全体的に行う変更の可能性があります。 つまり、カスタムCSSは将来問題が発生する可能性があることに注意する必要があります。
+**注意**：cactbotはCSSの後方互換性を保証できません。 将来の更新により、cactbotはエレメントの配置を変更したり、 エレメント名やクラスを変更したり、 スタイルを完全に変更したりする可能性があります。 一般的には、cactbotのCSSやスタイルを変更したい場合は、自己責任でお願いします。
 
 ## Raidbossトリガーの上書き
 
-`cactbot/user/raidboss.js` ファイルを利用して、トリガーの振る舞いを上書きすることができます。 例えば、出力テキストや、 適用ジョブや、 表示時間などの変更が可能です。
+`cactbot/user/raidboss.js` ファイルによって、トリガーの動作を上書きすることができます。 例えば、出力テキストや、 適用ジョブや、 表示時間などの変更が可能です。
 
 `cactbot/user/raidboss.js` ファイルに、 変数`Options.Triggers`はトリガーセットを含まれたリストです。 この変数を使い、新規トリガーや既存トリガーの変更が可能です。 ユーザーファイルに登録した新規トリガーのIDは既存のトリガー （cactbotが提供した内臓トリガー）と同じでしたら、そのトリガーが上書きされます。
 
@@ -210,9 +210,9 @@ Options.Triggers.push([
 
 Raidbossタイムラインの上書きは[トリガーの上書き](#overriding-raidboss-triggers)と似ています。
 
-操作手順は以下のように：
+タイムラインを上書きする手順は以下の通りです。
 
-1) Cactbotからタイムラインテキストファイルをコピーし、ユーザーディレクトリに貼り付けましょう。
+1) Cactbotからタイムラインのテキストファイルをコピーし、ユーザーディレクトリに貼り付けましょう。
 
     例えば、
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
