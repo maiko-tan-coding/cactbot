@@ -1,8 +1,8 @@
 # Cactbotカスタム化
 
-- [Cactbot UIを利用](#using-the-cactbot-ui)
+- [Cactbot UIを利用する](#using-the-cactbot-ui)
 - [ユーザーディレクトリ概要](#user-directory-overview)
-- [ユーザーディレクトリを設定](#setting-your-user-directory)
+- [ユーザーディレクトリの設定](#setting-your-user-directory)
 - [外観カスタム化](#customizing-appearance)
 - [Raidbossトリガーの上書き](#overriding-raidboss-triggers)
   - [例１：出力テキストを変更する](#example-1--changing-the-output-text)
@@ -17,17 +17,17 @@
 
 ## Cactbot UIを利用
 
-Cactbot設定UIを使って、cactbotをカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
+Cactbot設定UIを介して、cactbotにカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
 
 いくつかの機能があります：
 
-- トリガーのTTS設定
+- トリガーのTTS出力
 - トリガーの無効化
-- cactbot言語の変更
+- cactbot言語を変更する
 - 音量設定
 - チーズアイコンを隠す
 
-Cactbot設定UIは、すべてのオプションを提供することができません。 ただし、最初はこのUIによると、最も簡単な方法です。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
+Cactbot設定UIには、一部未実装の機能があります。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
 
 それらのオプションは`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`に保存されます。 そのファイルを直接編集する必要はありません。
 
@@ -98,7 +98,7 @@ Options.Triggers.push({
 });
 ```
 
-最も簡単な方法はこちらのコードをコピーし、ユーザーファイルに貼付け、トリガー各自を変更する。 `zoneId`行を変更して、関心のあるゾーンのIDを設定します。 通常、cactbotトリガーファイルの先頭から分かります。 [こちらのファイル](../../resources/zone_id.js)にゾーンIDを含まれたリストがあります。 不適切なIDが指定されたら、OverlayPluginのログ窓に警告が出力する。 そして、トリガーコードをこちらに貼り付く、 自分が思うままに編集しよう。 変更したいすべてのトリガーをこのように編集して、 Raidbossオーバーレイを再読み込み、変更が適用されます。
+こちらのコードをコピーし、ユーザーファイルに貼付け、トリガーをそれぞれ変更することは最も簡単なのです。 `zoneId`行を変更して、関心のあるゾーンのIDを設定します。 通常、cactbotトリガーファイルの先頭から分かります。 [こちらのファイル](../../resources/zone_id.js)にゾーンIDを含まれたリストがあります。 不適切なIDが指定されたら、OverlayPluginのログ窓に警告が出力する。 そして、トリガーコードをこちらに貼り付く、 自分が思うままに編集しよう。 変更したいすべてのトリガーをこのように編集して、 Raidbossオーバーレイを再読み込み、変更が適用されます。
 
 **メモ**：この手順によると、元のトリガーは完全に放棄される。編集時にロジックを削除することが防げる必要があります。 CactbotはJavaScriptによって構成されたから、ユーザーファイルにも有効なJavaScriptしか使えません。 もしプログラミングに慣れていないなら、コードを編集する時に気にする必要があります。
 
