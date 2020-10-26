@@ -27,29 +27,29 @@ Cactbot設定UIを介して、cactbotにカスタマイズすることがおす�
 - 音量設定
 - チーズアイコンを隠す
 
-Cactbot設定UIには、一部未実装の機能があります。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
+Cactbot設定UIにすべての設定を行うことはできません。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
 
-それらのオプションは`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`に保存されます。 そのファイルを直接編集する必要はありません。
+これらのオプションは「`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`」ファイルに保存されています。 そのファイルを直接編集する必要はありません。
 
 ## ユーザーディレクトリ概要
 
-Cactbot UIに必要なオプションがない場合は、 ユーザーファイルに上書きすることを考慮することがあります。 つまり、JavaScriptとCSSを書くことです。 そのために、プログラミングにいくつか知識が必要です。
+Cactbot UIにお探しのオプションがない場合は、 ユーザーファイルの上書きを検討する必要があるかもしれません。 つまり、JavaScriptとCSSを書くことです。 少しプログラミングの知識が必要になるかもしれません。
 
-Cactbotの設計哲学には、 すべてのユーザー設定は、ユーザーディレクトリ内のファイルにのみ配置することがあります。 これにより、cactbotの更新時に変更が上書きされるのを防ぐこともできます。 さらに、将来的には、cactbotリリースから直接cactbotファイルを変更しても、 ビルド手順を実行しないと、正しく機能しませぬことがあります。
+Cactbotに一般的な考え方は、 ユーザー設定はユーザーディレクトリ内のファイルにのみ記述するというものです。 これにより、将来cactbotが更新する時に変更内容が上書きされるのを防ぐことができます。 さらに、将来的には、cactbotリリースから直接cactbotファイルを変更しても、 ビルド手順を実行しなければ正しく機能しません。
 
-すべてのcactbot UIモジュールは、[user/](../../user/)ディレクトリからユーザー設定をロードできます。 つまり、`raidboss` モジュールは`user/raidboss.js` と `user/raidboss.css` をロードする。 `Oopsyraidsy` モジュールなら、`user/oopsyraidsy.js` と `user/oopsyraidsy.css` をロードします。 このように、全てのモジュールは、ロード機能があります。 これらのファイルはcactbotのファイルがロードした後に含まれ、元の設定を上書きできます。
+すべてのcactbot UIモジュールは、[user/](../../user/)ディレクトリからユーザー設定を読み込むことができます。 つまり、`raidboss` モジュールは`user/raidboss.js` と `user/raidboss.css` をロードします。 `Oopsyraidsy` モジュールは、`user/oopsyraidsy.js` と `user/oopsyraidsy.css` をロードします。 といったように、各モジュールは、ロード機能があります。 これらのファイルはcactbotのファイルの後に含まれられ、元の設定を上書きすることができます。
 
-`user/`ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更して使用することができます。 たとえば、[user/raidboss-example.js](../../user/raidboss-example.js)ファイルの名前を`user/raidboss.js`に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
+`user/`ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更すれば使用することができます。 たとえば、[user/raidboss-example.js](../../user/raidboss-example.js)ファイルの名前を`user/raidboss.js`に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
 
 これらのファイルに変更をした後、 「オーバーレイの再読み込み」ボタンを押し、 ACTのOverlayPluginに対応したオーバーレイに対して、変更が適用されます。
 
 ## ユーザーディレクトリを設定
 
-Cactbotユーザーディレクトリは、cactbot設定UIを介して設定できます。 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbotユーザーディレクトリ。 「`ディレクトリを選択`」ボタンを押し、ディスクに任意フォルダを選択します。
+Cactbotユーザーディレクトリは、cactbot設定UIから設定できます： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbotユーザーディレクトリ。 「`ディレクトリを選択`」ボタンを押し、ディスクに任意フォルダを選択します。
 
-選択が取り消されたら、設定値はcactbotのインストールパスに基づく、デフォルト値となります。
+選択していない場合は、設定値はcactbotのインストールした場所に基づいて選択しようとします。
 
-Cactbotインストールディレクトリにある`cactbot/user`フォルダを選択することをお勧めします。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
+Cactbotのインストール先に`cactbot/user`フォルダを選択してください。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
 
 ## 外観カスタム化
 
