@@ -49,7 +49,7 @@ Cactbotユーザーディレクトリは、cactbot設定UIから設定できま�
 
 選択していない場合は、設定値はcactbotのインストールした場所に基づいて選択しようとします。
 
-Cactbotのインストール先に`cactbot/user`フォルダを選択してください。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 設定ファイルの例は、[このフォルダ](../../docs)にあります。
+Cactbotのインストール先に`cactbot/user`フォルダを選択してください。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 [This folder](../user) has example customization files.
 
 ## 外観カスタム化
 
