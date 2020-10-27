@@ -49,7 +49,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 若您没有选择，cactbot会尝试选择安装目录下的默认文件夹。
 
-建议您选择cactbot安装目录下的 `cactbot/user` 文件夹。 该文件夹通常为位于 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置文件位于 [此文件夹](../../docs) 下。
+建议您选择cactbot安装目录下的 `cactbot/user` 文件夹。 该文件夹通常为位于 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 [This folder](../user) has example customization files.
 
 ## 样式自定义
 
