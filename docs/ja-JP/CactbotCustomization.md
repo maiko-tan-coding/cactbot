@@ -1,13 +1,15 @@
 # Cactbotカスタム化
 
+🌎 [**English**] [[한국어](./ko-KR/CactbotCustomization.md)]
+
 - [Cactbot UIを利用する](#using-the-cactbot-ui)
 - [ユーザーディレクトリ概要](#user-directory-overview)
 - [ユーザーディレクトリの設定](#setting-your-user-directory)
 - [外観カスタム化](#customizing-appearance)
 - [Raidbossトリガーの上書き](#overriding-raidboss-triggers)
-  - [例１：出力テキストを変更する](#example-1--changing-the-output-text)
-  - [例２：挑発トリガーを全ジョブに適用する](#example-2--making-provoke-work-for-all-jobs)
-  - [例３：カスタムトリガーを追加する](#example-3--adding-custom-triggers)
+  - [例１：出力テキストを変更する](#example-1-changing-the-output-text)
+  - [例２：挑発トリガーを全ジョブに適用する](#example-2-making-provoke-work-for-all-jobs)
+  - [例３：カスタムトリガーを追加する](#example-3-adding-custom-triggers)
 - [Raidbossタイムラインの上書き](#overriding-raidboss-timelines)
 - [動作のカスタマイズ](#customizing-behavior)
 - [ユーザーファイルのデバッグ](#debugging-user-files)
@@ -17,9 +19,9 @@
 
 ## Cactbot UIを利用
 
-Cactbot設定UIを介して、cactbotにカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
+The best way to customize cactbot is to use the cactbot configuration UI. This is under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot.
 
-いくつかの機能があります：
+This has options for things like:
 
 - トリガーのTTS出力
 - トリガーの無効化
@@ -27,37 +29,37 @@ Cactbot設定UIを介して、cactbotにカスタマイズすることがおす�
 - 音量設定
 - チーズアイコンを隠す
 
-Cactbot設定UIにすべての設定を行うことはできません。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
+It is not possible to configure everything you might want through the cactbot configuration UI. However, it is the easiest place to start with. Over time, more options will be added there.
 
-これらのオプションは「`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`」ファイルに保存されています。 そのファイルを直接編集する必要はありません。
+These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. You should not need to edit that file directly.
 
 ## ユーザーディレクトリ概要
 
-Cactbot UIにお探しのオプションがない場合は、 ユーザーファイルの上書きを検討する必要があるかもしれません。 つまり、JavaScriptとCSSを書くことです。 少しプログラミングの知識が必要になるかもしれません。
+If the cactbot UI doesn't have the option you are looking for, then you may need to consider user file overrides. At this point, you are writing JavaScript and CSS, and so you might need a little bit of programming savvy.
 
-Cactbotに一般的な考え方は、 ユーザー設定はユーザーディレクトリ内のファイルにのみ記述するというものです。 これにより、将来cactbotが更新する時に変更内容が上書きされるのを防ぐことができます。 さらに、将来的には、cactbotリリースから直接cactbotファイルを変更しても、 ビルド手順を実行しなければ正しく機能しません。
+The general philosophy of cactbot is that any user configuration should only go in files in the user directory. This will prevent your changes from being overwritten during future cactbot updates. Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
 
-すべてのcactbot UIモジュールは、[user/](../../user/)ディレクトリからユーザー設定を読み込むことができます。 つまり、`raidboss` モジュールは`user/raidboss.js` と `user/raidboss.css` をロードします。 `Oopsyraidsy` モジュールは、`user/oopsyraidsy.js` と `user/oopsyraidsy.css` をロードします。 といったように、各モジュールは、ロード機能があります。 これらのファイルはcactbotのファイルの後に含まれられ、元の設定を上書きすることができます。
+All cactbot UI modules can load user settings from the [user/](../user/) directory. The `raidboss` module loads `user/raidboss.js` and `user/raidboss.css`. The `oopsyraidsy` module loads `user/oopsyraidsy.js` and `user/oopsyraidsy.css`. And so on, for each module. These files are included after cactbot's files and can override its settings.
 
-`user/`ディレクトリには、すでにいくつかの設定ファイルの例が含まれています。 名前を変更すれば使用することができます。 たとえば、[user/raidboss-example.js](../../user/raidboss-example.js)ファイルの名前を`user/raidboss.js`に変更し、 内容を編集すると、`raidboss`モジュールの動作を変更することがあります。
+The `user/` directory already includes some example configuration files, which you can rename and use. For example the [user/raidboss-example.js](../user/raidboss-example.js) file can be renamed to `user/raidboss.js` and edited to change the behavior of the `raidboss` module.
 
-これらのファイルに変更をした後、 「オーバーレイの再読み込み」ボタンを押し、 ACTのOverlayPluginに対応したオーバーレイに対して、変更が適用されます。
+After making any changes to these files, pressing the "Reload overlay" button for the appropriate overlay in ACT's OverlayPlugin settings will apply the changes.
 
 ## ユーザーディレクトリを設定
 
-Cactbotユーザーディレクトリは、cactbot設定UIから設定できます： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbotユーザーディレクトリ。 「`ディレクトリを選択`」ボタンを押し、ディスクに任意フォルダを選択します。
+The cactbot user directory can be set via the cactbot configuration UI: ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbot user directory. Click the `Choose Directory` button and select a folder on disk.
 
-選択していない場合は、設定値はcactbotのインストールした場所に基づいて選択しようとします。
+If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
 
-Cactbotのインストール先に`cactbot/user`フォルダを選択してください。 このフォルダは`%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`にあることが多いです。 [This folder](../user) has example customization files.
+Ideally, you should select the `cactbot/user` folder from your cactbot installation. This is often in `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`. [This folder](../user) has example customization files.
 
 ## 外観カスタム化
 
-`user/<name>.css`ファイルを変更することにより、UIモジュールの位置、サイズ、色などをカスタマイズできます。 カスタマイズできるセレクターは`ui/<name>/<name>.css`ファイルを参照してください。
+The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
 
-例えば、[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css)には、 `#popup-text-container` や `#timeline-container`があります。 `user/raidboss.css`に介してUIコンポーネントの位置をカスタマイズすることができます。 `user/raidboss.css` に他のCSS規則も追加しましょう。
+For example in [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css), you see the `#popup-text-container` and `#timeline-container` which can be changed via `user/raidboss.css` to different positions as desired. You can use `user/raidboss.css` to add additional styling.
 
-情報テキストのサイズと色は、以下のような `.info-text`クラスのCSS規則を作成することで 変更することもできます：
+The size and color of info text alerts can also be changed by making a CSS rule for the `.info-text` class such as below:
 
 ```css
 .info-text {
@@ -66,23 +68,23 @@ Cactbotのインストール先に`cactbot/user`フォルダを選択してく�
 }
 ```
 
-ユーザーファイルのCSS規則は、Cactbotの組み込みのCSSファイルの最後に追加されていると考えましょう。 そのため、[CSS詳細度](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)を覚えておく必要があります。 時には、規則を強制的に上書きさせるために`!important`を追加しましょう。 さらに、一部の属性をデフォルトの`auto`値にリセットする必要があります。
+You can think about the CSS in the user file as being appended to the end of any built-in cactbot CSS file. Therefore, you need to keep in mind [CSS specificity rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity), possibly adding `!important` to force your rule to override. Additionally, you may need to unset properties by setting them to `auto`.
 
-CSSをデバッグするには、[Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools)というツールがおすすめです。 ACT -> Plugins -> OverlayPlugin.dll -> 対応オーバーレイ -> DevToolsを開く によって、オーバーレイのDevToolsを起動しましょう。
+The best way to debug CSS issues is to use [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools). You can open DevTools for an overlay by going to ACT -> Plugins -> OverlayPlugin.dll -> your overlay -> Open DevTools.
 
-**メモ**：タイムラインバーなど、カスタマイズが難しいものや、カスタマイズ不可能なものがあります。 それらはカスタムエレメントを使っている、エクスポートした設定項目が少ないだから。 もしタイムラインバーについて変更したいことがあれば、[github issue](https://github.com/quisquous/cactbot/issues/new/choose)を提出してください。
+**Note**: some things are hard or impossible to customize, such as the timeline bars. This is because they use custom elements, and they don't expose a lot of knobs to tune. If you have particular things you want to change about the timeline bars that you can't, please feel free to submit a [github issue](https://github.com/quisquous/cactbot/issues/new/choose).
 
-**注意**：cactbotはCSSの後方互換性を保証できません。 将来の更新により、cactbotはエレメントの配置を変更したり、 エレメント名やクラスを変更したり、 スタイルを完全に変更したりする可能性があります。 一般的には、cactbotのCSSやスタイルを変更したい場合は、自己責任でお願いします。
+**Warning**: cactbot makes no guarantees about preserving CSS backwards compatability. Future changes to cactbot may rearrange elements, change element names and classes, or change styling entirely. In general, you are on your own if you want to style cactbot with CSS.
 
 ## Raidbossトリガーの上書き
 
-`cactbot/user/raidboss.js` ファイルによって、トリガーの動作を上書きすることができます。 例えば、出力テキストや、 適用ジョブや、 表示時間などの変更が可能です。
+You can use your `cactbot/user/raidboss.js` to override how triggers behave. You can change the text that they output, what jobs they run for, and how long they stay on screen, and anything else.
 
-`cactbot/user/raidboss.js` ファイルに、 変数`Options.Triggers`はトリガーセットを含まれたリストです。 この変数を使い、新規トリガーや既存トリガーの変更が可能です。 ユーザーファイルに登録した新規トリガーのIDは既存のトリガー （cactbotが提供した内臓トリガー）と同じでしたら、そのトリガーが上書きされます。
+In `cactbot/user/raidboss.js`, there is an `Options.Triggers` list that contains a list of trigger sets. You can use this to append new triggers and modify existing triggers. If a user file contains a trigger with the same id as any previous trigger (including triggers in cactbot), then that trigger will override it.
 
-[トリガーガイド](RaidbossGuide.md)にはトリガーの属性や仕様が記載されます。 トリガーを変更する前に、このガイドを読むことがおすすめです。
+If you are going to modify triggers, it is worth reading the [trigger guide](RaidbossGuide.md) to understand what the various fields of each trigger means.
 
-簡単に言うと、`cactbot/user/raidboss.js`ファイルに追加されるコードこのような形と思われます：
+In general, the pattern to follow is to add a block of code to your `cactbot/user/raidboss.js` line that looks like this:
 
 ```javascript
 Options.Triggers.push({
@@ -98,17 +100,17 @@ Options.Triggers.push({
 });
 ```
 
-こちらのコードをコピーし、ユーザーファイルに貼付け、トリガーをそれぞれ変更することは最も簡単なのです。 `zoneId`行を変更して、関心のあるゾーンのIDを設定します。 通常、cactbotトリガーファイルの先頭から分かります。 [こちらのファイル](../../resources/zone_id.js)にゾーンIDを含まれたリストがあります。 不適切なIDが指定されたら、OverlayPluginのログ窓に警告が出力する。 そして、トリガーコードをこちらに貼り付く、 自分が思うままに編集しよう。 変更したいすべてのトリガーをこのように編集して、 Raidbossオーバーレイを再読み込み、変更が適用されます。
+The easiest approach to modify triggers is to copy and paste the block of code above for each trigger. Modify the `zoneId` line to have the zone id for the zone you care about, usually from the top of the cactbot trigger file. [This file](../resources/zone_id.js) has a list of all the zone ids. If you specify one incorrectly, you will get a warning in the OverlayPlugin log window. Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
 
-**メモ**：この手順によると、元のトリガーは完全に放棄される。編集時にロジックを削除することが防げる必要があります。 CactbotはJavaScriptによって構成されたから、ユーザーファイルにも有効なJavaScriptしか使えません。 もしプログラミングに慣れていないなら、コードを編集する時に気にする必要があります。
+**Note**: This method completely removes the original trigger, and so do not delete any logic when making edits. Also, this is JavaScript, and so it still needs to be valid JavaScript. If you are not a programmer, be extra careful with what and how you edit.
 
 ### 例１：出力テキストを変更する
 
-例えば、今あなたのチームは絶バハムート討滅戦を攻略している、 cactbotがすすめたのはチーム全員が１回目のファイルボールを受けることなのに、 自分のチームには「１回目のファイアボールなら一人で受けよう！」という攻略法が確立したことと仮定しましょう。
+Let's say hypothetically that you are doing UCOB and your group decides that they are going to do fire out first instead of fire in first like cactbot calls it by default.
 
-そのために、トリガーの出力テキストを調整しましょう。 元の fireball #1トリガーは [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743)に探せます。
+One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
 
-以降のコードを `cactbot/user/raidboss.js` に貼り付きましょう。
+This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
 
 ```javascript
 Options.Triggers.push({
@@ -136,15 +138,15 @@ Options.Triggers.push({
 });
 ```
 
-ここは `tts` の部分や、英語以外の言語も削除しました。
+This edit also replaced the `tts` section and removed other languages other than English.
 
 ### 例２：挑発トリガーを全ジョブに適用する
 
-現在、挑発トリガーはアライアンスメンバーや、一部のジョブしか適用しません。 この例は、すべてのプレーヤーに適用させる方法を示しています。 元の挑発トリガーは [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30)に探せます。
+Currently, provoke only works for players in your alliance and not for all jobs. This example shows how to make it work for all players. The provoke trigger can be found in [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30).
 
-こちらの例に、 `condition` 関数を変更しましょう。 トリガーのidは `General Provoke`、 cactbotに内蔵されたトリガーと同じidですから、 元のトリガーに上書きされます。
+Here is a modified version with a different `condition` function. Because this shares the same `General Provoke` id with the built-in cactbot trigger, it will override the built-in version.
 
-以降のコードを `cactbot/user/raidboss.js` に貼り付きましょう。
+This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
 
 ```javascript
 Options.Triggers.push([{
@@ -174,13 +176,13 @@ Options.Triggers.push([{
 ]);
 ```
 
-もとより、`condition`関数を丸ごと削除することも方法でしょう。条件関数がないなら、トリガー自体は正規表現がマッチ毎に起動できます。
+You could also just delete the `condition` function entirely here, as triggers without conditions will always run when their regex matches.
 
 ### 例３：カスタムトリガーを追加する
 
-カスタムトリガーを追加することも簡単なのです。
+You can also use this same pattern to add your own custom triggers.
 
-こちらはトリガーの例があります。「Forked Lightning」という効果が受けたから１秒後、「Get out!!!」が表示しようとする。
+Here's an example of a custom trigger that prints "Get out!!!", one second after you receive an effect called "Forked Lightning".
 
 ```javascript
 Options.Triggers.push([
@@ -204,21 +206,21 @@ Options.Triggers.push([
 ]);
 ```
 
-トリガーを実装する前に、[トリガーガイド](RaidbossGuide.md)を読むことがおすすめです。 [ui/raidboss/data](../../ui/raidboss/data) ディレクトリにトリガーコードも参考になれる。
+Your best resources for learning how to write cactbot triggers is the [trigger guide](RaidbossGuide.md) and also reading through existing triggers in [ui/raidboss/data](../ui/raidboss/data).
 
 ## Raidbossタイムラインの上書き
 
-Raidbossタイムラインの上書きは[トリガーの上書き](#overriding-raidboss-triggers)と似ています。
+Overriding a raidboss timeline is similar to [overriding a trigger](#overriding-raidboss-triggers).
 
-タイムラインを上書きする手順は以下の通りです。
+The steps to override a timeline are:
 
-1) Cactbotからタイムラインのテキストファイルをコピーし、ユーザーディレクトリに貼り付けましょう。
+1) Copy the timeline text file out of cactbot and into your user folder
 
     例えば、
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
     を `user/the_epic_of_alexander.txt`にコピーしましょう。
 
-1) user/raidboss.js にコードを追加しよう。
+1) Add a section to your user/raidboss.js file to override this.
 
     Like adding a trigger, you add a section with the `zoneId`,
     along with `overrideTimelineFile: true`,
