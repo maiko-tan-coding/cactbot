@@ -42,19 +42,19 @@
 
 **zoneRegex** 用于匹配区域名称的正则表达式(匹配ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
-**overrideTimelineFile** 可选属性，使该触发器集合中指定的 `timelineFile` 和 `timeline` 属性覆盖任何先前被读取的同区域的触发器文件。 此属性仅用于用户文件，cactbot本身不使用该值。
+**overrideTimelineFile** 可选布尔值属性，使该触发器集合中指定的 `timelineFile` 和 `timeline` 属性覆盖任何先前被读取的同区域的触发器文件。 此属性仅用于用户文件，cactbot本身不使用该值。
 
 **timelineFile** 可选属性，指定当前区域对应的时间轴文件。 这些文件与触发器文件存放在同一文件夹中。 (例如 `raidboss/data/04-sb/raid/`)
 
 **timeline** 可选属性，时间轴的补充行。
 
-**locale** 可选属性，限定触发器仅用于特定语言。如 'en'、'ko'、'fr'。 若该属性未设置，则应用于所有语言。
+**locale** 可选属性，限定触发器仅在特定语言的客户端上生效。如 'en'、'ko'、'fr'。 若该属性未设置，则应用于所有语言。
 
-**replaceText** 键值对，用于时间轴中搜索替换技能名。 对应的技能名会被替换，但 `hideall`、`infotext`、`alerttext`、`alarmtext` 等依旧指向其原名称。 这一属性使我们可以对时间轴文件进行翻译/本地化，不需要直接编辑时间轴文件。
+**replaceText** 键值对，用于在时间轴中搜索并替换技能名。 显示的技能名会被替换，但 `hideall`、`infotext`、`alerttext`、`alarmtext` 等依旧指向其原名称。 这一属性使我们可以对时间轴文件进行翻译/本地化，而不需要直接编辑时间轴文件。
 
-**replaceSync** 键值对，用于时间轴中搜索替换同步正则表达式。 当同步正则表达式包含了本地化名称时，该属性是必要的。
+**replaceSync** 键值对，用于在时间轴中搜索并替换同步正则表达式。 当同步正则表达式包含了本地化名称时，该属性是必要的。
 
-**resetWhenOutOfCombat** 布尔值，默认为true。 该值为真时，时间轴和触发器均在脱战时自动重置。 否则，需要手动调用`data.StopCombat()`使其重置。
+**resetWhenOutOfCombat** 布尔值，默认为true。 该值为true时，时间轴和触发器均在脱战时自动重置。 否则，需要手动调用`data.StopCombat()`使其重置。
 
 ## 触发器结构
 
