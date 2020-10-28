@@ -19,9 +19,9 @@
 
 ## Cactbot UIを利用
 
-The best way to customize cactbot is to use the cactbot configuration UI. This is under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot.
+Cactbot設定UIを介して、cactbotにカスタマイズすることがおすすめです。 設定UIは ACT -> Plugins -> OverlayPlugin.dll -> Cactbot に開けられます。
 
-This has options for things like:
+いくつかの機能があります：
 
 - トリガーのTTS出力
 - トリガーの無効化
@@ -29,7 +29,7 @@ This has options for things like:
 - 音量設定
 - チーズアイコンを隠す
 
-It is not possible to configure everything you might want through the cactbot configuration UI. However, it is the easiest place to start with. Over time, more options will be added there.
+Cactbot設定UIにすべての設定を行うことはできません。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
 
 These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. You should not need to edit that file directly.
 
