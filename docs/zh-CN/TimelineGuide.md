@@ -449,11 +449,11 @@ python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.t
 
 在cactbot中，有一个配置窗口可以设置显示多久之后的时间轴。  默认是30秒，因此您应额外在循环后方添加至少30秒的后续时间轴。
 
-那么第一阶段的最终版本应该像是这样子：
+那么第一阶段的最终版本就完成了。
 
 注意，我们倾向于使用 **timeline_adjust.py** 生成的时间，而不是原本的时间。 这样我们从52.2跳转到24.4的时候，时间差依旧是正确的。  每次 `Gate Of Tartarus` 释放后5.4秒总会出现 `Shield Skewer`。
 
-之后我们会添加jump。
+之后我们会添加jump。现在它如下所示：
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
