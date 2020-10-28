@@ -1,4 +1,4 @@
-# Log Lines and Triggers
+# 日志行与触发器
 
 This is intended to be a comprehensive guide to log lines for folks who want to write ACT triggers for ff14.
 
