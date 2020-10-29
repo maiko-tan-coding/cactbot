@@ -29,15 +29,15 @@ Cactbot設定UIを介して、cactbotにカスタマイズすることがおす�
 - 音量設定
 - チーズアイコンを隠す
 
-Cactbot設定UIにすべての設定を行うことはできません。 だけど、はじめはこのUIを通じて、最も簡単なのです。 時間の経過とともに、さらに多くのオプションがそこに追加されます。
+Cactbot設定UIにすべての設定を行うことはできません。 だけど、はじめはこのUIを通じて、最も簡単なのです。 より多くのオプションは後でそこに追加されます。
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. You should not need to edit that file directly.
+これらのオプションは「`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`」ファイルに保存されています。 そのファイルを直接編集する必要はありません。
 
 ## ユーザーディレクトリ概要
 
-If the cactbot UI doesn't have the option you are looking for, then you may need to consider user file overrides. At this point, you are writing JavaScript and CSS, and so you might need a little bit of programming savvy.
+Cactbot UIにお探しのオプションがない場合は、 ユーザーファイルの上書きを考慮する必要があるかもしれません。 つまり、JavaScriptとCSSを書くことが必要です。 少しプログラミングの知識が必要になるかもしれません。
 
-The general philosophy of cactbot is that any user configuration should only go in files in the user directory. This will prevent your changes from being overwritten during future cactbot updates. Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
+一般的には、cactbotのユーザー設定はユーザーディレクトリ内のファイルにのみ記述するというものです。 これにより、将来cactbotが更新する時に変更内容が上書きされるのを防ぐことができます。 Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
 
 All cactbot UI modules can load user settings from the [user/](../user/) directory. The `raidboss` module loads `user/raidboss.js` and `user/raidboss.css`. The `oopsyraidsy` module loads `user/oopsyraidsy.js` and `user/oopsyraidsy.css`. And so on, for each module. These files are included after cactbot's files and can override its settings.
 
