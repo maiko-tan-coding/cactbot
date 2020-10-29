@@ -88,17 +88,17 @@
 
 **id string** 字符串，触发器id。 所有cactbot的内置触发器均包含一个独一无二的id， 同样推荐在用户自定义触发器中包含该属性，但不是必要属性。
 
-触发器id不可重复。 若某个触发器的id与另一个触发器完全一致， 则原有的同id的触发器会被完全忽略， 该触发器会覆盖并替代原有的触发器。 这个机制让用户可以方便地复制粘贴触发器代码，以修改为他们自己喜欢的方式。 没有id的触发器无法被覆盖。
+触发器id不可重复。 若某个触发器的id与另一个已读取的触发器完全一致， 则先被读取的同id的触发器会被完全忽略， 新读取的触发器会覆盖并替代前者。 这个机制让用户可以方便地复制粘贴触发器代码到用户覆盖文件中，以修改为他们自己喜欢的方式。 没有id的触发器无法被覆盖。
 
-当前的 `Regexes/NetRegexes` 结构并不要求将技能名/效果名等名称作为正则表达式的一部分。 因此，将辅助信息写在旁边尤为重要。 对此的推荐方式是将效果名/技能名/NPC名称等写进触发器id， 或者在旁边撰写详尽的注释并包含这些名称。 仅仅依赖触发器本体的上下文信息并不足以了解其用处。 (与id一样，仅针对提交到cactbot仓库的触发器提出这些补充信息的要求。)
+当前的 `Regexes/NetRegexes` 结构并不要求将技能名/效果名等名称作为正则表达式的一部分。 因此，将注释写在附近尤为重要。 对此的推荐方式是将效果名/技能名/NPC名称等写进触发器id， 或者在旁边撰写详尽的注释。 仅仅依赖触发器本体的上下文信息并不足以了解其用处。 (与id一样，仅要求提交到cactbot仓库的触发器拥有注释。)
 
-**disabled: false** 若该值为真，则该触发器将被完全禁用/忽略。 默认为false。
+**disabled: false** 若该值为true，则该触发器将被完全禁用/忽略。 默认为false。
 
-**netRegex / regex** 正则表达式，cactbot会将该正则表达式与每一条日志行做比对， 并触发可以匹配的触发器。 `netRegex` 版本用于匹配网络日志行， 而 `regex` 版本用于匹配普通的ACT日志。
+**netRegex / regex** 正则表达式，cactbot会将该正则表达式与每一条日志行做比对， 并在匹配上时触发该触发器。 `netRegex` 版本用于匹配网络日志行， 而 `regex` 版本用于匹配普通的ACT日志行。
 
-更加准确地说，相对于“直白”的正则表达式，我们更加推荐使用正则替换函数。 定义在 [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 和 [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) 中的辅助函数 使用传入参数进行匹配，若对应的参数未定义，则可以通过匹配组提取字符串。 自此，函数可以自动构建可以匹配对应日志行的正则表达式。 顾名思义，`netRegex` 使用 `NetRegexes` 辅助函数， 而 `regex` 使用 `Regexes` 辅助函数。
+更多时候，相对于“直白”的正则表达式，我们更加推荐使用正则替换函数。 定义在 [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 和 [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) 中的辅助函数 可以直接提取参数而不必从匹配组中提取。 自此，函数可以自动构建匹配对应日志行的正则表达式。 顾名思义，`netRegex` 使用 `NetRegexes` 辅助函数， 而 `regex` 使用 `Regexes` 辅助函数。
 
-**netRegexFr / regexFr** 正则表达式，但该正则表达式仅用于 fr 语言。 若设置了 `Options.ParserLanguage == 'fr'`，则 `regexFr` (如果存在的话) 优先于 `regex` 对日志行进行匹配。 否则，该值将会被忽略。  这只是针对法语的例子，你也可以使用其他的。例如：regexEn, regexKo。 就像 `netRegex` 对于 `regex` 一样， `netRegexFr` 匹配法语的网络日志行 而 `regexFr` 匹配法语的ACT日志行。
+**netRegexFr / regexFr** 基于客户端语言的正则表达式（以fr为示例）。 若设置了 `Options.ParserLanguage == 'fr'`，则 `regexFr` (如果存在的话) 优先于 `regex` 对日志行进行匹配。 否则，该值将会被忽略。  这只是以法语举例，你也可以使用其他的。例如：regexEn, regexKo。 就像 `netRegex` 对于 `regex` 一样， `netRegexFr` 匹配法语的网络日志行 而 `regexFr` 匹配法语的ACT日志行。
 
 语言区域并没有指定的优先级。 尽管一般情况下我们会使用 `de`、`fr`、`ja`、`cn`、`ko` 的顺序。 同样，与其使用 `正则表达式`，当前的最佳实践是使用正则表达式替换函数。
 
