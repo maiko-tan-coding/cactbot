@@ -7,9 +7,9 @@
 - [设置您自己的用户文件夹](#设置您自己的用户文件夹)
 - [样式自定义](#样式自定义)
 - [Raidboss触发器自定义](#raidboss触发器自定义)
-  - [例1：改变输出文本](#例1改变输出文本)
-  - [例2：使挑衅提示适用于全职业](#例2使挑衅提示适用于全职业)
-  - [例3：添加自定义触发器](#例3添加自定义触发器)
+  - [例1：改变输出文本](#例1：改变输出文本)
+  - [例2：使挑衅提示适用于全职业](#例2：使挑衅提示适用于全职业：)
+  - [例3：添加自定义触发器](#例3：添加自定义触发器)
 - [Raidboss时间轴自定义](#raidboss时间轴自定义)
 - [行为自定义](#行为自定义)
 - [用户文件的调试](#用户文件的调试)
@@ -222,9 +222,8 @@ Options.Triggers.push([
 
 1) 在 user/raidboss.js 中添加代码
 
-    如同我们添加触发器一样，您依旧需要定义 `zoneId`，
-    以及 `overrideTimelineFile: true`，
-    `timelineFile` 的值必须是文本文件的名称。
+    如同我们添加触发器一样，您依旧需要定义 `zoneId`、 `overrideTimelineFile: true`，
+    以及值为文本文件的名称的`timelineFile` 。
 
     ```javascript
     Options.Triggers.push({
@@ -235,10 +234,9 @@ Options.Triggers.push([
     ```
 
 
-    此时，我们假设您已经做完了第一步，并且该文本文件的名称为 `user/the_epic_of_alexander.txt` 。
+    （假设您已经做完了第一步，并且该文本文件的名称为 `user/the_epic_of_alexander.txt` ）
     
-    设置 `overrideTimelineFile: true`，
-    告诉cactbot将内置的时间轴完全替换为您添加的文件。
+    设置 `overrideTimelineFile: true` 是为了告诉cactbot将内置的时间轴完全替换为您添加的文件。
 
 1) 按您的喜好编辑您自己的时间轴文件
 
@@ -248,9 +246,9 @@ Options.Triggers.push([
 
 ## 行为自定义
 
-这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不可在触发器中访问的变量。
+这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不是触发器的变量。
 
-每个cactbot模块都有一个名为 `Options` 的变量，它包含了若干控制选项。 每一个 `ui/<name>/<name>.js` 文件的顶部都会修改并注释 `Options` 的各个变量。
+每个cactbot模块都有一个名为 `Options` 的变量，它包含了若干控制选项。 可用的 `Options` 变量会在每个 `ui/<name>/<name>.js` 文件的顶部列出。
 
 例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 文件中， 您可以通过 `PlayerNicks` 选项定义玩家的昵称。
 
@@ -258,7 +256,7 @@ Options.Triggers.push([
 Options.PlayerNicks = {
   // 'Firstname Lastname': 'Nickname',
   'Banana Nana', 'Nana',
-  'The Great\'one', 'Joe', // The Great'one => Joe 这里需要一个反斜杠转义单引号
+  'The Great\'one', 'Joe', //  =>  这里需要一个反斜杠转义单引号
   'Viewing Cutscene': 'Cut',
   // 等等
 };
@@ -270,15 +268,15 @@ Options.PlayerNicks = {
 
 ### 检查OverlayPlugin的错误日志
 
-您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到OverlayPlugin的日志窗口， 位于该窗口的底部，为一自动滚动的文本窗口。
+您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位于该窗口的底部的OverlayPlugin日志窗口，它是一个自动滚动的文本窗口。
 
 当运行错误时，错误信息会显示在此处。
 
 ### 检查文件是否加载
 
-首先，开启raidboss模块的调试模式。 打开cactbot配置窗口，启用 `显示开发者选项` ，然后重新加载悬浮窗。 然后，勾选raidboss模块下的 `启用调试模式`，再次重载悬浮窗。
+首先，您需要开启raidboss模块的调试模式。 打开cactbot配置窗口，启用 `显示开发者选项` ，然后重新加载悬浮窗。 然后，勾选raidboss模块下的 `启用调试模式`，再次重载悬浮窗。
 
-当raidboss模块的调试模式启用时，OverlayPlugin的日志窗口中会打印更多信息。 每次本地的用户文件加载时都会输出类似信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
+当raidboss模块的调试模式启用时，OverlayPlugin的日志窗口中会打印更多信息。 每次本地的用户文件加载时都会输出类似于这样的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
 
 确认您的用户文件是否正常加载。
 
