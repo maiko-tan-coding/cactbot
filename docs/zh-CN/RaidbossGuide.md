@@ -90,7 +90,7 @@
 
 触发器id不可重复。 若当前触发器的id与某一已定义的触发器完全一致，后者的定义将会完全失效，并由前者覆盖并替代其位置。 这个机制让用户可以方便地复制触发器代码并粘贴到用户文件中，以修改为他们自己喜欢的方式。 没有id的触发器无法被覆盖。
 
-目前cactbot采用的 `Regexes/NetRegexes` 结构并不要求将技能名/效果名等名称写进正则表达式。 因此，将注释写在附近尤为重要。 对此的推荐方式是将效果名/技能名/NPC名称等写进触发器id， 或者在旁边撰写详尽的注释。 仅仅依赖触发器本体的上下文信息并不足以了解其用处。 (与id一样，仅要求提交到cactbot仓库的触发器拥有注释。)
+目前cactbot采用的 `Regexes/NetRegexes` 结构并不要求将技能名/效果名等名称写进正则表达式。 因此，将注释写在附近尤为重要。 我们强烈推荐在触发器id中写入效果名/技能名/NPC名称等， 或者在旁边撰写包含这些信息的详尽注释。 仅仅依赖触发器本体的上下文信息并不足以了解其用处。 (与id一样，若您的触发器不是提交到cactbot仓库的，这些要求也可以忽略。)
 
 **disabled: false** 若该值为true，则该触发器将被完全禁用/忽略。 默认为false。
 
@@ -104,7 +104,7 @@
 
 (理论上，以后我们可能不再需要独立的语言特定正则表达式， 而是采用 `timelineReplace` 对象自动地替换这些正则表达式。 我们还没有确定具体的实现方式，但条条大路通罗马。)
 
-**condition: function(data, matches)** 当函数返回 `true` 时激活该触发器。 若返回的不是 `true`，则不会有任何响应。 当触发器定义了多个函数，这个函数总是第一个执行。 ([conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js) 中定义了一部分高阶条件函数。 一般情况下，如果与情境相符，使用这些函数是最佳解决方案。)
+**condition: function(data, matches)** 当函数返回 `true` 时激活该触发器。 若返回的不是 `true`，则当前触发器不会有任何响应。 不管触发器对象里定义了多少函数，该函数总是第一个执行。 ([conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js) 中定义了一部分高阶条件函数。 一般情况下，如果与情境相符，使用这些函数是最佳解决方案。)
 
 **preRun: function(data, matches)** 当触发器被激活时，该函数会在条件判定成功后立刻执行。
 
@@ -134,7 +134,7 @@
 
 ## 触发器杂项属性
 
-任何可以返回一个函数 (如 `infoText`、`alertText`、`alarmText` 和 `tts`)的元素都可以返回一个含有本地化字符串的对象，例如不仅仅返回英语的'Get Out'，还可以这样子： {en: 'Get Out', fr: 'something french'} 。  当然，其值也可以返回一个函数，再让该函数返回本地化字符串对象。  若当前的区域语言不存在于该对象中，则会返回 en 的值。
+任何可以返回一个函数 (如 `infoText`、`alertText`、`alarmText` 和 `tts`)的元素都可以返回一个含有本地化字符串的对象。 本地化字符串对象是指形如 {en: 'Get Out', fr: 'something french'} 的一维对象，用以支持多语言，而不是仅仅返回单个字符串如 'Get Out'。  当然，其值也可以返回一个函数，再让该函数返回本地化字符串对象。  若当前的区域语言不存在于该对象中，则会返回 en 的值。
 
 触发器元素按以下顺序载入，定义元素时也应该按该顺序排序：
 
@@ -179,7 +179,7 @@
 
 为统一触发器构造，以及减轻翻译时的手动负担， cactbot的触发器元素广泛运用了高阶函数。 诸如此类的工具函数使自动化测试更为简单， 并让人们在审查拉取更改时更容易捕获错误及不一致。
 
-目前我们有3种独立元素具有预定义结构： [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js)、[Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 以及 [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)。 `Condition` 函数不接受参数。 几乎所有的 `Response` 函数都接受 `severity`参数， 用于定义触发器被激活时输出的警报文本的等级。 `Regex` 函数根据匹配的日志行，接受若干种参数 [(例如 `gainsEffect()`)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176)， 不管哪种日志行一般都接受 `source` 属性 (技能的咏唱者/释放者的名称)， `id` 属性 (十六进制的技能ID，例如 `2478`)， 以及正则表达式是否要捕获匹配组 (`capture: false`)。 `Regex` 函数默认开启捕获，但按惯例应当仅对需要读取捕获组数据的触发器开启捕获。
+目前我们有3种独立元素具有预定义结构： [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js)、[Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 以及 [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)。 `Condition` 函数不接受参数。 几乎所有的 `Response` 函数都接受 `severity`参数， 用于定义触发器被激活时输出的警报文本的等级。 `Regex` 函数根据匹配的日志行，接受若干参数 [(例如 `gainsEffect()`)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176)， 不管哪种日志行一般都接受 `source` 属性 (技能的咏唱者/释放者的名称)， `id` 属性 (十六进制的技能ID，例如 `2478`)， 以及正则表达式匹配时是否启用捕获组 (`capture: false`)。 `Regex` 函数默认开启捕获组，但按惯例应当仅对依赖捕获数据的触发器开启捕获。
 
 以下是使用了这三种元素的示例触发器：
 
@@ -222,7 +222,7 @@
 },
 ```
 
-直接使用正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 在提交拉取请求时使用正则表达式字面量会导致构建失败。 当的确存在特定的需求，不得不使用正则表达式字面量时 (例如ACT新增了其他类型的日志行)， 我们强烈推荐开启一个拉取请求，直接更新 `regexes.js` 文件。
+使用正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 在提交拉取请求时使用正则表达式字面量会导致构建失败。 当的确存在特定的需求，不得不使用正则表达式字面量时 (例如ACT新增了其他类型的日志行)， 我们强烈推荐开启一个拉取请求，直接更新 `regexes.js` 文件。
 
 (当然，若您正在撰写仅用于您个人的触发器，您可以随意发挥。 此处的警告仅针对想为cactbot项目提交贡献的人们。)
 
