@@ -47,7 +47,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 ## 设置您自己的用户文件夹
 
-您可以通过cactbot配置界面设置此用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
+您可以通过cactbot配置界面设置用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
 
 若您没有选择，cactbot会尝试选择安装目录下的默认文件夹。
 
