@@ -37,7 +37,7 @@ cactbot在 [raidboss模块](https://github.com/quisquous/cactbot#raidboss-module
 
 ## 历史
 
-让我们回到2016年，Shasta Kota在the Death and Taxes网站上发布了一篇 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) 讲解如何使用anoyetta的 [ACT timeline 插件](https://github.com/anoyetta/ACT.Hojoring)。 此插件现在已经成为了Hojoring的一部分。
+2016年，Shasta Kota在the Death and Taxes网站上发布了一篇 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) 讲解如何使用anoyetta的 [ACT timeline 插件](https://github.com/anoyetta/ACT.Hojoring)。 此插件现在已经成为了Hojoring的一部分。
 
 在anoyetta之前也有过一个更旧 [kaizoban](https://github.com/090/act_timeline/releases) 版本，有一部分玩家也曾使用过该插件。
 
