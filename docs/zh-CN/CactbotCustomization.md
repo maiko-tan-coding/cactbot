@@ -59,7 +59,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 如您在 [ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中 可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中添加更多的样式。
 
-同样地，您可以通过修改 `.info-text` 类，添加新的CSS规则，以对信息文字的尺寸和颜色进行自定义。例如：
+同样地，您可以在 `.info-text` 类中添加新的CSS规则，对信息文字的尺寸和颜色进行自定义。例如：
 
 ```css
 .info-text {
@@ -72,7 +72,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 我们推荐使用 [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) 以调试CSS问题。 您可以通过 ACT -> Plugins -> OverlayPlugin.dll -> 您的悬浮窗名字 -> 启动Debug工具 以开启DevTools。
 
-**注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有从外部调节的接口。 如果您有特别的需求，但是您不知道如何修改此进度条，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
+**注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有开放外部配置的接口。 如果您有特别的需求，但是您不知道如何修改此进度条，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
 
 **警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您需知晓您的自定义CSS有在将来出现问题的风险。
 
@@ -89,7 +89,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 ```javascript
 Options.Triggers.push({
   // 在文件开头定义ZoneId，
-  // 例如 ZoneId.MatchAll (指定所有区域) 或ZoneId.TheBozjanSouthernFront 等
+  // 例如 ZoneId.MatchAll (指定所有区域) 或 ZoneId.TheBozjanSouthernFront 等
   zoneId: ZoneId.PutTheZoneFromTheTopOfTheFileHere,
   triggers: [
     {
