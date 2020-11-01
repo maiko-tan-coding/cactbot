@@ -101,7 +101,7 @@ Sometimes you have to close ACT, but you want to look at old fights. Or, somebod
 
 To do this, click the **Import/Export** tab, click on **Import a Log File**, click on **Select File...** select the **Network_date.log** log file, and finally click the **YOU** button.
 
-![import screenshot](images/logguide_import.png)
+![导入屏幕截图](images/logguide_import.png)
 
 This will create encounters whose [logs you can view](#viewing-logs-after-a-fight).
 
@@ -209,7 +209,7 @@ The rest of the data in the log line needs to be interpreted based on what type 
 
 Structure: `00:[Message Type ID]:Message displayed In-Game`
 
-Examples:
+示例:
 
 ```log
 00:0839:The Right Hand of Bahamut is no longer sealed!
@@ -244,7 +244,7 @@ This message is sent when first logging in and whenever the zone is changed.
 
 Structure: `01:Changed Zone to [Zone Name].`
 
-Examples:
+示例:
 
 ```log
 01:Changed Zone to The Lavender Beds.
@@ -257,7 +257,7 @@ This redundant message follows every [ChangeZone](#01-changezone) message to ind
 
 Structure: `02:Changed primary player to [Player Name].`
 
-Examples
+示例
 
 ```log
 02:Changed primary player to Potato Chippy.
@@ -270,7 +270,7 @@ This message is sent when a new object is added to the scene or becomes close en
 
 Structure: `03:[ObjectId]:Added new combatant [Combatant Name].  Job: [Job-ID] Level: [Level-Value] Max HP: [Max-HP-Value] Max MP: [Max-MP-Value] Pos: ([X-Pos],[Z-Pos],[Y-Pos]).`
 
-Examples:
+示例:
 
 ```log
 03:40123456:Added new combatant Pagos Deepeye.  Job: N/A Level: 70 Max HP: 348652 Max MP: 12000 Pos: (-720.9337,90.80706,-679.6056).
@@ -304,7 +304,7 @@ This message is sent when an object is removed from the scene, either because th
 
 Structure: `04:[ObjectId]:Removing combatant [Combatant Name].  Max HP: [Max-HP-Value]. Pos: ([X-Pos],[Z-Pos],[Y-Pos])`
 
-Examples:
+示例:
 
 ```log
 04:10987654:Removing combatant Potato Chippy.  Max HP: 28784. Pos: (-776.6765,152.5261,-671.2197)
@@ -317,7 +317,7 @@ This is the memory-parsing equivalent of [1A: NetworkBuff](#1a-networkbuff). Do 
 
 Structure: `05:[Target Name] gains the effect of [Status] from [Source Name]`
 
-Examples:
+示例:
 
 ```log
 05:Striking Dummy gains the effect of Reprisal from Tini Poutini.
@@ -330,7 +330,7 @@ This is the memory-parsing equivalent of [1E: NetworkBuffRemove](#1e-networkbuff
 
 Structure: `06:[Target Name] loses the effect of [Status] from [Source Name]`
 
-Examples:
+示例:
 
 ```log
 06:Striking Dummy loses the effect of Reprisal from Tini Poutini.
@@ -343,7 +343,7 @@ This is the memory-parsing equivalent of [18: NetworkDoT](#18-networkdot). Do no
 
 Structure: `07:[Type Name] tick on [Source Name] for [Value] damage.`
 
-Examples:
+示例:
 
 ```log
 07:DoT tick on Striking Dummy for 509 damage.
@@ -355,7 +355,7 @@ This is the memory-parsing equivalent of [14: NetworkStartsCasting](#14-networks
 
 Structure: `08:[Source Name] starts using [Ability Name] on [Target Name].`
 
-Examples:
+示例:
 
 ```log
 08:Potato Chippy starts using Circle Of Scorn on Striking Dummy.
@@ -365,7 +365,7 @@ Examples:
 
 This is the memory-parsing equivalent of [15: NetworkAbility](#15-networkability) and [16: NetworkAOEAbility](#16-networkaoeability). Do not write triggers against this as this is only emitted when parsing from memory.
 
-Examples:
+示例:
 
 ```log
 0A:10532971:Potato Chippy:17:Circle Of Scorn:40001299:Striking Dummy:710003:6850000:ef010f:f80000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0
@@ -399,7 +399,7 @@ This is often used for phase change triggers.
 
 Structure: `0D:[Target Name] HP at [HP-Value]%.`
 
-Examples:
+示例:
 
 ```log
 0D:Striking Dummy HP at 96%.
@@ -412,7 +412,7 @@ For abilities with cast bars, this is the log line that specifies that a player 
 
 Structure: `14:[Source ID]:[Source Name] starts using [Ability Name] on [Target Name].`
 
-Examples:
+示例:
 
 ```log
 14:5B2:Twintania starts using Death Sentence on Potato Chippy.
@@ -540,7 +540,7 @@ For abilities with cast bars, this is the log line that specifies that the cast 
 
 Structure: `17:[Source ID]:[Source Name]:[Ability ID]:[Ability Name]:Cancelled.`
 
-Examples:
+示例:
 
 ```log
 17:105EDD08:Potato Chippy:1D07:Stone IV:Cancelled:
@@ -555,7 +555,7 @@ The reason why there is such a discrepancy between ACT and fflogs about dots is 
 
 Structure: `18:[Type Name] on [Source Name] for [Value] damage.`
 
-Examples:
+示例:
 
 ```log
 18:DoT Tick on Ovni for 13003 damage.
@@ -571,7 +571,7 @@ This message corresponds to an actor being defeated and killed.  This usually co
 
 Structure: `19:[Target Name] was defeated by [Source Name].`
 
-Examples:
+示例:
 
 ```log
 19:Tini Poutini was defeated by Ovni.
@@ -584,7 +584,7 @@ This message is the "gains effect" message for players and mobs gaining effects 
 
 Structure: `1A:[ObjectId]:[Target Name] gains the effect of [Status] from [Source Name] for [Float_Value] Seconds`
 
-Examples:
+示例:
 
 ```log
 1A:105EDD08:Tini Poutini gains the effect of Sprint from Tini Poutini for 20.00 Seconds.
@@ -604,7 +604,7 @@ You cannot count on the time remaining to be precise. In rare cases, the time wi
 
 Structure: `1B:[ObjectId]:[Player Name]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:0000:0000:0000`
 
-Examples:
+示例:
 
 ```log
 1B:10532971:Tini Poutini:0000:0000:0027:0000:0000:0000:
@@ -686,7 +686,7 @@ This is the paired "end" message to the [1A: NetworkBuff](#1a-networkbuff) "begi
 
 Structure: `1E:[ObjectId]:[Target Name] loses the effect of [Status] from [Source Name]`
 
-Examples:
+示例:
 
 ```log
 1E:10657868:Tini Poutini loses the effect of Sprint from Tini Poutini.
@@ -698,7 +698,7 @@ Examples:
 
 Info about the current player's job gauge.
 
-Examples:
+示例:
 
 ```log
 1F:10532971:Tini Poutini:C8000019:FD32:D0DF8C00:7FC0
@@ -746,7 +746,7 @@ Actor control lines are for several miscellaneous zone commands:
 
 Structure: `21:TypeAndInstanceContentId:Command (4 bytes):Data (4x 4? byte extra data)`
 
-Examples:
+示例:
 
 ```log
 21:8003753A:40000010:00:00:00:00
@@ -782,7 +782,7 @@ This log message toggles whether the nameplate for a particular entity is visibl
 
 Structure: `22:[ObjectId]:[Target Name]:[ObjectId]:[Target Name]:[Display State]`
 
-Examples:
+示例:
 
 ```log
 22:105E3321:Tini Poutini:105E3321:Tini Poutini:01
@@ -795,7 +795,7 @@ This log line is for tethers between enemies or enemies and players. This does n
 
 Structure: `23:[SourceId]:[SourceName]:[TargetId]:[TargetName]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:[TargetId]:[Unknown3 (4 bytes)]:[Unknown4 (4 bytes)]:`
 
-Examples:
+示例:
 
 ```log
 23:40015B4E:Weapons Node:40015B4D:Gravity Node:751E:0000:000E:40015B4D:000F:7F4B:
@@ -823,7 +823,7 @@ Each limit break bar is 0x2710 (10,000 decimal) units. Thus, the maximum possibl
 
 Structure: `24:Limit Break: [Value]`
 
-Examples:
+示例:
 
 ```log
 24:Limit Break: 7530
@@ -837,7 +837,7 @@ This log line is a sync packet that tells the client to render an action that ha
 
 Structure: `25:[Player ObjectId]:[Sequence Number]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:[packet data thereafter]`
 
-Examples:
+示例:
 
 ```log
 25:12345678:PlayerOne:0000132A:33635:35817:10000:10000:0::0.3841706:-207.8767:2.901163:-3.00212:03E8:2500:0:01:03000000:0:0:E0000000:
@@ -849,7 +849,7 @@ For NPC opponents (and possibly PvP) this log line is generated alongside `18:Ne
 
 Structure: `26:[Target Id]:[Target Name]:[Job Levels]:[Current HP]:[Max Hp]:[Current Mp]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:<status list; format unknown>`
 
-Examples:
+示例:
 
 ```log
 26:12345678:PlayerOne:3C503C1C:24136:24136:9045:10000:4:0:-0.4730835:-158.1598:-23.9:3.110625:03E8:45:0:020130:0:106501CA:0129:4172D113:106501CA:012A:4168C8B4:106501CA:012B:40919168:106501CA:0232:40E00000:E0000000:
@@ -863,7 +863,7 @@ It's not completely clear what triggers this log line, but it contains basic inf
 
 Structure: `27:[Target ID]:[Target Name]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[position X]:[position Y]:[position Z]:[Facing]`
 
-Examples:
+示例:
 
 ```log
 27:12345678:Eos:22851:22851:10000:10000:0:0:12.13086:-169.9398:-23.90031:-2.310888:
