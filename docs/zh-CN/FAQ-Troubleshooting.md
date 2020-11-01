@@ -32,13 +32,13 @@ ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactb
 
 If you get an error similar to `Invalid Plugin: This assembly does not have a class that implements ACT's plugin interface, or scanning the assembly threw an error.` or `Load Error: Method 'LoadConfig' in type 'CactbotEventSource' etc etc does not have an implementation` then you should make sure that `CactbotOverlay.dll` is listed after `OverlayPlugin.dll` in **Plugins** -> **Plugin Listing**.
 
-## Problems using Cactbot
+## Cactbot相关问题
 
 If triggers or pieces of the UI do not work, ensure that "Disable Parsing from Network Data" is **not** checked in the FFXIV plugin settings. Network data is required for accurate trigger timing.
 
 If you are using cactbot for dps parsing and you don't get any data, make sure that the `DPS update interval seconds` is set to a number higher than zero in your `OverlayPlugin.dll` -> `MiniParse Event Source` config.  Setting it to 3 is a good default.
 
-## Fisher Module
+## 捕鱼人模块
 
 ### I can't see the overlay
 
