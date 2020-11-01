@@ -1,21 +1,22 @@
 # Cactbot自定义教程
 
-🌎 [**English**] [[한국어](./ko-KR/CactbotCustomization.md)]
+🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
 
 - [使用cactbot配置界面](#使用cactbot配置界面)
-- [用户文件夹概览](#用户文件夹概览)
-- [设置您自己的用户文件夹](#设置您自己的用户文件夹)
-- [样式自定义](#样式自定义)
-- [Raidboss触发器自定义](#raidboss触发器自定义)
-  - [例1：改变输出文本](#例1改变输出文本)
-  - [例2：使挑衅提示适用于全职业](#例2使挑衅提示适用于全职业)
-  - [例3：添加自定义触发器](#例3添加自定义触发器)
-- [Raidboss时间轴自定义](#raidboss时间轴自定义)
-- [行为自定义](#行为自定义)
-- [用户文件的调试](#用户文件的调试)
-  - [检查OverlayPlugin的错误日志](#检查OverlayPlugin的错误日志)
-  - [检查文件是否加载](#检查文件是否加载)
-  - [检查文件是否有错误](#检查文件是否有错误)
+- [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui)
+- [User Directory Overview](#user-directory-overview)
+- [Setting Your User Directory](#setting-your-user-directory)
+- [Customizing Appearance](#customizing-appearance)
+- [Overriding Raidboss Triggers](#overriding-raidboss-triggers)
+  - [Example 1: changing the output text](#example-1-changing-the-output-text)
+  - [Example 2: making provoke work for all jobs](#example-2-making-provoke-work-for-all-jobs)
+  - [Example 3: adding custom triggers](#example-3-adding-custom-triggers)
+- [Overriding Raidboss Timelines](#overriding-raidboss-timelines)
+- [Customizing Behavior](#customizing-behavior)
+- [Debugging User Files](#debugging-user-files)
+  - [Check the OverlayPlugin log for errors](#check-the-overlayplugin-log-for-errors)
+  - [Check if your file is loaded](#check-if-your-file-is-loaded)
+  - [Check if your user file has errors](#check-if-your-user-file-has-errors)
 
 ## 使用cactbot配置界面
 
@@ -25,41 +26,52 @@
 
 - 设置触发器输出TTS
 - 禁用触发器
-- 改变cactbot语言
-- 音量设置
-- 隐藏奶酪图标
+- changing the output of triggers
+- changing your cactbot language
+- volume settings
+- getting rid of that cheese icon
 
 您可能无法通过cactbot配置界面以配置所有您想要的更改。 但是它是最容易的方法，适合作为您定制化的第一步。 以后此界面会添加更多的选项。
 
 此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 但您并不需要也不应当直接修改该文件。
 
-## 用户文件夹概览
+## Changing Trigger Text with the cactbot UI
 
-若cactbot配置界面不存在您所需的选项，您可能需要考虑以用户文件覆盖的方式进行自定义。 您需要编写JavaScript代码和CSS样式，这意味着您可能需要掌握一点点编程知识。
+In the cactbot configuration UI, under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Raidboss, there are individual trigger listings. You can use these listings to change various exposed configuration settings per trigger.
 
-Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户文件夹的文件中。 同时这也能防止您所做的更改在今后cactbot的更新中被覆盖失效。 不仅如此，以后您将无法通过直接修改cactbot的文件应用您的更改，除非您了解如何构建您自己的项目。
+Settings with a bell (🔔) next to their name are trigger mostly outputs that you can override. For example, maybe there's an 🔔onTarget field whose text is `Tank Buster on ${name}`. This is the string that will get played on screen (or via tts) when there is a tank buster on some person. `${name}` here is a parameter that will be set dynamically by the trigger. Anything that looks like `${param}` is such a dynamic parameter.
 
-所有的cactbot模块都会从 [user/](../../user/) 文件夹加载用户设置。 `raidboss` 模块会加载 `user/raidboss.js` 与 `user/raidboss.css`。 `oopsyraidsy` 模块会加载 `user/oopsyraidsy.js` 与 `user/oopsyraidsy.css`。 以此类推，每一个模块都支持此方式。 这些文件在cactbot自身加载完成后被加载，并可以覆盖对应的模块的设置。
+You could change this to say `${name} is going to die!` instead. Or, maybe you don't care who it's on, and you can edit the text to `Buster` to be brief. If you want to undo your overriding, just clear the text.
 
-`user/` 文件夹中包含了一部分示例配置文件，您可以对其重命名并直接使用。 如 [user/raidboss-example.js](../../user/raidboss-example.js) 文件 可被重命名为 `user/raidboss.js`，对其所做的更改可应用于 `raidboss` 模块。
+There are some limitations to this overriding. You cannot change the logic. You cannot make `tts` to say something different than the `alarmText` in most cases. You cannot add additional parameters. If you want to do any of these more complicated overrides, then you will want to look at the [Overriding Raidboss Triggers](#overriding-raidboss-triggers) section.
 
-在修改了这些文件之后，单击ACT中OverlayPlugin插件设置中的“重载悬浮窗”按钮，即可应用更改。
+## User Directory Overview
 
-## 设置您自己的用户文件夹
+If the cactbot UI doesn't have the option you are looking for, then you may need to consider user file overrides. At this point, you are writing JavaScript and CSS, and so you might need a little bit of programming savvy.
 
-您可以通过cactbot配置界面设置用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
+The general philosophy of cactbot is that any user configuration should only go in files in the user directory. This will prevent your changes from being overwritten during future cactbot updates. Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
 
-若您没有选择，cactbot会尝试选择安装目录下的默认文件夹。
+All cactbot UI modules can load user settings from the [user/](../user/) directory. The `raidboss` module loads `user/raidboss.js` and `user/raidboss.css`. The `oopsyraidsy` module loads `user/oopsyraidsy.js` and `user/oopsyraidsy.css`. And so on, for each module. These files are included after cactbot's files and can override its settings.
 
-建议您选择cactbot安装目录下的 `cactbot/user` 文件夹。 该文件夹通常为位于 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置文件位于 [此文件夹](../../user) 下。
+The `user/` directory already includes some example configuration files, which you can rename and use. For example the [user/raidboss-example.js](../user/raidboss-example.js) file can be renamed to `user/raidboss.js` and edited to change the behavior of the `raidboss` module.
 
-## 样式自定义
+After making any changes to these files, pressing the "Reload overlay" button for the appropriate overlay in ACT's OverlayPlugin settings will apply the changes.
 
-您可以通过修改 `user/<name>.css` 等文件，对UI模块的位置、尺寸、颜色等进行自定义。 可用的选择器可以通过阅览 `ui/<name>/<name>.css` 文件找到。
+## Setting Your User Directory
 
-如您在 [ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中 可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中添加更多的样式。
+The cactbot user directory can be set via the cactbot configuration UI: ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbot user directory. Click the `Choose Directory` button and select a folder on disk.
 
-同样地，您可以在 `.info-text` 类中添加新的CSS规则，对信息文字的尺寸和颜色进行自定义。例如：
+If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
+
+Ideally, you should select the `cactbot/user` folder from your cactbot installation. This is often in `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`. [This folder](../user) has example customization files.
+
+## Customizing Appearance
+
+The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
+
+For example in [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css), you see the `#popup-text-container` and `#timeline-container` which can be changed via `user/raidboss.css` to different positions as desired. You can use `user/raidboss.css` to add additional styling.
+
+The size and color of info text alerts can also be changed by making a CSS rule for the `.info-text` class such as below:
 
 ```css
 .info-text {
@@ -68,23 +80,23 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 }
 ```
 
-简单地说，您可以认为cactbot会将用户文件中的CSS规则添加至内置CSS文件的末尾。 也就是说，您需要注意 [CSS优先级规则](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)， 例如添加 `!important` 让您的规则可以强制覆盖。 另一方面，您可能需要重置某些属性为默认的 `auto` 值。
+You can think about the CSS in the user file as being appended to the end of any built-in cactbot CSS file. Therefore, you need to keep in mind [CSS specificity rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity), possibly adding `!important` to force your rule to override. Additionally, you may need to unset properties by setting them to `auto`.
 
-我们推荐使用 [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) 以调试CSS问题。 您可以通过 ACT -> Plugins -> OverlayPlugin.dll -> 您的悬浮窗名字 -> 启动Debug工具 以开启DevTools。
+The best way to debug CSS issues is to use [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools). You can open DevTools for an overlay by going to ACT -> Plugins -> OverlayPlugin.dll -> your overlay -> Open DevTools.
 
-**注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有开放外部配置的接口。 如果您有特别的需求，但是您不知道如何修改此进度条，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
+**Note**: some things are hard or impossible to customize, such as the timeline bars. This is because they use custom elements, and they don't expose a lot of knobs to tune. If you have particular things you want to change about the timeline bars that you can't, please feel free to submit a [github issue](https://github.com/quisquous/cactbot/issues/new/choose).
 
-**警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您需知晓您的自定义CSS有在将来出现问题的风险。
+**Warning**: cactbot makes no guarantees about preserving CSS backwards compatability. Future changes to cactbot may rearrange elements, change element names and classes, or change styling entirely. In general, you are on your own if you want to style cactbot with CSS.
 
-## Raidboss触发器自定义
+## Overriding Raidboss Triggers
 
-您可以通过 `cactbot/user/raidboss.js` 文件自定义触发器行为。 您可以修改输出文本、适用职业、文本显示的时间等等。
+You can use your `cactbot/user/raidboss.js` to override how triggers behave. You can change the text that they output, what jobs they run for, and how long they stay on screen, and anything else.
 
-在 `cactbot/user/raidboss.js` 文件中， `Options.Triggers` 是一个存放了触发器集合的列表。 您可以通过此变量添加新触发器，或修改已有的触发器。 若用户文件中存在与现有触发器 (cactbot官方提供的) 相同id的触发器，则会将后者其覆盖。
+In `cactbot/user/raidboss.js`, there is an `Options.Triggers` list that contains a list of trigger sets. You can use this to append new triggers and modify existing triggers. If a user file contains a trigger with the same id as any previous trigger (including triggers in cactbot), then that trigger will override it.
 
-在您修改触发器前，我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解各触发器的诸多属性的含义。
+If you are going to modify triggers, it is worth reading the [trigger guide](RaidbossGuide.md) to understand what the various fields of each trigger means.
 
-通常情况下，在 `cactbot/user/raidboss.js` 中添加的代码应当形如：
+In general, the pattern to follow is to add a block of code to your `cactbot/user/raidboss.js` line that looks like this:
 
 ```javascript
 Options.Triggers.push({
@@ -100,17 +112,19 @@ Options.Triggers.push({
 });
 ```
 
-最简单的定制触发器方式是直接复制上面那一大块代码粘贴到此文件再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.js) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 然后复制触发器文本并粘贴至此， 按您的喜好进行修改。 当你改完所有你想改的触发器后， 重载raidboss悬浮窗以应用更改。
+The easiest approach to modify triggers is to copy and paste the block of code above for each trigger. Modify the `zoneId` line to have the zone id for the zone you care about, usually from the top of the cactbot trigger file. [This file](../resources/zone_id.js) has a list of all the zone ids. If you specify one incorrectly, you will get a warning in the OverlayPlugin log window. Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
 
-**注意**：此方式会将原触发器完全移除，因此请在修改时不要删除任何逻辑。 此外，触发器均采用JavaScript编写，因此必须采用标准JavaScript语法。 若您不是程序员，您需要格外注意编辑方法。
+**Note**: This method completely removes the original trigger, and so do not delete any logic when making edits. Also, this is JavaScript, and so it still needs to be valid JavaScript. If you are not a programmer, be extra careful with what and how you edit.
 
 ### 例1：改变输出文本
 
-假定您正在攻略巴哈姆特绝境战(UCOB)， 您的固定队采用的不是cactbot默认的火1集合吃的打法， 而是先单吃火1。
+Let's say hypothetically that you are doing UCOB and your group decides that they are going to do "fire out" first instead of "fire in" first like cactbot calls it by default. Additionally, you *also* want to have the tts say something different for this trigger. You keep forgetting to get out, so you want it to repeat a few times.
 
-其中一种调整方式是编辑触发器的输出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743) 中找到原本的 fireball #1 触发器。
+If you only wanted to change the `infoText`, you could do this via [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui).
 
-您需要将以下的代码粘贴至您的 `cactbot/user/raidboss.js` 中：
+One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
+
+This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
 
 ```javascript
 Options.Triggers.push({
@@ -130,6 +144,9 @@ Options.Triggers.push({
       infoText: {
         en: 'Fire OUT',
       },
+      tts: {
+        en: 'out out out out out',
+      },
       run: function(data) {
         data.naelFireballCount = 1;
       },
@@ -138,15 +155,15 @@ Options.Triggers.push({
 });
 ```
 
-此处还修改了 `tts` 部分，并且移除了英语以外的其他语言。
+This edit also removed languages other than English.
 
 ### 例2：使挑衅提示适用于全职业
 
-目前，只有团队成员的挑衅会触发提示，并且不是所有职业都能收到提示。 该例子展示了如何使其适用于所有职业。 该挑衅触发器可以在 [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30) 中找到。
+Currently, provoke only works for players in your alliance and not for all jobs. This example shows how to make it work for all players. The provoke trigger can be found in [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30).
 
-我们需要修改 `condition` 函数(function)。 由于此处的id与内置的 `General Provoke` 触发器一致，因此会覆盖同名的内置触发器。
+Here is a modified version with a different `condition` function. Because this shares the same `General Provoke` id with the built-in cactbot trigger, it will override the built-in version.
 
-您需要将以下的代码粘贴至您的 `cactbot/user/raidboss.js` 中：
+This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
 
 ```javascript
 Options.Triggers.push([{
@@ -176,13 +193,13 @@ Options.Triggers.push([{
 ]);
 ```
 
-当然，您也可以直接删除整个 `condition` 函数， 因为没有condition的触发器只要正则匹配成功就会运行。
+You could also just delete the `condition` function entirely here, as triggers without conditions will always run when their regex matches.
 
 ### 例3：添加自定义触发器
 
-您也可以用同样的办法添加您的自定义触发器。
+You can also use this same pattern to add your own custom triggers.
 
-这是一个示例触发器，当您中了“Forked Lightning”效果时，会在1秒后显示“Get out!!!”。
+Here's an example of a custom trigger that prints "Get out!!!", one second after you receive an effect called "Forked Lightning".
 
 ```javascript
 Options.Triggers.push([
@@ -206,21 +223,21 @@ Options.Triggers.push([
 ]);
 ```
 
-我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解如何撰写cactbot的触发器， 当然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中现有的触发器代码。
+Your best resources for learning how to write cactbot triggers is the [trigger guide](RaidbossGuide.md) and also reading through existing triggers in [ui/raidboss/data](../ui/raidboss/data).
 
-## Raidboss时间轴自定义
+## Overriding Raidboss Timelines
 
-自定义时间轴与 [自定义触发器](#overriding-raidboss-triggers) 差不多。
+Overriding a raidboss timeline is similar to [overriding a trigger](#overriding-raidboss-triggers).
 
-自定义时间轴的步骤如下：
+The steps to override a timeline are:
 
-1) 复制原有的时间轴文本文件内容至您的用户文件夹
+1) Copy the timeline text file out of cactbot and into your user folder
 
     例如，您可以复制
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
     至 `user/the_epic_of_alexander.txt`。
 
-1) 在 user/raidboss.js 中添加代码
+1) Add a section to your user/raidboss.js file to override this.
 
     如同我们添加触发器一样，您依旧需要定义 `zoneId`、 `overrideTimelineFile: true`，
     以及定义文本文件名称的`timelineFile` 属性。
@@ -238,19 +255,19 @@ Options.Triggers.push([
     
     设置 `overrideTimelineFile: true` 是为了告诉cactbot将内置的时间轴完全替换为您添加的文件。
 
-1) 按您的喜好编辑您自己的时间轴文件
+1) Edit your new timeline file in your user folder as needed
 
     阅读 [时间轴指南](TimelineGuide.md) 学习更多关于时间轴的知识。
 
-**注意**：编辑时间轴文件有一定的风险， 这是因为部分触发器依赖于时间轴的特定文字。 例如在绝亚历山大中，`Fluid Swing` 与 `Propeller Wind` 都有对应的时间轴触发器。 如果这些文字被替换或移除，时间轴触发器也同样会失效。
+**Note**: Editing timelines is a bit risky, as there may be timeline triggers that refer to specific timeline text. For instance, in TEA, there are timeline triggers for `Fluid Swing` and `Propeller Wind`, etc. If these names are changed or removed, then the timeline triggers will also be broken.
 
-## 行为自定义
+## Customizing Behavior
 
-这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不是触发器的变量。
+This section discusses other kinds of customizations you can make to cactbot modules. There are some variables that are not in the config UI and are also not triggers.
 
-每个cactbot模块都有一个名为 `Options` 的变量，它包含了若干控制选项。 可用的 `Options` 变量会在每个 `ui/<name>/<name>.js` 文件的顶部列出。
+Each cactbot module has an `Options` variable that controls various options. The options that can be changed are documented in the `Options` section at the top of each `ui/<name>/<name>.js` file.
 
-例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 文件中， 您可以通过 `PlayerNicks` 选项定义玩家的昵称。
+For example in [ui/raidboss/raidboss.js](../ui/raidboss/raidboss.js), you see the `PlayerNicks` option which allows you to give people nicknames when their names are called out
 
 ```javascript
 Options.PlayerNicks = {
@@ -262,29 +279,29 @@ Options.PlayerNicks = {
 };
 ```
 
-**警告**：用户文件夹中的文件会静默覆盖cactbot配置窗口的同名选项。 该行为可能会造成一些困惑，因此您应当直接通过配置窗口设置这些变量， 仅当配置窗口不提供设置方法时采用此方式覆盖默认行为。
+**Warning**: files inside of your user directory will silently overwrite settings that were set from the cactbot configuration UI. This can be confusing, so it's generally preferable to let the config tool set everything you can, and only use user files in order to set things that the config tool does not provide access to.
 
-## 用户文件的调试
+## Debugging User Files
 
 ### 检查OverlayPlugin的错误日志
 
-您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位于该窗口的底部的OverlayPlugin日志窗口，它是一个自动滚动的文本窗口。
+The OverlayPlugin log is scrolling window of text that can be found by going to ACT -> Plugins -> OverlayPlugin.dll, and looking at the bottom of the window.
 
-当运行错误时，错误信息会显示在此处。
+If there are errors, they will appear here.
 
 ### 检查文件是否加载
 
-首先，您需要开启raidboss模块的调试模式。 打开cactbot配置窗口，启用 `显示开发者选项` ，然后重新加载悬浮窗。 然后，勾选raidboss模块下的 `启用调试模式`，再次重载悬浮窗。
+First, turn on debug mode for raidboss. Go to the cactbot configuration UI, enable `Show developer options` and reload the page. Then, enable `Enable debug mode` under Raidboss, and reload again.
 
-当raidboss模块的调试模式启用时，OverlayPlugin的日志窗口中会打印更多信息。 每次本地的用户文件加载时都会输出类似于这样的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
+When raidboss debug mode is on, it will print more information to the OverlayPlugin log. It will list lines for each local user file it loads: `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
 
-确认您的用户文件是否正常加载。
+Verify that your user file is loaded at all.
 
 ### 检查文件是否有错误
 
-用户文件采用JavaScript编写，若代码语法本身有错误，日志窗口会输出错误，您的用户文件也会被跳过而不会被加载。 在文件加载时检查OverlayPlugin的错误日志。
+User files are JavaScript, and so if you write incorrect JavaScript, there will be errors and your user file will be skipped and it will not load. Check the OverlayPlugin log for errors when loading.
 
-此处有一个例子：
+Here's an example:
 
 ```log
 [10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.js, Line: 83)
