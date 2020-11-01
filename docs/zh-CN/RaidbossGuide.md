@@ -40,23 +40,23 @@
 
 ### 元素
 
-**zoneId** A shortened name for the zone to use these triggers in. The set of id names can be found in [zone_id.js](../resources/zone_id.js). Prefer using this over zoneRegex. A trigger set must have one of zoneId or zoneRegex to specify the zone (but not both).
+**zoneId** 区域名缩写，用于规定触发器的适用范围。 这些区域名缩写可以在 [zone_id.js](../resources/zone_id.js) 文件中找到。 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex(但二者不能并存)。
 
-**zoneRegex** A regular expression that matches against the zone name (coming from ACT). If the regular expression matches, then the triggers will apply to that zone.
+**zoneRegex** 用于匹配区域名称的正则表达式(匹配ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
-**overrideTimelineFile** An optional boolean value that specifies that the `timelineFile` and `timeline` specified in this trigger set override all timelines previously found. This is a way to replace timelines in user files and is not used inside cactbot itself.
+**overrideTimelineFile** 可选属性，布尔值。该值设定为true时，任何先前被读取的同区域的触发器文件将被该触发器集合中指定的 `timelineFile` 和 `timeline` 属性覆盖。 此属性仅用于用户文件，cactbot本身不使用该值。
 
-**timelineFile** An optional timeline file to load for this zone. These files live alongside their parent trigger file in the appropriate folder. (As for example `raidboss/data/04-sb/raid/`).
+**timelineFile** 可选属性，指定当前区域对应的时间轴文件。 这些文件与触发器文件存放在同一文件夹中。 (例如 `raidboss/data/04-sb/raid/`)
 
-**timeline** Optional extra lines to include as part of the timeline.
+**timeline** 可选属性，时间轴的补充行。
 
-**locale** Optional locale to restrict the trigger file to, e.g. 'en', 'ko', 'fr'. If not present, applies to all locales.
+**locale** 可选属性，限定触发器仅在特定语言的客户端上生效。如 'en'、'ko'、'fr'。 若该属性未设置，则应用于所有语言。
 
-**replaceText** Key:value pairs to search and replace in timeline ability names. The display name for that ability is changed, but all `hideall`, `infotext`, `alerttext`, `alarmtext`, etc all refer to the original name. This enables translation/localization of the timeline files without having to edit those files directly.
+**replaceText** 键值对，用于在时间轴中搜索并替换技能名。 显示的技能名会被替换，但 `hideall`、`infotext`、`alerttext`、`alarmtext` 等依旧指向其原名称。 这一属性使我们可以对时间轴文件进行翻译/本地化，而不需要直接编辑时间轴文件。
 
-**replaceSync** Key:value pairs to search and replace in timeline file sync expressions. Necessary if localized names differ in the sync regexes.
+**replaceSync** 键值对，用于在时间轴中搜索并替换同步正则表达式。 当同步正则表达式包含了本地化名称时，该属性是必要的。
 
-**resetWhenOutOfCombat** Boolean, defaults to true. If true, timelines and triggers will reset automatically when the game is out of combat. Otherwise it's necessary to manually call `data.StopCombat()`.
+**resetWhenOutOfCombat** 布尔值，默认为true。 该值为true时，时间轴和触发器均在脱战时自动重置。 否则，需要手动调用`data.StopCombat()`使其重置。
 
 ## 触发器结构
 
@@ -98,51 +98,51 @@ Almost all trigger fields can either return a value or a `function(data, matches
 - `matches` is the matches from the trigger, specifically the `matches.groups` field.
 - `output` is a special object for turning fields in `outputStrings` into strings to return. See the `outputStrings` section below for more info. For triggers that return numbers, e.g. `delaySeconds` or `durationSeconds` and for triggers that don't output anything, e.g. `preRun` or `run`, the output field is largely meaningless.
 
-### Trigger Elements
+### 触发器元素
 
-**id string** An id string for the trigger. Every built-in trigger in cactbot has a unique id, and it is recommended but not required that user triggers also have them.
+**id string** 字符串，触发器id。 所有cactbot的内置触发器均包含一个独一无二的id。 我们同样推荐在用户自定义触发器中包含该属性，但这不是强制要求。
 
-Trigger ids must be unique. If a trigger is found with the same id as a previous trigger, then the first trigger will be skipped entirely and the second trigger will override it and take its place. This allows easier for copying and pasting of triggers into user overrides for edits. Triggers without ids cannot be overridden.
+触发器id不可重复。 若当前触发器的id与某一已定义的触发器完全一致，后者的定义将会完全失效，并由前者覆盖并替代其位置。 这个机制让用户可以方便地复制触发器代码并粘贴到用户文件中，以修改为他们自己喜欢的方式。 没有id的触发器无法被覆盖。
 
-The current structure for `Regexes/NetRegexes` does not require that the ability/effect/whatever name be present as part of the expression. Because of this, it is extremely important that that information is somewhere close by. Recommended practice is either to have the effect/ability/NPC name in the trigger ID itself, or in an explanatory comment alongside. Context solely from the trigger body is not necessarily sufficient! (As with the id, only triggers intended for the cactbot repository must have this information.)
+目前cactbot采用的 `Regexes/NetRegexes` 结构并不要求将技能名/效果名等名称写进正则表达式。 因此，将注释写在附近尤为重要。 我们强烈推荐在触发器id中写入效果名/技能名/NPC名称等， 或者在旁边撰写包含这些信息的详尽注释。 仅仅依赖触发器本体的上下文信息并不足以了解其用处。 (与id一样，若您的触发器不是打算提交到cactbot仓库的，这些要求也可以忽略。)
 
-**disabled: false** If this is true, the trigger is completely disabled and ignored. Defaults to false.
+**disabled: false** 若该值为true，则该触发器将被完全禁用/忽略。 默认为false。
 
-**netRegex / regex** The regular expression cactbot will run against each log line to determine whether the trigger will activate. The `netRegex` version matches against network log lines, while the `regex` version matches against regular ACT log lines.
+**netRegex / regex** 正则表达式，cactbot会将该正则表达式与每一条日志行做比对， 并在匹配成功时触发当前触发器。 `netRegex` 版本用于匹配网络日志行， 而 `regex` 版本用于匹配普通的ACT日志行。
 
-More commonly, however, a regex replacement is used instead of a bare regex. Helper functions defined in [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) and in [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) take the parameters that would otherwise be extracted via match groups. From here, the functions automatically construct the regex that should be matched against. Unsurprisingly, for `netRegex` use the `NetRegexes` helper and for `regex` use the `Regexes` helper.
+更多时候，相对于直接使用正则表达式字面量，我们更加推荐使用正则替换函数。 正则替换函数是指定义在 [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 和 [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) 中的辅助函数， 这些函数可以接受特定参数值用于匹配日志，并通过正则捕获组的方式帮助你提取未定义的参数值。 换句话说，这些函数用于自动构建能够匹配指定类型的日志行的正则表达式。 顾名思义，`netRegex` 使用 `NetRegexes` 辅助函数， 而 `regex` 使用 `Regexes` 辅助函数。
 
-**netRegexFr / regexFr** Example of a locale-based regular expression for the 'fr' locale. If `Options.ParserLanguage == 'fr'`, then `regexFr` (if it exists) takes precedence over `regex`. Otherwise, it is ignored.  This is only an example for french, but other locales behave the same, e.g. regexEn, regexKo. Like `netRegex` vs `regex`, `netRegexFr` matches against network log lines in French while `regexFr` matches against ACT log lines in French.
+**netRegexFr / regexFr** 语言特定正则表达式（以fr为示例）。 若设置了 `Options.ParserLanguage == 'fr'`，则 `regexFr` (如果存在的话) 优先于 `regex` 对日志行进行匹配。 否则，该值将会被忽略。  这里虽然只有法语的例子，但其他语言也是可用的。例如：regexEn, regexKo。 就像 `netRegex` 对于 `regex` 一样， `netRegexFr` 匹配法语的网络日志行 而 `regexFr` 匹配法语的ACT日志行。
 
-Locale regexes do not have a defined ordering. Current practice is to order them as `de`, `fr`, `ja`, `cn`, `ko`, however. Additionally, as with bare `regex` elements, current practice is to use regex replacements instead.
+这些语言特定正则表达式并没有明确的顺序规定。 但是我们定义的顺序通常为：`de`、`fr`、`ja`、`cn`、`ko` 。 同样，比起 `正则表达式字面量`，使用上述的正则替换函数更好。
 
-(Ideally, at some point in the future, we could get to the point where we don't need individual locale regexes. Instead, we could use the translations provided in the `timelineReplace` object to do this automagically. We're not there yet, but there's always someday.)
+(理论上，以后我们可能不再需要独立的语言特定正则表达式， 而是采用 `timelineReplace` 对象自动地替换这些正则表达式。 我们还没有确定具体的实现方式，但条条大路通罗马。)
 
-**condition: function(data, matches, output)** Activates the trigger if the function returns `true`. If it does not return `true`, nothing is shown/sounded/run. If multiple functions are present on the trigger, this has first priority to run. (Pre-made "canned" conditions are available within [conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js). Generally speaking it's best to use one of these if it fits the situation.)
+**condition: function(data, matches, output)** Activates the trigger if the function returns `true`. 若返回的不是 `true`，则当前触发器不会有任何响应。 不管触发器对象里定义了多少函数，该函数总是第一个执行。 ([conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js) 中定义了一部分高阶条件函数。 一般情况下，如果与情境相符，使用这些函数是最佳解决方案。)
 
 **preRun: function(data, matches, output)** If the trigger activates, the function will run as the first action after the activation condition is met.
 
-**promise: function(data, matches, output)** If present and a function which returns a promise, will wait for promise to resolve before continuing with trigger. This runs after `preRun` and before the `delaySeconds` delay.
+**promise: function(data, matches, output)** If present and a function which returns a promise, will wait for promise to resolve before continuing with trigger. 这个函数会在 `preRun` 之后，`delaySeconds` 之前执行。
 
-**delaySeconds** An amount of time, in seconds, to wait from the time the regex match is detected until the trigger activates. May be a number or a `function(data, matches, output)` that returns a number.
+**delaySeconds** 时间，单位为秒，规定从正则表达式匹配上到触发器激活之间的等待时间。 May be a number or a `function(data, matches, output)` that returns a number.
 
-**durationSeconds** Time, in seconds, to display the trigger text. May be a number or a `function(data, matches, output)` that returns a number. If not specified, defaults to 3.
+**durationSeconds** 时间，单位为秒，显示触发器文本的时长。 May be a number or a `function(data, matches, output)` that returns a number. 若该值未设置，默认为3。
 
-**suppressSeconds** Time to wait, in seconds, before showing this trigger again. May be a number or a `function(data, matches, output)`. The time to wait begins at the time of the initial regex match and is unaffected by presence or absence of a delaySeconds value. Once a trigger with this element activates, it will not activate again until after its timeout period is over.
+**suppressSeconds** 等待时间，单位为秒，再次触发该触发器的冷却时间。 May be a number or a `function(data, matches, output)`. The time to wait begins at the time of the initial regex match and is unaffected by presence or absence of a delaySeconds value. Once a trigger with this element activates, it will not activate again until after its timeout period is over.
 
-**sound** Sound file to play, or one of 'Info', 'Alert', 'Alarm', or 'Long'. Paths to sound files are relative to the ui/raidboss/ directory.
+**sound** 用于播放声音的音频文件，也可以是 'Info'，'Alert'，'Alarm' 或者 'Long'。 文件路径是对于 ui/raidboss/ 文件夹的相对路径。
 
-**soundVolume** Volume between 0 and 1 to play the sound associated with the trigger.
+**soundVolume** 从0到1的音量数值，触发器激活时播放的音量大小。
 
-**response** A way to return infoText/alertText/alarmText/tts all from a single entrypoint. Also used by `resources/responses.js`. Response has less priority than an explicitly specified text or tts, and so can be overridden. (As with `regex` and `condition`, "canned" responses are available within [responses.js](https://github.com/quisquous/cactbot/blob/main/resources/responses.js).)
+**response** 用于返回 infoText/alertText/alarmText/tts 的快捷方法。 这些函数定义于 `resources/responses.js`。 Response 的优先级比直接指定的文字或TTS低，因此可以被覆盖。 (如同 `regex` 和 `condition` 一样，[responses.js](https://github.com/quisquous/cactbot/blob/main/resources/responses.js) 中定义了一些便于使用的高阶函数。)
 
-**alarmText** Displays a text popup with Alarm importance when the trigger activates. This is for high-priority events where failure is guaranteed to kill you, is likely to wipe the encounter, or will otherwise make successful completion much more difficult. (Examples include Allagan Rot in T2, Cursed Shriek in T7, or Ultros' Stoneskin cast in O7s.) May be a string or a `function(data, matches, output)` that returns a string.
+**alarmText** 当触发器激活时显示“警报”级别的文本。 This is for high-priority events where failure is guaranteed to kill you, is likely to wipe the encounter, or will otherwise make successful completion much more difficult. (Examples include Allagan Rot in T2, Cursed Shriek in T7, or Ultros' Stoneskin cast in O7s.) May be a string or a `function(data, matches, output)` that returns a string.
 
-**alertText** Displays a text popup with Alert importance when the trigger activates. This is for medium-priority events that might kill you, or inflict party-wide damage/debuffs. (For example, warning the main tank that a buster is incoming, or warning the entire party of an upcoming knockback.) May be a string or a `function(data, matches, output)` that returns a string.
+**alertText** 当触发器激活时显示“警告”级别的文本。 This is for medium-priority events that might kill you, or inflict party-wide damage/debuffs. (For example, warning the main tank that a buster is incoming, or warning the entire party of an upcoming knockback.) May be a string or a `function(data, matches, output)` that returns a string.
 
-**infoText** Displays a text popup with Info importance when the trigger activates. This is for low-priority events that will be merely annoying if not attended to immediately. (For example, warning of an add spawn, or informing healers of incoming raid damage.) May be a string or a `function(data, matches, output)` that returns a string.
+**infoText** 当触发器激活时显示“信息”级别的文本。 该属性一般用于低危事件，不需要玩家立即做出反应。 (例如，小怪出现时的警告，或针对治疗职业的全体伤害预告等等。) May be a string or a `function(data, matches, output)` that returns a string.
 
-**tts** An alternative text string for the chosen TTS option to use for callouts. This can be a localized object just like the text popups.
+**tts** 字符串，用于输出TTS的另一种方式。 该值可以是包含本地化字符串的对象，与触发器文本类似。
 
 **run: function(data, matches, ouptut)** If the trigger activates, the function will run as the last action before the trigger ends.
 
@@ -208,24 +208,24 @@ response: (data, matches, output) => {
 
 ## 触发器杂项属性
 
-Any field that can return a function (e.g. `infoText`, `alertText`, `alarmText`, `tts`) can also return a localized object, e.g. instead of returning 'Get Out', they can return {en: 'Get Out', fr: 'something french'} instead. Fields can also return a function that return a localized object as well. If the current locale does not exist in the object, the 'en' result will be returned.
+Any field that can return a function (e.g. `infoText`, `alertText`, `alarmText`, `tts`) can also return a localized object, e.g. instead of returning 'Get Out', they can return {en: 'Get Out', fr: 'something french'} instead. 当然，其值也可以返回一个函数，再让该函数返回本地化字符串对象。 If the current locale does not exist in the object, the 'en' result will be returned.
 
-Trigger elements are evaluated in this order, and must be listed in this order:
+触发器元素按以下顺序载入，定义元素时也应该按该顺序排序：
 
 - id
 - disabled
-- netRegex (and netRegexDe, netRegexFr, etc)
-- regex (and regexDe, regexFr, etc)
-- beforeSeconds (for timelineTriggers)
-- (suppressed triggers early out here)
+- netRegex (以及 netRegexDe、netRegexFr 等等)
+- regex (以及 regexDe、regexFr 等等)
+- beforeSeconds (仅存在于 timelineTriggers 中)
+- (休眠的触发器会在此处直接退出)
 - condition
 - preRun
 - delaySeconds
 - durationSeconds
 - suppressSeconds
-- (the delaySeconds occurs here)
+- (等待delaySeconds延迟结束)
 - promise
-- (awaiting the promise occurs here)
+- (等待Promise执行完成)
 - sound
 - soundVolume
 - response
@@ -239,24 +239,24 @@ Trigger elements are evaluated in this order, and must be listed in this order:
 
 ## 正则表达式扩展
 
-If you're familiar with regular expressions, you'll note the the `\y{Name}` and `\y{AbilityCode}` are unfamiliar. These are extensions provided by cactbot for convenience to avoid having to match against all possible unicode characters or to know the details of how the FFXIV ACT plugin writes things.
+若您很了解正则表达式， 您会注意到 `\y{Name}` 和 `\y{AbilityCode}` 是个没见过的用法。 这些是cactbot提供的便捷扩展， 以让您不需要针对所有可能出现的Unicode字符撰写正则表达式， 也不需要完整学习 FFXIV ACT Plugin 的输出格式。
 
-The set of extensions are:
+目前可用的扩展名如下所示：
 
-- `\y{Float}`: Matches a floating-point number, accounting for locale-specific encodings.
-- `\y{Name}`: Matches any character name (including empty strings which the FFXIV ACT plugin can generate when unknown).
-- `\y{ObjectId}`: Matches the 8 hex character object id in network log lines.
-- `\y{AbilityCode}`: Matches the FFXIV ACT plugin's format for the number code of a spell or ability.
-- `\y{Timestamp}`: Matches the time stamp at the front of each log event such as `[10:23:34.123]`.
-- `\y{LogType}`: Matches the FFXIV ACT plugin's format for the number code describing the type of log event, found near the front of each log event.
+- `\y{Float}`：匹配浮点数，包含某些区域特定的编码。
+- `\y{Name}`：匹配任意角色名称 (同样包括 FFXIV ACT Plugin 针对未知名字生成的空字符串)。
+- `\y{ObjectId}`：在网络日志行中匹配8位十六进制的角色对象id。
+- `\y{AbilityCode}`：匹配 FFXIV ACT Plugin 针对技能或能力生成的数字格式。
+- `\y{Timestamp}`：匹配所有日志前端的时间戳，如 `[10:23:34.123]`。
+- `\y{LogType}`：匹配 FFXIV ACT Plugin 生成的用于描述日志类型的数字格式，位于每行日志的稍前方。
 
 ## 高阶辅助函数
 
-In order to unify trigger construction and reduce the manual burden of translation, cactbot makes widespread use of "canned" trigger elements. Use of these helpers makes automated testing significantly easier, and allows humans to catch errors and inconsistencies more easily when reviewing pull requests.
+为统一触发器构造，以及减轻翻译时的手动负担， cactbot的触发器元素广泛运用了高阶函数。 诸如此类的工具函数使自动化测试更为简单， 并让人们在审查拉取更改时更容易捕获错误及不一致。
 
-Currently, three separate elements have pre-made structures defined: [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js), [Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js), and [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js). `Condition` functions take no arguments. Almost all `Response` functions take one optional argument, `severity`, used to determine what level of popup text to display to the user when the trigger activates. `Regex` functions can take several arguments [(`gainsEffect()` is a good example)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176) depending on which log line is being matched against, but generally a contributor would include the `source`, (name of the caster/user of the ability to match,) the `id`, (the hex ability ID, such as `2478`,) and whether or not the regex should capture the matches (`capture: false`.) `Regex` functions capture by default, but standard practice is to specify non-capturing unless a trigger element requires captures.
+目前我们对于元素的独立预定义结构有3种： [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js)、[Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) 以及 [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)。 `Condition` 函数不接受参数。 几乎所有的 `Response` 函数都接受 `severity`参数， 用于定义触发器被激活时输出的警报文本的等级。 `Regex` 函数根据匹配的日志行，接受若干参数 [(例如 `gainsEffect()`)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176)， 不管哪种日志行一般都接受 `source` 属性 (技能的咏唱者/释放者的名称)， `id` 属性 (十六进制的技能ID，例如 `2478`)， 以及正则表达式匹配时是否启用捕获组 (`capture: false`)。 `Regex` 函数默认开启捕获组，但按惯例应当仅对依赖捕获数据的触发器开启捕获。
 
-A sample trigger that makes use of all these elements:
+以下是使用了这三种元素的示例触发器：
 
 ```javascript
 {
@@ -272,7 +272,7 @@ A sample trigger that makes use of all these elements:
 },
 ```
 
-While this doesn't reduce the number of lines we need to match the locale regexes, this is far less verbose than:
+尽管由于我们需要定义所有语言的正则表达式，该方法并未减少代码行数，但仍然远远优于：
 
 ```javascript
 {
@@ -297,26 +297,26 @@ While this doesn't reduce the number of lines we need to match the locale regexe
 },
 ```
 
-Use of bare regexes is deprecated. *Always* use the appropriate canned function unless there is a very specific reason not to. Attempting to use a bare regex will cause a build failure when the pull request is submitted. If a bare regex must be used for whatever reason (if, say, a new log line is added to ACT,) pull requests to update `regexes.js` are strongly encouraged.
+使用正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 在提交拉取请求时使用正则表达式字面量会导致构建失败。 当的确存在特定的需求，不得不使用正则表达式字面量时 (例如ACT新增了其他类型的日志行)， 我们强烈推荐开启一个拉取请求，直接更新 `regexes.js` 文件。
 
-(Note that if you are writing triggers for just your personal use, you are free to do what you want. This deprecation applies only to work intended for the cactbot repository.)
+(当然，若您正在撰写仅用于您个人的触发器，您可以随意发挥。 此处的警告仅针对想为cactbot项目提交贡献的人们。)
 
-Use of canned conditions and responses is recommended where possible, although given Square's extremely talented fight design team, it's not always going to *be* possible.
+可能的话，建议尽量使用在conditions和responses中定义的高阶函数，尽管SE的“天才”战斗设计组有时真的可以让它*变得*不可能。
 
 ## 关于时间轴
 
-The trigger subfolders may contain timeline text files in the format defined by ACT Timeline plugin, which described in here: <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
+触发器子目录内可能包含了一部分采用 ACT Timeline 插件格式定义的时间轴文本文件，您可以通过此链接了解： <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
 
-Each timeline file Cactbot uses has to be loaded by a relative directory reference from the given [TRIGGER-FILE].js. Typically the filename for the timeline file will match the name of the trigger file, and for specific encounters the filenames should at least loosely match the zone name.
+Cactbot的每一个时间轴文件均由同文件夹下某个对应的 [TRIGGER-FILE].js 加载。 通常情况下，时间轴文件的名称需与触发器文件一致，同时此文件名应当至少与副本区域名称可以一一对应，即不具有歧义。
 
-Cactbot implements some extensions to the original format. These extensions can appear in the file itself or in the `timeline` field in the triggers:
+Cactbot在原基础上实现了一部分扩展语法。 扩展语法可以在时间轴文本文件内或触发器的 `timeline` 属性中使用。
 
-**infotext "event name" before 1** Show a info-priority text popup on screen before an event will occur. The `event name` matches a timed event in the file and will be shown before each occurrence of events with that name. By default the name of the event will be shown, but you may specify the text to be shown at the end of the line if it should be different. The `before` parameter must be present, but can be 0 if the text should be shown at the same time the event happens. Negative values can be used to show the text after the event.
+**infotext "event name" before 1** 在某个事件发生之前显示一个“信息”级别的文本。 `event name` 与文件中的某个列出的事件名称匹配，并且在所有同名事件发生前均会显示指定文本。 默认显示的文本为事件名称，但若您需要显示其他文本，添加指定文本至行末即可。 `before` 参数是必填项，但您可以将其设置为0以令文本在事件发生的同时显示。 当您需要使文本在事件之后显示时，也可以设置为负值。
 
-**Example infotext which shows the event name 1s before the event happens** `infotext "event name" before 1`
+**例1：在事件发生前1秒时显示“信息”等级文本** `infotext "event name" before 1`
 
-**Example infotext which specifies different text to be shown earlier** `infotext "event name" before 2.3 "alternate text"`
+**例2：在事件发生前更早显示“信息”等级文本，并修改了默认文本** `infotext "event name" before 2.3 "alternate text"`
 
-**Example alert-priority popups using the same parameters** `alerttext "event name" before 1` `alerttext "event name" before 2.3 "alternate text"`
+**例3：与前述同事件名的“警告”等级文本** `alerttext "event name" before 1` `alerttext "event name" before 2.3 "alternate text"`
 
-**Example alarm-priority popups using the same parameters** `alarmtext "event name" before 1` `alarmtext "event name" before 2.3 "alternate text"`
+**例4：与前述同事件名的“警报”等级文本** `alarmtext "event name" before 1` `alarmtext "event name" before 2.3 "alternate text"`
