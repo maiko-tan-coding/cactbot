@@ -3,20 +3,20 @@
 🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
 
 - [藉由cactbot使用者介面](#藉由cactbot使用者介面)
-- [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui)
-- [User Directory Overview](#user-directory-overview)
-- [Setting Your User Directory](#setting-your-user-directory)
-- [Customizing Appearance](#customizing-appearance)
-- [Overriding Raidboss Triggers](#overriding-raidboss-triggers)
-  - [Example 1: changing the output text](#example-1-changing-the-output-text)
-  - [Example 2: making provoke work for all jobs](#example-2-making-provoke-work-for-all-jobs)
-  - [Example 3: adding custom triggers](#example-3-adding-custom-triggers)
-- [Overriding Raidboss Timelines](#overriding-raidboss-timelines)
-- [Customizing Behavior](#customizing-behavior)
-- [Debugging User Files](#debugging-user-files)
-  - [Check the OverlayPlugin log for errors](#check-the-overlayplugin-log-for-errors)
-  - [Check if your file is loaded](#check-if-your-file-is-loaded)
-  - [Check if your user file has errors](#check-if-your-user-file-has-errors)
+- [透過cactbot使用者介面改變觸發器文本](#changing-trigger-text-with-the-cactbot-ui)
+- [用戶資料夾概況](#user-directory-overview)
+- [設置您自己的用戶資料夾](#setting-your-user-directory)
+- [樣式自定義](#customizing-appearance)
+- [Raidboss觸發器自訂](#overriding-raidboss-triggers)
+  - [例1：改變輸出文本](#example-1-changing-the-output-text)
+  - [例2：使挑釁提示適用於全職業](#example-2-making-provoke-work-for-all-jobs)
+  - [例3：添加自訂觸發器](#example-3-adding-custom-triggers)
+- [Raidboss時間軸自訂](#overriding-raidboss-timelines)
+- [行為自訂](#customizing-behavior)
+- [用戶檔案的除錯](#debugging-user-files)
+  - [檢查OverlayPlugin的錯誤日誌](#check-the-overlayplugin-log-for-errors)
+  - [檢查檔案是否載入](#check-if-your-file-is-loaded)
+  - [檢查檔案是否有錯誤](#check-if-your-user-file-has-errors)
 
 ## 藉由cactbot使用者介面
 
@@ -26,16 +26,16 @@
 
 - 設置觸發器輸出TTS
 - 禁用觸發器
-- changing the output of triggers
-- changing your cactbot language
-- volume settings
-- getting rid of that cheese icon
+- 改變觸發器輸出
+- 改變cactbot語言
+- 音量設置
+- 隱藏起司圖標
 
 您可能無法透過cactbot使用者介面更改所有配置項。 但是它是最容易的方法，適合作為您定制化的第一步。 以後此介面會添加更多的選項。
 
 此處的選項會存儲於 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 檔案中。 但您並不需要也不應當直接修改該檔案。
 
-## Changing Trigger Text with the cactbot UI
+## 透過cactbot使用者介面改變觸發器文本
 
 In the cactbot configuration UI, under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Raidboss, there are individual trigger listings. You can use these listings to change various exposed configuration settings per trigger.
 
@@ -45,27 +45,27 @@ You could change this to say `${name} is going to die!` instead. Or, maybe you d
 
 There are some limitations to this overriding. You cannot change the logic. You cannot make `tts` to say something different than the `alarmText` in most cases. You cannot add additional parameters. If you want to do any of these more complicated overrides, then you will want to look at the [Overriding Raidboss Triggers](#overriding-raidboss-triggers) section.
 
-## User Directory Overview
+## 用戶資料夾概況
 
-If the cactbot UI doesn't have the option you are looking for, then you may need to consider user file overrides. At this point, you are writing JavaScript and CSS, and so you might need a little bit of programming savvy.
+若cactbot使用者介面不存在您所需的選項，您可能需要考慮以用戶檔案覆蓋的方式進行自訂。 您需要編寫JavaScript程式碼和CSS樣式，這意味著您可能需要掌握一點點編程知識。
 
-The general philosophy of cactbot is that any user configuration should only go in files in the user directory. This will prevent your changes from being overwritten during future cactbot updates. Additionally, in the future modifying cactbot files directly from a cactbot release will not work properly without running extra build steps.
+Cactbot的設計哲學要求任何用戶的自訂配置應當存放於用戶資料夾的檔案中。 同時這也能防止您所做的更改在今後cactbot的更新中被覆蓋失效。 不僅如此，以後您將無法通過直接修改cactbot的檔案應用您的更改，除非您了解如何編譯您自己的項目。
 
-All cactbot UI modules can load user settings from the [user/](../user/) directory. The `raidboss` module loads `user/raidboss.js` and `user/raidboss.css`. The `oopsyraidsy` module loads `user/oopsyraidsy.js` and `user/oopsyraidsy.css`. And so on, for each module. These files are included after cactbot's files and can override its settings.
+所有的cactbot模組都會從 [user/](../../user/) 資料夾載入用戶設置。 `raidboss` 模組會載入 `user/raidboss.js` 與 `user/raidboss.css`。 `oopsyraidsy` 模組會載入 `user/oopsyraidsy.js` 與 `user/oopsyraidsy.css`。 以此類推，每一個模組都支持此方式。 這些檔案在cactbot自身載入完成後被載入，並可以覆蓋對應的模組的設置。
 
-The `user/` directory already includes some example configuration files, which you can rename and use. For example the [user/raidboss-example.js](../user/raidboss-example.js) file can be renamed to `user/raidboss.js` and edited to change the behavior of the `raidboss` module.
+`user/` 資料夾中包含了一部分示例配置檔案，您可以對其重命名並直接使用。 如 [user/raidboss-example.js](../../user/raidboss-example.js) 檔案可被重命名為`user/raidboss.js` ，對其所做的更改可應用於`raidboss` 模組。
 
-After making any changes to these files, pressing the "Reload overlay" button for the appropriate overlay in ACT's OverlayPlugin settings will apply the changes.
+在修改了這些檔案之後，單擊ACT中OverlayPlugin外掛設置中的“重載懸浮窗”按鈕，即可應用更改。
 
-## Setting Your User Directory
+## 設置您自己的用戶資料夾
 
-The cactbot user directory can be set via the cactbot configuration UI: ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Cactbot user directory. Click the `Choose Directory` button and select a folder on disk.
+您可以透過cactbot配置界面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
 
 If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
 
 Ideally, you should select the `cactbot/user` folder from your cactbot installation. This is often in `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`. [This folder](../user) has example customization files.
 
-## Customizing Appearance
+## 樣式自定義
 
 The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
 
@@ -88,7 +88,7 @@ The best way to debug CSS issues is to use [Chrome DevTools](https://developers.
 
 **Warning**: cactbot makes no guarantees about preserving CSS backwards compatability. Future changes to cactbot may rearrange elements, change element names and classes, or change styling entirely. In general, you are on your own if you want to style cactbot with CSS.
 
-## Overriding Raidboss Triggers
+## Raidboss觸發器自訂
 
 You can use your `cactbot/user/raidboss.js` to override how triggers behave. You can change the text that they output, what jobs they run for, and how long they stay on screen, and anything else.
 
@@ -225,7 +225,7 @@ Options.Triggers.push([
 
 Your best resources for learning how to write cactbot triggers is the [trigger guide](RaidbossGuide.md) and also reading through existing triggers in [ui/raidboss/data](../ui/raidboss/data).
 
-## Overriding Raidboss Timelines
+## Raidboss時間軸自訂
 
 Overriding a raidboss timeline is similar to [overriding a trigger](#overriding-raidboss-triggers).
 
@@ -265,7 +265,7 @@ The steps to override a timeline are:
 
 **Note**: Editing timelines is a bit risky, as there may be timeline triggers that refer to specific timeline text. For instance, in TEA, there are timeline triggers for `Fluid Swing` and `Propeller Wind`, etc. If these names are changed or removed, then the timeline triggers will also be broken.
 
-## Customizing Behavior
+## 行為自訂
 
 This section discusses other kinds of customizations you can make to cactbot modules. There are some variables that are not in the config UI and are also not triggers.
 
@@ -285,7 +285,7 @@ Options.PlayerNicks = {
 
 **Warning**: files inside of your user directory will silently overwrite settings that were set from the cactbot configuration UI. This can be confusing, so it's generally preferable to let the config tool set everything you can, and only use user files in order to set things that the config tool does not provide access to.
 
-## Debugging User Files
+## 用戶檔案的除錯
 
 ### 檢查OverlayPlugin的錯誤日誌
 
