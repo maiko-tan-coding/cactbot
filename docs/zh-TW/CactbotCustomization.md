@@ -1,8 +1,9 @@
-# Cactbot Customization
+# Cactbot自訂教學
 
-🌎 [**English**] [[한국어](./ko-KR/CactbotCustomization.md)]
+🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
 
-- [Using the cactbot UI](#using-the-cactbot-ui)
+- [藉由cactbot使用者介面](#藉由cactbot使用者介面)
+- [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui)
 - [User Directory Overview](#user-directory-overview)
 - [Setting Your User Directory](#setting-your-user-directory)
 - [Customizing Appearance](#customizing-appearance)
@@ -17,21 +18,32 @@
   - [Check if your file is loaded](#check-if-your-file-is-loaded)
   - [Check if your user file has errors](#check-if-your-user-file-has-errors)
 
-## Using the cactbot UI
+## 藉由cactbot使用者介面
 
-The best way to customize cactbot is to use the cactbot configuration UI. This is under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot.
+自訂cactbot時，推薦透過cactbot的使用者介面進行操作。 該介面處於 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot。
 
-This has options for things like:
+它可以提供如下功能：
 
-- setting triggers to tts
-- disabling triggers
+- 設置觸發器輸出TTS
+- 禁用觸發器
+- changing the output of triggers
 - changing your cactbot language
 - volume settings
 - getting rid of that cheese icon
 
-It is not possible to configure everything you might want through the cactbot configuration UI. However, it is the easiest place to start with. Over time, more options will be added there.
+您可能無法透過cactbot使用者介面更改所有配置項。 但是它是最容易的方法，適合作為您定制化的第一步。 以後此介面會添加更多的選項。
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. You should not need to edit that file directly.
+此處的選項會存儲於 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 檔案中。 但您並不需要也不應當直接修改該檔案。
+
+## Changing Trigger Text with the cactbot UI
+
+In the cactbot configuration UI, under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Raidboss, there are individual trigger listings. You can use these listings to change various exposed configuration settings per trigger.
+
+Settings with a bell (🔔) next to their name are trigger mostly outputs that you can override. For example, maybe there's an 🔔onTarget field whose text is `Tank Buster on ${name}`. This is the string that will get played on screen (or via tts) when there is a tank buster on some person. `${name}` here is a parameter that will be set dynamically by the trigger. Anything that looks like `${param}` is such a dynamic parameter.
+
+You could change this to say `${name} is going to die!` instead. Or, maybe you don't care who it's on, and you can edit the text to `Buster` to be brief. If you want to undo your overriding, just clear the text.
+
+There are some limitations to this overriding. You cannot change the logic. You cannot make `tts` to say something different than the `alarmText` in most cases. You cannot add additional parameters. If you want to do any of these more complicated overrides, then you will want to look at the [Overriding Raidboss Triggers](#overriding-raidboss-triggers) section.
 
 ## User Directory Overview
 
@@ -104,9 +116,11 @@ The easiest approach to modify triggers is to copy and paste the block of code a
 
 **Note**: This method completely removes the original trigger, and so do not delete any logic when making edits. Also, this is JavaScript, and so it still needs to be valid JavaScript. If you are not a programmer, be extra careful with what and how you edit.
 
-### Example 1: changing the output text
+### 例1：改變輸出文本
 
-Let's say hypothetically that you are doing UCOB and your group decides that they are going to do fire out first instead of fire in first like cactbot calls it by default.
+Let's say hypothetically that you are doing UCOB and your group decides that they are going to do "fire out" first instead of "fire in" first like cactbot calls it by default. Additionally, you *also* want to have the tts say something different for this trigger. You keep forgetting to get out, so you want it to repeat a few times.
+
+If you only wanted to change the `infoText`, you could do this via [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui).
 
 One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
 
@@ -130,6 +144,9 @@ Options.Triggers.push({
       infoText: {
         en: 'Fire OUT',
       },
+      tts: {
+        en: 'out out out out out',
+      },
       run: function(data) {
         data.naelFireballCount = 1;
       },
@@ -138,9 +155,9 @@ Options.Triggers.push({
 });
 ```
 
-This edit also replaced the `tts` section and removed other languages other than English.
+This edit also removed languages other than English.
 
-### Example 2: making provoke work for all jobs
+### 例2：使挑釁提示適用於全職業
 
 Currently, provoke only works for players in your alliance and not for all jobs. This example shows how to make it work for all players. The provoke trigger can be found in [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30).
 
@@ -178,7 +195,7 @@ Options.Triggers.push([{
 
 You could also just delete the `condition` function entirely here, as triggers without conditions will always run when their regex matches.
 
-### Example 3: adding custom triggers
+### 例3：添加自訂觸發器
 
 You can also use this same pattern to add your own custom triggers.
 
@@ -270,13 +287,13 @@ Options.PlayerNicks = {
 
 ## Debugging User Files
 
-### Check the OverlayPlugin log for errors
+### 檢查OverlayPlugin的錯誤日誌
 
 The OverlayPlugin log is scrolling window of text that can be found by going to ACT -> Plugins -> OverlayPlugin.dll, and looking at the bottom of the window.
 
 If there are errors, they will appear here.
 
-### Check if your file is loaded
+### 檢查檔案是否載入
 
 First, turn on debug mode for raidboss. Go to the cactbot configuration UI, enable `Show developer options` and reload the page. Then, enable `Enable debug mode` under Raidboss, and reload again.
 
@@ -284,7 +301,7 @@ When raidboss debug mode is on, it will print more information to the OverlayPlu
 
 Verify that your user file is loaded at all.
 
-### Check if your user file has errors
+### 檢查檔案是否有錯誤
 
 User files are JavaScript, and so if you write incorrect JavaScript, there will be errors and your user file will be skipped and it will not load. Check the OverlayPlugin log for errors when loading.
 
