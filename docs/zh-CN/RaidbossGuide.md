@@ -122,9 +122,9 @@ Almost all trigger fields can either return a value or a `function(data, matches
 
 **preRun: function(data, matches, output)** If the trigger activates, the function will run as the first action after the activation condition is met.
 
-**promise: function(data, matches, output)** If present and a function which returns a promise, will wait for promise to resolve before continuing with trigger. 这个函数会在 `preRun` 之后，`delaySeconds` 之前执行。
+**delaySeconds** An amount of time, in seconds, to wait from the time the regex match is detected until the trigger activates. May be a number or a `function(data, matches, output)` that returns a number. This runs after `preRun` and before the `promise`.
 
-**delaySeconds** 时间，单位为秒，规定从正则表达式匹配上到触发器激活之间的等待时间。 May be a number or a `function(data, matches, output)` that returns a number.
+**promise: function(data, matches, output)** If present and a function which returns a promise, will wait for promise to resolve before continuing with trigger. This runs after the delay from `delaySeconds`.
 
 **durationSeconds** 时间，单位为秒，显示触发器文本的时长。 May be a number or a `function(data, matches, output)` that returns a number. 若该值未设置，默认为3。
 
