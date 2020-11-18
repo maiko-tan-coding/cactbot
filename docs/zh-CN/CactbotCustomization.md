@@ -1,6 +1,6 @@
 # Cactbot自定义教程
 
-🌎 [[English](../CactbotCustomization.md)] [**简体中文**] [[한국어](./ko-KR/CactbotCustomization.md)]
+🌎 [[English](../CactbotCustomization.md)] [**简体中文**] [[한국어](../ko-KR/CactbotCustomization.md)]
 
 - [使用cactbot配置界面](#使用cactbot配置界面)
 - [通过cactbot配置界面改变触发器文本](#通过cactbot配置界面改变触发器文本)
@@ -59,7 +59,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 ## 设置您自己的用户文件夹
 
-您可以通过cactbot配置界面设置此用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
+您可以通过cactbot配置界面设置用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
 
 若您没有选择，cactbot会尝试选择安装目录下的默认文件夹。
 
@@ -112,7 +112,7 @@ Options.Triggers.push({
 });
 ```
 
-最简单的方式是直接复制对应的触发器代码并粘贴到此文件再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.js) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 然后复制触发器文本并粘贴至此。 按您的喜好进行修改。 对您想修改的所有触发器均进行此步骤。 重载raidboss悬浮窗以应用更改。
+最简单的定制触发器方式是直接复制上面那一大块代码粘贴到此文件再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.js) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 然后复制触发器文本并粘贴至此， 按您的喜好进行修改。 当你改完所有你想改的触发器后， 重载raidboss悬浮窗以应用更改。
 
 **注意**：此方式会将原触发器完全移除，因此请在修改时不要删除任何逻辑。 此外，触发器均采用JavaScript编写，因此必须采用标准JavaScript语法。 若您不是程序员，您需要格外注意编辑方法。
 
