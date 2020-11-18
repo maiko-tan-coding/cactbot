@@ -3,20 +3,20 @@
 🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
 
 - [使用cactbot配置界面](#使用cactbot配置界面)
-- [通过cactbot界面改变触发器文本](#changing-trigger-text-with-the-cactbot-ui)
-- [用户文件夹概览](#user-directory-overview)
-- [设置您自己的用户文件夹](#setting-your-user-directory)
-- [样式自定义](#customizing-appearance)
-- [Raidboss触发器自定义](#overriding-raidboss-triggers)
-  - [例1：改变输出文本](#example-1-changing-the-output-text)
-  - [例2：使挑衅提示适用于全职业](#example-2-making-provoke-work-for-all-jobs)
-  - [例3：添加自定义触发器](#example-3-adding-custom-triggers)
-- [Raidboss时间轴自定义](#overriding-raidboss-timelines)
-- [行为自定义](#customizing-behavior)
-- [用户文件的调试](#debugging-user-files)
-  - [检查OverlayPlugin的错误日志](#check-the-overlayplugin-log-for-errors)
-  - [检查文件是否加载](#check-if-your-file-is-loaded)
-  - [检查文件是否有错误](#check-if-your-user-file-has-errors)
+- [通过cactbot配置界面改变触发器文本](#通过cactbot配置界面改变触发器文本)
+- [用户文件夹概览](#用户文件夹概览)
+- [设置您自己的用户文件夹](#设置您自己的用户文件夹)
+- [样式自定义](#样式自定义)
+- [Raidboss触发器自定义](#raidboss触发器自定义)
+  - [例1：改变输出文本](#例1改变输出文本)
+  - [例2：使挑衅提示适用于全职业](#例2使挑衅提示适用于全职业)
+  - [例3：添加自定义触发器](#例3添加自定义触发器)
+- [Raidboss时间轴自定义](#raidboss时间轴自定义)
+- [行为自定义](#行为自定义)
+- [用户文件的调试](#用户文件的调试)
+  - [检查OverlayPlugin的错误日志](#检查OverlayPlugin的错误日志)
+  - [检查文件是否加载](#检查文件是否加载)
+  - [检查文件是否有错误](#检查文件是否有错误)
 
 ## 使用cactbot配置界面
 
@@ -35,15 +35,15 @@
 
 此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 但您并不需要也不应当直接修改该文件。
 
-## Changing Trigger Text with the cactbot UI
+## 通过cactbot配置界面改变触发器文本
 
-In the cactbot configuration UI, under ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> Raidboss, there are individual trigger listings. You can use these listings to change various exposed configuration settings per trigger.
+在位于ACT-> 插件> OverlayPlugin.dll-> Cactbot-> Raidboss的cactbot配置界面中， 罗列着所有的触发器。 这里的列表让您可以更改每个触发器支持外部更改的配置设置。
 
-Settings with a bell (🔔) next to their name are trigger outputs that you can override. For example, maybe there's an 🔔onTarget field whose text is `Tank Buster on ${player}`. This is the string that will get played on screen (or via tts) when there is a tank buster on some person. `${player}` here is a parameter that will be set dynamically by the trigger. Anything that looks like `${param}` is such a dynamic parameter.
+名称旁边带有铃铛(🔔) 的设置项的触发器输出文本是可以被覆盖的。 举个例子，假设有一个🔔onTarget字段，其文本为 `死刑点${player}`。 当某人接到死刑技能时，这个字符串将出现在屏幕上（或通过tts播报）。 `${player}` 是一个将由触发器动态设置的参数。 任何类似于 `${param}` 的字符串都是动态参数。
 
-You could change this to say `${player} is going to die!` instead. Or, maybe you don't care who it's on, and you can edit the text to `Buster` to be brief. If you want to undo your overriding, just clear the text.
+比如，您可以将这个文本更改为 `${player} 即将死亡！`。 或者，也许您不关心谁是目标，那么您可以将其改为 `死刑` 以使文本更加简短。 如果您想撤消自己的更改，只需清空文本框即可。
 
-There are some limitations to this overriding. You cannot change the logic. You cannot make `tts` to say something different than the `alarmText` in most cases. You cannot add additional parameters. If you want to do any of these more complicated overrides, then you will want to look at the [Overriding Raidboss Triggers](#overriding-raidboss-triggers) section.
+但这个方式有一定的限制。 例如，您无法更改逻辑。 而且在大多数情况下，您无法使 `tts` 的播报与 `alarmText` 不同。 您无法添加更多的参数。 如果您想要对触发器做出更加复杂的覆盖操作， 那么您需要查看 [Raidboss触发器自定义](#overriding-raidboss-triggers) 小节。
 
 ## 用户文件夹概览
 
@@ -118,9 +118,9 @@ Options.Triggers.push({
 
 ### 例1：改变输出文本
 
-假定您正在攻略巴哈姆特绝境战(UCOB)， 您的固定队采用的不是cactbot默认的火1集合吃的打法， 而是先单吃火1。 Additionally, you *also* want to have the tts say something different for this trigger. You keep forgetting to get out, so you want it to repeat a few times.
+假定您正在攻略巴哈姆特绝境战(UCOB)， 您的固定队采用的不是cactbot默认的火1集合吃的打法， 而是先单吃火1。 另外，您 *同时* 还想让触发器通过tts播报与文本不同的内容。 比如，您总是忘记出人群，因此您想让它重复播报数次。
 
-If you only wanted to change the `infoText`, you could do this via [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui).
+若您只是想修改 `信息文本`，你可以 [通过cactbot配置界面改变触发器文本](#changing-trigger-text-with-the-cactbot-ui) 实现。
 
 其中一种调整方式是编辑触发器的输出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743) 中找到原本的 fireball #1 触发器。
 
@@ -155,7 +155,7 @@ Options.Triggers.push({
 });
 ```
 
-This edit also removed languages other than English.
+此处还删除了英语以外的语言。
 
 ### 例2：使挑衅提示适用于全职业
 
