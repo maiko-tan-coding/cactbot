@@ -1,6 +1,6 @@
 # Cactbot自定义教程
 
-🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
+🌎 [[English](../CactbotCustomization.md)] [**简体中文**] [[한국어](./ko-KR/CactbotCustomization.md)]
 
 - [使用cactbot配置界面](#使用cactbot配置界面)
 - [通过cactbot配置界面改变触发器文本](#通过cactbot配置界面改变触发器文本)
@@ -285,7 +285,7 @@ Options.PlayerNicks = {
 
 ### 检查OverlayPlugin的错误日志
 
-您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到OverlayPlugin的日志窗口， 位于该窗口的底部，为一自动滚动的文本窗口。
+您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位于该窗口的底部的OverlayPlugin日志窗口，它是一个自动滚动的文本窗口。
 
 当运行错误时，错误信息会显示在此处。
 
