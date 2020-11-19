@@ -1,231 +1,249 @@
-# Guide to Memory Signatures and Cheat Engine
+# メモリ署名とチートエンジンのガイド
 
-Memory signatures are unique binary strings that can be used to find memory locations in an executable.
+メモリ署名は、実行可能ファイル内のメモリ位置を見つけるために使用できる一意のバイナリ文字列 です。
 
-Finding these signatures makes it possible to consistently look up game state (e.g. am I in combat, what is my job gauge, how much enmity do I have) even when the game refuses to give you an API for this.
+これらの署名を見つけることが可能となる、一貫して ゲームの状態まで見て （例えば、私は戦闘で午前、私の仕事のゲージが、私はどのくらいの敵意をしているんです） ゲームはあなたに、このためのAPIを提供することを拒否した場合でも。
 
-This guide shows how to use Cheat Engine to find such memory signatures. It's probably helpful if you know some basic assembly language, some programming, and have extreme levels of patience.
+このガイドでは、CheatEngineを使用してそのようなメモリシグネチャを見つける方法を示します。 あなたには、いくつかの基本的なアセンブリ言語、知っていればそれはおそらく便利です いくつかのプログラミングを、そして忍耐の極端なレベルを持っています。
 
-## Table of Contents
+## 目次
 
-* [Installation](#installation)
-* [Finding New Memory Signatures](#finding-new-memory-signatures)
-  * [Connect Cheat Engine to the Game](#connect-cheat-engine-to-the-game)
-  * [Initial Memory Search](#initial-memory-search)
-  * [Repeated Scans](#repeated-scans)
-  * [Browsing Memory](#browsing-memory)
-  * [Approach 1: Finding Writers](#approach-1-finding-writers)
-  * [Approach 2: Tracing](#approach-2-tracing)
-  * [Approach 3: Finding Readers](#approach-3-finding-readers)
-  * [Assembly Code and Pointers](#assembly-code-and-pointers)
-  * [Extracting a Signature From Assembly](#extracting-a-signature-from-assembly)
-* [Scan For Existing Memory Signatures](#scan-for-existing-memory-signatures)
+* [インストール](#installation)
+* [新しいメモリ署名の検索](#finding-new-memory-signatures)
+  * [チートエンジンをゲームに接続する](#connect-cheat-engine-to-the-game)
+  * [初期メモリ検索](#initial-memory-search)
+  * [繰り返しスキャン](#repeated-scans)
+  * [閲覧メモリ](#browsing-memory)
+  * [アプローチ1：作家を見つける](#approach-1-finding-writers)
+  * [アプローチ2：トレース](#approach-2-tracing)
+  * [アプローチ3：読者を見つける](#approach-3-finding-readers)
+  * [アセンブリコードとポインタ](#assembly-code-and-pointers)
+  * [アセンブリから署名を抽出する](#extracting-a-signature-from-assembly)
+* [既存のメモリ署名をスキャンする](#scan-for-existing-memory-signatures)
 
-## Installation
+## インストール
 
-Install the [latest version of Cheat Engine](https://github.com/cheat-engine/cheat-engine/releases/latest). The installer tries to tack some additional garbage on, so be sure to turn this off and don't blindly click next. Sorry.  It's gross.
+インストール [チートエンジンの最新バージョン](https://github.com/cheat-engine/cheat-engine/releases/latest)。 インストーラーは追加のガベージをオンにしようとします なので、これをオフにして、やみくもに[次へ]をクリックしないでください。 ごめんなさい。  それはグロスです。
 
-## Finding New Memory Signatures
+## 新しいメモリ署名の検索
 
-![cheat engine screenshot](images/cheatengine_initial.png)
+![チートエンジンのスクリーンショット](images/cheatengine_initial.png)
 
-### Connect Cheat Engine to the Game
+### チートエンジンをゲームに接続する
 
-Start Final Fantasy XIV up and log in.
+ファイナルファンタジーXIVを起動してログインします。
 
-Then, open up Cheat Engine. Click on **File**, select **Open Process**, and then pick Final Fantasy XIV.
+次に、CheatEngineを開きます。 クリックして **ファイル**、 を選択し **を開きプロセス**、 、その後、ファイナルファンタジーXIVを選びます。
 
-The top bar should say **ffxiv_dx11.exe** at this point.
+トップバーには言うべき **ffxiv_dx11.exe** 、この時点で。
 
-![cheat engine connected screenshot](images/cheatengine_connected.png)
+![チートエンジン接続のスクリーンショット](images/cheatengine_connected.png)
 
-### Initial Memory Search
+### 初期メモリ検索
 
-Let's say we're looking for your character's job gauge in memory. For simplicity, say we're a warrior and we're just looking for beast gauge. Because so many values in memory are zero, let's start with a different initial value.
+メモリー内でキャラクターのジョブゲージを探しているとしましょう。 簡単にするために、私たちは戦士であり、獣のゲージを探しているだけだとしましょう。 メモリ内の非常に多くの値がゼロであるため、 は別の初期値から始めましょう。
 
-Switch to warrior in game, and then hit a striking dummy until your beast gauge is 80.
+ゲーム内で戦士に切り替えて し、獣のゲージが80になるまで印象的なダミーをヒットします。
 
-Switch back to Cheat Engine.
+CheatEngineに切り替えます。
 
-![cheat engine initial scan screenshot](images/cheatengine_initialscan.png)
+![チートエンジンの初期スキャンのスクリーンショット](images/cheatengine_initialscan.png)
 
-Put in a value (not hex) of 80. The scan type should be `Exact Value` with a `Value Type` of byte. At this point, we don't know how many bytes beast gauge takes in memory. It would be nice if it took four bytes, because there'd be a lot fewer options to sift through. However, we can't make that assumption yet. We're also looking for memory that is writable and not executable.
+80の値（16進数ではない）を入力します。 スキャンタイプは `必要があります<code>正確な値` と `値タイプ` のバイト。 現時点では、ビーストゲージがメモリに何バイトを占めるかはわかりません。 ふるいにかけるオプションがはるかに少ないので、4バイト が必要な場合は便利です。 しかし、私たちはまだその仮定をすることはできません。 また、書き込み可能で実行可能ではないメモリも探しています。
 
-Then, click **First Scan**.
+その後、クリック **初めてのスキャン**。
 
-This will likely give you millions of memory locations with value 80. A great start!
+これにより、値80の数百万のメモリロケーションが得られる可能性があります。 素晴らしいスタートです！
 
-![cheat engine found screenshot](images/cheatengine_found.png)
+![チートエンジンがスクリーンショットを見つけました](images/cheatengine_found.png)
 
-This is a live view into all of these memory locations. They turn red when they have changed. Some of these are flickering values that are changing even without doing something in game. You can always mash **Next Scan** a few times to repeat the scan and eliminate them.
+これは、これらすべてのメモリ位置のライブビューです。 変わると赤くなります。 これらのいくつかは、ゲームで何もしなくても変化するちらつきの値です。 あなたはいつもマッシュアップすることができます **次のスキャン** スキャンを繰り返し、それらを排除するために数回。
 
-### Repeated Scans
+### 繰り返しスキャン
 
-In game, use a fell cleave to get back to 30 beast gauge.
+ゲームでは、落ちた劈開を使用して30の獣ゲージに戻ります。
 
-Go back to Cheat Engine. Change the **Value** to 30. Click **Next Scan**. This should greatly cut down on the number of memory locations.
+CheatEngineに戻ります。 **値** を30に変更し** 。 **次のスキャン**クリックし** 。 これにより、メモリ位置の数が大幅に削減されます。</p>
 
-Repeat this process of changing the value in game and then re-scanning for the new value until you have a small number of addresses.
+ゲーム 値を変更するこのプロセスを繰り返してから、アドレスの数が少なくなるまで新しい値 を再スキャンします。
 
-![cheat engine post scan screenshot](images/cheatengine_postscan.png)
+![チートエンジンのスキャン後のスクリーンショット](images/cheatengine_postscan.png)
 
-The black addresses are heap addresses. The green addresses are [static addresses](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88). In general, you're looking for static addresses because it's easier to find code that refers to them and they are permanent.
+黒のアドレスはヒープアドレスです。 緑のアドレスは [静的アドレス](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88)です。 一般に、静的アドレス 探しているのは、静的アドレス を参照するコードを見つけるのが簡単であり、永続的であるためです。
 
-Keep scanning until you have a single green (static) address.
+緑の（静的）アドレスが1つになるまでスキャンを続けます。
 
-Right click on the address, and select **Add selected addresses to the address list**. This will put the address in the list at the bottom. In this case, our static address is `14116E128`.
+アドレス を右クリックし、 **を選択します。選択したアドレスをアドレスリストに追加します**。 これにより、アドレスが下部のリストに表示されます。 この場合、私たちの静的アドレスは `14116E128`。
 
-![cheat engine address list screenshot](images/cheatengine_addresslist.png)
+![チートエンジンのアドレスリストのスクリーンショット](images/cheatengine_addresslist.png)
 
-If you are following along with this example, the static address you have will not match. Moreover, it will be different each time you restart the game. This is because Windows has [address space layout randomization](https://en.wikipedia.org/wiki/Address_space_layout_randomization) enabled, largely to make it harder to do the exact sort of thing we are doing now.
+この例に従っている場合、 あなたが持っている静的アドレスは一致しません。 また、ゲームを再開するたびに異なります。 Windowsが持っているからです [アドレス空間配置のランダム化](https://en.wikipedia.org/wiki/Address_space_layout_randomization) 有効になって、 主にそれが難しく、正確なソート私たちが今やっていることの行うことにします。
 
-This is also why we need to find a code signature. If the executable and DLL addresses weren't randomized, the static addresses would be the same from run to run.
+これが、コード署名を見つける必要がある理由でもあります。 実行可能ファイルとDLLアドレスがランダム化されなかった場合は、 静的アドレスは、実行するたびに同じになります。
 
-### Browsing Memory
+### 閲覧メモリ
 
-From the address list, right click on the address that was just added and select **Browse This Memory Region*.
+アドレスリストから、 追加したばかりのアドレスを右クリックして 、**このメモリ領域を参照*を選択します。
 
-That will bring up the Memory Viewer window. This has a disassembly view at the top and a memory viewer at the bottom. Confusingly, these are separate views and are *not* synced together even though they are in the same window. They will sync to whatever the last address you have selected **Disassemble This Memory Region** or **Browse This Memory Region** on respectively.
+これにより、メモリビューアウィンドウが表示されます。 これには、上部に分解ビューがあり、下部にメモリビューアがあります。 紛らわしいことに、これらは別々の図であり、ある *でない* 彼らは同じウィンドウ内にあるにもかかわらず、一緒に同期。 彼らは、あなたが選択したものは何でも最後のアドレスに同期します **を分解し、このメモリ領域に** または **参照。このメモリ領域を** それぞれに。
 
-![cheat engine browse memory screenshot](images/cheatengine_browsememory.png)
+![チートエンジンのブラウズメモリのスクリーンショット](images/cheatengine_browsememory.png)
 
-However, you can see that in the top left of this screenshot is the hex value `1E`, which is [30 in decimal](https://www.google.com/search?q=0x1e+in+decimal).
+ただし、このスクリーンショットの左上に進値であることがわかります `1E`、 であり、 [進で30](https://www.google.com/search?q=0x1e+in+decimal)。
 
-Browsing memory can let you see what else is around it. This is especially useful for things like entity or player data.
+メモリを参照すると、その周りに他に何があるかを確認できます。 これは、エンティティやプレーヤーのデータなどに特に役立ちます。
 
-For job data, there's really not much interesting in nearby memory.
+仕事のデータについては、近くのメモリにはあまり興味深いものはありません。
 
-### Approach 1: Finding Writers
+### アプローチ1：作家を見つける
 
-Now, we need to find some code that refers to this. The easiest way to do this is to find what modifies this value.
+ここで、これを参照するコードを見つける必要があります。 これを行う最も簡単な方法は、この値を変更するものを見つけることです。
 
-Right click on the address in the address list, and select **Find out what writes to this address**. This will ask you to attach the debugger, say yes. A new window will pop up.
+アドレスリストのアドレス を右クリックし、 **を選択します。このアドレスに何が書き込まれるかを調べます**。 これにより、デバッガーを接続するように求められます。「はい」と言います。 新しいウィンドウがポップアップします。
 
-Go back to FFXIV, and modify the beast gauge. In this case, we'll hit infuriate to go from 30 to 80.
+FFXIVに戻り、ビーストゲージを変更します。 この場合、30から80に激怒します。
 
-Go back to Cheat Engine, and the new debugger window should have some information.
+Cheat Engine、 戻ると、新しいデバッガウィンドウにいくつかの情報が表示されます。
 
-![cheat engine debugger screenshot](images/cheatengine_debugger.png)
+![チートエンジンデバッガーのスクリーンショット](images/cheatengine_debugger.png)
 
-This is the assembly that wrote to the beast gauge memory location.
+これは、ビーストゲージのメモリ位置に書き込んだアセンブリです。
 
-If you want, you can click on the **Show disassembler** to see the surrounding code.
+必要に応じて、 は **Show disassembler** をクリックして、周囲のコードを表示できます。
 
-![cheat engine disassembly screenshot](images/cheatengine_disassembly.png)
+![チートエンジンの分解のスクリーンショット](images/cheatengine_disassembly.png)
 
-Unfortunately, in this case, this is a two instruction function call.
+残念ながら、この場合、 これは2命令の関数呼び出しです。
 
-The line that is changing the value is `mov [rcx+08], al`. I don't really know assembly language, but google tells me that `al` is the last 8 bits of the `eax` register which was set on the previous `movzx eax, byte ptr [rdx+01]` line. Given that this is the line that is writing memory, `[rcx+08]` is the pointer we care about, but we need to find the calling code that set `rcx`. This code is likely somewhere very different in the executable.
+値を変更している行である `MOV [RCX + 08]、文献`。 本当にアセンブリ言語、知らない が、Googleは、と言われます `のAl` 最後の8ビット `EAX` レジスタ 以前に設定された `movzx EAX、バイトPTR [RDX + 01]` 行。 これは、メモリを書いているラインであることを考えると `[RCX + 08]` 私たちは、気にポインタである が、我々が設定することを呼び出し元のコードを見つける必要がある `RCX`。 このコードは、実行可能ファイルのどこかで非常に異なる可能性があります。
 
-We have a couple of different options here. One option here is to [do a trace to find calling code](#approach-2-tracing). The second option is to [consider what reads the address](#approach-3-finding-readers) and not just write. A third option (not explored in this guide) is to find some other code path that modifies the value, and see if that code path has an easier signature. (For example, changing jobs likely modifies the value in a different way?)
+ここにはいくつかの異なるオプションがあります。 ここでの1つのオプションは、 [実行して、呼び出し元のコード](#approach-2-tracing)を見つけることです。 2番目のオプションは、書き込みだけでなく、アドレス</a> を読み取るものを
 
-### Approach 2: Tracing
+検討することです。 3番目のオプション（このガイドでは説明していません）は、値 を変更する他のコードパスを見つけて、そのコードパスの署名が簡単かどうかを確認することです。 （たとえば、ジョブを変更すると、値が別の方法で変更される可能性がありますか？）</p> 
 
-If pure disassembly doesn't yield enough contextual information, Cheat Engine has "break and trace" functionality. Go back to the [browsing memory](#browsing-memory) view. This functionality is not available from the address list directly.
 
-Right click on that `1E` byte you care about. Select **Data Breakpoint** and then **Break and trace**. All the default options are fine. Since we are still looking for a writer, we will keep **Break on Write** selected. Click **Ok**.
 
-This brings you to a Tracer window. Go back to Final Fantasy, and do something to modify your beast gauge. The game will probably hiccup as Cheat Engine tries to record callstacks. Go back to the Tracer window.
+### アプローチ2：トレース
 
-![cheat engine tracing screenshot](images/cheatengine_tracing.png)
+純粋な逆アセンブルで十分なコンテキスト情報が得られない場合、 CheatEngineには「ブレークアンドトレース」機能があります。 [ブラウジングメモリ](#browsing-memory) ビューに戻ります。 この機能は、アドレスリストから直接利用することはできません。
 
-You can double click on the lines in the Tracer to have the Memory Viewer disassembly window jump to that location.
+その上で右クリック `1E` あなたが気にバイト。 選択 **データブレークポイントの** 、その後 **ブレーク、トレース**。 デフォルトのオプションはすべて問題ありません。 我々はまだ作家を探しているので、 我々は維持されます **書き込みでブレークを** 選択しました。 クリックして **[OK]を**。
 
-In this case, expanding the arrow and double clicking the `ret` return assembly instruction goes back to exactly what we were looking at before in the disassembly window.
+これにより、トレーサーウィンドウが表示されます。 ファイナルファンタジーに戻り、獣のゲージを変更するために何かをします。 Cheat Engineがコールスタックを記録しようとすると、ゲームが一時的に中断する可能性があります。 トレーサーウィンドウに戻ります。
 
-Double clicking on `mov rdx, [rsp+50]` brings us to the code that called the code we were looking at before.
+![チートエンジントレースのスクリーンショット](images/cheatengine_tracing.png)
 
-![cheat engine tracing 2 screenshot](images/cheatengine_tracing2.png)
+Tracerの行をダブルクリックして と、MemoryViewerの逆アセンブリウィンドウがその場所にジャンプします。
 
-The `call` right before that line is the `call` into the code we were looking at. So, we would need to figure out what set `rcx`. It looks like that's set from `r9`. `r9` is set indirectly from a pointer in `r14`. This is getting complicated. It's possible to keep going back in the assembly to find some code, but maybe there's an easier approach.
+この場合、矢印とダブルクリックの拡大 `RET` リターンアセンブリ命令がに戻っまさに私たちがした 解体ウィンドウ内の前で見ています。
 
-### Approach 3: Finding Readers
+`mov rdxをダブルクリックすると、[rsp + 50]` は、前に見ていたコードを呼び出したコード に移動します。
 
-Instead of finding code that modifies the value, we could also find code that reads the value.
+![チートエンジントレース2スクリーンショット](images/cheatengine_tracing2.png)
 
-Right click on the address in the address list, and select **Find out what accesses this address**.
+その行の直前の `コール` は、私たちが見ていたコード への `コール` です。 そこで、我々はセットかを把握する必要があります `RCX`。 それから設定することのように見えます `R9`。 `R9` におけるポインタから間接的に設定されている `R14`。 これは複雑になっています。 それは見つけるために、アセンブリに戻って保持することが可能です 、いくつかのコードを 多分より簡単なアプローチがあります。
 
-Unlike writing, the code is likely constantly accessing this address. You will need to hit the **Stop** button to stop collecting locations.
 
-![cheat engine debugger 2 screenshot](images/cheatengine_debugger2.png)
 
-In this case, there are two places in code that are accessing this memory. One is hit very frequently (3000 times) and the other infrequently (152).
+### アプローチ3：読者を見つける
 
-Looking at the disassembly in the window, the second one looks like a much more substantial function, so let's disassemble that one.
+値を変更するコード を見つける代わりに、値を読み取るコードを見つけることもできます。
 
-![cheat engine disassembly 2 screenshot](images/cheatengine_disassembly2.png)
+アドレスリストのアドレスを右クリックし、 を選択して **を選択します。このアドレスにアクセスするものを確認します**。
 
-Perfect! This looks a bit simpler than the code we saw in tracing.
+書き込みとは異なり、 コードは常にこのアドレスにアクセスしている可能性があります。 あなたはヒットする必要があります **停止** 場所の収集を停止するボタンを。
 
-### Assembly Code and Pointers
+![チートエンジンデバッガー2のスクリーンショット](images/cheatengine_debugger2.png)
 
-Because we are looking for a static address, this address will never change once the program has started. The goal is to find some stable set of assembly code that surrounds the address we're looking for. We can then search for this code in memory to get back the address, no matter where it is that particular run.
+この場合、このメモリにアクセスしているコードには2つの場所があります。 1つは非常に頻繁に（3000回）ヒットし、もう1つはまれに（152）ヒットします。
 
-Reading this assembly code, the reading code is `movzx ebx, byte ptr [rcx+08]`. In English, this looks at the memory location 8 bytes after what is in the `rcx` register, takes the byte found there, and moves it into the `ebx` register. (The movzx part means that it [zero extends](https://www.felixcloutier.com/x86/movzx) this value, which is not very relevant to what we're doing.)
+逆アセンブルウィンドウ内を見ると、 はるかに大幅な機能のような二番目のルックスは、 ので、1というのを逆アセンブルしてみましょう。
 
-Since it's looking at `rcx`, we need to look backwards in the assembly code until we find the line that sets `rcx`. You can see that `rcx` gets set on the `mov rcx,[ffxiv_dx11.exe+1AAE118]` line. This means that `rcx` is set from whatever is stored in memory at that location.
+![チートエンジンの分解2スクリーンショット](images/cheatengine_disassembly2.png)
+
+完璧！ これは、トレースで見たコードよりも少し単純に見えます。
+
+
+
+### アセンブリコードとポインタ
+
+静的アドレスを探しているので、 プログラムが開始されると、このアドレスは変更されません。 目標は、探しているアドレスを 囲む安定したアセンブリコードのセットを見つけることです。 次に、メモリ内でこのコードを検索して、特定の実行の場所に関係なく、アドレス を取得できます。
+
+このアセンブリコードを読み取ると、読み取るコードは `movzx ebx、byte ptr [rcx + 08]`です。 英語では、メモリ位置にこのルックスであるものの後に8つのバイト `RCX` レジスタは、バイトが見出され、そしてに動くことを要する `EBX` レジスタ。 （movzxの部分は、 [ゼロが](https://www.felixcloutier.com/x86/movzx) この値を拡張することを意味します。これは、私たちが行っていることにあまり関係がありません。）
+
+`rcx`を見ているので、 `rcx`を設定する行が見つかるまで、アセンブリコード を逆方向に調べる必要があります。 あなたはそれを見ることができます `RCX` に設定されます `楽章RCX、[ffxiv_dx11.exe + 1AAE118]` 行。 ことをこの手段 `RCX` どのように設定されているが、その位置でメモリに格納されます。
+
+
 
 ```assembly
-48 8B 0D 23C14201     - mov rcx,[ffxiv_dx11.exe+1AAE118] { (14116E120) }
-48 85 C9              - test rcx,rcx
-74 B8                 - je ffxiv_dx11.exe+681FB2
-48 8B 05 67C14201     - mov rax,[ffxiv_dx11.exe+1AAE168] { (21) }
+48 8B 0D 23C14201-mov rcx、[ffxiv_dx11.exe + 1AAE118] {（14116E120）}
+48 85 C9-test rcx、rcx
+74 B8-je ffxiv_dx11.exe + 681FB2
+48 8B 05 67C14201-mov rax、[ffxiv_dx11 .exe + 1AAE168] {（21）}
 ```
 
-In particular, the `23C14201` value is what we are looking for. Here's a brief digression on RIP relative addressing modes. RIP relative addressing means that offsets are relative to the instruction pointer. The `RIP` register is the instruction pointer register and contains the address of the instruction immediately following this instruction. You can find out what this address is by double clicking on the next line (the `text rcx,rcx` line). In my case, it says the address is `13FD41FF5`. Because we are on a [little endian](https://en.wikipedia.org/wiki/Endianness) system, the `23C14201` hex is the 4 byte integer `01 42 C1 23` (bytes reversed). If you [add](https://www.google.com/search?q=0x0142C123+%2B+0x13FD41FF5) 0x0142C123 + 0x13FD41FF5, you get 0x14116E118. Cheat Engine will also calculate this number for you if you just double click on the instruction itself. For instance, double clicking on the `mov rcx` line yields the text `mov rcx,[14116E118]`. So, you don't have to do this math at all, but it's good to know how it works.
 
-In the comment from Cheat Engine, that `mov rcx` line has the value `14116E120`. This means that the memory address at `14116E118` has the value `14116E120`. The memory address we found earlier when scanning was `14116E128`. So it makes sense that `14116E120 + 08` is the value we want, as the reading code adds 8 bytes to its address.
+具体的には、 `23C14201` 値は、我々が探しているものです。 RIP相対アドレッシングモードについて簡単に説明します。 RIP相対アドレス指定は、オフセットが命令ポインタに相対的であることを意味します。 `RIP` レジスタは命令ポインタレジスタであり、この命令の直後の命令のアドレスが 含まれています。 次の 行（ `テキストrcx、rcx` 行）をダブルクリックすると、このアドレスが何であるかを確認できます。 私の場合は、アドレスがあると言い `13FD41FF5`。 我々は上にあるので、 [リトルエンディアン](https://en.wikipedia.org/wiki/Endianness) システム、 `23C14201` 進整数4バイトである `01 42 C1 23` （バイトが逆）。 </a> 0x0142C123 + 0x13FD41FF5を 加算すると、0x14116E118になります。 あなただけのダブルクリックすると、チートエンジンはまた、あなたのために、この数を計算します 命令自体に。 例えば、上でダブルクリック `MOV RCX` 行は、テキスト生じる `のMOV RCX、[14116E118]`。 したがって、この計算を行う必要はまったくありませんが、それがどのように機能するかを知っておくのは良いことです。</p> 
 
-You can manually add `14116E118` to the memory region or just find it relative to the beast gauge, as it's very close.
+チートエンジンからのコメントでは、その `MOVはRCX` 行が値を有する `14116E120`。 これは、メモリアドレスことを意味する `14116E118` 値を有する `14116E120`。 スキャンがいたとき、我々は以前に見つかったメモリアドレス `14116E128`。 それは理にかなってて `14116E120 + 08` 読書として、私たちが望む値である のコードは、そのアドレスに8つのバイトが追加されます。
 
-![cheat engine pointer screenshot](images/cheatengine_pointer.png)
+`14116E118` をメモリ領域に手動で追加するか、非常に近いため、獣のゲージに対して 見つけることができます。
 
-In the above screenshot, the small circle is the beast gauge values at `14116E128` and the longer circle is the pointer at `14116E118` that is being used to load `rcx`. This memory browsing confirms the comment earlier, that the memory at `14116E118` contains the pointer `000000014116E120`. (As always, little endian means reversing the bytes.)
+![チートエンジンポインターのスクリーンショット](images/cheatengine_pointer.png)
 
-### Extracting a Signature From Assembly
+上記のスクリーンショットでは、 小さな円は、獣ゲージ値である `14116E128` 長い円は、ポインタで `14116E118` で ロードするために使用されている `RCX`。 このメモリの閲覧には、以前のコメントを確認し、 でメモリという `14116E118` ポインタが含まれ `000000014116E120`。 （いつものように、リトルエンディアンはバイトを逆にすることを意味します。）
 
-So, now we have some assembly code that contains a pointer to a pointer to the beast gauge. We need to pick out some bytes from the assembly code to serve as the signature.
 
-There's a little bit of an art to picking good signatures. You want to always want to ignore relative pointer offsets, like the `23C14201` value from before. These offsets will be the same from run to run, but change from patch to patch with great frequency. Finding signatures is a huge pain, so ideally you want to find something that will stand the test of time.
 
-In this case, let's just start copying bytes out from the bytes column, starting with the `mov rcx, ...` line.
+### アセンブリから署名を抽出する
+
+これで、ビーストゲージへのポインタへのポインタを含むアセンブリコードができました。 署名として機能するために、アセンブリコードからいくつかのバイトを選択する必要があります。
+
+良い署名を選ぶには少し芸術があります。 あなたは、常に相対的なポインタのオフセットを無視したいしたい のような `23C14201` 前の値です。 これらのオフセットは実行ごとに同じですが、 が、パッチごとに頻繁に変更されます。 署名を見つけることは非常に苦痛です なので、理想的には、時の試練に耐える何かを見つけたいと思うでしょう。
+
+この場合、bytes列からバイトをコピーし始めましょう は `mov rcx、...` 行から始まります。
+
+
 
 ```assembly
-48 8B 0D 23C14201     - mov rcx,[ffxiv_dx11.exe+1AAE118] { (14116E120) }
-48 85 C9              - test rcx,rcx
-74 B8                 - je ffxiv_dx11.exe+681FB2
-48 8B 05 67C14201     - mov rax,[ffxiv_dx11.exe+1AAE168] { (21) }
+48 8B 0D 23C14201-mov rcx、[ffxiv_dx11.exe + 1AAE118] {（14116E120）}
+48 85 C9-test rcx、rcx
+74 B8-je ffxiv_dx11.exe + 681FB2
+48 8B 05 67C14201-mov rax、[ffxiv_dx11 .exe + 1AAE168] {（21）}
 ```
 
-This gives us: `48 8B 0D 23C14201 48 85 C9 74 B8 48 8B 05 67C14201`
 
-The two four byte patterns are both pointers, so let's just drop the one on the end and make the internal one a wildcard. You can make wildcards using question marks, both in cactbot and in Cheat Engine.
+これが私たちに与えます： `48（b）0D 23C14201 48 85 C9 74 B8 48 8B 05 67C14201`
 
-Thus, our final signature is: `488B0D????????4885C974B8488B05`
+2つの4バイトパターンは両方ともポインタ なので、最後に1つをドロップして、内部のパターンをワイルドカードにします。 cactbotとCheatEngineの両方で、疑問符 を使用してワイルドカードを作成できます。
 
-The address that contains the pointer we care about is the four bytes in the question mark.
+したがって、最終的な署名がある： `488B0D ???????? 4885C974B8488B05`
 
-You can see this [in cactbot itself](https://github.com/quisquous/cactbot/blob/df176c4feff81bab356a8e5e6e6b453e94626320/CactbotOverlay/FFXIVProcess.cs#L189).
+気になるポインタを含むアドレスは、疑問符の4バイトです。
 
-It's important to do a [scan for existing memory signatures](#scan-for-existing-memory-signatures) to make sure that this signature is unique.
+この [はcactbot自体](https://github.com/quisquous/cactbot/blob/df176c4feff81bab356a8e5e6e6b453e94626320/CactbotOverlay/FFXIVProcess.cs#L189)で確認できます。
 
-Then, in your plugin, the process would be the following.
+このシグニチャが一意であることを確認するために、既存のメモリシグニチャ</a> に対して スキャンを実行することが重要です。</p> 
 
-* search for this signature in memory
-* convert the RIP relative addressing to a real pointer (e.g. `14116E118`)
-* find the pointer at that memory location (e.g. `14116E120`)
-* this pointer is the pointer to beast gauge
+次に、プラグインでのプロセスは次のようになります。
 
-Because `14116E118` points 8 bytes forward to `14116E120`, we could just also make the assumption that this is always true and just add 16 bytes to what we find in the signature. This has been true through all of Stormblood, at least.
+* メモリ内でこの署名を検索する
+* RIP相対アドレス指定を実際のポインタに変換します（例： `14116E118`）
+* そのメモリ位置でポインタを見つけます（例： `14116E120`）
+* このポインターはビーストゲージへのポインターです
 
-Foof.
+なぜなら `14116E118` 点を8にバイト先の `14116E120`、 我々だけでも、これは常に真であることを前提にすることができ 、ちょうど私たちは署名で見つけるものに16のバイトを追加します。 これは、少なくともストームブラッド全体に当てはまります。
 
-## Scan For Existing Memory Signatures
+足。
 
-If you have an existing memory signature, you can also use Cheat Engine to find it in memory.
 
-![cheat engine signature scan screenshot](images/cheatengine_signature_scan.png)
 
-Start another scan. This time, set the **Value Type** to **Array of byte**, and select **Search for this array**. Click the **Hex** checkmark, and paste in the signature that we got previously. Make sure to click the **Executable** checkmark, as we are searching for code.
+## 既存のメモリ署名をスキャンする
 
-If you click **First scan**, this should find a single result. If you right click that address, and select **Disassemble this address** it will bring you right back to the code that we found previously.
+既存のメモリシグネチャ 場合は、CheatEngineを使用してメモリ内でそれを見つけることもできます。
+
+![チートエンジンの署名スキャンのスクリーンショット](images/cheatengine_signature_scan.png)
+
+別のスキャンを開始します。 今回は、 **値タイプ** をバイト</strong>**配列に設定し、 **を選択します。この配列**検索します。 **Hex** チェックマークをクリックして、前に取得した署名を貼り付けます。 コードを検索しているので、必ず **実行可能** チェックマークをクリックしてください。</p> 
+
+**最初のスキャン**をクリックすると、単一の結果が見つかります。 そのアドレスを右クリックし、[ **このアドレスを逆アセンブルする** ]を選択すると、前に見つけたコードにすぐに戻ります。
