@@ -11,7 +11,7 @@
 1. [Building From Source](#building-from-source)
 1. [UI Module Overview](#ui-module-overview)
 1. [Troubleshooting](#troubleshooting)
-1. [Cactbot Customization](#cactbot-customization)
+1. [Cactbot自訂教學](#cactbot-customization)
 1. [Supported Languages](#supported-languages)
 
 ## About
@@ -342,7 +342,7 @@ This module is just an onscreen test of cactbot variables and is not meant to be
 
 A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
 
-## Cactbot Customization
+## Cactbot自訂教學
 
 Most common cactbot configuration can be done via the control panel, inside of ACT.
 
@@ -354,7 +354,7 @@ In particular, if you want to use text to speech for raidboss alerts, you can ch
 
 Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+此處的選項會存儲於 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 檔案中。 It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
 
 It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
 
