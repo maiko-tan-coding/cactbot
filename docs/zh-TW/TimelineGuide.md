@@ -225,8 +225,6 @@ Create **ui/raidboss/data/02-arr/trial/cape_westwind.js**. This can be named wha
 An initial triggers file should look like the following:
 
 ```javascript
-'use strict';
-
 [{
   zoneId: ZoneId.CapeWestwind,
   timelineFile: 'cape_westwind.txt',
