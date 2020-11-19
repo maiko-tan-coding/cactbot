@@ -225,8 +225,6 @@ Cactbot默认并不包含这些配置，这个功能更适合用户自行配置�
 最初的触发器文件应当如下所示：
 
 ```javascript
-'use strict';
-
 [{
   zoneId: ZoneId.CapeWestwind,
   timelineFile: 'cape_westwind.txt',
