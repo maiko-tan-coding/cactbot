@@ -1,365 +1,365 @@
-# cactbot (ffxiv raiding overlay)
+# cactbot (ffxivレイドオーバーレイ)
 
 <img align="right" src="https://raw.githubusercontent.com/quisquous/cactbot/main/screenshots/cactbot-logo-320x320.png" />
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
+[![GitHubワークフローステータス（ブランチ）](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHubリリース（最新のSemVer）](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
 🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
 
-1. [About](#about)
-1. [Installing](#installing)
-1. [Building From Source](#building-from-source)
-1. [UI Module Overview](#ui-module-overview)
-1. [Troubleshooting](#troubleshooting)
-1. [Cactbot Customization](#cactbot-customization)
-1. [Supported Languages](#supported-languages)
+1. [Cactbotについて](#about)
+1. [インストール](#installing)
+1. [ソースコードからのビルド](#building-from-source)
+1. [UIモジュールの概要](#ui-module-overview)
+1. [トラブルシューティング](#troubleshooting)
+1. [Cactbotカスタム化](#cactbot-customization)
+1. [サポートされている言語](#supported-languages)
 
-## About
+## Cactbotについて
 
-cactbot is an ACT overlay that provides raiding tools for [Final Fantasy XIV](http://www.finalfantasyxiv.com/). This project is an overlay plugin for [ngld's OverlayPlugin](https://github.com/ngld/OverlayPlugin) which itself is a plugin for [Advanced Combat Tracker](http://advancedcombattracker.com/).
+cactbotは[ファイナルファンタジーXIV](http://www.finalfantasyxiv.com/)のために提供するACTオーバーレイプラグインです。 このプロジェクトは、[Advanced Combat Tracker](http://advancedcombattracker.com/) のプラグインである[ngld様が作ったOverlayPlugin](https://github.com/ngld/OverlayPlugin) のオーバーレイプラグインです。
 
-cactbot provides these modules:
+cactbotは、次のモジュールを提供します。
 
-* raidboss: built-in timelines and triggers:
+* raidboss：タイムラインとトリガー
 
-![timeline screenshot](screenshots/promo_raidboss_timeline.png) ![triggers screenshot](screenshots/promo_raidboss_triggers.png)
+![タイムラインのスクリーンショット](screenshots/promo_raidboss_timeline.png) ![スクリーンショットをトリガーします](screenshots/promo_raidboss_triggers.png)
 
-* oopsyraidsy: mistake and death reporting
+* oopsyraidsy：ミスと死の報告
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![おっと、スクリーンショット](screenshots/promo_oopsy.png)
 
-* jobs: condensed gauges with buff and proc tracking
+* ジョブ：バフとprocトラッキングを備えた凝縮ゲージ
 
-![rdm jobs screenshot](screenshots/promo_jobs.png)
+![rdmジョブのスクリーンショット](screenshots/promo_jobs.png)
 
-* eureka: Eureka NM tracking map
+* eureka：EurekaNMトラッキングマップ
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![eurekaスクリーンショット](screenshots/promo_eureka.png)
 
-* fisher: Fishing cast time tracking
+* フィッシャー：釣りキャストタイムトラッキング
 
-![fisher screenshot](screenshots/promo_fishing.png)
+![フィッシャーのスクリーンショット](screenshots/promo_fishing.png)
 
-* radar: hunt mob directions, puller notifications
+* レーダー：暴徒の方向を追跡し、引き手に通知
 
-![radar screenshot](screenshots/promo_radar.png)
+![レーダーのスクリーンショット](screenshots/promo_radar.png)
 
-* dps: extra features for dps meters
+* dps：dpsメーターの追加機能
 
-![xephero screenshot](screenshots/xephero.png)
+![xepheroスクリーンショット](screenshots/xephero.png)
 
-### Video Examples
+### ビデオの例
 
-* [O4S raidboss + monk jobs](https://www.twitch.tv/videos/209562337)
-* [O3S spellblade callouts](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
+* [O4Sレイドボス+僧侶の仕事](https://www.twitch.tv/videos/209562337)
+* [O3Sスペルブレードコールアウト](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
 
-## Installing
+## インストール
 
-### Dependencies
+### 依存関係
 
-Install [.NET Framework](https://www.microsoft.com/net/download/framework) version 4.6.1 or above.
+インストール [.NET Frameworkの](https://www.microsoft.com/net/download/framework) バージョン4.6.1以上が。
 
-You must have [DirectX 11](http://imgur.com/TjcnjmG) enabled for Final Fantasy XIV.
+あなたは持っている必要があります [のDirectX 11](http://imgur.com/TjcnjmG) ファイナルファンタジーXIVのために有効。
 
-Install the 64-bit version of [Advanced Combat Tracker](http://advancedcombattracker.com/), if you have not already.
+64ビット版のインストール [高度な戦闘トラッカー](http://advancedcombattracker.com/)お持ちでない場合は、。
 
-### Install FFXIV ACT Plugin
+### FFXIVACTプラグインをインストールする
 
-If you have just installed ACT, then you will be presented with a startup wizard. To get to the startup wizard otherwise, click on `Options` and then click on `Show Startup Wizard`.
+ACT、 インストールしたばかりの場合は、スタートアップウィザードが表示されます。 、そうでない場合は、スタートアップウィザードに取得するには にクリック `オプション` 、次にをクリックしてください `表示スタートアップウィザード`。
 
-![startup wizard screenshot](screenshots/ffxiv_plugin_show_startup_wizard.png)
+![スタートアップウィザードのスクリーンショット](screenshots/ffxiv_plugin_show_startup_wizard.png)
 
-In the startup wizard, select `FFXIV Parsing Plugin` and then click the `Download/Enable Plugin` button. This will download `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll` and enable it in the list of plugins.
+スタートアップウィザードでは、 選択 `FFXIV解析プラグイン` [OK]をクリックします `ダウンロード/プラグインを有効に` ボタンを。 これにより、 `%APPDATA%Advanced Combat Tracker \ Plugins \ FFXIV_ACT_Plugin.dll` がダウンロードされ、プラグインのリストで有効になります。
 
-![startup wizard download screenshot](screenshots/ffxiv_plugin_parsing_plugin.png)
+![スタートアップウィザードのダウンロードスクリーンショット](screenshots/ffxiv_plugin_parsing_plugin.png)
 
-Additionally, you must enable parsing from the network and make sure that ACT is not firewalled. Make sure the settings for the FFXIV plugin have the "Include HP for Triggers" button checked. This is under `Plugins` ->`FFXIV Settings` -> `Options`.
+さらに、ネットワークからの解析を有効にし、ACTがファイアウォールで保護されていないことを確認する必要があります。 FFXIVプラグインの設定で、[トリガーにHPを含める]ボタンがオンになっていることを確認してください。 これは、下にある `プラグイン` ->`FFXIV設定` -> `オプション`。
 
-Alternative FFXIV Plugin Guides:
+代替FFXIVプラグインガイド：
 
-* [fflogs video guide](https://www.fflogs.com/help/start/)
-* [TomRichter guide](https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin)
+* [fflogsビデオガイド](https://www.fflogs.com/help/start/)
+* [TomRichterガイド](https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin)
 
-### Install ngld OverlayPlugin
+### ngldOverlayPluginをインストールします
 
-At this point, if you select the `Plugins` tab and go to the `Plugin Listing`, your list of plugins should look something like this:
+あなたが選択した場合、この時点では、 `プラグイン` ]タブをしてまで行く `プラグインのリスト`、 プラグインのリストは次のようになります。
 
-![blank plugin listing screenshot](screenshots/get_plugins_blank.png)
+![空白のプラグインリストのスクリーンショット](screenshots/get_plugins_blank.png)
 
-Click on `Get Plugins` to open up the ACT plugin installer.
+`Get Plugins` をクリックして、ACTプラグインインストーラーを開きます。
 
-Select `Overlay Plugin` and then click `Download and Enable`.
+`オーバーレイプラグイン` を選択し、 `をクリックしてダウンロードして有効にします`。
 
-![overlay plugin selection screenshot](screenshots/get_plugins_overlayplugin.png)
+![オーバーレイプラグイン選択のスクリーンショット](screenshots/get_plugins_overlayplugin.png)
 
-This will download the ngld OverlayPlugin into `%APPDATA%Advanced Combat Tracker\Plugins\OverlayPlugin` and enable `OverlayPlugin.dll` in the list of plugins.
+これは、にngld OverlayPluginをダウンロードする `%APPDATA%Advanced戦闘トラッカー\プラグイン\ OverlayPlugin` 及びイネーブル `OverlayPlugin.dll` プラグインのリストです。
 
-As a note, you must use the [ngld](https://github.com/ngld) version of OverlayPlugin and not the original RainbowMage version or the hibiyasleep fork.
+注意点として、あなたが使用する必要があります [ngld](https://github.com/ngld) のバージョン OverlayPluginとないオリジナルRainbowMageバージョンまたはhibiyasleepフォークを。
 
-### Installing cactbot
+### cactbotのインストール
 
-Again, go to the `Plugins` tab and go to the `Plugin Listing`, and then select `Get Plugins`.
+ここでも、に進みます `プラグイン` タブおよびに行く `プラグインのリスト`、 、次に選択 `取得プラグイン`。
 
-Select `Cactbot` and then click `Download and Enable`.
+`Cactbot` を選択し、[ `ダウンロードして有効にする`]をクリックします。
 
-![cactbot selection screenshot](screenshots/get_plugins_cactbot.png)
+![cactbot選択のスクリーンショット](screenshots/get_plugins_cactbot.png)
 
-This will download the cactbot into `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot` and enable `CactbotOverlay.dll` in the list of plugins.
+これは、にcactbotをダウンロードします `%APPDATA%Advanced戦闘トラッカー\プラグイン\ cactbotバージョン\ cactbot` 及びイネーブル `CactbotOverlay.dll` プラグインのリストに。
 
-**Note**: Due to a difference in how ACT expects archives to be and how cactbot generates its zip files, there will be something like a `cactbot-0.15.2` folder that corresponds to the initial version that you downloaded cactbot. This folder name does not matter and is cosmetic.
+**注**：ACTは、アーカイブがあることを期待する方法の違いによる 及びcactbotは、そのzipファイルを生成する方法、 のようなものがあるでしょう `cactbot-0.15.2` フォルダ あなたはcactbotをダウンロードしたことを最初のバージョンへの対応。 このフォルダ名は重要ではなく、見栄えがします。
 
-Verify your plugins are in the correct order. The order should be: FFXIV Plugin first, then OverlayPlugin, then cactbot. If you have followed the above instructions, it should look like the following:
+プラグインが正しい順序になっていることを確認します。 順序は、最初にFFXIVプラグイン、次にOverlayPlugin、次にcactbotの順になります。 上記の手順に従っている場合は、次のようになります。
 
-![plugin order](screenshots/get_plugins_complete.png)
+![プラグインの注文](screenshots/get_plugins_complete.png)
 
-Finally, restart ACT.
+最後に、ACTを再起動します。
 
-## Adding overlay modules
+## オーバーレイモジュールの追加
 
-Here's an example of how to set up the raidboss overlay module. Setting up other cactbot overlays works identically.
+これは、レイドボスオーバーレイモジュールを設定する方法の例です。 他のcactbotオーバーレイの設定も同じように機能します。
 
-1. Open ACT.
-1. Make sure you've restarted ACT after adding the cactbot plugin.
-1. Navigate to the `Plugins` tab of ACT and then the `OverlayPlugin.dll` tab inside it.
-1. Click the "New" button and then pick `Cactbot Raidboss` in the Preset list.
+1. ACTを開きます。
+1. cactbotプラグインを追加した後、ACTを再起動したことを確認してください。
+1. ナビゲートに `プラグイン` ACTのタブし、次いで `OverlayPlugin.dll` その内部タブ。
+1. 「新規」ボタンをクリックして選択 `Cactbot Raidboss` プリセットリストに。
 
-    ![new overlay plugin screenshot](screenshots/overlay_plugin_new.png)
+    ![新しいオーバーレイプラグインのスクリーンショット](screenshots/overlay_plugin_new.png)
 
-1. At this point, you should see some test UI appear on screen. cactbot provides default test UI, a large dashed red border, and a blue background to help with resizing and placing overlays on screen. These all go away when the overlay is locked in the config panel for the overlay. You should always lock your overlay once you are done resizing and placing it.
+1. この時点で、いくつかのテストUIが画面に表示されるはずです。 cactbotは、デフォルトのテストUI、 の大きな赤い破線の境界線、 、および画面上のオーバーレイのサイズ変更と配置に役立つ青い背景を提供します。 これらはすべて、オーバーレイの構成パネルでオーバーレイがロックされると消えます。 サイズ変更と配置が完了したら、常にオーバーレイをロックする必要があります。
 
-    ![raidboss plugin unlocked](screenshots/overlay_plugin_new_raidboss_unlocked.png)
+    ![raidbossプラグインのロックが解除されました](screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
-1. Type in any name you'd like as the name of this overlay, e.g. `raidbossy`.
-1. Click the `OK` button to add this as an Overlay. It will now appear in the list of overlays in the `Plugins` -> `OverlayPlugin.dll` tab.
+1. このオーバーレイの名前として任意の名前を入力します（例： `raidbossy`。
+1. `OK` ボタンをクリックして、これをオーバーレイとして追加します。 それは今ではオーバーレイのリストに表示されます `プラグイン` -> `OverlayPlugin.dll` タブ。
 
-1. Drag and resize the overlay to the location that you want it in.
+1. オーバーレイをドラッグして、目的の場所にサイズ変更します。
 
-1. In the `General` tab of the `Raidboss` overlay, click the `Lock Overlay` and `Enable Clickthrough` checkboxes. The test bars, debug text, dashed red border, and shaded blue background will disappear once the overlay has been locked.
+1. で `一般` のタブ `Raidboss` オーバーレイ、クリック `ロックオーバーレイ` および `クリックスルーの有効化` チェックボックスを。 オーバーレイがロックされると、テストバー、デバッグテキスト、赤い破線の境界線、および青い影付きの背景が消えます。
 
-    ![raidboss plugin config](screenshots/overlay_plugin_new_raidboss_locked.png)
+    ![raidbossプラグイン構成](screenshots/overlay_plugin_new_raidboss_locked.png)
 
-1. If you want to test the raidboss plugin, teleport to Summerford Farms, and do a `/countdown 5`.
+1. Summerford農場にあなたがraidbossプラグインをテストしたい場合は、テレポート、および行う `/カウントダウン5`。
 
-1. Adding other cactbot overlays is a similar process. Follow the same process but select a different cactbot preset.
+1. 他のcactbotオーバーレイの追加も同様のプロセスです。 同じプロセスに従いますが、別のcactbotプリセットを選択します。
 
-## Building from source
+## ソースからの構築
 
-Follow all the steps above for installing cactbot first. To install dependencies there are 2 methods: **per script** and **manually**
+最初にcactbotをインストールするには、上記のすべての手順に従ってください。 依存関係をインストールするには2つの方法があります： **スクリプトごとに** と **を手動で**
 
-### Dependencies: Script Method
+### 依存関係：スクリプトメソッド
 
-1. `curl` MUST be installed (this is used to download dependencies)
-1. Execute the `./utils/fetch_deps.py` script
-1. Continue with **Steps to build**
+1. `curl` インストールする必要があります（これは依存関係をダウンロードするために使用されます）
+1. 実行 `./utils/fetch_deps.py` スクリプトを
+1. </strong>を構築するための **ステップに進みます</li> </ol>
 
-### Dependencies: Manual Method
+### 依存関係：手動による方法
 
-1. Please download the latest Zip file from <https://github.com/EQAditu/AdvancedCombatTracker/releases/>
-1. Extract the `Advanced Combat Tracker.exe` to `cactbot/plugin/ThirdParty/ACT/`
-1. Please download the latest SDK Zip file from [https://github.com/ravahn/FFXIV_ACT_Plugin/](https://github.com/ravahn/FFXIV_ACT_Plugin/) (make sure the file says SDK in its name)
-1. Extract the `SDK folder` as well as the `FFXIV_ACT_Plugin.dll` to `cactbot/plugin/ThirdParty/FFXIV_ACT/`
-1. Please download the latest Zip file from <https://github.com/ngld/OverlayPlugin/releases/>
-1. Extract the `libs folder` as well as the `OverlayPlugin.dll` to `cactbot/plugin/ThirdParty/OverlayPlugin/`
-1. Continue with **Steps to build**
+1. 最新のZipファイルをダウンロードしてください <https://github.com/EQAditu/AdvancedCombatTracker/releases/>
+1. 抽出 `高度戦闘Tracker.exe` に `cactbot /プラグイン/サードパーティー/ ACT /`
+1. [https://github.com/ravahn/FFXIV_ACT_Plugin/](https://github.com/ravahn/FFXIV_ACT_Plugin/) から最新のSDKZipファイルをダウンロードしてください（ファイルの名前にSDKが含まれていることを確認してください）
+1. 抽出 `フォルダSDK` 並びに `FFXIV_ACT_Plugin.dll` に `cactbot /プラグイン/サードパーティー/ FFXIV_ACT /`
+1. 最新のZipファイルをダウンロードしてください <https://github.com/ngld/OverlayPlugin/releases/>
+1. 抽出 `フォルダLIBS` 並びに `OverlayPlugin.dll` へ `cactbot /プラグイン/サードパーティー/ OverlayPlugin /`
+1. </strong>を構築するための **ステップに進みます</li> </ol>
 
-The folder should look something like this (keep in mind files can change with updates in the future):
+フォルダは次のようになります（ファイルは将来の更新で変更される可能性があることに注意してください）。
 
 ```plaintext
-ThirdParty
-|- ACT
-|  |- Advanced Combat Tracker.exe
-|- FFXIV_ACT
-|  |- SDK
-|  |  |- FFXIV_ACT_Plugin.Common.dll
-|  |  |- FFXIV_ACT_Plugin.Config.dll
-|  |  |- FFXIV_ACT_Plugin.LogFile.dll
-|  |  |- FFXIV_ACT_Plugin.Memory.dll
-|  |  |- FFXIV_ACT_Plugin.Network.dll
-|  |  |- FFXIV_ACT_Plugin.Overlay.dll
-|  |  |- FFXIV_ACT_Plugin.Parse.dll
-|  |  |- FFXIV_ACT_Plugin.Resource.dll
-|  |- FFXIV_ACT_Plugin.dll
-|- OverlayPlugin
-   |- libs
-   |  |- HtmlRenderer.dll
-   |  |- Markdig.Signed.dll
-   |  |- Newtonsoft.Json.dll
-   |  |- OverlayPlugin.Common.dll
-   |  |- OverlayPlugin.Core.dll
-   |  |- OverlayPlugin.Updater.dll
-   |  |- SharpCompress.dll
-   |  |- System.ValueTuple.dll
-   |  |- websocket-sharp.dll
-   |- OverlayPlugin.dll
+サードパーティ
+| -ACT
+| | -Advanced Combat Tracker.exe
+| -FFXIV_ACT
+| | -SDK
+| | | -FFXIV_ACT_Plugin.Common.dll
+| | | -FFXIV_ACT_Plugin.Config.dll
+| | | -FFXIV_ACT_Plugin.LogFile.dll
+| | | -FFXIV_ACT_Plugin.Memory.dll
+| | | -FFXIV_ACT_Plugin.Network.dll
+| | | -FFXIV_ACT_Plugin.Overlay.dll
+| | | -FFXIV_ACT_Plugin.Parse.dll
+| | | -FFXIV_ACT_Plugin.Resource.dll
+| | -FFXIV_ACT_Plugin.dll
+| -OverlayPlugin
+   | -libs
+   | | -HtmlRenderer.dll
+   | | -Markdig.Signed.dll
+   | | -Newtonsoft.Json.dll
+   | | -OverlayPlugin.Common.dll
+   | | -OverlayPlugin.Core.dll
+   | | -OverlayPlugin.Updater.dll
+   | | -SharpCompress.dll
+   | | -System.ValueTuple.dll
+   | | -websocket-sharp.dll
+   | -OverlayPlugin.dll
 ```
 
-### Steps to build
+### 構築する手順
 
-1. Open the solution in Visual Studio (tested with Visual Studio 2017).
-1. Build for "Release" and "x64".
-1. The plugin will be built as **bin/x64/Release/CactbotOverlay.dll**.
-1. Add the built plugin directly as an ACT plugin.  In the ACT -> Plugins -> Plugin Listing tab, click the `Browse` button and find the **bin/x64/Release/CactbotOverlay.dll** where this file was built.  Then click `Add/Enable Plugin`.
+1. Visual Studioでソリューションを開きます（Visual Studio 2017でテスト済み）。
+1. 「リリース」および「x64」用にビルドします。
+1. プラグインは、として構築されます **ビン/ x64の/リリース/ CactbotOverlay.dll**。
+1. ビルドされたプラグインをACTプラグインとして直接追加します。  - ACTで> プラグイン-> プラグインのリスト]タブをクリックします `[参照` ]ボタンをして見つける **ビン/ x64の/リリース/ CactbotOverlay.dll** このファイルが建設されました。  次に、[ `プラグインの追加/有効化`]をクリックします。
 
-## UI module overview
+## UIモジュールの概要
 
-The [ui/](ui/) directory contains cactbot's ui modules. If you installed cactbot following the instructions above, this will most likely be `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`.
+[ui /](ui/) ディレクトリには、cactbotのuiモジュールが含まれています。 上記の手順に従ってcactbotをインストールした場合、 これはおそらく `%APPDATA%Advanced Combat Tracker \ Plugins \ cactbot-version \ cactbot \ ui \`になります。
 
-Each cactbot ui module should be added as a separate overlay. See the [Adding Overlay Modules](#adding-overlay-modules) section for more details about setup.
+各cactbotuiモジュールは、個別のオーバーレイとして追加する必要があります。 セットアップの詳細については、 [オーバーレイモジュールの追加](#adding-overlay-modules) セクションを参照してください。
 
-### [raidboss](ui/raidboss) module
+### [レイドボス](ui/raidboss) モジュール
 
-To use this module, point cactbot at **ui/raidboss/raidboss.html** or use the `Cactbot Raidboss` preset.
+このモジュールは、使用するには 点のcactbotを **UI / raidboss / raidboss.html** 又は使用 `Cactbot Raidboss` プリセット。
 
-This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://mods.curse.com/addons/wow/big-wigs) addon for World of Warcraft.
+このモジュールは、戦闘での今後のイベントの視覚的なタイムラインと、レイドの認識を高めるのに役立つテキストと音声の 通知を提供します。 テキストと音声によるアラートは、ファイト タイムラインに基づくことも、ACTの「カスタムトリガー」と同様にゲーム内で発生するログメッセージから取得することもできます。 モジュールを見て、に似て感じるように設計されて [大物Bossmods](https://mods.curse.com/addons/wow/big-wigs) World of Warcraftのためのアドオン。
 
-Fight timelines are provided in files designed for the [ACT Timeline](https://github.com/grindingcoil/act_timeline) plugin, [documented here](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) with [some extensions](docs/TimelineGuide.md).
+ファイトタイムラインがために設計されたファイルで提供されている [ACTタイムライン](https://github.com/grindingcoil/act_timeline) プラグイン、 [ここでは、文書化](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) と [いくつかの拡張機能](docs/TimelineGuide.md)。
 
-There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
+：エスカレート重要度の順にテキストアラートの三つのレベル、あり `情報`、 `警告`、および `アラーム`。 テキストメッセージはこれらのいずれかになり、より重要なレベルはより大きく、より目を引く色になります。  画面のテキストよりも音声合成を設定したい場合は、音声合成を設定できます。
 
-Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
+タイムラインのファイルが中に発見された [UI / raidboss /データ/タイムライン](ui/raidboss/data/timelines)。 トリガ テキストと音アラートがで発見された [UI / raidboss /データ/トリガ](ui/raidboss/data/triggers)。
 
-In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
+このスクリーンショットでは、raidbossモジュールが強調表示され、タイムラインが赤で囲まれ、 テキストアラートが黄色で囲まれ、 `アラート`レベルのテキストメッセージが表示されています。
 
-![raidboss screenshot](screenshots/Raidboss.png)
+![raidbossのスクリーンショット](screenshots/Raidboss.png)
 
-### raidboss emulator
+### raidbossエミュレーター
 
-If you are writing triggers or timelines and want to test them, you can use the raidboss emulator: **ui/raidboss/raidemulator.html**.
+：あなたがトリガやタイムラインを書き、それらをテストしたい場合は、raidbossエミュレータを使用することができます **UI / raidboss / raidemulator.html**。
 
-This currently can only be loaded in a browser and not as an overlay. This will work in current version of Chrome, and should work in other browsers as well but this is less tested.
+これは現在、ブラウザにのみロードでき、オーバーレイとしてはロードできません。 これはクロム、現在のバージョンで動作します と同様に他のブラウザでも動作するはずですが、これはあまりテストされています。
 
-Instructions:
+指示：
 
-1. Start ACT.
-1. Make sure the WS Server is started via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
-1. Select `Cactbot Raidboss (Combined Alerts and Timelines)` from the URL Generator list.
-1. Edit the url to say `raidemulator.html` instead of `raidboss.html`.
-1. Copy and paste this edited url into Chrome.
-1. Drag and drop a [network log](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) onto the page.
-1. Select the zone and encounter, and then click `Load Encounter`.
+1. ACTを開始します。
+1. -確かWS Serverは、プラグイン経由で開始されていることを確認> OverlayPlugin WSServer -> ストリーム/ローカルオーバーレイ。
+1. 選択 `Cactbot Raidboss（複合アラートおよびタイムライン）` URLジェネレータリストから。
+1. 編集言うのURL `raidemulator.html` の代わりに、 `raidboss.html`。
+1. この編集したURLをコピーしてChromeに貼り付けます。
+1. [ネットワークログ](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) をページにドラッグアンドドロップします。
+1. ゾーンとの出会いを選択し、[OK]をクリックします `ロード出会い`。
 
-If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
+エミュレータが機能していない場合は、インスペクタのコンソールログでエラーを確認してください。 WebSocketを介してACTに接続されるまで、ボタンは機能しません。
 
-![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
+![raidbossエミュレータのスクリーンショット](screenshots/raidboss_emulator.png)
 
-### [oopsyraidsy](ui/oopsyraidsy) module
+### [oopsyraidsy](ui/oopsyraidsy) モジュール
 
-To use this module, point cactbot at **ui/oopsyraidsy/oopsyraidsy.html** or use the `Cactbot OopsyRaidsy` preset.
+このモジュールは、使用するには 点のcactbotを **UI / oopsyraidsy / oopsyraidsy.html** 又は使用 `Cactbot OopsyRaidsy` プリセット。
 
-This module provides mistake tracking and death reporting.  Oopsy raidsy is meant to reduce the time wasted understanding what went wrong on fights and how people died.  During the fight, only a limited number of mistakes are shown (to avoid clutter), but afterwards a full scrollable list is displayed.
+このモジュールは、ミス追跡と死亡報告を提供します。  Oopsy raidsyは、戦いで何がうまくいかなかったのか、人々がどのように死んだのかを理解するために無駄な時間を減らすことを目的としています。  戦闘中は（混乱を避けるために）限られた数のミスのみが表示されますが、その後は完全なスクロール可能なリストが表示されます。
 
-When somebody dies, the last thing they took damage from is listed in the log.  For example, if the log specifies: ":skull: Poutine: Iron Chariot (82173/23703)" this means that Poutine most likely died to Iron Chariot, taking 82173 damage and having 23703 health at the time.  The health value itself is not perfect and may be slightly out of date by a ~second due to a hot tick or multiple simultaneous damage sources.
+誰かが死んだとき、彼らが最後にダメージを受けたものがログにリストされます。  たとえば、ログに「:skull: Poutine：Iron Chariot（82173/23703）」と指定されている場合、これは、PoutineがIron Chariotで死亡した可能性が高く、82173のダメージを受け、その時点で23703の体力を持っていることを意味します。  ヘルス値自体は完全ではなく、ホットティックまたは複数の同時ダメージソースが原因で、わずかに1秒遅れている可能性があります。
 
-When mistakes are made that are avoidable, oopsy logs warning (:warning:) and failure (:no_entry_sign:) messages, explaining what went wrong.
+回避可能なミスが発生すると、oopsyは警告（:warning:）メッセージと失敗（:no_entry_sign:）メッセージをログに記録し、何が悪かったのかを説明します。
 
-Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data](ui/oopsyraidsy/data) folder.
+ミストリガーは、内の個々の戦いのために指定されている [UI / oopsyraidsy /データ](ui/oopsyraidsy/data) フォルダー。
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![おっと、スクリーンショット](screenshots/promo_oopsy.png)
 
-### [jobs](ui/jobs) module
+### [ジョブ](ui/jobs) モジュール
 
-To use this module, point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
+このモジュールを使用する の点cactbot **UI /ジョブ/ jobs.html** 又は使用 `Cactbotジョブ` プリセット。
 
-This module provides health, mana, and tp bars, as well as icons and timer bars for big raid buffs such as The Balance and Trick Attack. It also features a food buff warning to keep up your food buff when leveling or raiding, and a visual pull countdown.
+このモジュールは、ヘルス、マナ、およびtpバーに加えて、 TheBalanceやTrickAttackなどの大きなレイドバフ用のアイコンとタイマーバーを提供します。 また、レベリング またはレイド時にフードバフを維持するためのフードバフ警告、および視覚的なプルカウントダウンも備えています。
 
-It has more fleshed out support for some jobs but is *strongly* a Work In Progress for others.
+これは、より多くのいくつかの仕事をサポートして肉付けが、あるい *強く* 他の人のための作業進行中。
 
-* Red Mage: Shows white/black mana, tracks procs for Verstone, Verfire and Impact, and shows the state of the melee combo in progress.
-* Warrior: Shows the beast amount, and tracks the remaining Storm's Eye buff time in gcds.
-* Monk: Shows chakra count, remaining greased lightning time, and tracks monk buffs and debuffs.
+* 赤魔道士：白/黒のマナを表示し、Verstone、Verfire、Impactのprocを追跡し、進行中の近接コンボの状態を表示します。
+* ウォリアー：獣の量を表示し、残りのストームズアイバフ時間をgcdで追跡します。
+* モンク：チャクラの数、残りのグリースを塗った稲妻の時間を表示し、モンクのバフとデバフを追跡します。
 
-In this screenshot, the jobs module is highlighted for the Red Mage job. The health and mana bars, as well as Red Mage white/black mana tracking is circled in purple, with the large raid buff tracking pointed to beside it in orange. The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar. The proc tracking is circled below in green.
+このスクリーンショットでは、RedMageジョブのジョブモジュールが強調表示されています。 ヘルスバーとマナバー、および とレッドメイジの白/黒のマナトラッキングは紫色で囲まれ、大きなレイドバフトラッキングはオレンジ色の横にある 指しています。 近接コンボの最初のステップが実行されました。これは、ヘルスバーの上に黄色の ボックスとして表示されます。 procトラッキングは、下の緑色の丸で囲まれています。
 
-![jobs screenshot](screenshots/Jobs.png)
+![仕事のスクリーンショット](screenshots/Jobs.png)
 
-### [eureka](ui/eureka) module
+### [ユーレカ](ui/eureka) モジュール
 
-To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactbot Eureka` preset.
+このモジュールは、使用するには 点のcactbotを **UI /ユーレカ/ eureka.html** 又は使用 `Cactbotユーレカ` プリセット。
 
-This module provides automatic tracking of NMs that are popped or have been killed.  It shows gales/night timers and any local tracker link that has been pasted in chat.  Any flags in chat are also temporarily included on the map.
+このモジュールは、ポップされた、または が強制終了されたNMの自動追跡を提供します。  強風/ナイトタイマーと、チャットに貼り付けられたローカルトラッカーリンク が表示されます。  チャットでのすべてのフラグは、一時的でもある 地図上含まれています。
 
-It currently does not read the tracker information directly.  However, if you click on the left/red "Copy killed NMs" button in the tracker to copy the list of currently dead NMs, you can paste it in game, e.g. `/echo ? NMs on cooldown: Serket (7m) > Julika (24m) > Poly (54m)`
+現在、トラッカー情報を直接読み取ることはありません。  ただし、 あなたは、左/をクリックした場合は、トラッカーにしてボタン「コピーNMSに殺された」RED あなたは例えば、ゲームでそれを貼り付けることができ、現在、死者のNMのリストをコピー `/エコー？ クールダウン時のNM：セルケト（7m） > ジュリカ（24m） > ポリ（54m）`
 
-If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
+あなたは絵文字が表示されない場合は、必ずインストールしている作る [このWindowsの更新プログラム](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![eurekaスクリーンショット](screenshots/promo_eureka.png)
 
-### [radar](ui/radar) module
+### [レーダー](ui/radar) モジュール
 
-To use this module, point cactbot at **ui/radar/radar.html** or use the `Cactbot Radar` preset.
+このモジュールは、使用するには 点のcactbotを **UI /レーダー/ radar.html** 又は使用 `Cactbotレーダー` プリセット。
 
-This module lets you know about nearby hunt mobs (S-rank, A-rank, etc). When one pops, it gives you an arrow (based on your character's heading) and a distance to the mob.
+このモジュールでは、近くのハントモブ（Sランク、Aランクなど）について知ることができます。 ポップすると、矢印（キャラクターの見出しに基づく） と暴徒までの距離が表示されます。
 
-There are options to show who pulled the mob, as well as to configure the display of the radar. You can also set up custom options for different ranks (e.g. make noises for S rank, but be silent for B ranks), or set up custom triggers for any mob name you would like.
+誰が暴徒を引いたかを示すオプション、 、およびレーダーの表示を構成するオプションがあります。 さまざまなランク （たとえば、Sランクでは音を立てるが、Bランクでは無音にする）、 または任意のMob名にカスタムトリガーを設定することもできます。
 
-See the `cactbot/user/radar-example.js` for more options.
+参照してください `cactbot /ユーザー/レーダー-example.js` より多くのオプションのために。
 
-![radar screenshot](screenshots/promo_radar.png)
+![レーダーのスクリーンショット](screenshots/promo_radar.png)
 
-### [fisher](ui/fisher) module
+### [フィッシャー](ui/fisher) モジュール
 
-To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactbot Fisher` preset.
+このモジュールは、使用するには 点のcactbotを **UI /フィッシャー/ fisher.html** 又は使用 `Cactbotフィッシャー` プリセット。
 
-When you cast your line at a fishing hole, this module keeps track of when you reel in particular fish so that you know what you might be getting when you hook it.
+釣り場でラインをキャストするとき、このモジュールは特定の魚をリールするタイミングを追跡し、フックしたときに何が得られるかを把握します。
 
-![fishing screenshot](screenshots/promo_fishing.png)
+![釣りのスクリーンショット](screenshots/promo_fishing.png)
 
-Cast times are currently only logged as you fish, so there won't be any data until you've caught each fish. Green bars represent light tugs, yellow is a medium tug and red bars are legendary/heavy tugs.
+現在、キャスト時間は釣りをしているときにのみ記録されるため、各魚を捕まえるまでデータはありません。 緑のバーは軽いタグボートを表し、黄色は中程度のタグボートを表し、赤いバーは伝説的/重いタグボートを表します。
 
-[See here](https://www.youtube.com/watch?v=GHgWIA-Zhug) for examples of the different tug types.
+[さまざまなタグボートの種類の例については、ここ](https://www.youtube.com/watch?v=GHgWIA-Zhug) を参照してください。
 
-Check [here](docs/FAQ-Troubleshooting.md#fisher-module) for common troubleshooting tips.
+一般的なトラブルシューティングのヒントについては、 [ここ](docs/FAQ-Troubleshooting.md#fisher-module) を確認してください。
 
-### [dps](ui/dps) meters
+### [DPS](ui/dps) メートル
 
-cactbot can be used with any dps meter overlay designed for OverlayPlugin's miniparse addon, with the option to build out more features through cactbot's additional Javascript APIs.  cactbot also auto-stops fights on wipes, so you can configure ACT's fight time to infinity.
+cactbotはOverlayPluginのminiparseのために設計された任意のDPSメーターオーバーレイで使用することができます cactbotの追加のJavascriptを通じてより多くの機能を構築するためのオプションで、アドオン のAPI。  cactbotはワイプでの戦闘も自動停止するため、ACTの戦闘時間を 無限大に構成できます。
 
-The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for miniparse, with the additional ability to do per-phase dps tracking, displayed in additional columns. In the screenshot below the phases are named B1, B2, B3.  These autogenerate from dungeon bosses, but could be used to differentiate raid fight phases.
+[xephero](ui/dps/xephero) dpsメーターは、ミニ解析用に構築された同じdpsメーターに基づいており、 は、追加の列に表示される、フェーズごとのdpsトラッキングを実行する追加機能を備えています。 以下のスクリーンショットでは、フェーズの名前はB1、B2、B3です。  これらはダンジョンのボスから自動生成されますが、レイドファイトフェーズを区別するために使用できます。
 
-![xephero screenshot](screenshots/xephero.png)
+![xepheroスクリーンショット](screenshots/xephero.png)
 
-The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
+[rdmty](ui/dps/rdmty) DPS計はminiparseに対して同じDPSメーターに基づいて、更新された Stormbloodジョブのと一致するように再着色 [fflogs](http://fflogs.com)。
 
-![rdmty screenshot](screenshots/rdmty.png)
+![rdmtyスクリーンショット](screenshots/rdmty.png)
 
-### [pull counter](ui/pullcounter) module
+### [プルカウンター](ui/pullcounter) モジュール
 
-This small module sticks the current pull count for raiding bosses on screen. This is primarily for folks who stream a lot and want to review video footage. Having a number on screen makes it easy to scrub through video and find particular pulls to review.
+この小さなモジュールは、画面上のボスを襲撃するための現在のプルカウントを固定します。 これは主に、多くのストリーミングを行い、ビデオ映像を確認したい人向けです。 画面に数字があると、ビデオを簡単にスクラブして、レビューする特定のプルを 見つけることができます。
 
-In most cases, you can reset the count for the current boss/zone by typing `/echo pullcounter reset`. You can also edit the counts directly in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file.
+ほとんどの場合、 `/ echo pullcounter reset`入力すると、現在のボス/ゾーンのカウントをリセットできます。 また、あなたに直接カウントを編集することができます `%APPDATA%\高度な戦闘トラッカー\ Configを\RainbowMage.OverlayPlugin.config.json` ファイル。
 
-![pull counter screenshot](screenshots/pullcounter.png)
+![プルカウンターのスクリーンショット](screenshots/pullcounter.png)
 
-### [test](ui/test) module
+### [テスト](ui/test) モジュール
 
-To use this module, point cactbot at **ui/test/test.html** or use the `Cactbot Test` preset.
+このモジュールは、使用するには 点のcactbotを **UI /試験/ test.htmlという** 又は使用 `Cactbotテスト` プリセット。
 
-This module is just an onscreen test of cactbot variables and is not meant to be used while playing. It can be useful to try out to make sure everything is working as expected or to use to help debug overlay issues.
+このモジュールは、cactbot変数の画面上のテストであり、再生中に使用することを意図したものではありません。 すべてが期待どおりに機能していることを確認したり、オーバーレイの問題のデバッグに使用したりすると便利です。
 
-![test screenshot](screenshots/test.png)
+![テストのスクリーンショット](screenshots/test.png)
 
-## Troubleshooting
+## トラブルシューティング
 
-A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
+一般的なFAQは、一般的なCactbotの問題の解決策を含む [ここ](docs/FAQ-Troubleshooting.md) ます。
 
-## Cactbot Customization
+## Cactbotのカスタマイズ
 
-Most common cactbot configuration can be done via the control panel, inside of ACT.
+最も一般的なcactbotの構成は、ACT内の のコントロールパネルを介して行うことができます。
 
-![config panel](screenshots/config_panel.png)
+![設定パネル](screenshots/config_panel.png)
 
-This can be found by going to Plugins -> OverlayPlugin.dll -> Cactbot Event Source, and then clicking on options there.
+これは、 プラグイン> OverlayPlugin.dll-> Cactbotイベントソース に移動し、そこでオプションをクリックすることで見つけることができます。
 
-In particular, if you want to use text to speech for raidboss alerts, you can change the "Default alert output" to be "TTS Only" or "Text and TTS". You can also change this on a per trigger basis.
+特に、 あなたは、raidbossアラートのためにスピーチへのテキストを使用したい場合は あなたはあることを「デフォルトのアラート出力」を変更することができます 「のみTTS」または「テキストとTTS」。 これは、トリガーごとに変更することもできます。
 
-Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
+それとも、何らかの理由であれば（???）あなたは、準備チェック警告音を望んでいない あなたは同じオプションパネルを経由して、これを無効にすることができます。 - Raidbossに行く> 一般的なトリガ-> 一般-> 一般的な準備のチェック、 し、それを設定する `障害者` の代わりに、 `デフォルト`。
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+これらのオプションは、あなたの中に保存されている `%APPDATA%\高度な戦闘トラッカー\ Configを\RainbowMage.OverlayPlugin.config.json` ファイル。 これは、このファイルを直接編集するにはお勧めしません それがでなければならないとして [厳格なJSON](https://jsonlint.com/) と、ファイルが誤って記述されている場合、ACTは、負荷に失敗することがあります。
 
-It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
+ほとんどの構成は、ユーザーファイルではなく、このコントロールパネル を介して行うことをお勧めします。 `cactbot / user /` ファイルはより強力で 、コントロールパネルから何でも上書きできます。 ただし、これは、コントロールパネルが何か 適切に調整せず、 `cactbot / user /` ファイルがサイレントにオーバーライドされている場合にも混乱を招く可能性があります。
 
-See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrides) for more details about user javascript and css files.
+参照してください。 [この文書](docs/CactbotCustomization.md#user-folder-config-overrides) 、ユーザのjavascriptとcssファイルの詳細については。
 
-## Supported Languages
+## サポートされている言語
 
-cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
+cactbotはテストされ、現在の 国際（英語、ドイツ語、フランス語、日本語）バージョン、 現在の中国語バージョン、 および現在の韓国語バージョンで動作します。 一部の翻訳はまだ進行中です。
