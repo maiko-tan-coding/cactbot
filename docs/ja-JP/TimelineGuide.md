@@ -1,264 +1,264 @@
-# Timeline Guide
+# タイムラインガイド
 
-This is a guide for people who want to write timelines, primarily for cactbot.
+これは、タイムラインを書きたい人のためのガイドである 主にcactbotため。
 
-![import screenshot](images/timelineguide_timeline.png)
+![スクリーンショットをインポートする](images/timelineguide_timeline.png)
 
-cactbot uses the [raidboss module](https://github.com/quisquous/cactbot#raidboss-module) for triggers and timelines. These are combined together so that you can make triggers that are based on actions or triggers that are based on timelines themselves.
+cactbotは使用 [raidbossモジュール](https://github.com/quisquous/cactbot#raidboss-module) トリガし、タイムラインのため。 これらを組み合わせて、アクション 基づくトリガー、またはタイムライン自体に基づくトリガーを作成できます。
 
-## Table of Contents
+## 目次
 
-* [History](#history)
-* [Timeline File Syntax](#timeline-file-syntax)
-  * [Comments](#comments)
-  * [Entries](#entries)
-  * [Commands](#commands)
-  * [Examples](#examples)
-  * [Testing](#testing)
-  * [Shasta Kota Guide](#shasta-kota-guide)
-* [Cactbot Style Guide](#cactbot-style-guide)
-* [Timeline Triggers](#timeline-triggers)
-* [Timeline Injection](#timeline-injection)
-* [Timeline Translation](#timeline-translation)
-* [Example Timeline Creation](#example-timeline-creation)
-  * [Run the fight a few times](#run-the-fight-a-few-times)
-  * [Software prerequisites](#software-prerequisites)
-  * [Timeline Skeleton](#timeline-skeleton)
-  * [Generating an initial timeline file](#generating-an-initial-timeline-file)
-  * [Building Loops](#building-loops)
-  * [Adding Phases](#adding-phases)
-  * [Next phase](#next-phase)
-  * [Final Phase](#final-phase)
-  * [Boilerplate glue](#boilerplate-glue)
-  * [Making loops loop](#making-loops-loop)
-  * [Putting it all together](#putting-it-all-together)
-  * [Testing Timelines](#testing-timelines)
-  * [Test against other timelines](#test-against-other-timelines)
+* [歴史](#history)
+* [タイムラインファイルの構文](#timeline-file-syntax)
+  * [コメント](#comments)
+  * [エントリー](#entries)
+  * [コマンド](#commands)
+  * [例](#examples)
+  * [テスト](#testing)
+  * [シャスタコタガイド](#shasta-kota-guide)
+* [Cactbotスタイルガイド](#cactbot-style-guide)
+* [タイムライントリガー](#timeline-triggers)
+* [タイムラインインジェクション](#timeline-injection)
+* [タイムライン翻訳](#timeline-translation)
+* [タイムライン作成の例](#example-timeline-creation)
+  * [戦いを数回実行します](#run-the-fight-a-few-times)
+  * [ソフトウェアの前提条件](#software-prerequisites)
+  * [タイムラインスケルトン](#timeline-skeleton)
+  * [初期タイムラインファイルの生成](#generating-an-initial-timeline-file)
+  * [ループの構築](#building-loops)
+  * [フェーズの追加](#adding-phases)
+  * [次の段階](#next-phase)
+  * [最終段階](#final-phase)
+  * [ボイラープレート接着剤](#boilerplate-glue)
+  * [ループをループにする](#making-loops-loop)
+  * [すべてを一緒に入れて](#putting-it-all-together)
+  * [タイムラインのテスト](#testing-timelines)
+  * [他のタイムラインに対してテストする](#test-against-other-timelines)
 
-## History
+## 歴史
 
-Back in 2016, Shasta Kota on the Death and Taxes website made this [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) to use with  anoyetta's [ACT timeline plugin](https://github.com/anoyetta/ACT.Hojoring). That plugin is now part of Hojoring.
+戻る2016年、死と税金ウェブサイト上シャスタコタは、この作ら [ガイド](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) anoyettaのに使用する [プラグインACTタイムライン](https://github.com/anoyetta/ACT.Hojoring)。 そのプラグインは現在Hojoringの一部です。
 
-There's also an older [kaizoban](https://github.com/090/act_timeline/releases) version of the plugin that some people have used that predates anoyetta's work.
+古いもあります [kaizoban](https://github.com/090/act_timeline/releases) 一部の人々は以前からのanoyettaの作品ということで使用していることをプラグインのバージョンが。
 
-cactbot timeline files were originally intended to be backwards compatible with these, and so cactbot-specific extensions are injected later from the triggers file.
+cactbotタイムラインファイルは元々これらとの下位互換性を意図していたため、 であるため、cactbot固有の拡張子は後でトリガーファイルから挿入されます。
 
-## Timeline File Syntax
+## タイムラインファイルの構文
 
-Each line in a timeline file is considered its own timeline entry. There is no ordering at all. The fact that timeline files are ordered is as a convenience to the reader.
+タイムラインファイルの各行は、独自のタイムラインエントリと見なされます。 注文は一切ありません。 タイムラインファイルが順序付けられているという事実は、読者の便宜のためです。
 
-### Comments
+### コメント
 
-On any line, a hash character `#` signifies a comment. Everything after that on the current line will be ignored.
+どの行でも、ハッシュ文字 `＃` はコメントを示します。 それ以降の現在の行はすべて無視されます。
 
-### Entries
+### エントリー
 
-Here is some grammar examples of timeline entries. Every timeline entry begins with the ability time and the ability name.
+タイムラインエントリの文法例を次に示します。 すべてのタイムラインエントリは、能力時間と能力名で始まります。
 
-`Number "String" (duration Number)`
+`番号「文字列」（期間番号）`
 
-`Number "String" sync /Regex/ (window Number,Number) (jump Number) (duration Number)`
+`番号 "文字列"同期/正規表現/（ウィンドウ番号、番号）（ジャンプ番号）（期間番号）`
 
-The parentheses here indicate optionality and are not literal parentheses.
+ここでの括弧はオプションを示し、文字通りの括弧ではありません。
 
-Number can be an integer, e.g. `34`, or a float, e.g. `84.381`.
+数値は、整数（ `34`など）または浮動小数点数（ `84.381`など）にすることができます。
 
-String is a character string, e.g. `"Liftoff"` or `"Double Attack"`
+文字列は文字列です。例： `"Liftoff"` または `"Double Attack"`
 
-Regex is a [Javascript regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).
+正規表現は、 [Javascriptの正規表現](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions)。
 
-The ability time and ability name always need to come first, but `window`, `jump`, `duration`, and `sync` do not have to be in any order with respect to each other. Stylistically, usually sync is put first.
+能時間と能力名は常に最初に来る必要があるが、 `ウィンドウ`、 `ジャンプ`、 `期間`、及び `シンク` 互いに対して任意の順序である必要はありません。 様式的には、通常、同期が最初に置かれます。
 
-`duration Number` is a time in seconds to show the action. Usually, timeline entries disappear immediately, but sometimes an action is ongoing, like 5x Bahamut's Claw in a row. You can use `duration` to show the action for that length of time. It does not need a sync to do this.
+`期間番号` は、アクションを表示する秒単位の時間です。 通常、タイムラインエントリはすぐに消えますが、 が、5x Bahamut'sClawが連続するなどのアクションが進行中の場合もあります。 `期間` を使用して、その期間のアクションを表示できます。 これを行うために同期は必要ありません。
 
-`window Number,Number` is the time frame in which to consider the sync. By default, if `window` is not specified, cactbot considers it the same as specifying `window 2.5,2.5`.  In other words, 2.5 seconds before the ability time and 2.5 seconds after. As an example, for the line `3118.9 "Lancing Bolt" sync /:Raiden:3876:/`, if the regular expression `/:Raiden:3876:/` is encountered anywhere between 3116.4 and 3121.4 then it will resync the timeline playback to 3118.9. Often timelines will use very large windows for unique abilities, to make sure that timelines sync to the right place even if started mid-fight.
+`ウィンドウ番号、番号` は、同期を検討する時間枠です。 場合、デフォルトで、 `ウィンドウ` 指定されていない、cactbotは考慮 指定したのと同じ `ウィンドウ2.5,2.5`。  言い換えれば、能力時間の2.5秒前と2.5秒後の です。 一例として、ラインの `/：3118.9「Lancingのボルト」同期/：雷電：3876`、 正規表現の場合 `/：雷電：3876：/` 3116.4と3121.4の間のどこにでも発生した それは再同期されます3118.9までのタイムライン再生。 多くの場合、タイムラインは独自の機能のために非常に大きなウィンドウを使用します 、戦闘の途中で開始された場合でもタイムラインが適切な場所に同期するようにします。
 
-`jump Number` tells the timeline playback to jump to a particular time if the sync is encountered. If you jump to time 0, the timeline will stop playback. This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
+`ジャンプ番号` は、同期が検出された場合に特定の時間 にジャンプするようにタイムライン再生に指示します。 時間0にジャンプすると、タイムラインは再生を停止します。 これは通常、フェーズプッシュとループに使用されます。 ジャンプする時間のタイムラインエントリは必要ありませんが、 は非常に一般的です。
 
-### Commands
+### コマンド
 
-To hide all instances of an ability, you can use the `hideall` command. Most timelines start with the line `hideall "--sync--"` to hide syncs that are just used to keep the timeline on track but should not be shown to the player.
+能力のすべてのインスタンスを非表示にするには、使用することができます `hideall` コマンドを。 ほとんどのタイムラインは、 `行目hideall "--sync--"` 始まり、タイムラインを軌道に乗せるために使用されているが、プレーヤーには表示されない同期を非表示にします。
 
-There are a number of other commands for generating alerts based on timeline entries. These are still supported but are not documented. Instead, alerts based on timelines in cactbot should use [timeline triggers](#timeline-triggers).
+タイムラインエントリに基づいてアラートを生成するための他のコマンドがいくつかあります。 これらは引き続きサポートされていますが、文書化されていません。 代わりに、cactbotのタイムラインに基づくアラートは、 [タイムライントリガー](#timeline-triggers)使用する必要があります。
 
-### Examples
+### 例
 
 ```bash
-677.0 "Heavensfall Trio"
-1044 "Enrage" # ???
-35.2 "Flare Breath x3" duration 4
-1608.1 "Petrifaction" sync /:Melusine:7B1:/ window 1610,5
-1141.4 "Leg Shot" sync /:Mustadio:3738:/ duration 20
-# I am just a comment
+677.0 "Heavensfallトリオ"
+1044 "激怒" ＃???
+35.2 "フレアブレス×3"期間4
+1608.1 "石化"の同期/：メリュジーヌ：7B1：/ウィンドウ1610,5
+1141.4 "レッグショット"同期/：Mustadio：3738：/期間20
+だけコメント私は＃
 hideall "--sync--"
 
-28.0 "Damning Edict?" sync /:Chaos:3150:/ window 30,10 jump 2028.0
-524.9 "Allagan Field" sync /:The Avatar:7C4:/ duration 31 jump 444.9
-1032.0 "Control Tower" duration 13.5 sync /:Hashmal, Bringer Of Order starts using Control Tower on Hashmal/ window 20,20 # start of cast -> tower fall
+28.0 "Damning Edict？"同期/：カオス：3150：/ウィンドウ30,10ジャンプ2028.0
+524.9「アラガンフィールド」同期/：アバター：7C4：/期間31ジャンプ444.9
+1032.0「管制塔」期間13.5同期/：ハッシュマル、ブリンガーオブオーダー開始Hashmal /ウィンドウ20,20で管制塔を使用＃キャストの開始> 塔の落下
 ```
 
-### Testing
+### テスト
 
-In cactbot, running `npm run test` will run **test/check_timelines.js** in node to verify syntax.
+cactbotでは、 `npm run test` を実行すると、ノードで **test / check_timelines.js** が実行され、構文が検証されます。
 
-### Shasta Kota Guide
+### シャスタコタガイド
 
-It is also worth reading Shasta Kota's original [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) which is still excellent.
+また、読む価値シャスタコタの元である [ガイド](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) まだ良好です。
 
-## Cactbot Style Guide
+## Cactbotスタイルガイド
 
-These are guidelines that cactbot tries to follow for timelines.
+これらは、cactbotがタイムラインで従おうとするガイドラインです。
 
-* add syncs for everything possible
-* always add an Engage! entry, but add syncs in case there's no /countdown
-* if the first boss action is an auto-attack, add a sync to start the timeline asap. (Note that sometimes boss auto-attacks are not literally "Attack"!)
-* include the command line used to generate the timeline in a comment at the top
-* prefer actions for syncs over rp text, but rp text syncs if that's the only option
-* if you do sync a phase with rp text, add a large window sync for an action
-* sync regexes should be short
-* use original names as much as possible
-* loops should use `jump` instead of having previous abilities have large windows
-* liberally use whitespace and comments to make the timeline readable
-* do not put any triggers or tts or alerts in the timeline file itself
-* use [timeline triggers](#timeline-triggers) for any alerts
-* add at least a 30 second lookahead window for loops
-* comment out syncs from any abilities that are within 7 seconds of each other (This preserves the ability ID for future maintainers.)
+* 可能なすべての同期を追加する
+* 常にエンゲージを追加してください！ エントリですが、/ countdownがない場合は同期を追加します
+* 最初のボスアクションが自動攻撃の場合は、同期を追加してタイムラインをできるだけ早く開始します。 （ボスの自動攻撃が文字通り「攻撃」ではない場合があることに注意してください！）
+* タイムラインを生成するために使用されるコマンドラインを上部のコメントに含めます
+* rpテキストよりも同期のアクションを優先しますが、それが唯一のオプションである場合、rpテキストは同期します
+* フェーズをrpテキストと同期する場合は、アクションの大きなウィンドウ同期を追加します
+* 同期正規表現は短くする必要があります
+* 可能な限り元の名前を使用する
+* ループは、以前の能力に大きなウィンドウを持たせる代わりに、 `ジャンプ` を使用する必要があります
+* 空白とコメントを自由に使用して、タイムラインを読みやすくします
+* タイムラインファイル自体にトリガー、tts、アラートを配置しないでください
+* アラートには [タイムライントリガー](#timeline-triggers) を使用します
+* ループ用に少なくとも30秒の先読みウィンドウを追加します
+* 互いに7秒以内にあるすべての能力からの同期をコメントアウトします （これにより、将来のメンテナのために能力IDが保持されます）。
 
-### Trigger Filenames
+### トリガーファイル名
 
-The general goal of filenames is to be consistent with what the community calls these fights. Trials get called by the name of the boss, raids get abbreviated and numbered, dungeons are called by their zone.
+ファイル名の一般的な目標は、一貫している 社会がこれらの戦いを呼んで。 トライアルはボスの名前で呼び出され、 レイドは省略されて番号が付けられ、 ダンジョンはゾーンによって呼び出されます。
 
-For filenames, use underscores to separate words. For trials like `nm` (normal mode), `hm` (hard mode), and `ex` (extreme mode), separate with a hyphen. Dungeons with hard in the name can spell out "Hard" as a full word. Articles like `The` can be dropped. Raids are numbered through the tier, e.g. `t1` through `t13` and `a1s` through `a12s`. Savage fights should have an `s` suffix while normal fights have an 'n' suffix. (However, this does not apply to coil raids.)
+ファイル名の場合は、アンダースコアを使用して単語を区切ります。 `nm` （ノーマルモード）、 `hm` （ハードモード）、 `ex` （エクストリームモード）などのトライアルの場合、 はハイフンで区切ります。 名前にハードが含まれるダンジョンは、「ハード」を完全な単語として綴ることができます。 以下のような記事 `` 落下させることができます。 襲撃は、層を通って番号が付けられている 、例えば `、T1` 介して `T13` 及び `A1S` を介し `a12s`。 野蛮な戦いがなければならない `、S` サフィックス 通常の戦いは、「N」接尾辞を有します。 （ただし、これはコイルレイドには適用されません。）
 
-Examples:
+例：
 
-* The Grand Cosmos: `grand_cosmos`
-* Titan Extreme: `titan-ex`
-* Ruby Weapon Extreme: `ruby_weapon-ex`
-* The Great Gubal Library (Hard): `great_gubal_library_hard`
-* Sigmascape V2.0 (Savage): `o6s`
-* Alexander - The Arm of the Father: `a3n`
-* The Final Coil of Bahamut: `t13`
+* グランドコスモス： `grand_cosmos`
+* タイタンエクストリーム： `タイタン-例`
+* Ruby Weapon Extreme： `ruby_weapon-ex`
+* グレートグバルライブラリ（ハード）： `great_gubal_library_hard`
+* Sigmascape V2.0（サベージ）： `o6s`
+* アレクサンダー-父の腕： `a3n`
+* バハムートの最終コイル： `t13`
 
-## Timeline Triggers
+## タイムライントリガー
 
-Trigger files in cactbot support adding timeline triggers. Because people may have preferences about what triggers they want enabled by default, and because cactbot timeline syntax extensions are not compatible with other timeline plugins, cactbot adds all of its timeline triggers from the timeline file.
+cactbotのトリガーファイルは、タイムライントリガーの追加をサポートしています。 人々は、彼らがデフォルトで有効になって欲しいトリガーものについての選好ている可能性があるため とcactbotタイムライン構文拡張は、他のタイムラインのプラグインと互換性がないため、 cactbotは、タイムラインファイルからそのタイムライントリガのすべてを追加します。
 
-This is done by adding a `timelineTriggers` section to the triggers file.
+これは、追加することによって行われる `timelineTriggers` トリガファイルにセクションを。
 
-Examples:
+例：
 
-* [Orbonne Monastery](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/alliance/orbonne_monastery.js)
+* [オーボンヌ修道院](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/alliance/orbonne_monastery.js)
 * [T9](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/02-arr/raid/t9.js)
-* [O12 normal](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/raid/o12n.js)
+* [O12ノーマル](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/raid/o12n.js)
 
-These triggers have the [same syntax](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/README.txt) as normal triggers. They still allow you to use functions if you want to return something. You can use a [condition](https://github.com/quisquous/cactbot/blob/5a7011c662d65f44c12c2fbff255484f2d31b8ef/ui/raidboss/data/02-arr/raid/t9.js#L10) to have it only trigger for a particular job or role.
+これらのトリガーは持って [と同じ構文](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/README.txt) ノーマルトリガなどを。 何かを返したい場合でも、関数を使用できます。 [条件](https://github.com/quisquous/cactbot/blob/5a7011c662d65f44c12c2fbff255484f2d31b8ef/ui/raidboss/data/02-arr/raid/t9.js#L10) を使用して、特定のジョブまたはロールに対してのみトリガーすることができます。
 
-However there are a few differences:
+ただし、いくつかの違いがあります。
 
-The `regex` should not be translated and should be based off of whatever is exactly in the timeline file. It matches against the ability name in quotes on the timeline line. The `matches` parameter to functions will return this.
+`正規表現` は翻訳されるべきではなく、タイムラインファイルに正確に含まれているものに基づいている必要があります。 タイムライン行の引用符で囲まれた能力名と一致します。 関数に `` パラメーターと一致すると、これが返されます。
 
-They support a `beforeSeconds` parameter, that allows you to specify how long before the ability to show the trigger.
+これらは、 `beforeSeconds` パラメーター をサポートします。これにより、トリガーを表示できるようになるまでの時間を指定できます。
 
-## Timeline Injection
+## タイムラインインジェクション
 
-The timeline files themselves are constructed in a way that should be useful for everybody. However, sometimes people want to hide parts of timelines or add other things to timelines.
+タイムラインファイル自体は、すべての人に役立つように作成されています。 ただし、タイムラインの一部を非表示にしたり、タイムラインに他のものを追加したりする場合があります。
 
-This is not something that cactbot does by default anywhere, and so it is more a user configuration feature.
+これは、cactbotがデフォルトでどこでも行うことではないため、よりユーザー構成機能です。
 
-The triggers file supports a `timeline` entry which is an array of things to add to the timeline. If those things are strings, it will add them directly. If those things are functions, it will call the function and add the return value. (The `data` parameter passed only contains a player's role and job and not other things.)
+トリガーファイルは、タイムラインに追加するものの配列である `タイムライン` エントリをサポートします。 それらが文字列の場合、直接追加されます。 それらが関数の場合、関数を呼び出して戻り値を追加します。 （渡された `データ` パラメーターには、プレーヤーの役割とジョブのみが含まれ、他のものは含まれません。）
 
-The test timeline in Summerford Farms that you can start by doing a /countdown or /bow-ing to a Striking Dummy has examples of this.  See: [test.js](https://github.com/quisquous/cactbot/blob/79239abda888dd7a277da0501a7d4ac60d8cf963/ui/raidboss/data/triggers/test.js#L10).
+印象的なダミーに/ countdownまたは/ bow-ingを実行することから開始できるSummerfordFarmsのテストタイムラインには、この例があります。  参照： [test.js](https://github.com/quisquous/cactbot/blob/79239abda888dd7a277da0501a7d4ac60d8cf963/ui/raidboss/data/triggers/test.js#L10)。
 
-You can also add timeline entries to your **cactbot/user/raidboss.js** file for personalized timeline entries and triggers.  See: [user/raidboss.js](https://github.com/quisquous/cactbot-user/blob/641488590e3ea499cc3b54cc9f2f2f856dee4ad8/raidboss.js#L28)
+また、あなたのタイムラインエントリを追加することができます **/ cactbot /ユーザーraidboss.js** パーソナライズされたタイムラインのエントリとトリガのファイルを。  参照： [user / raidboss.js](https://github.com/quisquous/cactbot-user/blob/641488590e3ea499cc3b54cc9f2f2f856dee4ad8/raidboss.js#L28)
 
-## Timeline Translation
+## タイムライン翻訳
 
-To support multiple languages, cactbot trigger files support a `timelineReplace` section. You can see an example in [o12s.js](https://github.com/quisquous/cactbot/blob/ecbb723f097328c7bd0476352e5135bd5f776248/ui/raidboss/data/triggers/o12s.js#L608). This section contains a bunch of regular expressions to replace in syncs, texts, and effects. This has two purposes.
+複数の言語をサポートするために、cactbotトリガファイルはサポートして `timelineReplace` セクションを。 あなたには例を見ることができます [o12s.js](https://github.com/quisquous/cactbot/blob/ecbb723f097328c7bd0476352e5135bd5f776248/ui/raidboss/data/triggers/o12s.js#L608)。 このセクションには、同期、テキスト、および効果で置き換える正規表現が多数含まれています。 これには2つの目的があります。
 
-The first purpose is for tools, to autogenerate regular expression translations for triggers.
+最初の目的は、トリガーの正規表現変換を自動生成するツールです。
 
-The second purpose is for timelines at runtime. cactbot will use the `replaceSync` section to auto-replace anything inside a `sync /text`/ on a timeline line, and the `replaceText` section to auto-replace anything inside the ability text.
+2番目の目的は、実行時のタイムラインです。 cactbotを使用する `replaceSync` の内部に何かを自動交換するセクション `同期/テキスト`タイムラインのライン、上/ と `のreplaceText` 能力テキスト内の自動交換何かにセクション。
 
-These match only the exact text of the regex within the line, not the entire line. Care is needed to make sure that replacements are not overzealous.
+これらは、行全体ではなく、行内の正規表現の正確なテキストにのみ一致します。 交換が熱心すぎないように注意する必要があります。
 
-## Example Timeline Creation
+## タイムライン作成の例
 
-Here's an example of using cactbot's tools to make a timeline file for Cape Westwind. This is pretty straightforward and only requires one person to test, so is a good first example.
+これは、cactbotのツールを使用してCapeWestwindのタイムラインファイルを作成する例です。 これは非常に簡単で、テストに必要なのは1人だけなので、最初の良い例です。
 
-### Run the fight a few times
+### 戦いを数回実行します
 
-The first step in making a timeline is generating a few ACT logs.
+タイムラインを作成する最初のステップは、いくつかのACTログを生成することです。
 
-cactbot will also let you make timelines from fflogs clears, but this drops many log lines. In particular, you can't get rp text lines, the text for the zone sealing/unsealing, and new combatants.
+cactbotを使用すると、fflogsをクリアしてタイムラインを作成することもできますが、これにより多くのログ行が削除されます。 特に、rpテキスト行、ゾーンの封印/開封のテキスト、および新しい戦闘員を取得することはできません。
 
-Once you've run the combat, you'll have generated a couple of [network log files](LogGuide.md#network-log-lines).
+戦闘を実行すると、ネットワークログファイルが [生成されます](LogGuide.md#network-log-lines)。
 
-Follow those links, click **Raw**, then right click and **Save As** to save them to disk.
+これらのリンクをたどり、 **Raw**クリックしてから、右クリックして **Save As** をクリックして、ディスクに保存します。
 
-Good guidelines for getting good logs are:
+優れたログを取得するための適切なガイドラインは次のとおりです。
 
-1. run long enough to see the enrage
-1. have enough people to see all the mechanics (e.g. t11 tethers don't appear without two people)
-1. per phase, run long enough to see the mechanics loop
-1. run several times so you can test it
+1. 怒りを見るのに十分長く走る
+1. すべてのメカニズムを見るのに十分な人数がいる（たとえば、t11テザーは2人がないと表示されない）
+1. フェーズごとに、メカニックループを確認するのに十分な時間実行します
+1. あなたがそれをテストできるように数回実行します
 
-### Software prerequisites
+### ソフトウェアの前提条件
 
 * [Python 3](https://www.python.org/downloads/release/python-373/)
-* A copy of cactbot's [source code](https://github.com/quisquous/cactbot/archive/main.zip)
+* cactbotの [ソースコード](https://github.com/quisquous/cactbot/archive/main.zip)のコピー
 
-You should do a system-wide installation of Python 3 if you can, as this will put Python into your Windows PATH so that you can easily run it from the command line.
+可能であれば、Python 3をシステム全体にインストールする必要があり を指定すると、PythonがWindows PATHに配置され、コマンドラインから簡単に実行できるようになります。
 
-### Timeline Skeleton
+### タイムラインスケルトン
 
-There are three things you need to add a new timeline to cactbot.
+cactbotに新しいタイムラインを追加するために必要なものが3つあります。
 
-(1) Create a blank timeline file.
+（1）空のタイムラインファイルを作成します。
 
-Add a new file called **ui/raidboss/data/timelines/cape_westwind.txt**. You can leave it blank.
+新しいファイルを追加しますと呼ばれる **UI / raidboss /データ/タイムライン/ cape_westwind.txt**。 空白のままにすることができます。
 
-(2) Add a new triggers file, if it doesn't exist.
+（2）新しいトリガーファイルが存在しない場合は追加します。
 
-Create **ui/raidboss/data/02-arr/trial/cape_westwind.js**. This can be named whatever you want. Timeline files can only be loaded via triggers files, so the triggers file is always required.
+作成 **UI / raidboss /データ/ 02-ARR /トライアル/ cape_westwind.js**。 これには、任意の名前を付けることができます。 タイムラインファイルはトリガーファイルを介してのみロードできるため、 ため、トリガーファイルは常に必要です。
 
-An initial triggers file should look like the following:
+初期トリガーファイルは次のようになります。
 
 ```javascript
 [{
-  zoneId: ZoneId.CapeWestwind,
-  timelineFile: 'cape_westwind.txt',
-  triggers: [
-  ],
+  zoneId：ZoneId.CapeWestwind、
+  timelineFile： 'cape_westwind.txt'、
+  トリガー：[
+  ]、
 }];
 ```
 
-(3) Update the manifest file.
+（3）マニフェストファイルを更新します。
 
-Update **ui/raidboss/data/manifest.txt** with both the name of the new triggers file and the new timeline file.
+**ui / raidboss / data / manifest.txt** を、 新しいトリガーファイルと新しいタイムラインファイルの両方の名前で更新します。
 
-(4) Reload raidboss
+（4）レイドボスをリロードする
 
-If you've changed any of these files, reload your cactbot raidboss plugin to pick up the changes.
+あなたはこれらのファイルのいずれかを変更した場合は、お使いのcactbot raidbossリロード 変更をピックアップしてプラグインを。
 
-### Generating an initial timeline file
+### 初期タイムラインファイルの生成
 
-Once you have a network log file, you need to find the start and the finish.
+ネットワークログファイルを取得したら、開始と終了を見つける必要があります。
 
-[View the logs in ACT](LogGuide.md#viewing-logs-after-a-fight) and find the start and the end.
+[ACT](LogGuide.md#viewing-logs-after-a-fight) のログを表示し、開始と終了を見つけます。
 
-![encounter logs screenshot](images/timelineguide_encounterlogs.png)
+![遭遇ログのスクリーンショット](images/timelineguide_encounterlogs.png)
 
-For example, in this fight, these are the relevant log lines and times:
+たとえば、この戦いでは、これらは関連するログ行と時間です。
 
 ```log
-[18:42:23.614] 15:105E5703:Potato Chippy:2E:Tomahawk:4000EE16:Rhitahtyn sas Arvina:710003:9450000:1C:2E8000:0:0:0:0:0:0:0:0:0:0:0:0:140279:140279:8010:8010:1000:1000:-707.8608:-822.4221:67.74045:3858:74095:4560:0:1000:1000:-693.7162:-816.4633:65.55687:
-[18:49:22.934] 19:Rhitahtyn Sas Arvina was defeated by Potato Chippy.
+[18：42：23.614] 15：105E5703：Potato Chippy：2E：Tomahawk：4000EE16：Rhitahtyn sas Arvina：710003：9450000：1C：2E8000：0：0：0：0：0：0：0：0：0： 0：0：0：140279：140279：8010：8010：1000：1000：-707.8608：-822.4221：67.74045：3858：74095：4560：0：1000：1000：-693.7162：-816.4633：65.55687：
+[18： 49：22.934] 19：Rhitahtyn SasArvinaがPotatoChippyに敗れた。
 ```
 
-(Known bug: sometimes network logs from other people's timezones require converting the time from what the act log lines.  Patches welcome.)
+（既知のバグ：他の人のタイムゾーンからのネットワークログでは、動作ログの行から時間を変換する必要がある場合があります。  パッチは大歓迎です。）
 
-You can then make a timeline from those times by running the following command.
+次に、次のコマンドを実行して、それらの時間からタイムラインを作成できます。
 
 ```bash
 python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934
@@ -354,444 +354,446 @@ python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934
 402.4 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
 ```
 
-(Note that you can also use the `-lf` parameter to list the encounters in the combat log.
+（ `-lf` パラメーターを使用して、戦闘ログに遭遇をリストすることもできることに注意してください。
 
 ```bash
-python make_timeline.py -f CapeWestwind.log -lf
-1. 02:03:44.018 02:16:53.632 Cape Westwind
-2. 18:32:52.981 18:36:14.086 Cape Westwind
-3. 18:42:23.614 18:49:22.934 Cape Westwind
-4. 18:57:09.114 19:10:13.200 Cape Westwind
-5. 19:29:42.265 19:36:22.437 Cape Westwind
-6. 19:40:20.606 19:46:44.342 Cape Westwind
+パイソンmake_timeline.py -f CapeWestwind.log -lf
+1。 02：03：44.018 02：16：53.632ケープウエストウインド
+2。 18：32：52.981 18：36：14.086ケープウエストウインド
+3。 18：42：23.614 18：49：22.934ケープウェストウィンド
+。 18：57：09.114 19：10：13.200ケープウェストウィンド
+。 19：29：42.265 19：36：22.437ケープウェストウィンド
+。 19：40：20.606 19：46：44.342ケープウェストウィンド
 ```
 
-From here, you can then rerun the command with the number of the encounter you want to use, as `-lf 3`.)
+ここから、使用するエンカウンターの番号 を `-lf 3`としてコマンドを再実行できます。）
 
-This isn't really a workable timeline yet, but it's a start. Paste this into **ui/raidboss/data/timelines/cape_westwind.txt**.
+これはまだ実際に実行可能なタイムラインではありませんが、それは始まりです。 これを貼り **UI / raidboss /データ/タイムライン/ cape_westwind.txt**。
 
-If you are using Windows cmd.exe or MINGW32 as your terminal, you can copy this by clicking the upper left hand corner icon, selecting **Edit**, and then **Mark**. You can highlight what you want with your mouse, and then hit the Enter key, and that will copy that so you can paste it elsewhere.
+Windows cmd.exeまたはMINGW32を端末として使用している場合は、 左上隅のアイコンをクリックし、 選択して **編集**選択し、次に **マーク**選択してこれをコピーできます。 マウスで必要なものを強調表示してから、Enterキーを に押すと、それがコピーされ、別の場所に を貼り付けることができます。
 
-![mark screenshot](images/timelineguide_copy.png)
+![スクリーンショットをマークする](images/timelineguide_copy.png)
 
-The first thing to note from this log is that there's a bunch of junk from adds. Most of the time, you can't count on adds to have reliable timing relative to the main boss, so it's usually better to remove them.
+このログからノートへの最初のものがたくさんありますということです 追加されますから、ジャンクの。 ほとんどの場合、メインボスに対して信頼できる タイミングを持つために追加を当てにすることはできないため、通常は 削除することをお勧めします。
 
-The make_timeline.py script has two options to do this. One is "ignore combatants" and the other is "ignore id". Either `-ic "7Th Cohort Optio"` or `-ii 0A 2CD 2CE 194 14` will remove all of these abilities. We'll go with ids.
+make_timeline.pyスクリプトには、これを行うための2つのオプションがあります。 1つは「戦闘員を無視する」で、もう1つは「IDを無視する」です。 `-ic "7Th Cohort Optio"` または `-ii 0A 2CD 2CE 194 14` は、これらの能力をすべて削除します。 IDを使用します。
 
-Run the command again with this ignore to have a cleaned up version: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14`
+：クリーンアップバージョン持って無視これで再度コマンドを実行してください `のpythonのutil / make_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e 18：49：22.934 -II 0A 2CD 2CE 194 14`
 
-At this point, it may also be worth going through and finding other lines to add. Usually, these are [added combatant](LogGuide.md#03-addcombatant) lines or [game log lines](LogGuide.md#00-logline) for rp text. You can look at the time and figure out where they go yourself. (Patches welcome to add either of these into **make_timeline.py** automatically.)
+この時点で、追加する他の行を調べて見つけることも価値があるかもしれません。 通常、これらはrpテキストの [追加戦闘員](LogGuide.md#03-addcombatant) 行 または [ゲームログ行](LogGuide.md#00-logline) です。 あなたは時間を見て、彼らが自分でどこに行くのかを理解することができます。 （パッチは、これらのいずれかを **make_timeline.py** 自動的に追加することを歓迎します。）
 
-The relevant lines here are:
+ここでの関連行は次のとおりです。
 
 ```log
-[18:45:27.041] 03:Added new combatant 7Th Cohort Optio.  Job: 0 Level: 49 Max HP: 24057 Max MP: 8010 Pos: (-665.5159,-804.6631,62.33055).
-[18:45:27.041] 03:Added new combatant 7Th Cohort Optio.  Job: 0 Level: 49 Max HP: 24057 Max MP: 8010 Pos: (-665.5013,-807.1013,62.45256).
-[18:42:24.000] 00:0044:Rhitahtyn sas Arvina:I will suffer none to oppose Lord van Baelsar!
-[18:44:08.000] 00:0044:Rhitahtyn sas Arvina:My shields are impregnable! Join the countless challengers who have dashed themselves against them!
-[18:46:27.000] 00:0044:Rhitahtyn sas Arvina:Your defeat will bring Lord van Baelsar's noble conquest one step closer to fruition!
-[18:48:27.000] 00:0044:Rhitahtyn sas Arvina:Ungh... Though it cost me my life...I will strike you down!
+[18：45：27.041] 03：新しい戦闘員の第7コホートオプティオを追加しました。  ジョブ：0レベル：49最大HP：24057最大MP：8010位置：（-665.5159、-804.6631,62.33055）。
+[18：45：27.041] 03：新しい戦闘員の第7コホートオプティオを追加しました。  ジョブ：0レベル：49最大HP：24057最大MP：8010位置：（-665.5013、-807.1013,62.45256）。
+[18：42：24.000] 00：0044：Rhitahtyn sas Arvina：ヴァン・バエルサー卿に反対することはありません！
+[18：44：08.000] 00：0044：Rhitahtyn sas Arvina：私の盾は難攻不落です！ 彼らに打ち勝った無数の挑戦者に加わってください！
+[18：46：27.000] 00：0044：Rhitahtyn sas Arvina：あなたの敗北は、ヴァン・ベールサー卿の高貴な征服を実現に一歩近づけるでしょう！
+[18：48：27.000] 00：0044：Rhitahtyn sas Arvina：うーん... それは私の人生を犠牲にしましたが...私はあなたを打ち倒します！
 ```
 
-You can subtract the times from the start time to figure out about where they are. For instance, the adds pop at t=183.5 (which is 18:45:27.041 - 18:42:23.614).
+開始時間から時間を差し引いて、それらがどこにあるかを把握することができます。 たとえば、adds popはt = 183.5（18：45：27.041-18：42：23.614）にあります。
 
-### Building Loops
+### ループの構築
 
-The next step is to build some loops around the phases. From observation, it looks like there's a number of phase pushes.
+次のステップは、フェーズの周りにいくつかのループを構築することです。 観察から、フェーズプッシュがいくつかあるように見えます。
 
-Here's what the initial phase looks like, with some extra line breaks for clarity.
+これが初期フェーズの様子です。わかりやすくするために、余分な改行が ています。
 
 ```bash
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-10.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-19.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-24.4 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+10.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+19.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+24.4 " Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+29.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+38.4" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+46.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+52.2" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-57.7 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-66.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-74.7 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-80.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+57.7" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+66.2" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+74.7" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+80.2" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 ```
 
-It's pretty clear that there's a loop of roughly 27.8 or 27.9 seconds. Let's just assume it's 27.8
+およそ27.8秒または27.9秒のループがあることはかなり明らかです。 27.8だとしましょう
 
-The best tool for making perfect loops is **util/timeline_adjust.py**. This script will walk through a timeline file and print out the same timeline file, adjusted by any amount, positive or negative. (Note: it will not adjust jumps.)
+完璧なループを作るための最良のツールがある **のutil / timeline_adjust.py**。 このスクリプトは、タイムラインファイルをウォークスルーし、正または負の任意の量で調整された同じ タイムラインファイルを出力します。 （注：ジャンプは調整されません。）
 
-Here's an abbreviated version of the output from running this command:
+このコマンドを実行したときの出力の簡略版は次のとおりです。
 
 ```bash
-python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8
+python util / timeline_adjust.py --file = ui / raidboss / data / timelines / cape_westwind.txt --adjust = 27.8
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+29.8 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+38.4 "Shield Skewer" sync / ：Rhitahtyn sas Arvina：471：/
+46.8 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+52.2 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 
-57.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-66.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-74.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+57.6 "Shield Skewer" sync /： Rhitahtyn sas Arvina：471：/
+66.2 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+74.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+80.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 
-85.5 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-94.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-102.5 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-108.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+85.5 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+94.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+102.5 "Shield Skewer" sync /：Rhitahtyn sas Arvina ：471：/
+108.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 ```
 
-Comparing to the original, it looks like this loops fairly perfectly. The first loop is perfect and the second loop is off by a little, as this adjusted loop has 57.6, 74.6, 80.0 but the original is 57.7, 74.7, 80.2.  Close enough.
+オリジナルと比較すると、これはかなり完全にループしているように見えます。 最初のループは完全であり、第二のループは、少しではオフになって、 この調整ループは57.6、74.6、80.0を有しているが、元のように 57.7、74.7、80.2です。  十分近い。
 
-In cactbot, there's a configurable window of time for how far ahead to show in the timeline.  By default it is 30 seconds, so you should at least make a loop that goes 30 seconds ahead.
+cactbotには、タイムラインに をどれだけ先に表示するかを設定できる時間枠があります。  デフォルトでは、それはあなたがする必要がありますので、30秒 、少なくとも先に30秒を行くループを作ります。
 
-Here's what a completed version of the first phase loop looks like.
+最初のフェーズループの完成版は次のようになります。
 
-Note that we've used the times from **timeline_adjust.py** rather than the original times. This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
+私たちはからの時間を使ってきたことを注意 **timeline_adjust.py** ではなく オリジナルの倍以上。 これは、52.2から24.4にジャンプしたときに、 相対時間のすべてが同じままになるようにするためです。  どちらの場合も `タルタロスのゲート` 発生し、そこだ `シールド串` それの後に5.4秒に。
 
-We'll add the jumps in later.
+ジャンプは後で追加します。
 
 ```bash
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-10.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-19.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-24.4 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+10.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+19.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+24.4 " Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+29.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+38.4" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+46.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+52.2" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-57.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-66.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-74.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:471:/
+57.6" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+66.2" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+74.6" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+80.0" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：471：/
 ```
 
-### Adding Phases
+### フェーズの追加
 
-Now on to the second phase. From observation, it's clear that at 80% the boss does some rp text and then starts doing some different abilities.
+次に、第2フェーズに進みます。 観察から、80％で上司がrp テキストを実行し、次にいくつかの異なる能力を実行し始めることは明らかです。
 
-Unfortunately for us, it looks like the boss starts phase 2 by doing another `Shield Skewer` which it does a lot of in phase 1, so it won't be easy to sync to that.
+上司がフェーズ2を開始するように残念ながら私たちのために、それが見えます 別の実行して `シールド串` 、それは中の多くありません 1相を、ので、それはそれとの同期には容易ではないだろう。
 
-**make_timeline.py** has an option to move the first usage of an ability to a particular time. As cactbot usually has a window of 30 seconds ahead, feel free to generously move phases ahead in time.
+**make_timeline.py** は、能力の最初の使用法 を特定の時間に移動するオプションがあります。 cactbotには通常30秒先のウィンドウがあるため、 は時間の経過とともにフェーズを寛大に進めることができます。
 
-Let's move phase 2 to start its first ability at time=200. Since `Shrapnel Shell` starts 4.3 seconds after that, let's adjust the first usage of `Shrapnel Shell` (ability id 474) to time=204.3.
+フェーズ2に移動して、time = 200で最初の能力を開始しましょう。 `榴散弾` はその後4.3秒で開始するので、 は `榴散弾` （能力ID 474）の最初の使用をtime = 204.3に調整しましょう。
 
-Here's the new command line we've built up to: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3`
+これが私たちが構築した新しいコマンドラインです： `python util / make_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e 18：49：22.934 -ii 0A 2CD 2CE 194 14 -p 474： 204.3`
 
-This gets us the following output for phase 2, with manually added blank lines to break out the loops.
+これにより、フェーズ の次の出力が得られ、ループを分割するために手動で空白行が追加されます。
 
 ```bash
-# manually added in
-199.0 "--sync--" sync /00:0044:[^:]*:My shields are impregnable/
-200.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
+＃
+で手動で追加199.0 "--sync--" sync / 00：0044：[^：] *：私の盾は難攻不落です/
+200.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
 
-# output of make_timeline
-204.3 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-208.8 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-213.1 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+＃の出力make_timeline
+204.3 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+208.8 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+213.1 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-217.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-221.7 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-226.0 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-230.3 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+217.4「シールドスキューワー」同期/：Rhitahtyn sas Arvina：471：/
+221.7「ドリルショット」同期/：Rhitahtyn sas Arvina：475：/
+226.0「WindsOfTartarus」同期/：Rhitahtyn sas Arvina：472：/
+230.3 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-234.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-239.1 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-243.7 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-248.2 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+234.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+239.1 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+243.7 "Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+248.2" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 
-252.7 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-257.2 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-261.7 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-266.2 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+252.7" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+257.2" Drill Shot "sync /：Rhitahtyn sas Arvina：475：/
+261.7 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+266.2 "F irebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-It looks like there's a clear loop here, where every iteration of the loop has 2x `Firebomb` and 2x `Shield Skewer`. The loop time is 34.6.  Time to break out **timeline_adjust.py** again.
+明確なループが、ここにありますように見えます ループのすべての反復が2倍有する場合 `Firebomb` と2倍 `シールド串`。 ループ時間は34.6です。  抜け出すための時間 **timeline_adjust.py** 再び。
 
-Running `python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8`, the relevant output is:
+実行 `パイソンのutil / timeline_adjust.py --file = UI / raidboss /データ/タイムライン/ cape_westwind.txt --adjust = 27.8`、 、関連する出力です。
 
 ```bash
-234.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-238.9 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-243.4 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-247.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+234.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+238.9 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+243.4 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+247.7 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-252.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-256.3 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-260.6 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-264.9 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+252.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+256.3 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+260.6 "Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+264.9" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-This has diverged a fair bit from the original times, with the last Firebomb being 264.9 vs 266.2. If you want to be more precise, this is where you would compare against some other runs.
+これは、元の時代から、公平なビットを発散しています 最後Firebombは266.2対264.9であることを。 より正確にしたい場合は、 これは他のいくつかの実行と比較する場所です。
 
-However, this is good enough for Cape Westwind, so we will replace the second loop with this output from **timeline_adjust.py**.
+しかし、これはケープウエストウインド、のために良い十分です 私たちは、この出力を有する第2のループに置き換えられますので、 から **timeline_adjust.py**。
 
-The current state of our timeline is now:
+タイムラインの現在の状態は次のとおりです。
 
 ```bash
 0 "Start"
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-10.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-19.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-24.4 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+10.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+19.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471 ：/
+24.4 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+29.8 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+38.4 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471： /
+46.8 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+52.2 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 
-57.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-66.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-74.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+57.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+66.2 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+74.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+80.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 
-# 80%
-199.0 "--sync--" sync /00:0044:[^:]*:My shields are impregnable/
-200.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-204.3 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-208.8 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-213.1 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+＃80％
+199.0 "--sync--" sync / 00：0044：[^：] *：シールドは難攻不落/
+200.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+204.3 "Shrapnel Shell "sync /：Rhitahtyn sas Arvina：474：/
+208.8" Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+213.1" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 
-217.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-221.7 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-226.0 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-230.3 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+217.4 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+221.7 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+226.0 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+230.3 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-234.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-238.9 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-243.4 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-247.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+234.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+238.9 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474 ：/
+243.4 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+247.7 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-252.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-256.3 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-260.6 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-264.9 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+252.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+256.3「ドリルショット」同期/：Rhitahtyn sas Arvina：475：/
+260.6「WindsOfTartarus」同期/：Rhitahtyn sas Arvina：472：/
+264.9「Firebomb」同期/：Rhitahtyn sas Arvina：476：/
 
-# 60%
+＃ 60％
 ```
 
-### Next phase
+### 次の段階
 
-From observation, I know that the next phase starts at 60% and there's two adds.
+観察から、次のフェーズは60％で から始まり、2つの追加があることがわかります。
 
-From reading the timeline, there's a random "Gate of Tartarus" around the time the adds show up.
+タイムラインを読むと、追加が表示される頃にランダムに 「タルタロスの門」があります。
 
-This is the original timeline, before any phases were adjusted:
+これは、フェーズが調整される前の元のタイムラインです。
 
 ```bash
-175.8 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
-183.5 "Adds"
+175.8 "門タルタロスの"同期/：Rhitahtyn SAS Arvina：473：/
+183.5 "追加"
 ```
 
-Unfortunately, the boss uses `Gate of Tartarus` in phase 1, so we can't add it using `-p` like we did for phase 2. (Patches welcome to add more options to make this possible?)
+残念ながら、上司は使用しています `タルタロスの門` フェーズ1、中 我々が使用してそれを追加することはできませんので、 `-p` 我々はフェーズ2のために行ったように。 （パッチはこれを可能にするためにさらにオプションを追加することを歓迎しますか？）
 
-Instead, we can just use **timeline_adjust.py** to just shift the timeline forward automatically. If we adjust the original timeline by 400-175.8=224.2 then we can start phase 3 at t=400.
+代わりに、 **timeline_adjust.py** を使用して、タイムラインを自動的に シフトすることができます。 元のタイムラインを400-175.8 = 224.2 調整すると、t = 400でフェーズ3を開始できます。
 
-Here's the adjusted output, with the adds manually added back in:
+これが調整された出力で、手動で追加 追加されています。
 
 ```bash
-400.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
-403.5 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
+400.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
+403.5 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
 
 407.7 "Adds"
-408.7 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-413.2 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-417.9 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-422.4 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+408.7 "Shield Skewer" sync /：Rhitahtyn sas Arvina： 471：/
+413.2 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+417.9 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+422.4 "Firebomb" sync /：Rhitahtyn sas Arvina：476： /
 
-426.9 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-431.4 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-435.9 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-440.4 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+426.9 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+431.4 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+435.9 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+440.4 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-445.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-449.4 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-454.1 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-458.6 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+445.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+449.4 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+454.1 " Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+458.6" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 
-463.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-467.6 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
+463.2" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+467.6" Drill Shot "sync /：Rhitahtyn sas Arvina：475：/
 
-# 40% phase push??
-483.3 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-487.8 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-492.1 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+＃40％フェーズプッシュ??
+483.3 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+487.8 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+492.1 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
 
-493.3 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-407.7 "Adds"
+493.3 " Magitekミサイル」同期/：Rhitahtyn SAS Arvina：478：/
+407.7 "追加"
 ```
 
-Without recorded video, it's not 100% clear from the logs whether the `Shrapnel Shell` is part of phase 3 or phase 4. I know from observation that `Magitek Missiles` is the last phase, so because the Shrapnel Shell breaks the pattern let's assume it starts phase 4. We'll test this later.
+録画されたビデオがなければ、 `榴散弾` がフェーズ3の一部であるかフェーズ4の一部であるかは、ログ から100％明確ではありません。 私はという観測から知っている `Magitekミサイル` 最後の段階であり、 シュラプネルシェルパターンのは、仮定しよう壊れるので、そう 、それがフェーズ4を開始します。 これは後でテストします。
 
-It looks a bit like there's another loop just like phase 2.
+フェーズ2と同じように別のループがあるように見えます。
 
-One consideration is to see if it's exactly the same as phase 2. You can use **timeline_adjust.py** with an adjustment of 208.7 to move phase 2's `Shield Skewer` on top of phase 3. However, you can see from that output that it's not quite the same. Therefore, we'll need to build phase 3 separately.
+1つの考慮事項は、フェーズ2とまったく同じかどうかを確認することです。 あなたは使用することができます **timeline_adjust.py** 208.7の調整で フェーズ2の移動する `シールド串` フェーズ3の上に。 ただし、その出力から、まったく同じではないことがわかります。 したがって、フェーズ3を個別に構築する必要があります。
 
-It's pretty clear that this loop is also a 36.2 second loop. Using **timeline_adjust.py** with a 36.2 adjustment gets this output:
+このループも36.2秒のループであることは明らかです。 **timeline_adjust.py** を36.2調整で使用すると、次の出力が ます。
 
 ```bash
-445.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-449.5 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-454.2 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-458.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+445.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+449.5 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+454.2 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
+458.7 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
 
-463.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-467.7 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-472.2 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-476.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
+463.2 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+467.7 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+472.2 "Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+476.7" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-This is really close to the original times, so let's consider that our loop.
+これは元の時間に非常に近いので、 をループと考えてみましょう。
 
-### Final Phase
+### 最終段階
 
-Finally, we need the phase that starts at 40%. We assumed that the `Shrapnel Shell` started this phase. However, this isn't a unique skill. `Magitek Missiles` is the first unique skill in this phase and that starts 10 seconds after "Shrapnel Shell". Let's start phase 4 at 600 seconds, so we'll adjust the first use of `Magitek Missile` (ability id 478) to be t=610.
+最後に、40％から始まるフェーズが必要です。 `榴散弾` がこのフェーズを開始したと仮定しました。 ただし、これはユニークなスキルではありません。 `マジテックミサイル` は、このフェーズ 最初のユニークなスキルであり、「榴散弾」の10秒後に開始されます。 フェーズ4を600秒で開始しましょう。そのため、 `Magitekミサイル` （能力ID 478）の最初の使用 t = 610に調整します。
 
-Here's the final command line, including this second phase: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3 478:610`
+ここで、最終的なコマンドラインは、この第2の相を含む、次のとおりです。 `パイソンのutil / make_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e 18：49：22.934 -II 0A 2CD 2CE 194 14 -p 474：204.3 478：610`
 
 ```bash
-# manually added in
-595.0 "--sync--" sync /00:0044:[^:]*:Your defeat will bring/ window 600,0
-600.0 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-604.5 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-608.8 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+＃
+で手動で追加595.0 "--sync--" sync / 00：0044：[^：] *：敗北すると/ウィンドウ600,0
+600.0 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+604.5 "Firebomb"同期/：Rhitahtyn SAS Arvina：476：/
+608.8 "タルタロスの風"同期/：Rhitahtyn SAS Arvina：472：/
 
-# partial output from make_timeline
-610.0 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-615.1 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-619.4 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-623.7 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-640.2 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-644.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-649.0 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+make_timelineから＃部分出力
+Rhitahtyn SAS Arvina：610.0 "Magitekミサイル"同期/ ：478：/
+615.1「ドリルショット」同期/：Rhitahtyn sas Arvina：475：/
+619.4「Firebomb」同期/：Rhitahtyn sas Arvina：476：/
+623.7「WindsOfTartarus」同期/：Rhitahtyn sas Arvina：472 ：/
+640.2 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+644.7 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+649.0 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
 
-650.2 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-655.3 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-659.6 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-663.9 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-680.4 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-684.9 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-689.2 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+650.2 "Magitek Missiles" sync /：Rhitahtyn sas Arvina：478：/
+655.3 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+659.6 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+663.9 " Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+680.4" Shrapnel Shell "sync /：Rhitahtyn sas Arv ina：474：/
+684.9 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+689.2 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
 
-690.4 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-695.5 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-699.8 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-704.1 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-719.6 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-724.1 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-728.4 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+690.4 "Magitek Missiles" sync /：Rhitahtyn sas Arvina： 478：/
+695.5 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+699.8 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+704.1 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472： /
+719.6 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+724.1 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+728.4 "Winds Of Tartarus" sync /：Rhitahtyn sas Arvina：472：/
 
-729.6 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-734.7 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-739.0 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-743.3 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+729.6 "Magitek Missiles" sync /：Rhitahtyn sas Arvina：478：/
+734.7 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+739.0 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+743.3 "Windsタルタロスの "同期/：Rhitahtyn sas Arvina：472：/
 ```
 
-This sure looks like a 40.2 second loop. Using **timeline_adjust.py**, with a 40.2 second adjustment, we get the following output:
+これは確かに40.2秒のループのように見えます。 **timeline_adjust.py**を使用し、40.2秒の調整で を使用すると、次の出力が得られます。
 
 ```bash
-650.2 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
-655.3 "Drill Shot" sync /:Rhitahtyn sas Arvina:475:/
-659.6 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-663.9 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
-680.4 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
-684.9 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
-689.2 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
+650.2 "Magitek Missiles" sync /：Rhitahtyn sas Arvina：478：/
+655.3 "Drill Shot" sync /：Rhitahtyn sas Arvina：475：/
+659.6 "Firebomb" sync /：Rhitahtyn sas Arvina：476：/
+663.9 "Winds Of Tartarus "sync /：Rhitahtyn sas Arvina：472：/
+680.4" Shrapnel Shell "sync /：Rhitahtyn sas Arvina：474：/
+684.9" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
+689.2" Winds Of Tartarus "同期/：Rhitahtyn sas Arvina：472：/
 ```
 
-This is a perfect match for the original times, so there's our loop.
+これは元の時代と完全に一致しているので、ループがあります。
 
-### Boilerplate glue
+### ボイラープレート接着剤
 
-In general, most timelines should include some boilerplate at the top like this:
+一般に、ほとんどのタイムラインには、次のように上部に定型文を含める必要があります。
 
 ```bash
-# Cape Westwind
-# -ii 0A 2CD 2CE 194 14 -p 474:204 478:610
+＃ケープウェストウィンド
+＃-ii 0A 2CD 2CE 194 14 -p 474：204 478：610
 
 hideall "--Reset--"
 hideall "--sync--"
 
-0.0 "--Reset--" sync / 21:........:40000010:/ window 10000 jump 0
+0.0 "--Reset--" sync / 21 ：........:40000010:/ window 10000 jump 0
 
 0 "Start"
-0.0 "--sync--" sync /:Engage!/ window 0,1
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
+0.0 "--sync--" sync /：Engage！/ window 0,1
+2.0 "Shield Skewer" sync /：Rhitahtyn sasアルビナ：471：/
 ```
 
-It's good practice to include the command line you used to generate this so that other people can come back and see what you skipped.
+これを生成するために使用したコマンドラインを含めて、他の 人が戻ってきて、スキップしたものを確認できるようにすることをお勧めします。
 
-`hideall` hides all instances of a line, so that players don't see `--sync--` show up visually, but the timeline itself will still sync to those lines. There can be anything in the text, it is just called `--sync--` for convenience.
+`hideall` は行のすべてのインスタンスを非表示にするため、プレーヤーには `--sync--` が視覚的に表示されませんが、 タイムライン自体はそれらの行に同期されます。 テキストには何でも含めることができます。便宜上、 `--sync--` と呼び` 。</p>
 
-It's good practice to have a Reset line to stop the timeline when there's a wipe. On fights where the entire zone resets (e.g. all of omegascape, a4s, a8s, a12s, t9, t13), `sync / 21:........:40000010:/` is a good sync to use. On fights with zones that seal and unseal, (e.g. a1s,  t1-8) you should use the zone sealing message itself to reset.
+<p spaces-before="0">ワイプが発生したときにタイムラインを停止するために、リセットラインを用意することをお勧めします。
+戦いに全体ゾーンをリセット（例えばomegascape、A4S、A8S、a12s、T9、T13の全て）、ここで
+<code>同期/ 21：........:40000010:/` 使用に対する良好な同期があります。 封印および開封するゾーンとの戦闘（例：a1s、t1-8） では、ゾーン封印メッセージ自体を使用してリセットする必要があります。
 
-Finally, to start a fight, you should always include an Engage! sync for countdowns. If the first boss ability is slow to happen, you should also include the first auto so that the timeline starts.
+最後に、戦いを始めるには、常にエンゲージを含める必要があります！ カウントダウンの同期。 最初のボス能力の発生が遅い場合は、タイムラインが開始するように最初の オートも含める必要があります。
 
-For instances, on o11s, the first two lines are:
+たとえば、o11の場合、最初の2行は次のとおりです。
 
 ```bash
-0.0 "--sync--" sync /:Engage!/ window 0,1
-2.5 "--sync--" sync /:Omega:368:/ window 3,0
+0.0 "--sync--" sync /：Engage！/ window 0,1
+2.5 "--sync--" sync /：Omega：368：/ window 3,0
 ```
 
-### Making loops loop
+### ループをループにする
 
-Here's the phase 1 loop, again. We're going to edit this so that whenever we get to 52.2 seconds it will jump back to 24.4 seconds seamlessly.
+これがフェーズ1のループです。 これを編集して、52.2秒 に達するたびに、シームレスに24.4秒に戻るようにします。
 
 ```bash
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-10.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-19.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-24.4 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+10.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+19.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+24.4 " Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+29.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+38.4" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+46.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+52.2" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 
-57.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-66.2 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-74.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
+57.6" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+66.2" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+74.6" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+80.0" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 ```
 
-On the 52.2 line, add the following `window 10,100 jump 24.4`. This means, if you see this ability 10 seconds in the past or 100 seconds in the future, jump to t=24.4. By default, all syncs are `window 5,5` unless otherwise specified, meaning they sync against the ability any time within the last 5 seconds or 5 seconds in the future.
+52.2ラインで、次の追加 `ウィンドウ10100ジャンプ24.4`。 つまり、この能力が過去 秒で10秒、または将来100秒である場合は、t = 24.4にジャンプします。 デフォルトでは、すべての同期は `ウィンドウ5,5` 特に指定がない限り、 彼らは最後の中に能力に対して任意の時間を同期する意味 5秒または将来的には5秒。
 
-The abilities from 57.6 to 80.0 will never be synced against because as soon as the ability at 52.2 is seen, we will want to jump back.  So, we will remove those syncs.
+57.6から80.0までの能力は、 に対して同期されることはありません これは、52.2での能力が見られるとすぐに、 がジャンプバックしたいためです。  したがって、これらの同期を削除します。
 
-Finally, because sometimes log lines get dropped or ACT starts mid-combat, it can be good to put large syncs on infrequent or important abilities so that the timeline can sync there.
+最後に、ログ行が にドロップされたり、ACTが戦闘の途中で開始されたりすることがあるため、タイムライン がそこで同期できるように、大規模な同期 をまれな機能または重要な機能に配置するとよいでしょう。
 
-This leaves us with this final version of the initial loop.
+これにより、最初のループのこの最終バージョンが残ります。
 
 ```bash
-2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-10.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-19.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-24.4 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/ window 30,10
+2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+10.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+19.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+24.4 " Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/ window 30,10
 
-29.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-38.4 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-46.8 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
-52.2 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/ window 10,100 jump 24.4
+29.8" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+38.4" Shield Skewer "sync /：Rhitahtyn sas Arvina：471：/
+46.8 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
+52.2 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/ window 10,100 jump 24.4
 
-# fake loop
+＃fake loop
 57.6 "Shield Skewer"
-66.2 "Shield Skewer"
-74.6 "Shield Skewer"
-80.0 "Gate Of Tartarus"
+66.2 "シールド串」
+74.6 『盾串』
+タルタロス80.0 『門』
 ```
 
-This is done on all the following loops as well.
+これは、以下のすべてのループでも実行されます。
 
-### Putting it all together
+### すべてを一緒に入れて
 
-Putting all the loops that we have created together leaves us with the following timeline.
+作成したすべてのループをまとめると、次のタイムラインが になります。
 
-Because there are so many `Shield Skewer` abilities, any loops are on less frequent abilities just to be more careful.
+`Shield Skewer` 能力は非常に多いため、 ループは、より注意するために、頻度の低い能力にあります。
 
 ```bash
 # Cape Westwind
@@ -894,18 +896,18 @@ hideall "--sync--"
 689.2 "Winds Of Tartarus"
 ```
 
-### Testing Timelines
+### タイムラインのテスト
 
-cactbot has a testing tool called **util/test_timeline.py** that can test a network log file or an fflogs fight against an existing timeline.
+cactbotは、テストツールを呼び出した **UTIL / test_timeline.py** 缶という テストネットワークログファイルまたはfflogsは、既存のタイムラインと戦います。
 
-The test tool will tell you when a sync in your timeline is not matched against the fight, and if a future sync is hit, it will let you know that some were skipped over. It will not do the reverse, and tell you about abilities in the fight that have no timeline entries.
+テストツールは、タイムラインの同期が戦いと一致しない場合、 を通知し、将来の同期がヒットした場合、一部がスキップされたことを通知します。 それは逆の を行わず、タイムラインエントリのない戦闘の能力について教えてくれます。
 
-It will also tell you about how far off the sync was, which can help with adjusting timelines to be more accurate.
+それはまたして助けることができる、いかに遠く同期オフをご紹介します 、より正確にタイムラインを調整します。
 
-Here's an example. The `-t` parameter here refers to the file name of the timeline you want to test against in the **ui/raidboss/data/timelines** folder, minus the .txt extension. (As with `make_timeline`, you can use the `-lf` parameter to list encounters.)
+これが例です。 `-t` ここでパラメータを使用すると、反対テストしたいタイムラインのファイル名を参照 で **UI / raidboss /データ/タイムライン** フォルダ、マイナス.txt拡張子。 （ `make_timeline`と同様に、 `-lf` パラメーターを使用してエンカウンターを一覧表示できます。）
 
 ```bash
-$ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
+$ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：49：22。
 934 -t cape_westwind
 0.000: Matched entry: 2.0 Shield Skewer (+2.000s)
 10.556: Matched entry: 10.6 Shield Skewer (+0.044s)
@@ -1000,101 +1002,101 @@ $ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
 623.709: Matched entry: 623.7 Winds Of Tartarus (-0.009s)
 ```
 
-As this timeline was generated against this network log, it's not surprising that most of these timings are very accurate.
+このタイムラインはこのネットワークログに対して生成されたため、 これらのタイミングのほとんどが非常に正確であることは驚くべきことではありません。
 
-The `Missed sync` lines are the ones to look at more closely.
+`Missed sync` 行は、より詳細に調べるべき行です。
 
-These three examples aren't worrisome because they are just the end of the loop and we've skipped forward in time to the next phase. (Patches welcome to figure out how to not warn on this sort of jump.)
-
-```text
-48.695: Matched entry: 199.0 --sync-- (+150.305s)
-    Missed sync: Gate Of Tartarus at 52.2 (last seen at 24.411)
-
-233.846: Matched entry: 400.0 Gate Of Tartarus (+166.154s)
-    Missed sync: Shield Skewer at 234.6 (last seen at 217.623)
-    Missed sync: Shrapnel Shell at 238.9 (last seen at 204.273)
-
-431.400: Matched entry: 595.0 --sync-- (+163.600s)
-    Missed sync: Winds Of Tartarus at 435.9 (last seen at 417.884)
-    Missed sync: Firebomb at 440.4 (last seen at 422.366)
-    Missed sync: Shield Skewer at 445.0 (last seen at 426.97499999999997)
-    Missed sync: Shrapnel Shell at 449.5 (last seen at 413.195)
-```
-
-However, this looks like a problem:
+これらの3つの例は、ループ 終わりに過ぎず、次のフェーズに間に合うようにスキップしたため、気になりません。 （パッチは、この種のジャンプについて警告しない方法を理解することを歓迎します。）
 
 ```text
-620.783: Matched entry: 610.0 Magitek Missiles (-10.783s)
-    Missed sync: Shrapnel Shell at 600.0 (last seen at 610.739)
-    Missed sync: Firebomb at 604.5 (last seen at 615.247)
-    Missed sync: Winds Of Tartarus at 608.8 (last seen at 619.564)
+48.695：一致したエントリ：199.0 --sync-（+ 150.305s）
+    同期の失敗：52.2のタルタロスの門（最後に見たのは24.411）
+
+233.846：一致したエントリ：400.0タルタロスの門（+ 166.154s）
+    同期の失敗： 234.6のシールドスキュワー（最後に見られたのは217.623）
+    同期の失敗：238.9の榴散弾（最後に見られたのは204.273）
+
+431.400：一致したエントリ：595.0 --sync-（+ 163.600s）
+    同期の失敗：Winds Of Tartarus at 435.9 （最後に見られたのは417.884）
+    同期が取れなかった：Firebombが440.4（最後に見られたのは422.366）
+    見落とされた同期：Shield Skewerが445.0（最後に見られたのは426.97499999999997）
+    見当たらない同期：Shrapnel Shellが449.5（最後に見られたのは413.195）
 ```
 
-It seems pretty likely that we've put the rp text sync in the wrong place. Because we added such a large window on `Magitek Missile` the timeline resynced (thank goodness), but some of the abilities before that were wrong.
+ただし、これは問題のように見えます。
 
-The original timeline is:
-
-```bash
-595.0 "--sync--" sync /00:0044:[^:]*:Your defeat will bring/ window 600,0
-600.0 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
+```text
+620.783：一致するエントリ：610.0 Magitekミサイル（-10.783s）
+    不在同期：シュラプネルシェル600.0で（最後610.739で見られる）
+    不在同期：604.5でFirebomb（615.247で見られる最後）
+    不在同期：608.8でタルタロスの風（最後に見られたのは619.564）
 ```
 
-However, Shrapnel Shell is off by 10.7 seconds, as the tester output mentioned `(last seen at 610.739)`. The fix is to move the rp text sync back in time by that amount. The new time will be 595 - 10.7 = 584.3.
+rpテキスト同期を間違った場所に配置した可能性が高いようです。 `Magitek Missile` にこのような大きなウィンドウを追加したため、タイムライン 再同期されました（よかったです）が、それ以前の機能のいくつかは間違っていました。
+
+元のタイムラインは次のとおりです。
 
 ```bash
-584.3 "--sync--" sync /00:0044:[^:]*:Your defeat will bring/ window 600,0
-600.0 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
+595.0 "--sync--" sync / 000044：[^：] *：敗北すると/ウィンドウ600,0
+600.0 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
 ```
 
-Rerunning the tester (most output omitted)
+しかし、シュラプネルシェルは10.7秒、でオフになって テスタ出力は上述のように `（最後610.739で見られる）`。 修正は、rpテキスト同期をその量だけ時間に戻すことです。 新しい時間は595-10.7 = 584.3になります。
 
 ```bash
-$ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
+584.3 "--sync--" sync / 000044：[^：] *：敗北すると/ウィンドウ600,0
+600.0 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
+```
+
+テスターの再実行（ほとんどの出力は省略）
+
+```bash
+$ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：49：22。
 934 -t cape_westwind
 
-431.400: Matched entry: 584.3 --sync-- (+152.900s)
-    Missed sync: Winds Of Tartarus at 435.9 (last seen at 417.884)
-    Missed sync: Firebomb at 440.4 (last seen at 422.366)
-    Missed sync: Shield Skewer at 445.0 (last seen at 426.97499999999997)
-    Missed sync: Shrapnel Shell at 449.5 (last seen at 413.195)
-600.039: Matched entry: 600.0 Shrapnel Shell (-0.039s)
-604.508: Matched entry: 604.5 Firebomb (-0.008s)
-608.817: Matched entry: 608.8 Winds Of Tartarus (-0.017s)
-610.019: Matched entry: 610.0 Magitek Missiles (-0.019s)
+431.400：一致したエントリ：584.3--sync-（+ 152.900s）
+    同期の失敗：435.9のタルタロスの風（最後に417.884で見られた）
+    同期の失敗：440.4での火爆弾（422.366で最後に見られた）
+    同期の失敗：シールドスキューワー445.0（最後に見られたのは426.97499999999997）
+    同期の失敗：シュラプネルシェルの449.5（最後に見られたのは413.195）
+600.039：一致したエントリ：600.0シュラプネルシェル（-0.039s）
+604.508：一致したエントリ：604.5 Firebomb（ -0.008s）
+608.817：一致したエントリ：608.8タルタロスの風（-0.017s）
+610.019：一致したエントリ：610.0 Magitekミサイル（-0.019s）
 ```
 
-This is what we want to see. As before, these missed syncs are just from the phase push, but `Shrapnel Shell` is now in the right spot.
+これが私たちが見たいものです。 前述のように、これら逃し同期はちょうど相プッシュからです しかし `シュラプネルシェル` 適切な場所になりました。
 
-### Test against other timelines
+### 他のタイムラインに対してテストする
 
-It's important to test against multiple fight instances to make sure that the timeline is good. Here's an example of running against the **CapeWestwind2.log** file.
+複数の戦闘インスタンスに対してテストして、タイムラインが適切であることを確認することが重要です。 ここに対して実行の例です **CapeWestwind2.log** ファイル。
 
-If you run `python util/test_timeline.py -f CapeWestwind2.log -s 13:21:00.688 -e 13:29:36.976 -t cape_westwind` yourself, you can spot at least two problems.
+`python util / test_timeline.py -f CapeWestwind2.log -s 13：21：00.688 -e 13：29：36.976 -t cape_westwind` 自分で実行すると、少なくとも2つの問題を見つけることができます。
 
-One minor problem is that this boss is inconsistent:
+小さな問題の1つは、このボスに一貫性がないことです。
 
 ```text
-447.329: Matched entry: 445.0 Shield Skewer (-2.329s)
-443.789: Matched entry: 445.0 Shield Skewer (+1.211s)
-444.792: Matched entry: 445.0 Shield Skewer (+0.208s)
-447.361: Matched entry: 445.0 Shield Skewer (-2.361s)
+447.329：一致したエントリ：445.0シールドスキュワー（-2.329s）
+443.789：一致したエントリ：445.0シールドスキュワー（+ 1.211s）
+444.792：一致したエントリ：445.0シールドスキューワー（+ 0.208s）
+447.361：一致したエントリ：445.0シールドスキューワー（-2.361s）
 ```
 
-This `Shield Skewer` in phase 3 comes at wildly different times. However, the abilities before and after seem to be just fine. Often if there are inconsistencies like this, the best thing to do is make sure there are larger windows around surrounding abilities to make sure that even if one ability is inconsistent the entire timeline doesn't get derailed.
+フェーズ3のこの `シールドスキュワー` は、大きく異なる時期に発生します。 しかし、前後の能力は問題ないようです。 多くの場合、このような矛盾がある場合、 最善の方法は、周囲の能力 周囲に大きなウィンドウがあることを確認して、1つの能力に矛盾がある場合でも、タイムライン全体が脱線しないようにすることです。
 
-However, one major problem is that there's a missing `Shield Skewer`:
+ただし、大きな問題の1つは、 `シールドスキュワー`欠落していることです。
 
 ```text
-403.454: Matched entry: 403.5 Shield Skewer (+0.046s)
-407.876: Matched entry: 413.2 Shrapnel Shell (+5.324s)
-    Missed sync: Shield Skewer at 408.7 (last seen at 403.454)
-417.748: Matched entry: 417.9 Winds Of Tartarus (+0.152s)
+403.454：一致したエントリ：403.5シールドスキュワー（+ 0.046s）
+407.876：一致したエントリ：413.2榴散弾（+ 5.324s）
+    同期が失われました：シールドスキュワー408.7（最後に見たのは403.454）
+417.748：一致したエントリ：417.9 Winds Ofタルタロス（+ 0.152s）
 ```
 
-One timeline has two `Shield Skewer`s and one only has one. And the `Shrapnel Shell` is horribly mistimed here.
+ワンタイムラインは2持っ `シールド串`秒と1が一つだけあります。 そして、 `榴散弾` はここでひどくタイミングがずれています。
 
-What to do in this case is subjective. Here are some options:
+この場合の対処方法は主観的です。 ここにいくつかのオプションがあります：
 
-* get more data, and make a timeline for the most common case
-* leave a comment in the timeline
-* if this is an important ability (e.g. tankbuster) put a question mark on it so players know it's not guaranteed
+* より多くのデータを取得し、最も一般的なケースのタイムラインを作成します
+* タイムラインにコメントを残す
+* これが重要な能力（タンクバスターなど）である場合は、疑問符を付けて、保証されていないことをプレーヤーに知らせます。
