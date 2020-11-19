@@ -1,84 +1,84 @@
-# Potential errors and workarounds
+# 潜在的なエラーと回避策
 
-1. [General FFXIV ACT Troubleshooting](#general-ffxiv-act-troubleshooting)
-1. [Problems using Cactbot](#problems-using-cactbot)
-1. [Fisher Module](#fisher-module)
-1. [Other Issues](#other-issues)
+1. [一般的なFFXIVACTのトラブルシューティング](#general-ffxiv-act-troubleshooting)
+1. [Cactbotの使用に関する問題](#problems-using-cactbot)
+1. [フィッシャーモジュール](#fisher-module)
+1. [その他の問題](#other-issues)
 
-## General FFXIV ACT Troubleshooting
+## 一般的なFFXIVACTのトラブルシューティング
 
-ngld (developer of the [OverlayPlugin](https://github.com/ngld/OverlayPlugin) used by Cactbot) has written an excellent FAQ for common FFXIV ACT Plugin and OverlayPlugin issues, which you can find [here](https://gist.github.com/ngld/e2217563bbbe1750c0917217f136687d).
+ngld（Cactbotが使用する [OverlayPlugin](https://github.com/ngld/OverlayPlugin) 開発者）は、FFXIVACTプラグインとOverlayPluginの一般的な問題に関する優れたFAQを作成しました。2 [ここにあります](https://gist.github.com/ngld/e2217563bbbe1750c0917217f136687d)。
 
-If you get an error that it can't find **FFXIV_ACT_Plugin.dll**, make sure the **FFXIV_ACT_Plugin.dll** is in the `%APPDATA%\Advanced Combat Tracker\Plugins` folder. You can install **FFXIV_ACT_Plugin.dll** from the ACT Startup Wizard.
+あなたはそれを見つけることができないというエラーが出た場合 **FFXIV_ACT_Plugin.dll**、確認してください **FFXIV_ACT_Plugin.dll** にある `%APPDATA%\高度な戦闘トラッカー\プラグイン` フォルダ。 あなたは、インストールすることができます **FFXIV_ACT_Plugin.dll** ACTスタートアップウィザードからを。
 
-## Problems during Cactbot installation
+## Cactbotのインストール中の問題
 
-If you get an error in the OverlayPlugin console similar to `Error: JS Handler call failed: System.Exception: Tried to call missing handler "cactbotLoadUser"!` then you are still using the hibiyasleep version of OverlayPlugin and need to upgrade to the latest version of the ngld [OverlayPlugin](https://github.com/ngld/OverlayPlugin/releases/latest) instead.
+OverlayPluginコンソールで `ようなエラーが発生した場合エラー：JSハンドラーの呼び出しに失敗しました：System.Exception：欠落しているハンドラー「cactbotLoadUser」を呼び出そうとしました！` あなたはまだhibiyasleepのOverlayPluginのバージョンとngldの最新バージョンにアップグレードする必要が使用している [OverlayPlugin](https://github.com/ngld/OverlayPlugin/releases/latest) の代わりに。
 
-If you get an error in the OverlayPlugin console similar to `Error: LoadAddons: Cactbot.PluginLoader: RainbowMage.OverlayPlugin.TinyIoCResolutionException: Unable to resolve type: Cactbot.CactbotEventSource` then you have likely installed the `CactbotOverlay.dll` into the `OverlayPlugin/addons` folder.  Please move the Cactbot files to their own separate folder, as described in the [Installing Cactbot](https://github.com/quisquous/cactbot#installing-cactbot) instructions.
+あなたは次のようにOverlayPluginコンソールでエラーが出た場合 `Cactbot.CactbotEventSource：LoadAddons：：Cactbot.PluginLoader：RainbowMage.OverlayPlugin.TinyIoCResolutionException：解決型にできません。エラー` 、あなたは可能性がインストールされている `CactbotOverlay.dll` に `OverlayPlugin /アドオン` フォルダ。  [Cactbot](https://github.com/quisquous/cactbot#installing-cactbot) インストール手順の説明に従って、Cactbotファイルを独自の別のフォルダーに移動してください。
 
-If you get an error in the OverlayPlugin console similar to `System.MissingMethodException: Method not found: '!!0[] System.Array.Empty()` then you have installed the wrong .NET framework version.  Please install the [.NET Framework](https://www.microsoft.com/net/download/framework) version 4.6.1 or above.
+あなたがに似OverlayPluginコンソールでエラーが出た場合 `メソッドが見つかりません：：System.MissingMethodException「!! 0 [] System.Array.Empty（）` 、あなたは間違った.NETフレームワークのバージョンがインストールされています。  インストールしてください [.NET Frameworkの](https://www.microsoft.com/net/download/framework) バージョン4.6.1以上が。
 
-If you get a [CAS policy](https://blogs.msdn.microsoft.com/drew/2009/12/23/xunit-and-td-net-fixing-the-attempt-was-made-to-load-an-assembly-from-a-network-location-problem/) error on starting the OverlayPlugin, such as `An attempt was made to load an assembly from a network location which would have caused the assembly to be sandboxed in previous version of the .NET Framework.` then this means that you have forgotten to unblock some/all of your DLLs (either hibiyasleep or cactbot).  First, stop ACT.  Then, unblock everything; the easiest way is to unblock the original zip file and re-extract rather than unblocking every file individually.  Finally, restart ACT again.
+あなたが得る場合は [CASポリシー](https://blogs.msdn.microsoft.com/drew/2009/12/23/xunit-and-td-net-fixing-the-attempt-was-made-to-load-an-assembly-from-a-network-location-problem/) OverlayPluginの開始に関するエラーを、のような `アンの試みは、アセンブリは、.NET Frameworkの以前のバージョンでサンドボックス化させていたネットワーク上の場所からアセンブリをロードするために作られました。` これは、DLLの一部またはすべて（hibiyasleepまたはcactbot）のブロックを解除するのを忘れたことを意味します。  まず、ACTを停止します。  次に、すべてのブロックを解除します。最も簡単な方法は、すべてのファイルのブロックを個別に解除するのではなく、元のzipファイルのブロックを解除して再抽出することです。  最後に、ACTを再起動します。
 
-If you get an overlay plugin error similar to `Error: (overlay): Exception in SendFastRateEvents: Could not load file or assembly 'FFXIV_ACT_Plugin, Version=(version), Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.` then you likely need to unblock the ffxiv plugin.  See the instructions above for unblocking DLLs.
+`ようなオーバーレイプラグインエラーが発生した場合エラー:(オーバーレイ）：SendFastRateEventsの例外：ファイルまたはアセンブリを読み込めませんでした 'FFXIV_ACT_Plugin、Version =（version）、Culture = neutral、PublicKeyToken = null'またはその依存関係の1つ。 システムは、指定されたファイルを見つけることができません。` 次に、ffxivプラグインのブロックを解除する必要があります。  DLLのブロックを解除するには、上記の手順を参照してください。
 
-If you get an error that says `Plugin Load Failure` and `The downloaded file did not contain a plugin that could be loaded`, there could be several potential issues.
+あなたが言うエラーが出た場合 `プラグインの読み込みエラー` と `ダウンロードしたファイルをロードすることができ、プラグイン含まれていませんでした`、 いくつかの潜在的な問題があるかもしれません。
 
-- Make sure you have [installed OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin).
-- Check your OverlayPlugin version in **Plugins** -> **Plugin Listing** -> **OverlayPlugin.dll**. If this is not the same version as [this release](https://github.com/ngld/OverlayPlugin/releases/latest), then remove it and re-follow the [installation instructions](https://github.com/quisquous/cactbot#install-ngld-overlayplugin).
-- Make sure you are running x64 ACT (`Advanced Combat Tracker.exe`) and not x86 ACT (`ACTx86.exe`).
-- Finally, make sure you have reloaded ACT once you have installed OverlayPlugin.
+- あなたがしたことを確認してください [OverlayPluginインストール](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
+- であなたのOverlayPluginのバージョンを確認してください **プラグイン** -> **プラグインのリスト** -> **OverlayPlugin.dll**。 これと同じバージョンでない場合は [このリリース](https://github.com/ngld/OverlayPlugin/releases/latest)、 、それを削除して再従う [インストール手順](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
+- x86 ACT（`ACTx86.exe`）ではなく、x64 ACT（`Advanced Combat Tracker.exe`）を実行していることを確認してください。
+- 最後に、OverlayPluginをインストールしたら、ACTをリロードしたことを確認してください。
 
-If you get an error similar to `Invalid Plugin: This assembly does not have a class that implements ACT's plugin interface, or scanning the assembly threw an error.` or `Load Error: Method 'LoadConfig' in type 'CactbotEventSource' etc etc does not have an implementation` then you should make sure that `CactbotOverlay.dll` is listed after `OverlayPlugin.dll` in **Plugins** -> **Plugin Listing**.
+`無効なプラグインのようなエラーが発生した場合：このアセンブリには、ACTのプラグインインターフェイスを実装するクラスがないか、アセンブリをスキャンするとエラーが発生しました。` または `読み込みエラー：型のメソッド'LoadConfig「CactbotEventSource」などなどは実装していません` あなたがことを確認するべきである `CactbotOverlay.dll` 後に表示されている `OverlayPlugin.dll` に **プラグイン** -> **プラグインリスト**。
 
-## Problems using Cactbot
+## Cactbotの使用に関する問題
 
-If triggers or pieces of the UI do not work, ensure that "Disable Parsing from Network Data" is **not** checked in the FFXIV plugin settings. Network data is required for accurate trigger timing.
+UIのトリガやピースが仕事をしない場合、「ネットワーク・データから無効化解析」のことを確認している **ない** FFXIVプラグインの設定でチェック。 正確なトリガータイミングにはネットワークデータが必要です。
 
-If you are using cactbot for dps parsing and you don't get any data, make sure that the `DPS update interval seconds` is set to a number higher than zero in your `OverlayPlugin.dll` -> `MiniParse Event Source` config.  Setting it to 3 is a good default.
+あなたがパースDPS用cactbotを使用していて、任意のデータを取得しない場合は、ことを確認してください `DPSは、間隔秒を更新` あなたに高いゼロより数に設定されている `OverlayPlugin.dll` -> `MiniParseイベントソース` 設定。  3に設定するのが適切なデフォルトです。
 
-## Fisher Module
+## フィッシャーモジュール
 
-### I can't see the overlay
+### オーバーレイが見えない
 
-The overlay is hidden by default until you cast your line at a fishing hole.
+釣り穴にラインをキャストするまで、オーバーレイはデフォルトで非表示になっています。
 
-### It doesn't show up when fishing
+### 釣りをしていると出てこない
 
-If the overlay doesn't register your casting/catches/reeling in your rod there are a few options you need to check:
+オーバーレイがキャスティング/キャッチ/リールをロッドに登録しない場合は、チェックする必要のあるいくつかのオプションがあります。
 
-- **Ingame chat log filter**
+- **ゲーム内チャットログフィルター**
 
-![image](images/troubleshooting_chatlogfilter.png)
+![画像](images/troubleshooting_chatlogfilter.png)
 
-You need to have at least one chat log set to show `Own Gathering Messages` You can find this option in `Character Configuration` -> `Log Window Settings` -> `Log Filters 1/2/3/4` -> `Announcements`
+あなたは、表示するために少なくとも一つのチャットログセットを持っている必要があります `自身の収集メッセージ` あなたは、このオプションを見つけることができる `コンフィギュレーションキャラ` -> `ログインウィンドウ設定` -> `ログ1/2/3/4フィルタ` -> `アナウンス`
 
-- **ACT FFXIV Plugin options**
+- **ACTFFXIVプラグインオプション**
 
-![image](images/troubleshooting_hidechatlog.png)
+![画像](images/troubleshooting_hidechatlog.png)
 
-You must have the `Hide Chat Log (for privacy)` option disabled.
+`チャットログの非表示（プライバシーのため）` オプションを無効にする必要があります。
 
-- Supported language Korean is not supported at this time. You will need to restart ACT after you change parser language.
+- サポートされている言語 韓国語は現在サポートされていません。 パーサー言語を変更した後、ACTを再起動する必要があります。
 
-## Places To Get Help
+## ヘルプを得る場所
 
-- ask in the [FFXIV ACT discord](https://discord.gg/ahFKcmx) #troubleshooting channel
-- open a [github issue](https://github.com/quisquous/cactbot/issues)
+- [FFXIVACT不和](https://discord.gg/ahFKcmx) ＃troubleshootingチャンネルで尋ねる
+- オープン [githubの問題を](https://github.com/quisquous/cactbot/issues)
 
-## How To Find A Network Log
+## ネットワークログを見つける方法
 
-If you are having issues with triggers or timelines, it can be useful to attach a network log from ACT so that the [network logs](LogGuide.md#network-log-lines) can be replayed and investigated for errors.
+あなたがトリガーやタイムラインに問題がある場合、 ACTからネットワークログを添付することが有用であることができ ので、 [ネットワークのログ](LogGuide.md#network-log-lines) 再生し、エラーを調べることができます。
 
-To find your network logs, go to the **Plugins** tab in ACT, click the **FFXIV Settings** button, and then click **Open FFXIV Log Folder**.
+ネットワークログを見つけるには、ACTの[ **プラグイン** ]タブに移動し、 [ **FFXIV設定** ]ボタンをクリックし、 、[ **]をクリックします。FFXIVログフォルダー**開きます。
 
-![image](images/troubleshooting_openlogfolder.png)
+![画像](images/troubleshooting_openlogfolder.png)
 
-This will open up a folder window with files in it. Select a file named something like **Network_etc.log**. The files are named with your FFXIV ACT Plugin version and the date.
+これにより、ファイルを含むフォルダウィンドウが開きます。 以下のようなものという名前のファイルを選択 **Network_etc.log**。 ファイルには、FFXIVACTプラグインのバージョンと日付が付けられています。
 
-![image](images/troubleshooting_networklog.png)
+![画像](images/troubleshooting_networklog.png)
 
-These files are often large, so zip them up first.
+これらのファイルは大きいことが多いので、最初に圧縮してください。
 
-You can attach these to github issues directly. Alternatively, find some file hosting site, upload the files there, and then attach the link.
+これらをgithubの問題に直接添付できます。 または、ファイルホスティングサイトを見つけて、 そこにファイルをアップロードし、 次にリンクを添付します。
