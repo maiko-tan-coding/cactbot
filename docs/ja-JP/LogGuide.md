@@ -1,912 +1,912 @@
-# Log Lines and Triggers
+# ログラインとトリガー
 
-This is intended to be a comprehensive guide to log lines for folks who want to write ACT triggers for ff14.
+これは、ff14のACTトリガーを作成したい人のために行 をログに記録するための包括的なガイドとなることを目的としています。
 
-This guide was last updated for:
+このガイドの最終更新日：
 
-* [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 4.58
-* [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 1.7.2.13
+* [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) パッチ4.58
+* [FFXIVプラグインの](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 1.7.2.13
 
-With updates for:
+更新あり：
 
-* [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 5.08
-* [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 2.0.4.0
+* [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) パッチ5.08
+* [FFXIVプラグインの](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 2.0.4.0
 
 <!-- manually generated via https://imthenachoman.github.io/nGitHubTOC/ -->
 ## TOC
 
-* [Data Flow](#data-flow)
-  * [Viewing logs after a fight](#viewing-logs-after-a-fight)
-  * [Importing an old fight](#importing-an-old-fight)
-  * [Importing into ffxivmon](#importing-into-ffxivmon)
-* [Glossary of Terms](#glossary-of-terms)
-  * [Network Data](#network-data)
-  * [Network Log Lines](#network-log-lines)
-  * [ACT Log Lines](#act-log-lines)
-  * [Game Log Lines](#game-log-lines)
-  * [Object/Actor/Entity/Mob/Combatant](#objectactorentitymobcombatant)
-  * [Object ID](#object-id)
-  * [Ability ID](#ability-id)
-* [Log Line Overview](#log-line-overview)
-  * [00: LogLine](#00-logline)
-    * [Don't Write Triggers Against Game Log Lines](#dont-write-triggers-against-game-log-lines)
-  * [01: ChangeZone](#01-changezone)
-  * [02: ChangePrimaryPlayer](#02-changeprimaryplayer)
-  * [03: AddCombatant](#03-addcombatant)
-  * [04: RemoveCombatant](#04-removecombatant)
-  * [05: AddBuff](#05-addbuff)
-  * [06: RemoveBuff](#06-removebuff)
-  * [07: FlyingText](#07-flyingtext)
-  * [08: OutgoingAbility](#08-outgoingability)
-  * [0A: IncomingAbility](#0a-incomingability)
-  * [0B: PartyList](#0b-partylist)
-  * [0C: PlayerStats](#0c-playerstats)
-  * [0D: CombatantHP](#0d-combatanthp)
-  * [14: NetworkStartsCasting](#14-networkstartscasting)
-  * [15: NetworkAbility](#15-networkability)
-    * [Ability Flags](#ability-flags)
-    * [Ability Damage](#ability-damage)
-    * [Special Case Shifts](#special-case-shifts)
-    * [Ability Examples](#ability-examples)
-  * [16: NetworkAOEAbility](#16-networkaoeability)
-  * [17: NetworkCancelAbility](#17-networkcancelability)
-  * [18: NetworkDoT](#18-networkdot)
-  * [19: NetworkDeath](#19-networkdeath)
-  * [1A: NetworkBuff](#1a-networkbuff)
-  * [1B: NetworkTargetIcon (Head Markers)](#1b-networktargeticon-head-markers)
-  * [1C: NetworkRaidMarker](#1c-networkraidmarker)
-  * [1D: NetworkTargetMarker](#1d-networktargetmarker)
-  * [1E: NetworkBuffRemove](#1e-networkbuffremove)
-  * [1F: NetworkGauge](#1f-networkgauge)
-  * [20: NetworkWorld](#20-networkworld)
-  * [21: Network6D (Actor Control Lines)](#21-network6d-actor-control-lines)
-  * [22: NetworkNameToggle](#22-networknametoggle)
-  * [23: NetworkTether](#23-networktether)
-  * [24: LimitBreak](#24-limitbreak)
-  * [25: NetworkActionSync](#25-NetworkActionSync)
-  * [26: NetworkStatusEffects](#26-networkstatuseffects)
-  * [27: NetworkUpdateHP](#27-networkupdatehp)
-  * [FB: Debug](#fb-debug)
-  * [FC: PacketDump](#fc-packetdump)
-  * [FD: Version](#fd-version)
-  * [FE: Error](#fe-error)
-  * [FF: Timer](#ff-timer)
-* [Future Network Data Science](#future-network-data-science)
+* [データフロー](#data-flow)
+  * [戦いの後のログの表示](#viewing-logs-after-a-fight)
+  * [古い戦いをインポートする](#importing-an-old-fight)
+  * [ffxivmonへのインポート](#importing-into-ffxivmon)
+* [用語集](#glossary-of-terms)
+  * [ネットワークデータ](#network-data)
+  * [ネットワークログライン](#network-log-lines)
+  * [ACTログライン](#act-log-lines)
+  * [ゲームログライン](#game-log-lines)
+  * [オブジェクト/俳優/エンティティ/暴徒/戦闘員](#objectactorentitymobcombatant)
+  * [オブジェクトID](#object-id)
+  * [能力ID](#ability-id)
+* [ログラインの概要](#log-line-overview)
+  * [00：LogLine](#00-logline)
+    * [ゲームのログ行に対してトリガーを書かないでください](#dont-write-triggers-against-game-log-lines)
+  * [01：ChangeZone](#01-changezone)
+  * [02：ChangePrimaryPlayer](#02-changeprimaryplayer)
+  * [03：AddCombatant](#03-addcombatant)
+  * [04：RemoveCombatant](#04-removecombatant)
+  * [05：AddBuff](#05-addbuff)
+  * [06：RemoveBuff](#06-removebuff)
+  * [07：FlyingText](#07-flyingtext)
+  * [08：発信能力](#08-outgoingability)
+  * [0A：IncomingAbility](#0a-incomingability)
+  * [0B：PartyList](#0b-partylist)
+  * [0C：PlayerStats](#0c-playerstats)
+  * [0D：CombatantHP](#0d-combatanthp)
+  * [14：NetworkStartsCasting](#14-networkstartscasting)
+  * [15：NetworkAbility](#15-networkability)
+    * [能力フラグ](#ability-flags)
+    * [能力ダメージ](#ability-damage)
+    * [特別な場合のシフト](#special-case-shifts)
+    * [能力の例](#ability-examples)
+  * [16：NetworkAOEAbility](#16-networkaoeability)
+  * [17：NetworkCancelAbility](#17-networkcancelability)
+  * [18：NetworkDoT](#18-networkdot)
+  * [19：NetworkDeath](#19-networkdeath)
+  * [1A：NetworkBuff](#1a-networkbuff)
+  * [1B：NetworkTargetIcon（ヘッドマーカー）](#1b-networktargeticon-head-markers)
+  * [1C：NetworkRaidMarker](#1c-networkraidmarker)
+  * [1D：NetworkTargetMarker](#1d-networktargetmarker)
+  * [1E：NetworkBuffRemove](#1e-networkbuffremove)
+  * [1F：NetworkGauge](#1f-networkgauge)
+  * [20：NetworkWorld](#20-networkworld)
+  * [21：Network6D（アクターコントロールライン）](#21-network6d-actor-control-lines)
+  * [22：NetworkNameToggle](#22-networknametoggle)
+  * [23：NetworkTether](#23-networktether)
+  * [24：LimitBreak](#24-limitbreak)
+  * [25：NetworkActionSync](#25-NetworkActionSync)
+  * [26：NetworkStatusEffects](#26-networkstatuseffects)
+  * [27：NetworkUpdateHP](#27-networkupdatehp)
+  * [FB：デバッグ](#fb-debug)
+  * [FC：PacketDump](#fc-packetdump)
+  * [FD：バージョン](#fd-version)
+  * [FE：エラー](#fe-error)
+  * [FF：タイマー](#ff-timer)
+* [将来のネットワークデータサイエンス](#future-network-data-science)
 
-## Data Flow
+## データフロー
 
-![Alt text](https://g.gravizo.com/source/data_flow?https%3A%2F%2Fraw.githubusercontent.com%2Fquisquous%2Fcactbot%2Fmain%2Fdocs%2FLogGuide.md)
+![代替テキスト](https://g.gravizo.com/source/data_flow?https%3A%2F%2Fraw.githubusercontent.com%2Fquisquous%2Fcactbot%2Fmain%2Fdocs%2FLogGuide.md)
 
 <!-- markdownlint-disable MD033 -->
 <details>
 <summary></summary>
-data_flow digraph G { size ="4,4"; ff14 [label="ff14 servers"] ff14 -> ACT [label="network data"] network [label="network log files"] ACT [label="ACT + ffxiv plugin",shape=box,penwidth=3] ACT -> network [label="write to disk"] fflogs network -> fflogs [label="upload"] network -> ffxivmon [label="import"] network -> ACT [label="import"] network -> timeline [label="process"] timeline [label="cactbot make_timeline.py"] plugins [label="triggers, ACT plugins"] ACT -> plugins [label="ACT log lines"] } data_flow </details>
+data_flow digraph G { size = "4,4"; FF14 [LABEL = "FF14サーバ"] FF14 -> ACT [LABEL = "ネットワークデータ"] ネットワーク[LABEL = "ネットワークログファイルを"] ACT [LABEL = "ACT + FFXIVプラグイン"、形状=ボックスpenwidth = 3] ACT -> ネットワーク[LABEL = "ディスクへの書き込み"] fflogs ネットワーク-> fflogs [LABEL = "アップロード"] ネットワーク-> ffxivmon [LABEL = "インポート"] ネットワーク-> ACT [ラベル= "インポート"] ネットワーク-> タイムライン[LABEL = "プロセス"] タイムライン[LABEL = "cactbotのmake_timeline.py"] プラグイン[LABEL = "トリガー、ACTプラグイン"] ACT -> プラグイン[ラベル= "ACTログ行"] } data_flow </details>
 <!-- markdownlint-enable MD033 -->
 
-### Viewing logs after a fight
+### 戦いの後のログの表示
 
-If you have ACT open during a fight, then it will generate logs. These logs will be trimmed to the start and end of combat.
+戦闘中にACTを開いていると、ログが生成されます。 これらのログは、戦闘の開始と終了に合わせてトリミングされます。
 
-To see the logs, click on the **Main** tab, expand the zone you care about, right click on the encounter you want, then select **View Logs**.
+ログを表示するには、[ **メイン** ]タブをクリックし、 関心のあるゾーンを展開し、 目的のエンカウンターを右クリックし、 次に[ **ログの表示]を選択します**。
 
-![view logs screenshot](images/logguide_viewlogs.png)
+![ログのスクリーンショットを表示](images/logguide_viewlogs.png)
 
-The **All** entry includes all the encounters in a zone and cannot be viewed. You must view individual encounters.
+**All** エントリには、ゾーン内のすべてのエンカウンターが含まれ、表示できません。 個々の出会いを見る必要があります。
 
-The window that pops up has the text that triggers can be made against. This is usually the best way to search through and find the text that you want to make a trigger for.
+ポップアップするウィンドウには、トリガーを作成できるテキストがあります。 これは通常、トリガーを作成するテキストを検索して見つけるための最良の方法です。
 
-### Importing an old fight
+### 古い戦いをインポートする
 
-Sometimes you have to close ACT, but you want to look at old fights. Or, somebody else sends you a log, and you want to make triggers from it.
+ACTを閉じる必要がある場合もありますが、古い戦いを見たいと思います。 または、他の誰かがあなたにログを送信し、あなたはそれからトリガーを作成したいと考えています。
 
-To do this, click the **Import/Export** tab, click on **Import a Log File**, click on **Select File...** select the **Network_date.log** log file, and finally click the **YOU** button.
+これを行うには、クリックしてください **インポート/エクスポート** タブ、 をクリック **インポートログファイル**、 をクリック **[ファイルを...** 選択 **Network_date.log** 、ログファイルを し、最終的にクリックしてください **YOU** ボタン。
 
-![import screenshot](images/logguide_import.png)
+![スクリーンショットをインポートする](images/logguide_import.png)
 
-This will create encounters whose [logs you can view](#viewing-logs-after-a-fight).
+これにより、 [ログで](#viewing-logs-after-a-fight)を表示できるエンカウンターが作成されます。
 
-### Importing into ffxivmon
+### ffxivmonへのインポート
 
-If you want to dig into the network data itself, ffxivmon is a great tool.
+ネットワークデータ自体を掘り下げたい場合は、ffxivmonが優れたツールです。
 
-To create a log file suitable for ffxivmon, first turn on the **(DEBUG) Dump all Network Data to logfile** setting in ACT.
+ffxivmonに適したログファイルを作成するには、 に最初のターン **（DEBUG）すべてのネットワークデータをログファイルにダンプ** ACTに設定を。
 
-![dump network data screenshot](images/logguide_dumpnetworkdata.png)
+![ネットワークデータのスクリーンショットをダンプ](images/logguide_dumpnetworkdata.png)
 
-Then, run an encounter in game with ACT running. Once you're done, import that network log file into ffxivmon.
+次に、ACTを実行してゲーム内でエンカウンターを実行します。 完了したら、そのネットワークログファイルをffxivmonにインポートします。
 
-![ffxivmon import screenshot](images/logguide_ffxivmon_import.png)
+![ffxivmonインポートスクリーンショット](images/logguide_ffxivmon_import.png)
 
-Now, you can walk through and investigate the network data directly.
+これで、ネットワークデータを直接調べて調べることができます。
 
-![ffxivmon screenshot](images/logguide_ffxivmon.png)
+![ffxivmonスクリーンショット](images/logguide_ffxivmon.png)
 
-## Glossary of Terms
+## 用語集
 
-### Network Data
+### ネットワークデータ
 
-This is the raw packet dump sent from ff14 servers to your computer. This data is processed both by the game itself as well as by the ffxiv plugin to produce network log lines.
+これは、ff14サーバーからコンピューターに送信される生のパケットダンプです。 このデータは、ゲーム自体によって同様にFFXIVプラグインの両方によって処理される 農産物ネットワークログライン。
 
-![network data screenshot](images/logguide_networkdata.png)
+![ネットワークデータのスクリーンショット](images/logguide_networkdata.png)
 
-Folks writing triggers generally do not have to worry about raw packet data and so this document does not focus very much on this type of data.
+トリガーを作成する人々は通常、生のパケットデータと について心配する必要がないため、このドキュメントではこのタイプのデータにあまり焦点を当てていません。
 
-### Network Log Lines
+### ネットワークログライン
 
-These represent the lines that the ffxiv plugin writes to disk in **Network_20191002.log** files in your log directory. These lines are still processed and filtered by the ffxiv plugin, and are (mostly) not raw network data.
+これらは、行を表すという点で、ディスクへの書き込みプラグインFFXIV **Network_20191002.log** ログディレクトリ内のファイル。 これらの行は、ffxivプラグイン によって引き続き処理およびフィルタリングされ、（ほとんど）生のネットワークデータではありません。
 
-Here are some example network log lines:
+ネットワークログ行の例を次に示します。
 
 ```log
-21|2019-05-31T21:14:56.8980000-07:00|10532971|Tini Poutini|DF9|Fire IV|40002F21|Zombie Brobinyak|150003|3B9D4002|1C|DF98000|0|0|0|0|0|0|0|0|0|0|0|0|104815|348652|12000|12000|1000|1000|-767.7882|156.939|-672.0446|26285|28784|13920|15480|1000|1000|-771.8156|157.1111|-671.3281||8eaa0245ad01981b69fc1af04ea8f9a1
-30|2019-05-31T20:02:41.4560000-07:00|6b4|Boost|0.00|1069C23F|Potato Chippy|1069C23F|Potato Chippy|00|3394|3394||4f7b1fa11ec7a2746a8c46379481267c
-20|2019-05-31T20:02:41.4660000-07:00|105E3321|Tater Tot|2C9D|Peculiar Light|105E3321|Tater Tot||c375d8a2d1cf48efceccb136584ed250
+21 | 2019-05-31T21：14：56.8980000-07：00 | 10532971 | Tini Poutini | DF9 | Fire IV | 40002F21 | Zombie Brobinyak | 150003 | 3B9D4002 | 1C | DF98000 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 104815 | 348652 | 12000 | 12000 | 1000 | 1000 | -767.7882 | 156.939 | -672.0446 | 26285 | 28784 | 13920 | 15480 | 1000 | 1000 | -771.8156 | 157.1111 | -671.3281 || 8eaa0245ad01981b69fc1af04ea8f9a1
+30 | 2019-05-31T20：02：41.4560000から07：00 | 6B4 |ブースト| 0.00 | 1069C23F |ジャガイモChippy | 1069C23F |ジャガイモChippy | 00 | 3394 | 3394 || 4f7b1fa11ec7a2746a8c46379481267c
+20 | 2019 -05-31T20：02：41.4660000-07：00 | 105E3321 |テイタートッツ| 2C9D |独特の光| 105E3321 |テイタートッツ|| c375d8a2d1cf48efceccb136584ed250
 ```
 
-Data on network log lines is separated by vertical braces, i.e. `|`. Network log lines also contain the hash of that line at the end. The log line type itself is in decimal, e.g. aoe abilities are on lines that begin with `22|`. The equivalent [ACT log line](#act-log-lines) would be written as the hex type `0x16`, i.e. `NetworkAOEAbility`.
+ネットワークログライン上のデータはすなわち、垂直ブレースによって分離されている `|`。 ネットワークログ行には、最後にその行のハッシュも含まれています。 ログの線種自体は10進数です。たとえば、aoeの能力は `22 |で始まる行にあります。`。 等価 [ACTログライン](#act-log-lines) 六角型として書き込まれることになる `0x16`、すなわち `NetworkAOEAbility`。
 
-The ffxiv plugin does not write the ACT log lines that plugins interact with to disk.
+ffxivプラグインは、プラグインが と対話するACTログ行をディスクに書き込みません。
 
-The network log lines are used by some tools, such as:
+ネットワークログ行は、次のようないくつかのツールで使用されます。
 
-* fflogs uploader
+* fflogsアップローダー
 * ffxivmon
-* cactbot make_timeline utility
+* cactbotmake_timelineユーティリティ
 
-If you [import a network log file into ACT](#importing-an-old-fight), then it you can view the ACT log lines in the fight.
+あなたがいる場合 [ACTにネットワークログファイルをインポートする](#importing-an-old-fight)、 、それはあなたが戦いでACTログラインを表示することができます。
 
-### ACT Log Lines
+### ACTログライン
 
-These are the log lines that come out of the ffxiv plugin at runtime and are exposed to plugins for triggers. These are what the [View Logs](#viewing-logs-after-a-fight) option in ACT shows.
+これらは、実行時にFFXIVプラグインから出ているログラインである トリガ用のプラグインにさらさ。 これらは何をしている [ログの表示](#viewing-logs-after-a-fight) ACTショーでオプション。
 
-Data in ACT log lines is separated by colons, i.e. `:`. The log line type is in hex.
+ACTログ行のデータはコロンで区切られます。つまり `：`です。 ログラインタイプは16進数です。
 
-Here is an example:
-
-```log
-[21:16:44.288] 15:10532971:Potato Chippy:9C:Scathe:40001299:Striking Dummy:750003:90D0000:1C:9C8000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0:0:1000:1000:-653.9767:-807.7275:31.99997:26945:28784:6720:15480:1000:1000:-631.5208:-818.5244:31.95173:
-```
-
-### Game Log Lines
-
-A game log line is a specific type of ACT log line with type `00`. These log lines also appear directly in your chat windows in game, possibly in the Battle Log tab. Try to [avoid writing triggers](#dont-write-triggers-against-game-log-lines) using these lines.
-
-See: [00: Log Lines](#00-logline) for examples.
-
-### Object/Actor/Entity/Mob/Combatant
-
-These are all words used synonymously in this document to refer to an object in the game that can use abilities and has stats. This could be the player, Bahamut, Eos, a Striking Dummy.
-
-### Object ID
-
-Object ids are 4 byte identifiers used for all types of objects.
-
-Player ids always start with the byte `10`, e.g. `1069C23F` or `10532971`.
-
-Enemy and pet ids always start with the byte `40`, e.g. `4000A848` or `4000A962`.
-
-For `NetworkAOEAbility` lines that don't affect anybody, e.g. a Titan landslide that somehow nobody stands in, this is represented as hitting the id `E0000000` (and a blank name).
-
-One thing to note is that in most raids, there are many mobs in the scene with the same name. For example, in t13, there are about twenty Bahamut Prime mobs in the zone, most of which are invisible. You can often differentiate these by HP values (see [AddCombatant](#03-addcombatant) log lines). Often these invisible mobs are used as the damaging actors, which is why in UWU Titan Phase, both Garuda and Titan use Rock Throw to put people in jails.
-
-### Ability ID
-
-Although ff14 differentiates between abilities and spells, this document uses these words interchangeably. All actions taken by a player or an enemy are "abilities" and have a unique 4 byte id.
-
-You can use xivapi.com to look up a particular action, as sometimes these are listed as "Unknown" from the ffxiv plugin if it hasn't updated yet. For example, Fire IV has the ability id 0xDF9 = 3577, so this link will give you more information about it: <https://xivapi.com/action/3577?columns=ID,Name,Description,ClassJobCategory.Name>
-
-This works for both players and enemies, abilities and spells.
-
-## Log Line Overview
-
-Here's an example of a typical log line: `[12:01:48.293] 21:80034E29:40000001:E10:00:00:00`. This log line happens to be the actor control line (type=`0x21`) for commencing Titan Extreme.
-
-Log lines always start with the time in square brackets. This time is formatted to be in your local time zone. The time is followed with a hex value (in this case 0x21) that indicates the type of the log line it is. These types are internal to the ffxiv plugin and represent its conversion of network data and memory data into discrete events.
-
-The rest of the data in the log line needs to be interpreted based on what type it is. See the following sections that describe each log line. The examples in these sections do not include the time prefix for brevity.
-
-### 00: LogLine
-
-Structure: `00:[Message Type ID]:Message displayed In-Game`
-
-Examples:
+次に例を示します。
 
 ```log
-00:0839:The Right Hand of Bahamut is no longer sealed!
-00:0840:The Final Coil of Bahamut - Turn 2 completion time: 8:37.
-00:0b3a:You are defeated by the oppressor 0.5.
-00:302b:The gravity node uses Forked Lightning.
-00:322a:The attack misses.
+[21：16：44.288] 15：10532971：Potato Chippy：9C：Scathe：40001299：Striking Dummy：750003：90D0000：1C：9C8000：0：0：0：0：0：0：0：0：0：0 ：0：0：2778：2778：0：0：1000：1000：-653.9767：-807.7275：31.99997：26945：28784：6720：15480：1000：1000：-631.5208：-818.5244：31.95173：
 ```
 
-These are what this document calls "game log lines". There is a two byte log type and then a string. Because these are not often used for triggers (other than `0839` messages), the full set of LogTypes is not well-documented.
+### ゲームログライン
 
-(Pull requests welcome!)
+ゲームログラインタイプとACTログラインの特定のタイプである `00`。 これらのログ行は、ゲームのチャットウィンドウにも直接表示され、 場合は[バトルログ]タブに表示されます。 してみてください [避け書き込みトリガ](#dont-write-triggers-against-game-log-lines) これらの行を使用しました。
 
-#### Don't Write Triggers Against Game Log Lines
+例については、 [00：ログ行](#00-logline) を参照してください。
 
-There are a number of reasons to avoid basing triggers on game log lines:
+### オブジェクト/俳優/エンティティ/暴徒/戦闘員
 
-* can show up later than ACT log lines (often up to half a second)
-* inconsistent text (gains effect vs suffers effect, begins casting vs readies, you vs player name)
-* often vague (the attack misses)
-* can change spelling at the whim of SquareEnix
+これらはすべて、このドキュメントで同義語として使用され、能力を使用でき、統計情報を持つゲーム内のオブジェクト を指します。 これは、プレーヤー、バハムート、エオス、印象的なダミーである可能性があります。
 
-Instead, the recommendation is to base your triggers on ACT log lines that are not type `00`. Prefer using `1A` "gains the effect" message instead of `00` "suffers the effect" messages.  Prefer using the `14` "starts using" instead of `00` "readies" or "begins casting".
+### オブジェクトID
 
-At the moment, there are some cases where you must use game log lines, such as sealing and unsealing of zones, or boss rp text for phase transitions.
+オブジェクトIDは、すべてのタイプのオブジェクトに使用される4バイトの識別子です。
 
-Note: There are examples where `14` "starts using" lines show up after the corresponding `00` "readies" line, but it is on the order of tens of milliseconds and does not consistently show up first. `15` "ability" lines always seem to show up before the `00` "uses" lines.
+プレイヤーIDは常にバイトで始まり `10`、 例 `1069C23F` または `10532971`。
 
-### 01: ChangeZone
+敵とペットのIDは常にバイトで始まり `40`、 例 `4000A848` または `4000A962`。
 
-This message is sent when first logging in and whenever the zone is changed.
+以下のために `NetworkAOEAbility` 何とか誰もに立っていないこと、例えばAタイタンの地すべりを誰に影響を与えない行、 本は、ID当たっとして表される `E0000000` （と空白の名前を）。
 
-Structure: `01:Changed Zone to [Zone Name].`
+もう一つ注意すべきは、ほとんどの襲撃では、ということである と同じ名前を持つシーンで多くの暴徒があります。 例えば、T13には、ゾーン内の20のバハムートプライムモブ、約ある 見えないそのほとんどが。 多くの場合、これらはHP値で区別できます（ [AddCombatant](#03-addcombatant) ログ行を参照）。 多くの場合、これらの目に見えない暴徒はダメージを与えるアクターとして使用され そのため、UWUタイタンフェーズでは、ガルーダとタイタンの両方がロックスローを使用して人々を刑務所に入れます。
 
-Examples:
+### 能力ID
+
+能力や呪文の間FF14差別化が、 本書は、同義的にこれらの単語を使用しています。 プレイヤーまたは敵が行うすべてのアクションは「能力」であり、一意の4バイトIDを持ちます。
+
+あなたは、これらがされているように、時には、特定のアクションをルックアップするためにxivapi.comを使用することができます それはまだ更新されていない場合FFXIVプラグインから「不明」として記載されています。 例えば、火IVは、能力ID 0xDF9 = 3577、持っている このリンクはあなたにそれについての詳細な情報が得られますので： <https://xivapi.com/action/3577?columns=ID,Name,Description,ClassJobCategory.Name>
+
+これは、プレイヤーと敵、能力と呪文の両方で機能します。
+
+## ログラインの概要
+
+ここで、一般的なログ行の例です： `[12：01：48.293] 21：80034E29：40000001：E10：00：00：00`。 このログ行は、Titan Extremeを開始するためのアクター制御行（type =`0x21`）です。
+
+ログラインは常に角括弧内の時間で始まります。 この時間は、ローカルタイムゾーンになるようにフォーマットされています。 時間の後には、ログ行のタイプを示す16進値（この場合は0x21）が続きます。 これらのタイプはffxivプラグイン 内部にあり、ネットワークデータとメモリデータの離散イベントへの変換を表します。
+
+ログ行の残りのデータは、そのタイプに基づいて解釈する必要があります。 各ログ行について説明している次のセクションを参照してください。 これらのセクションの例には、簡潔にするための時間プレフィックスは含まれていません。
+
+### 00：LogLine
+
+構造： `00：[メッセージタイプID]：ゲーム内に表示されるメッセージ`
+
+例：
 
 ```log
-01:Changed Zone to The Lavender Beds.
-01:Changed Zone to The Unending Coil Of Bahamut (Ultimate).
+00：0839：バハムートの右手はもう封印されていません！
+00：0840：バハムートの最後のコイル-2ターン目の完了時間：8：37。
+00：0b3a：あなたは抑圧者0.5に敗北しました。
+00：302b：重力ノードはフォークライトニングを使用します。
+00：322a：攻撃は失敗します。
 ```
 
-### 02: ChangePrimaryPlayer
+これらは、このドキュメントで「ゲームログライン」と呼ばれるものです。 2バイトのログタイプと文字列があります。 これらはしばしばトリガーするために使用されていないので、 （以外 `0839` メッセージ）、 LogTypesのフルセット十分に文書化されていません。
 
-This redundant message follows every [ChangeZone](#01-changezone) message to indicate the name of the player.
+（プルリクエストは大歓迎です！）
 
-Structure: `02:Changed primary player to [Player Name].`
+#### ゲームのログ行に対してトリガーを書かないでください
 
-Examples
+ゲームのログ行に基づいてトリガーを使用しないようにする理由はいくつかあります。
+
+* ACTログ行よりも遅く表示される可能性があります（多くの場合、最大0.5秒）
+* 一貫性のないテキスト（効果を得るvs効果を被る、キャストvs準備を開始、あなたvsプレイヤー名）
+* 多くの場合あいまいです（攻撃は失敗します）
+* スクウェア・エニックスの気まぐれでスペルを変更できます
+
+その代わり、勧告が入力されていないACTログライン上のトリガをベースにある `00`。 使用好む `1A` 「の利益を効果」メッセージの代わりに `00` メッセージ「効果を受けます」。  使用好む `14` 代わりに「使用開始」 `00` 「構えるの」または「キャスト始まります」。
+
+現時点では、ゾーンの封印と開封などのゲームログ行 、または相転移のためのボスrpテキストを使用する必要がある場合があります。
+
+注： 例がある場合 `14` ラインが現れる「使用開始」 対応した後、 `00` 「構える」ライン、 それは数十ミリ秒のオーダーである と一貫して最初に表示されません。 `15` 「能力」の行は、常に前に現れているように見える `00` 「用途」ライン。
+
+### 01：ChangeZone
+
+このメッセージは、最初にログインしたとき、およびゾーンが変更されたときに送信されます。
+
+構造： `01：ゾーンを[ゾーン名]に変更しました。`
+
+例：
 
 ```log
-02:Changed primary player to Potato Chippy.
-02:Changed primary player to Tini Poutini.
+01：ゾーンをラベンダーベッドに変更しました。
+01：ゾーンをバハムートの終わりのないコイル（究極）に変更しました。
 ```
 
-### 03: AddCombatant
+### 02：ChangePrimaryPlayer
 
-This message is sent when a new object is added to the scene or becomes close enough to the player that they can view its actions.
+この冗長なメッセージは、 [ChangeZone](#01-changezone) メッセージごとに続き、プレーヤーの名前を示します。
 
-Structure: `03:[ObjectId]:Added new combatant [Combatant Name].  Job: [Job-ID] Level: [Level-Value] Max HP: [Max-HP-Value] Max MP: [Max-MP-Value] Pos: ([X-Pos],[Z-Pos],[Y-Pos]).`
+構造： `02：プライマリプレイヤーを[プレイヤー名]に変更しました。`
 
-Examples:
+例
 
 ```log
-03:40123456:Added new combatant Pagos Deepeye.  Job: N/A Level: 70 Max HP: 348652 Max MP: 12000 Pos: (-720.9337,90.80706,-679.6056).
-03:10987654:Added new combatant Tater Tot (Jenova).  Job: 28 Level: 70 Max HP: 39835 Max MP: 16461 Pos: (-143.9604,168.5795,-4.999999).
+02：プライマリープレイヤーをポテトチッピーに変更。
+02：プライマリープレイヤーをTiniPoutiniに変更しました。
 ```
 
-This combatant may be invisible and fake.  The real ones have more HP. For example, at the start of t5 you will see messages like this:
+### 03：AddCombatant
+
+このメッセージは、新しいオブジェクトがシーンに追加されたとき、または がプレーヤーに十分近くなり、プレーヤーがそのアクションを表示できるようになったときに送信されます。
+
+構造： `03：[ObjectId]：新しい戦闘員[戦闘員名]を追加しました。  ジョブ： [Job-ID] レベル： [Level-Value] 最大HP： [Max-HP-Value] 最大MP： [Max-MP-Value] 順位：（[X-Pos]、[Z-Pos]、[Y-Pos]）。`
+
+例：
 
 ```log
-03:40123450:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123451:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123452:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123453:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123454:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123455:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123456:Added new combatant The Scourge Of Meracydia.  Job: N/A Level: 50 Max HP: 20307 Max MP: 0 Pos: (-8.42909,17.4637,50.15326).
-03:40123457:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 514596 Max MP: 0 Pos: (2.251731,4.753533,50.03756).
-03:40123458:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (7.752398,1.972908,50.04842).
-03:40123459:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (7.752398,1.972908,50.04842).
-03:40123460:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123461:Added new combatant Twintania.  Job: N/A Level: 50 Max HP: 2778 Max MP: 0 Pos: (-6.27745,-5.304218,50.00586).
-03:40123462:Added new combatant The Scourge Of Meracydia.  Job: N/A Level: 50 Max HP: 20307 Max MP: 0 Pos: (8.960839,18.12193,50.66183).
-03:40123463:Added new combatant The Scourge Of Meracydia.  Job: N/A Level: 50 Max HP: 20307 Max MP: 0 Pos: (18.30528,3.778645,50.44044).
+03：40123456：新しい戦闘員PagosDeepeyeを追加しました。  ジョブ：N / Aレベル：70最大HP：348652最大MP：12000位置：（-720.9337,90.80706、-679.6056）。
+03：10987654：新しい戦闘員テイタートッツ（ジェノバ）を追加しました。  ジョブ：28レベル：70最大HP：39835最大MP：16461位置：（-143.9604,168.5795、-4.999999）。
 ```
 
-In heavy zones (e.g. Eureka), combatants may be culled if there are too many things nearby. Usually other players are culled first, but mobs can be as well. Eureka NMs (and S ranks) solve this by having a flag on them that allows them to be seen via AddCombatant message from anywhere in the zone, which is why it is possible to write triggers for when these pop.
-
-### 04: RemoveCombatant
-
-This message is sent when an object is removed from the scene, either because the player has moved too far away from it, it has died, or the player has changed zones.
-
-Structure: `04:[ObjectId]:Removing combatant [Combatant Name].  Max HP: [Max-HP-Value]. Pos: ([X-Pos],[Z-Pos],[Y-Pos])`
-
-Examples:
+この戦闘員は目に見えず、偽物である可能性があります。  本物のものはより多くのHPを持っています。 たとえば、t5の開始時に、次のようなメッセージが表示されます。
 
 ```log
-04:10987654:Removing combatant Potato Chippy.  Max HP: 28784. Pos: (-776.6765,152.5261,-671.2197)
-04:40123462:Removing combatant Frozen Void Dragon.  Max HP: 348652. Pos: (-710.7075,49.39039,-646.7071)
+03：40123450：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123451：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123452：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123453：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123454：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123455：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123456：新しい戦闘員The Scourge OfMeracydiaを追加しました。  ジョブ：N / Aレベル：50最大HP：20307最大MP：0位置：（-8.42909,17.4637,50.15326）。
+03：40123457：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：514596最大MP：0位置：（2.251731,4.753533,50.03756）。
+03：40123458：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（7.752398,1.972908,50.04842）。
+03：40123459：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（7.752398,1.972908,50.04842）。
+03：40123460：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123461：新しい戦闘員Twintaniaを追加しました。  ジョブ：N / Aレベル：50最大HP：2778最大MP：0位置：（-6.27745、-5.304218,50.00586）。
+03：40123462：新しい戦闘員The Scourge OfMeracydiaを追加しました。  ジョブ：N / Aレベル：50最大HP：20307最大MP：0位置：（8.960839,18.12193,50.66183）。
+03：40123463：新しい戦闘員The Scourge OfMeracydiaを追加しました。  ジョブ：N / Aレベル：50最大HP：20307最大MP：0位置：（18.30528,3.778645,50.44044）。
 ```
 
-### 05: AddBuff
+あまりにも多く存在する場合重いゾーン（例えばユーレカ）では、戦闘員がカリングされる のもの近く。 通常、他のプレイヤーが最初に淘汰されますが、Mobも淘汰される可能性があります。 ユーレカのNM（及びSは、ランク）それらにフラグを持つことによってこの問題を解決 それらは、ゾーン内の任意の場所からAddCombatantメッセージを介して見ることを可能にする がこれらのポップのトリガーを書き込むことができる理由です。
 
-This is the memory-parsing equivalent of [1A: NetworkBuff](#1a-networkbuff). Do not write triggers against this as this is only emitted when parsing from memory.
+### 04：RemoveCombatant
 
-Structure: `05:[Target Name] gains the effect of [Status] from [Source Name]`
+このメッセージは、オブジェクトがシーンから削除されたときに送信され、いずれかのため、 プレイヤーが離れすぎて、そこから移動してきた、それが死亡した、またはプレイヤーが持っている 変更されたゾーンを。
 
-Examples:
+構造： `04：[ObjectId]：戦闘員の削除[戦闘員名]。  最大HP： [Max-HP-Value]。 POS：（[X-Pos]、[Z-Pos]、[Y-Pos]）、`
+
+例：
 
 ```log
-05:Striking Dummy gains the effect of Reprisal from Tini Poutini.
-05:Potato Chippy gains the effect of Passage Of Arms from Potato Chippy.
+04：10987654：戦闘員のポテトチッピーを削除します。  最大HP：28784。 位置：（-776.6765,152.5261、-671.2197）
+04：40123462：戦闘員のFrozen VoidDragonを削除します。  最大HP：348652。 位置：（-710.7075,49.39039、-646.7071）
 ```
 
-### 06: RemoveBuff
+### 05：AddBuff
 
-This is the memory-parsing equivalent of [1E: NetworkBuffRemove](#1e-networkbuffremove). Do not write triggers against this as this is only emitted when parsing from memory.
+これは、メモリ解析と等価である [NetworkBuff：（a）](#1a-networkbuff)。 これはメモリから解析するときにのみ発行されるため、これに対してトリガーを書き込まないでください。
 
-Structure: `06:[Target Name] loses the effect of [Status] from [Source Name]`
+構造： `05：[ターゲット名]は[ソース名]`から [Status] の効果を得る
 
-Examples:
+例：
 
 ```log
-06:Striking Dummy loses the effect of Reprisal from Tini Poutini.
-06:Striking Dummy loses the effect of Circle Of Scorn from Potato Chippy.
+05：ストライキングダミーはティニプーティーニから報復の効果を得る。
+05：ポテトチッピーはポテトチッピーからパッセージオブアームズの効果を得る。
 ```
 
-### 07: FlyingText
+### 06：RemoveBuff
 
-This is the memory-parsing equivalent of [18: NetworkDoT](#18-networkdot). Do not write triggers against this as this is only emitted when parsing from memory.
+これは、メモリ解析と等価である [NetworkBuffRemove：1E](#1e-networkbuffremove)。 これはメモリから解析するときにのみ発行されるため、これに対してトリガーを書き込まないでください。
 
-Structure: `07:[Type Name] tick on [Source Name] for [Value] damage.`
+構造： `06：[ターゲット名]は[ソース名]`から [Status] の効果を失います
 
-Examples:
+例：
 
 ```log
-07:DoT tick on Striking Dummy for 509 damage.
+06：ストライキングダミーはティニプーティーニからの報復の効果を失います。
+06：ストライキングダミーはポテトチッピーのサークルオブスコーンの効果を失います。
 ```
 
-### 08: OutgoingAbility
+### 07：FlyingText
 
-This is the memory-parsing equivalent of [14: NetworkStartsCasting](#14-networkstartscasting). Do not write triggers against this as this is only emitted when parsing from memory.
+これは、メモリ解析と等価である [NetworkDoT：18](#18-networkdot)。 これはメモリから解析するときにのみ発行されるため、これに対してトリガーを書き込まないでください。
 
-Structure: `08:[Source Name] starts using [Ability Name] on [Target Name].`
+構造： `07：[タイプ名] [ソース名]にチェックを入れて [Value] ダメージ。`
 
-Examples:
+例：
 
 ```log
-08:Potato Chippy starts using Circle Of Scorn on Striking Dummy.
+07：509のダメージでストライキングダミーをチェックしないでください。
 ```
 
-### 0A: IncomingAbility
+### 08：発信能力
 
-This is the memory-parsing equivalent of [15: NetworkAbility](#15-networkability) and [16: NetworkAOEAbility](#16-networkaoeability). Do not write triggers against this as this is only emitted when parsing from memory.
+これは、メモリ解析と等価である [14：NetworkStartsCasting](#14-networkstartscasting)。 これはメモリから解析するときにのみ発行されるため、これに対してトリガーを書き込まないでください。
 
-Examples:
+構造： `08：[ソース名]は[ターゲット名]で[能力名]の使用を開始します。`
+
+例：
 
 ```log
-0A:10532971:Potato Chippy:17:Circle Of Scorn:40001299:Striking Dummy:710003:6850000:ef010f:f80000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0
+08：PotatoChippyがStrikingDummyでCircleOfScornの使用を開始します。
 ```
 
-### 0B: PartyList
+### 0A：IncomingAbility
 
-Lines are printed, but with blank data.  :sob:
+これは、メモリ解析と等価である [NetworkAbility：15](#15-networkability) 及び [16：NetworkAOEAbility](#16-networkaoeability)。 これはメモリから解析するときにのみ発行されるため、これに対してトリガーを書き込まないでください。
 
-### 0C: PlayerStats
-
-This message is sent whenever your player's stats change and upon entering a new zone/instance.
-
-Structure:
-
-`0C:Player Stats: JOB:STR:DEX:VIT:INT:MND:PIE:ATTACK POWER:DHIT:CRIT:ATTACK MAGIC POTENCY:HEAL MAGIC POTENCY:DET:SkS:SpS:0:TENACITY`
-
-Example:
+例：
 
 ```log
-0C:Player Stats: 23:305:4240:4405:290:275:340:4240:2694:2795:290:275:2473:578:380:0:380
+0A：10532971：Potato Chippy：17：Circle Of Scorn：40001299：Striking Dummy：710003：6850000：ef010f：f80000：0：0：0：0：0：0：0：0：0：0：0：0： 2778：2778：0
 ```
 
-### 0D: CombatantHP
+### 0B：PartyList
 
-If you have the **Include HP for Triggers** setting turned on in the **FFXIV Settings** tab of ACT, then it will emit log lines for every percentage change of every entity.
+行は印刷されますが、データは空白になります。  :sob:
 
-This is often used for phase change triggers.
+### 0C：PlayerStats
 
-![include hp screenshot](images/logguide_includehp.png)
+このメッセージは、プレーヤーの統計が変更されたとき、および新しいゾーン/インスタンスに入るときに送信されます。
 
-Structure: `0D:[Target Name] HP at [HP-Value]%.`
+構造：
 
-Examples:
+`0C：プレイヤー統計：JOB：STR：DEX：VIT：INT：MND：PIE：ATTACK POWER：DHIT：CRIT：ATTACK MAGIC POTENCY：HEAL MAGIC POTENCY：DET：SkS：SpS：0：TENACITY`
+
+例：
 
 ```log
-0D:Striking Dummy HP at 96%.
-0D:Tini Poutini HP at 98%.
+0C：プレイヤー統計：23：305：4240：4405：290：275：340：4240：2694：2795：290：275：2473：578：380：0：380
 ```
 
-### 14: NetworkStartsCasting
+### 0D：CombatantHP
 
-For abilities with cast bars, this is the log line that specifies that a player or a monster has started casting an ability. This precedes a log line of type `15`, `16`, or `17` where it uses the ability or is interrupted.
+あなたが持っている場合は **トリガのHPを含めて** オンに設定 で **FFXIV設定** ACTのタブ、それはログラインに放出する すべてのエンティティのすべての百分率変化のために。
 
-Structure: `14:[Source ID]:[Source Name] starts using [Ability Name] on [Target Name].`
+これは、相変化トリガーによく使用されます。
 
-Examples:
+![hpのスクリーンショットを含める](images/logguide_includehp.png)
+
+構造： `0D：[ターゲット名] HP [HP-Value]％。`
+
+例：
 
 ```log
-14:5B2:Twintania starts using Death Sentence on Potato Chippy.
-14:DF9:Tini Poutini starts using Fire IV on Striking Dummy.
+0D：96％でダミーHPを打つ。
+0D：Tini Poutini HPが98％。
 ```
 
-The value after `14` is the 4 byte [ability id](#ability-id).
+### 14：NetworkStartsCasting
 
-These are usually (but not always) associated with game log lines that either look like `00:282B:Shinryu readies Earthen Fury.` or `00:302b:The proto-chimera begins casting The Ram's Voice.`
+キャストバーを持つ能力の場合、これはプレイヤーまたはモンスターが能力のキャストを開始したことを指定するログ行です。 これは、ログタイプのラインに先行 `15`、 `16`、または `17` が能力を使用するか、または中断されます。
 
-### 15: NetworkAbility
+構造： `14：[ソースID]：[ソース名]は[ターゲット名]で[能力名]の使用を開始します。`
 
-This is an ability that ends up hitting a single target (possibly the caster's self). The reason this is worded as "ends up hitting" is that some AOE abilities may only hit a single target, in which case they still result in type `15`. For example, in ucob, if Firehorn's fireball in nael phase hits the whole group, it will be a `16` type. If one person runs the fireball out and it only hits them, then it is type `15` because there's only one target. If your trigger includes the message type, it is usually best to write your regex as `1[56]` to include both possibilities. Ground AOEs that don't hit anybody are type `16`.
-
-Example: `15:10532971:Tini Poutini:07:Attack:40001299:Striking Dummy:710003:9420000:0:0:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0:0:1000:1000:-653.9767:-807.7275:31.99997:66480:74095:4560:4560:1000:1000:-653.0394:-807.9677:31.99997:`
-
-| Index | Example        | Explanation                                            |
-| ----- | -------------- | ------------------------------------------------------ |
-| 0     | 15             | type id (in hex)                                       |
-| 1     | 10532971       | caster object id                                       |
-| 2     | Tini Poutini   | caster name                                            |
-| 3     | 07             | ability id                                             |
-| 4     | Attack         | ability name                                           |
-| 5     | 40001299       | target object id                                       |
-| 6     | Striking Dummy | target name                                            |
-| 7     | 710003         | [flags](#ability-flags)                                |
-| 8     | 9420000        | [damage](#ability-damage)                              |
-| 9-22  | 0              | ??? (see: [special case shifts](#special-case-shifts)) |
-| 23    | 2778           | target current hp                                      |
-| 24    | 2778           | target max hp                                          |
-| 25    | 0              | target current mp                                      |
-| 26    | 0              | target max mp                                          |
-| 27    | 1000           | target current tp                                      |
-| 28    | 1000           | target max tp                                          |
-| 29    | -653.9767      | target x position                                      |
-| 30    | -807.7275      | target y position                                      |
-| 31    | 31.99997       | target z position                                      |
-| 32    | 66480          | caster current hp                                      |
-| 33    | 74095          | caster max hp                                          |
-| 34    | 4560           | caster current mp                                      |
-| 35    | 4560           | caster max mp                                          |
-| 36    | 1000           | caster current tp                                      |
-| 37    | 1000           | caster max tp                                          |
-| 38    | -653.0394      | caster x position                                      |
-| 39    | -807.9677      | caster y position                                      |
-| 40    | 31.99997       | caster z position                                      |
-
-Network ability lines are a combination of raw network data (e.g. the `710003` flags and the `9420000` damage) and frequently sampled data from memory (e.g. the `66480` current hp value and `-653.0394` x position).
-
-This means that there's a number of caveats going on to handling all the data in these lines.  The raw network data is subject to change over time from ff14 servers.  Also, the data from memory may be slightly stale and out of date
-
-#### Ability Flags
-
-Damage bitmasks:
-
-* 0x01 = dodge
-* 0x03 = damage done
-* 0x05 = blocked damage
-* 0x06 = parried damage
-* 0x33 = instant death
-* 0x100 = crit damage
-* 0x200 = direct hit damage
-* 0x300 = crit direct hit damage
-
-Heal bitmasks:
-
-* 0x00004 = heal
-* 0x10004 = crit heal
-
-Other bitmasks appear on particular abilities, and can indicate whether bane missed or hit recipients.  However, these all appear ability-specific.
-
-Some of these flags also indicate whether the ability is part of a combo or not and whether the positional was hit. However, these values do not seem to be consistent between jobs.
-
-For example, the flags for successful trick attack are `28710.03`. The `.` here represents 0-3 as the trick may crit, dh, both, or neither. The flags for a missed trick attack are `710.03`. Thus, there's a `0x28700000` mask applied here when the positional is correct, which was determined via experimentation.
-
-If you care about specific ability flags, you likely have to do this research yourself. Please send pull requests to this document so it can be shared!
-
-#### Ability Damage
-
-Damage bitmasks: 0x1000 = hallowed, no damage 0x4000 = "a lot" of damage
-
-The damage value in an ability usage is not the literal damage, because that would be too easy.
-
-The formula to get from the damage value in the ability log line to the actual damage value is the following.
-
-First, left-extend zeroes to 4 bytes (8 chars), e.g. 2934001 => 02934001, or 1000 => 00001000.
-
-The first two bytes (4 chars) are the damage.
-
-Unless, if there is an 0x00004000 mask, then this implies "a lot" of damage. In this case, consider the bytes as ABCD, where C is 0x40. The total damage is calculated as D A (B-D) as three bytes together interpreted as an integer.
-
-For example, `424E400F` becomes `0F 42 (4E - OF = 3F)` => `0F 42 3F` => 999999
-
-#### Special Case Shifts
-
-It is not clear what this represents, but sometimes the flags is replaced by one (or more) pairs of values.
-
-The most likely case is that if flags is `3F`, then the flags and damage are in index 9 and 10 instead of 7 and 8, respectively. In other words, when you see flags being a particular value, you need to shift everything over two to find the real flags. See the example below. It is also to be noted that this value has slowly increased over time and was `3C` back in 2017.
-
-The other shift is that plenary indulgence lists the number of stacks in the flags as `113`, `213`, or `313` respectively. These are always followed by `4C3`. Therefore, these should also be shifted over two to find the real flags.
-
-#### Ability Examples
-
-1) 18216 damage from Grand Cross Alpha (basic damage) `16:40001333:Neo Exdeath:242B:Grand Cross Alpha:1048638C:Tater Tot:750003:47280000:1C:80242B:0:0:0:0:0:0:0:0:0:0:0:0:36906:41241:5160:5160:880:1000:0.009226365:-7.81128:-1.192093E-07:16043015:17702272:12000:12000:1000:1000:-0.01531982:-19.02808:0:`
-
-2) 82538 damage from Hyperdrive (0x4000 extra damage mask) `15:40024FBA:Kefka:28E8:Hyperdrive:106C1DBA:Okonomi Yaki:750003:426B4001:1C:28E88000:0:0:0:0:0:0:0:0:0:0:0:0:35811:62464:4560:4560:940:1000:-0.1586061:-5.753153:0:30098906:31559062:12000:12000:1000:1000:0.3508911:0.4425049:2.384186E-07:`
-
-3) 22109 damage from Grand Cross Omega (:3F:0: shift) `16:40001333:Neo Exdeath:242D:Grand Cross Omega:1048638C:Tater Tot:3F:0:750003:565D0000:1C:80242D:0:0:0:0:0:0:0:0:0:0:41241:41241:5160:5160:670:1000:-0.3251641:6.526299:1.192093E-07:7560944:17702272:12000:12000:1000:1000:0:19:2.384186E-07:`
-
-4) 15732 crit heal from 3 confession stack Plenary Indulgence (:?13:4C3: shift) `16:10647D2F:Tako Yaki:1D09:Plenary Indulgence:106DD019:Okonomi Yaki:313:4C3:10004:3D74:0:0:0:0:0:0:0:0:0:0:0:0:7124:40265:14400:9192:1000:1000:-10.78815:11.94781:0:11343:40029:19652:16451:1000:1000:6.336648:7.710004:0:`
-
-5) instant death twister `16:40004D5D:Twintania:26AB:Twister:10573FDC:Tini Poutini:33:0:1C:26AB8000:0:0:0:0:0:0:0:0:0:0:0:0:43985:43985:5760:5760:910:1000:-8.42179:9.49251:-1.192093E-07:57250:57250:0:0:1000:1000:-8.565645:10.20959:0:`
-
-6) zero damage targetless aoe (E0000000 target) `16:103AAEE4:Potato Chippy:B1:Miasma II:E0000000::0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0::::::::::19400:40287:17649:17633:1000:1000:-0.656189:-3.799561:-5.960464E-08:`
-
-### 16: NetworkAOEAbility
-
-This is an ability usage in game that ends up hitting multiple actors or no actors at all.
-
-See: [15: NetworkAbility](#15-networkability) for a discussion of the difference between `NetworkAbility` and `NetworkAOEAbility`.
-
-### 17: NetworkCancelAbility
-
-For abilities with cast bars, this is the log line that specifies that the cast was cancelled either due to movement or an interrupt and it won't go off.
-
-Structure: `17:[Source ID]:[Source Name]:[Ability ID]:[Ability Name]:Cancelled.`
-
-Examples:
+例：
 
 ```log
-17:105EDD08:Potato Chippy:1D07:Stone IV:Cancelled:
-17:40000FE3:Raiden:3878:Ultimate Zantetsuken:Cancelled:
+14：5B2：TwintaniaがPotatoChippyでDeathSentenceの使用を開始します。
+14：DF9：TiniPoutiniがStrikingDummyでFireIVの使用を開始します。
 ```
 
-### 18: NetworkDoT
+後の値 `14` 4バイトである [能力番号](#ability-id)。
 
-HoT (heal over time) and DoT (damage over time) amounts. These are the aggregated quantities of damage for every hot or dot on that target.
+これらは通常（常にではありませんが） `00：282B：Shinryu readies EarthenFuryのようなゲームログ行に関連付けられています。` または `00：302bは：プロトキメラは、ラムの声をキャスト開始します。`
 
-The reason why there is such a discrepancy between ACT and fflogs about dots is that ff14 does not return the exact tick amounts for every active dot. Instead, if a boss has 20 dots applied to it, then it returns the total tick amount for all of these dots. Parsers are left to estimate what the individual dot amounts are.
+### 15：NetworkAbility
 
-Structure: `18:[Type Name] on [Source Name] for [Value] damage.`
+これは、最終的に単一のターゲット（おそらく術者の自己）に当たる能力です。 これは「打つ終わる」と言葉で表現された理由は、いくつかのAOE能力が唯一の彼らはまだタイプになり、その場合には単一のターゲット、ヒットかもしれないということです `15`。 nael相でFirehornの火の玉がグループ全体に当たっている場合たとえば、ucobで、それは次のようになります `16` タイプ。 1人は火の玉アウトを実行し、それだけでそれらをヒットした場合、それはタイプである `15` つのみのターゲットがありますので。 あなたのトリガは、メッセージタイプが含まれている場合、それはあなたのよう正規表現を記述することが最善である `1[56]` 両方の可能性を含めること。 誰にもヒットしない地上AOEsはタイプです `16`。
 
-Examples:
+例： `15：10532971：Tini Poutini：07：Attack：40001299：Striking Dummy：710003：9420000：0：0：0：0：0：0：0：0：0：0：0：0： 0：2778：2778：0：0：1000：1000：-653.9767：-807.7275：31.99997：66480：74095：4560：4560：1000：1000：-653.0394：-807.9677：31.99997：`
+
+| インデックス | 例          | 説明                                         |
+| ------ | ---------- | ------------------------------------------ |
+| 0      | 15         | タイプID（16進数）                                |
+| 1      | 10532971   | キャスターオブジェクトID                              |
+| 2      | ティニ・プーティーニ | キャスター名                                     |
+| 3      | 07         | 能力ID                                       |
+| 4      | 攻撃         | 能力名                                        |
+| 5      | 40001299   | ターゲットオブジェクトID                              |
+| 6      | 印象的なダミー    | ターゲット名                                     |
+| 7      | 710003     | [フラグ](#ability-flags)                      |
+| 8      | 9420000    | [ダメージ](#ability-damage)                    |
+| 9-22   | 0          | ??? （参照： [特殊ケースシフト](#special-case-shifts)） |
+| 23     | 2778       | 目標電流馬力                                     |
+| 24     | 2778       | 目標最大馬力                                     |
+| 25     | 0          | ターゲット電流mp                                  |
+| 26     | 0          | ターゲット最大mp                                  |
+| 27     | 1000       | ターゲット電流tp                                  |
+| 28     | 1000       | ターゲット最大tp                                  |
+| 29     | -653.9767  | ターゲットx位置                                   |
+| 30     | -807.7275  | ターゲットy位置                                   |
+| 31     | 31.99997   | ターゲットz位置                                   |
+| 32     | 66480      | キャスター電流馬力                                  |
+| 33     | 74095      | キャスター最大馬力                                  |
+| 34     | 4560       | キャスター電流mp                                  |
+| 35     | 4560       | キャスター最大mp                                  |
+| 36     | 1000       | キャスター電流tp                                  |
+| 37     | 1000       | キャスター最大tp                                  |
+| 38     | -653.0394  | キャスターx位置                                   |
+| 39     | -807.9677  | キャスターy位置                                   |
+| 40     | 31.99997   | キャスターz位置                                   |
+
+ネットワーク能力ラインは、生のネットワークデータの組み合わせである （例えば、 `710003` フラグ及び `942万` ダメージ） メモリから頻繁にサンプリングされたデータ （例えば、 `66480` 現在HPの値と `-653.0394` x位置） 。
+
+これは、これらの行のすべてのデータの処理に注意が必要であることを意味します。  生のネットワークデータは、ff14サーバーから時間の経過とともに変更される可能性があります。  また、メモリからのデータは少し古く、古くなっている可能性があります
+
+#### 能力フラグ
+
+ダメージビットマスク：
+
+* 0x01 =かわす
+* 0x03 =ダメージ
+* 0x05 =ブロックされたダメージ
+* 0x06 =受け流されたダメージ
+* 0x33 =即死
+* 0x100 =クリティカルダメージ
+* 0x200 =直撃ダメージ
+* 0x300 =クリティカル直撃ダメージ
+
+ヒールビットマスク：
+
+* 0x00004 =回復
+* 0x10004 =クリティカルヒール
+
+他のビットマスクは特定の能力に表示され、ベイン が受信者を逃したかヒットしたかを示すことができます。  ただし、これらはすべて能力固有のように見えます。
+
+これらのフラグのいくつかは、能力がコンボの一部であるかどうかを示す と位置がヒットしたかどうか。 ただし、これらの値はジョブ間で一貫していないようです。
+
+例えば、成功したトリック攻撃のためのフラグは `28710.03`。 `。ここでの` は、トリックがクリティカル、dh、両方、またはどちらでもない可能性があるため、0〜3を表します。 逃したトリック攻撃のためのフラグは `710.03`。 したがって、位置が正しい場合は `0x28700000` マスクがここに適用され、 は実験によって決定されました。
+
+特定の能力フラグが気になる場合は、この調査を自分で行う必要があります。 共有できるように、このドキュメントにプルリクエストを送信してください。
+
+#### 能力ダメージ
+
+ダメージビットマスク： 0x1000 =神聖、ダメージなし 0x4000 =「たくさんの」ダメージ
+
+能力使用のダメージ値は文字通りのダメージではありません。それは簡単すぎるからです。
+
+能力ログ行のダメージ値から実際のダメージ値までの計算式は次のとおりです。
+
+まず、ゼロを4バイト（8文字）に左拡張します（例：2934001 => 02934001、または1000 => 00001000）。
+
+最初の2バイト（4文字）が損傷です。
+
+0x00004000マスクがある場合を除いて、これは「多くの」損傷を意味します。 この場合、バイトをABCDと見なします。ここで、Cは0x40です。 合計ダメージは、DA（BD）として計算され、3バイトを合わせて を整数として解釈します。
+
+例えば、 `424E400F` となる `0F 42（4E - = 3F OF）` => `0F 42 3F` => 999999
+
+#### 特別な場合のシフト
+
+これが何を表しているのかは明確ではありませんが、フラグが 個の1つ（または複数）の値のペアに置き換えられることがあります。
+
+最も可能性が高い場合には、フラグがある場合、すなわち `3F`、 次にフラグや損傷は、それぞれ、インデックス9及び10の代わりに、図7及び図8です。 言い換えると、フラグが特定の値で ことが 場合、実際のフラグを見つけるには、すべてを2にシフトする必要があります。 以下の例を参照してください。 また、この値は、ゆっくり時間をかけて増加したしていることに留意すべきである `3（c）` 2017年バック。
+
+他のシフトは、本会議耽溺リストとしてフラグにスタックの数であり、 `113`、 `213`、または `313` それぞれ。 これらは常に続いている `4C3`。 したがって、実際のフラグを見つけるには、これらも2つにシフトする必要があります。
+
+#### 能力の例
+
+1）グランドクロスアルファからの18216ダメージ（基本ダメージ） `16：40001333：ネオエクスデス：242B：グランドクロスアルファ：1048638C：テイタートッツ：750003：47280000：1C：80242B：0：0：0：0：0： 0：0：0：0：0：0：0：36906：41241：5160：5160：880：1000：0.009226365：-7.81128：-1.192093E-07：16043015：17702272：12000：12000：1000：1000：- 0.01531982：-19.02808：0：`
+
+2）ハイパードライブによる82538のダメージ（0x4000追加ダメージマスク） `15：40024FBA：Kefka：28E8：Hyperdrive：106C1DBA：お好み焼き：750003：426B4001：1C：28E88000：0：0：0：0：0：0：0 ：0：0：0：0：0：35811：62464：4560：4560：940：1000：-0.1586061：-5.753153：0：30098906：31559062：12000：12000：1000：1000：0.3508911：0.4425049：2.384186E- 07：`
+
+3）グランドクロスオメガによる22109のダメージ（：3F：0：シフト） `16：40001333：ネオエクスデス：242D：グランドクロスオメガ：1048638C：テイタートット：3F：0：750003：565D0000：1C：80242D：0： 0：0：0：0：0：0：0：0：41241：41241：5160：5160：670：1000：-0.3251641：6.526299：1.192093E-07：7560944：17702272：12000：12000：1000： 1000：0：19：2.384186E-07：`
+
+4）3つの告白スタックから15732クリティカルヒールプレナリーインダルジェンス（：？13：4C3：シフト） `16：10647D2F：たこ焼き：1D09：プレナリーインダルジェンス：106DD019：お好み焼き：313：4C3：10004：3D74：0：0 ：0：0：0：0：0：0：0：0：0：7124：40265：14400：9192：1000：1000：-10.78815：11.94781：0：11343：40029：19652：16451：1000： 1000：6.336648：7.710004：0：`
+
+5）即死ツイスター `16：40004D5D：Twintania：26AB：Twister：10573FDC：Tini Poutini：33：0：1C：26AB8000：0：0：0：0：0：0：0：0：0：0： 0：0：43985：43985：5760：5760：910：1000：-8.42179：9.49251：-1.192093E-07：57250：57250：0：0：1000：1000：-8.565645：10.20959：0：`
+
+6）ダメージゼロのターゲットレスaoe（E0000000ターゲット） `16：103AAEE4：Potato Chippy：B1：Miasma II：E0000000 :: 0：0：0：0：0：0：0：0：0：0：0：0 ：0：0：0：0 :::::::::: 19400：40287：17649：17633：1000：1000：-0.656189：-3.799561：-5.960464E-08：`
+
+### 16：NetworkAOEAbility
+
+これは、ゲームでの能力の使用法であり、最終的に複数のアクターにヒットするか、アクターがまったくヒットしなくなります。
+
+参照： [15：NetworkAbility](#15-networkability) との間の差の議論のために `NetworkAbility` 及び `NetworkAOEAbility`。
+
+### 17：NetworkCancelAbility
+
+キャストバーのある能力の場合、これは、移動または割り込みのいずれかのためにキャストがキャンセルされ、それが消えないことを指定するログ行です。
+
+構造： `17：[ソースID]：[ソース名]：[アビリティID]：[アビリティ名]：キャンセルされました。`
+
+例：
 
 ```log
-18:DoT Tick on Ovni for 13003 damage.
-18:HoT Tick on Tini Poutini for 2681 damage.
-18:Shadow Flare DoT Tick on Arsenal Centaur for 151 damage.
+17：105EDD08：ポテトチッピー：1D07：ストーンIV：キャンセル：
+17：40000FE3：雷電：3878：アルティメット残鉄拳：キャンセル：
 ```
 
-Ground effect dots get listed separately.
+### 18：NetworkDoT
 
-### 19: NetworkDeath
+HoT（時間の経過とともに回復）とDoT（時間の経過による損傷）の量。 これらは、そのターゲット上のすべてのホットまたはドットのダメージの合計量です。
 
-This message corresponds to an actor being defeated and killed.  This usually comes along with a battle log message such as `You defeat the worm's heart.`
+ドット に関するACTとfflogの間にこのような不一致がある理由は、ff14がすべてのアクティブなドットの正確なティック量を返さないためです。 代わりに、ボスに20ドットが適用されている場合、 場合、これらすべてのドットの合計ティック量が返されます。 パーサーは、個々のドット量が何であるかを推定するために残されています。
 
-Structure: `19:[Target Name] was defeated by [Source Name].`
+構造： `18：[ソース名]の[タイプ名]に [Value] ダメージ。`
 
-Examples:
+例：
 
 ```log
-19:Tini Poutini was defeated by Ovni.
-19:The Scourge Of Meracydia was defeated by Unknown.
+18：Ovniに13003のダメージを与えるDoTティック。
+18：HoTTiniPoutiniに2681のダメージを与える。
+18：シャドウフレアDoTがアーセナルケンタウロスに151のダメージを与える。
 ```
 
-### 1A: NetworkBuff
+地面効果ドットは個別にリストされます。
 
-This message is the "gains effect" message for players and mobs gaining effects whether they are good or bad.
+### 19：NetworkDeath
 
-Structure: `1A:[ObjectId]:[Target Name] gains the effect of [Status] from [Source Name] for [Float_Value] Seconds`
+このメッセージは、俳優が敗北して殺されたことに対応しています。  これは通常、 `などの戦闘ログメッセージとともに表示されます。ワームの心臓を倒します。`
 
-Examples:
+構造： `19：[ターゲット名]は[ソース名]に敗北しました。`
+
+例：
 
 ```log
-1A:105EDD08:Tini Poutini gains the effect of Sprint from Tini Poutini for 20.00 Seconds.
-1A:10660108:Potato Chippy gains the effect of Protect from Tater Tot for 1800.00 Seconds.
-1A:405EFA09:Ovni gains the effect of Aero II from  for 18.00 Seconds.
+19：ティニ・プーティーニはオヴニに敗れた。
+19：Meracydiaの惨劇はUnknownに敗れた。
 ```
 
-The "Source Name" can be blank here (and there will be two spaces like the above example if that's the case).
+### 1A：NetworkBuff
 
-This corresponds to game log messages that look like this: `00:12af:The worm's heart suffers the effect of Slashing Resistance Down.` `00:112e:Tini Poutini gains the effect of The Balance.` `00:08af;You suffer the effect of Burning Chains.`
+このメッセージは、プレイヤーとモブが良いか悪いかにかかわらず効果を得る「効果を得る」メッセージです。
 
-Although game messages differentiate between buffs and debuffs, log message type `1A` includes all effect types (both positive and negative).
+構造： `1A：[ObjectId]：[ターゲット名]は[ソース名]から [Float_Value] 秒間 [Status] の効果を得る`
 
-You cannot count on the time remaining to be precise. In rare cases, the time will already have counted down a tiny bit. This matters for cases such as ucob Nael phase doom debuffs.
-
-### 1B: NetworkTargetIcon (Head Markers)
-
-Structure: `1B:[ObjectId]:[Player Name]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:0000:0000:0000`
-
-Examples:
+例：
 
 ```log
-1B:10532971:Tini Poutini:0000:0000:0027:0000:0000:0000:
-1B:106F0213:Potato Chippy:0000:0EE3:0061:0000:0000:0000:
+1A：105EDD08：Tini Poutiniは、TiniPoutiniから20.00秒間スプリントの効果を獲得します。
+1A：10660108：ポテトチッピーはテイタートッツからの保護の効果を1800.00秒間獲得します。
+1A：405EFA09：Ovniは18.00秒間からAeroIIの効果を獲得します。
 ```
 
-The different headmarker types (e.g. `0027` or `0061` in the examples above) are consistent across fights as far as which marker they *visually* represent. (Correct *resolution* for the marker mechanic may not be.)  For example, `0039` is the meteor marker in Shinryu EX adds phase and the Baldesion Arsenal Ozma fight.  The data following the type always appears to be zero in practice, although `Unknown1` and `Unknown2` infrequently have non-zero values.
+ここでは「ソース名」を空白にすることができます（その場合、上記の例のように2つのスペースがあります）。
 
-Note: It's unclear when the head markers disappear.  Maybe `Unknown2` is a duration time? It's not clear what either of these unknown values mean.
+ゲームのログメッセージにこの対応することを次のようになります。 `00：12af：ワームの心は斬耐性ダウンの影響を受けます。` `00：112e：TiniPoutiniはバランスの効果を獲得します。` `00：08af;あなたはバーニングチェーンの影響を受けます。`
 
-Also, this appears to only be true on later fights. Turn 5 fireball and conflag headmarkers are actions from Twintania and not `1B` lines. It seems likely this was implemented later and nobody wanted to break old content by updating it to use newer types.
+ゲームメッセージはバフとデバフを区別しますが、 ログメッセージタイプ `1A` は、すべてのエフェクトタイプ（ポジティブとネガティブの両方）が含まれます。
 
-| Marker Code | Name                              | Sample Locations                              | Consistent meaning? |
-| ----------- | --------------------------------- | --------------------------------------------- | ------------------- |
-| 000[1-2, 4] | Prey Circle (orange)              | o6s, The Burn boss 2                          | Yes                 |
-| 0007        | Green Meteor                      | t9n/s                                         | N/A                 |
-| 0008        | Ghost Meteor                      | t9n/s                                         | N/A                 |
-| 0009        | Red Meteor                        | t9n/s                                         | N/A                 |
-| 000A        | Yellow Meteor                     | t9n/s                                         | N/A                 |
-| 000D        | Devour Flower                     | t6n/s, Sohm Al boss 1                         | Yes                 |
-| 000E        | Prey Circle (blue)                | t6n/s, o7s                                    | No                  |
-| 0010        | Teal Crystal                      | Ultima Weapon Ultimate                        | N/A                 |
-| 0011        | Heavenly Laser (red)              | t8n/s, e1n                                    | No                  |
-| 0017        | Red Pinwheel                      | Sohm Al boss 2, Susano N/EX, e3n/s            | No                  |
-| 0028        | Earth Shaker                      | Sephirot N/EX, o4s                            | Yes                 |
-| 001C        | Gravity Puddle                    | e1n                                           | N/A                 |
-| 001E        | Prey Sphere (orange)              | Dun Scaith boss 3, o7n/s                      | No                  |
-| 001F        | Prey Sphere (blue)                | t10                                           | N/A                 |
-| 003[2-5]    | Sword Markers 1-4                 | Ravana N/EX, Twinning boss 1                  | N/A                 |
-| 0037        | Red Dorito                        | Weeping City boss 2, Ridorana boss 1          | Yes                 |
-| 0039        | Purple Spread Circle (large)      | Ravana N/EX, Shinryu EX                       | Yes                 |
-| 003E        | Stack Marker (bordered)           | o8n/s, Dun Scaith                             | Yes                 |
-| 0046        | Green Pinwheel                    | Dun Scaith boss 1, o5n/s                      | Yes                 |
-| 004B        | Acceleration Bomb                 | Weeping City boss 3, Susano N/EX, o4s         | Yes                 |
-| 004C        | Purple Fire Circle (large)        | e2n/s                                         | Yes                 |
-| 0054        | Thunder Tether (orange)           | Titania EX                                    | N/A                 |
-| 0057        | Flare                             | o4n/s, e2n/s                                  | Yes                 |
-| 005C        | Prey (dark)                       | Dun Scaith boss 3/4, Holminster Switch boss 3 | No                  |
-| 005D        | Stack Marker (tank--no border)    | Dun Scaith boss 4, e4s                        | Yes                 |
-| 0060        | Orange Spread Circle (small)      | Hades N                                       | Yes                 |
-| 0061        | Chain Tether (orange)             | The Vault boss 3, Shinryu N/EX                | Yes                 |
-| 0064        | Stack Marker (bordered)           | o3s, Ridorana boss 3                          | Yes                 |
-| 0065        | Spread Bubble                     | o3s, Byakko EX                                | N/A                 |
-| 006E        | Levinbolt                         | Susano EX                                     | N/A                 |
-| 0076        | Prey (dark)                       | Bahamut Ultimate                              | N/A                 |
-| 0078        | Orange Spread Circle (large)      | Akadaemia Anyder                              | Yes                 |
-| 007B        | Scatter (animated Play symbol)    | Rabanastre boss 4                             | N/A                 |
-| 007C        | Turn Away (animated eye symbol)   | Rabanastre boss 4                             | N/A                 |
-| 007E        | Green Crystal                     | Shinryu N/EX                                  | No                  |
-| 0083        | Sword Meteor (Tsukuyomi)          | Tsukuyomi EX                                  | N/A                 |
-| 0087        | Prey Sphere (blue)                | Akadaemia Anyder                              | N/A                 |
-| 008A        | Orange Spread Circle (large)      | Innocence N/EX, Orbonne boss 3                | Yes                 |
-| 008B        | Purple Spread Circle (small)      | Ridorana boss 1, Hades N                      | Yes                 |
-| 008E        | Death From Above                  | o10s                                          | N/A                 |
-| 008F        | Death From Below                  | o10s                                          | N/A                 |
-| 009[1-8]    | Fundamental Synergy Square/Circle | o12s                                          | N/A                 |
-| 00A1        | Stack Marker (bordered)           | Titania N/EX                                  | Yes                 |
-| 00A9        | Orange Spread Circle (small)      | o11n/s, e3n/s                                 | Yes                 |
-| 00AB        | Green Poison Circle               | Qitana Ravel                                  | N/A                 |
-| 00AC        | Reprobation Tether                | Innocence EX                                  | N/A                 |
-| 00AE        | Blue Pinwheel                     | Sohm Al boss 2                                | N/A                 |
-| 00B9        | Yellow Triangle (spread)          | e4s                                           | N/A                 |
-| 00BA        | Orange Square (stack)             | e4s                                           | N/A                 |
-| 00BB        | Blue Square (big spread)          | e4s                                           | N/A                 |
-| 00BD        | Purple Spread Circle (giant)      | TItania N/EX                                  | Yes                 |
-| 00BF        | Granite Gaol                      | e4s                                           | N/A                 |
+正確に言うと、残り時間を当てにすることはできません。 まれに、時間がすでに少しカウントダウンされている場合があります。 これは、ucobNaelフェーズの運命のデバフなどの場合に重要です。
 
-### 1C: NetworkRaidMarker
+### 1B：NetworkTargetIcon（ヘッドマーカー）
 
-Unknown?
+構造： `1B：[ObjectId]：[プレーヤー名]：[不明1（4バイト）]：[不明2（4バイト）]：[タイプ（4バイト）]：0000：0000：0000`
 
-### 1D: NetworkTargetMarker
-
-Unknown?
-
-### 1E: NetworkBuffRemove
-
-This is the paired "end" message to the [1A: NetworkBuff](#1a-networkbuff) "begin" message. This message corresponds to the loss of effects (either positive or negative).
-
-Structure: `1E:[ObjectId]:[Target Name] loses the effect of [Status] from [Source Name]`
-
-Examples:
+例：
 
 ```log
-1E:10657868:Tini Poutini loses the effect of Sprint from Tini Poutini.
-1E:10299838:Potato Chippy loses the effect of Protect from Tater Tot.
-1E:40686258:Ovni loses the effect of Aero II.
+1B：10532971：Tini Poutini：0000：0000：0027：0000：0000：0000：
+1B：106F0213：Potato Chippy：0000：0EE3：0061：0000：0000：0000：
 ```
 
-### 1F: NetworkGauge
+異なるheadmarker型（例えば `0027` 又は `0061` 上記の例では）限り、それらがどのマーカーとしての戦いを横切って一貫している *目視* 表します。 （マーカーメカニックの正しい *解像度* はそうではないかもしれません。）  たとえば、 `0039` は、Shinryu EXの隕石マーカーがフェーズを追加し、Baldesion ArsenalOzmaが戦います。  タイプ以下のデータは常にあるが、実際にゼロであるように見える `Unknown1` 及び `Unknown2` まれに非ゼロ値を有します。
 
-Info about the current player's job gauge.
+注：ヘッドマーカーがいつ消えるかは不明です。  多分 `不明` は継続時間ですか？ これらの未知の値のいずれかが何を意味するのかは明らかではありません。
 
-Examples:
+また、これは後の戦いでのみ当てはまるようです。 5火の玉を回してconflag headmarkersはTwintaniaとしないからであるアクション `1B` 行。 これは後で実装された可能性が高く、新しいタイプを使用するように更新して古いコンテンツを壊したいと思った人は誰もいませんでした。
+
+| マーカーコード     | 名前                      | サンプルの場所                          | 一貫した意味？ |
+| ----------- | ----------------------- | -------------------------------- | ------- |
+| 000 [1-2、4] | プレイサークル（オレンジ）           | o6s、バーンボス2                       | はい      |
+| 0007        | 緑の流星                    | t9n / s                          | 該当なし    |
+| 0008        | ゴーストメテオ                 | t9n / s                          | 該当なし    |
+| 0009        | 赤い流星                    | t9n / s                          | 該当なし    |
+| 000A        | 黄色い流星                   | t9n / s                          | 該当なし    |
+| 000D        | 花をむさぼり食う                | t6n / s、SohmAlボス1                | はい      |
+| 000E        | プレイサークル（青）              | t6n / s、o7s                      | 番号      |
+| 0010        | ティールクリスタル               | ウルティマウェポンアルティメット                 | 該当なし    |
+| 0011        | ヘブンリーレーザー（赤）            | t8n / s、e1n                      | 番号      |
+| 0017        | 赤い風車                    | Sohm Alボス2、Susano N / EX、e3n / s | 番号      |
+| 0028        | アースシェーカー                | セフィロトN / EX、o4s                  | はい      |
+| 001C        | 重力水たまり                  | e1n                              | 該当なし    |
+| 001E        | プレイスフィア（オレンジ）           | ダンスキー城のボス3、o7n / s               | 番号      |
+| 001F        | プレイスフィア（青）              | t10                              | 該当なし    |
+| 003[2-5]    | ソードマーカー1-4              | ラーヴァナN / EX、双晶ボス1                | 該当なし    |
+| 0037        | レッドドリトス                 | しだれ都市ボス2、リドラナボス1                 | はい      |
+| 0039        | パープルスプレッドサークル（大）        | ラーヴァナN / EX、シンリュウEX              | はい      |
+| 003E        | スタックマーカー（境界線）           | o8n / s、ダンスキー城                   | はい      |
+| 0046        | 緑の風車                    | ダンスキー城のボス1、o5n / s               | はい      |
+| 004B        | 加速爆弾                    | しだれ市のボス3、スサノN / EX、o4s           | はい      |
+| 004C        | パープルファイアサークル（大）         | e2n / s                          | はい      |
+| 0054        | サンダーテザー（オレンジ）           | チタニアEX                           | 該当なし    |
+| 0057        | フレア                     | o4n / s、e2n / s                  | はい      |
+| 005C        | 獲物（暗い）                  | ダンスキー城のボス3/4、ホルミンスタースイッチのボス3     | 番号      |
+| 005D        | スタックマーカー（タンク-境界なし）      | ダンスキー城のボス4、e4s                   | はい      |
+| 0060        | オレンジスプレッドサークル（小）        | ハデスN                             | はい      |
+| 0061        | チェーンテザー（オレンジ）           | ヴォールトボス3、シンリュウN / EX             | はい      |
+| 0064        | スタックマーカー（境界線）           | o3s、リドラナボス3                      | はい      |
+| 0065        | スプレッドバブル                | o3s、白虎EX                         | 該当なし    |
+| 006E        | レビンボルト                  | スサノオEX                           | 該当なし    |
+| 0076        | 獲物（暗い）                  | バハムートアルティメット                     | 該当なし    |
+| 0078        | オレンジスプレッドサークル（大）        | アカデミアエニダー                        | はい      |
+| 007B        | スキャッター（アニメーションプレイシンボル）  | ラバナストレボス4                        | 該当なし    |
+| 007C        | ターンアウェイ（アニメーションの目のシンボル） | ラバナストレボス4                        | 該当なし    |
+| 007E        | グリーンクリスタル               | しんりゅうN / EX                      | 番号      |
+| 0083        | ソードメテオ（ツクヨミ）            | ツクヨミEX                           | 該当なし    |
+| 0087        | プレイスフィア（青）              | アカデミアエニダー                        | 該当なし    |
+| 008A        | オレンジスプレッドサークル（大）        | イノセンスN / EX、オーボンヌボス3             | はい      |
+| 008B        | パープルスプレッドサークル（小）        | リドラナボス1、ハデスN                     | はい      |
+| 008E        | 上からの死                   | o10s                             | 該当なし    |
+| 008F        | 下からの死                   | o10s                             | 該当なし    |
+| 009[1-8]    | ファンダメンタルシナジースクエア/サークル   | o12s                             | 該当なし    |
+| 00A1        | スタックマーカー（境界線）           | チタニアN / EX                       | はい      |
+| 00A9        | オレンジスプレッドサークル（小）        | o11n / s、e3n / s                 | はい      |
+| 00AB        | グリーンポイズンサークル            | Qitana Ravel                     | 該当なし    |
+| 00AC        | 叱責テザー                   | イノセンスEX                          | 該当なし    |
+| 00AE        | 青い風車                    | ソームアルボス2                         | 該当なし    |
+| 00B9        | 黄色い三角形（広がり）             | e4s                              | 該当なし    |
+| 00BA        | オレンジスクエア（スタック）          | e4s                              | 該当なし    |
+| 00BB        | ブルースクエア（大きな広がり）         | e4s                              | 該当なし    |
+| 00BD        | パープルスプレッドサークル（ジャイアント）   | チタニアN / EX                       | はい      |
+| 00BF        | 花崗岩の刑務所                 | e4s                              | 該当なし    |
+
+### 1C：NetworkRaidMarker
+
+わからない？
+
+### 1D：NetworkTargetMarker
+
+わからない？
+
+### 1E：NetworkBuffRemove
+
+これは、ペアに「終了」メッセージである [1A：NetworkBuff](#1a-networkbuff) メッセージを「開始します」。 このメッセージは、効果の喪失（正または負のいずれか）に対応します。
+
+構造： `1E：[ObjectId]：[ターゲット名]は[ソース名]`から [Status] の効果を失います
+
+例：
 
 ```log
-1F:10532971:Tini Poutini:C8000019:FD32:D0DF8C00:7FC0
-1F:10532971:Potato Chippy:C863AC19:1000332:D0DF8C00:7FC0
+1E：10657868：Tini Poutiniは、TiniPoutiniからのSprintの効果を失います。
+1E：10299838：ポテトチッピーはテイタートッツからの保護の効果を失います。
+1E：40686258：OvniはAeroIIの効果を失います。
 ```
 
-Each of the values after the name represents the memory for the job gauge, interpreted as a 4 byte integer. To get back to the original memory, zero pad out to 4 bytes, and then reverse the bytes (because little endian).
+### 1F：NetworkGauge
 
-For example, take this line: `1F:10532971:Tini Poutini:C8000019:FD32:D0DF8C00:7FC0`
+現在のプレーヤーのジョブゲージに関する情報。
 
-Zero extended: `:C8000019:0000FD32:D0DF8C00:`
-
-Reversed: `19 00 00 C8 32 FD 00 00 00 8C DF D0`
-
-The first byte is always the job. The remaining bytes are a copy of the job gauge memory.
-
-This job is `0x19` (or black mage). Interpreting these [values](https://github.com/goaaats/Dalamud/blob/4ad5bee0c62128315b0a247466d28f42264c3069/Dalamud/Game/ClientState/Structs/JobGauge/BLMGauge.cs) means:
-
-* `short TimeUntilNextPolyglot` = 0x0000 = 0
-* `short ElementTimeRemaining` = 0x32C8 = 13000ms
-* `byte ElementStance` = 0xFD = -3 (three stacks of ice)
-* `byte NumUmbralHearts` = 0x00 = 0
-* `byte EnoState` = 0x00 = 0 (no enochian)
-
-There are a number of references for job gauge memory:
-
-  1) [cactbot FFXIVProcess code](https://github.com/quisquous/cactbot/blob/a4d27eca3628d397cb9f5638fad97191566ed5a1/CactbotOverlay/FFXIVProcessIntl.cs#L267) 1) [Dalamud code](https://github.com/goaaats/Dalamud/blob/4ad5bee0c62128315b0a247466d28f42264c3069/Dalamud/Game/ClientState/Structs/JobGauge/NINGauge.cs#L15)
-
-Unfortunately, network data about other player's gauge is not sent. You are unable to see the abilities of other players, only your own. (This is probably by design to cut down on the amount of network data sent.)
-
-### 20: NetworkWorld
-
-Unused.
-
-### 21: Network6D (Actor Control Lines)
-
-See also: [nari directory update documentation](https://nonowazu.github.io/nari/types/event/directorupdate.html)
-
-Actor control lines are for several miscellaneous zone commands:
-
-* changing the music
-* resetting an entire zone after a wipe
-* limit gauge for bosses
-* updates on time remaining (periodically, and after a clear)
-
-Structure: `21:TypeAndInstanceContentId:Command (4 bytes):Data (4x 4? byte extra data)`
-
-Examples:
+例：
 
 ```log
-21:8003753A:40000010:00:00:00:00
-21:80034E52:8000000D:1601:00:00:00
-21:80037543:80000004:257:00:00:00
+1F：10532971：Tini Poutini：C8000019：FD32：D0DF8C00：7FC0
+1F：10532971：Potato Chippy：C863AC19：1000332：D0DF8C00：7FC0
 ```
 
-`TypeAndContentId` is 2 bytes of a type enum, where `8003` is the update type for instanced content. It's then followed by 2 bytes of a content id. This is the ID from the InstanceContent table.
+名前の後の各値は、ジョブゲージのメモリを表し、 は4バイト整数として解釈されます。 元のメモリに戻すには、ゼロで4バイト、 パディングしてから、バイトを逆にします（リトルエンディアンのため）。
 
-Wipes on most raids and primals these days can be detected via this regex: `21:........:40000010:`.  However, this does not occur on some older fights, such as coil turns where there is a zone seal.
+たとえば、この行を取る： `階：10532971：チニPoutini：C8000019：FD32：D0DF8C00：7FC0`
 
-Known types:
+ゼロ拡張： `：C8000019：0000FD32：D0DF8C00：`
 
-* Initial commence: `21:content:40000001:time:` (time is the lockout time in seconds)
-* Recommence: `21:content:40000006:time:00:00:00`
-* Lockout time adjust: `21:content:80000004:time:00:00:00`
-* Charge boss limit break: `21:content:8000000C:value1:value2:00:00`
-* Music change: `21:content:80000001:value:00:00:00`
-* Fade out: `21:content:40000005:00:00:00:00` (wipe)
-* Fade in: `21:content:40000010:00:00:00:00` (always paired with barrier up)
-* Barrier up: `21:content:40000012:00:00:00:00` (always comes after fade in)
-* Victory: `21:zone:40000003:00:00:00:00`
+反転： `19 00 00 C8 32 FD 00 00 00 8C DF D0`
 
-Note: cactbot uses "fade in" as the wipe trigger, but probably should switch to "fade out" after testing.
+最初のバイトは常にジョブです。 残りのバイトは、ジョブゲージメモリのコピーです。
 
-Still unknown:
+この仕事は `0x19` （又は黒魔術師）。 これらの [値を](https://github.com/goaaats/Dalamud/blob/4ad5bee0c62128315b0a247466d28f42264c3069/Dalamud/Game/ClientState/Structs/JobGauge/BLMGauge.cs) と解釈すると、次のことを意味します。
 
-* `21:zone:40000007:00:00:00:00`
+* `短いTimeUntilNextPolyglot` = 0000 = 0
+* `短いElementTimeRemaining` = 0x32C8 = 13000ms
+* `バイトElementStance` = 0xFDで= -3（氷の3つのスタック）
+* `バイトNumUmbralHearts` = 0x00の= 0
+* `バイトEnoState` = 0×00 = 0（なしエノク語）
 
-### 22: NetworkNameToggle
+ジョブゲージメモリについては、いくつかの参照があります。
 
-This log message toggles whether the nameplate for a particular entity is visible or not. This can help you know when a mob is targetable, for example.
+  1） [cactbot FFXIVProcessコード](https://github.com/quisquous/cactbot/blob/a4d27eca3628d397cb9f5638fad97191566ed5a1/CactbotOverlay/FFXIVProcessIntl.cs#L267) 1） [Dalamudコード](https://github.com/goaaats/Dalamud/blob/4ad5bee0c62128315b0a247466d28f42264c3069/Dalamud/Game/ClientState/Structs/JobGauge/NINGauge.cs#L15)
 
-Structure: `22:[ObjectId]:[Target Name]:[ObjectId]:[Target Name]:[Display State]`
+残念ながら、他のプレイヤーのゲージに関するネットワークデータは送信されません。 あなたは他のプレイヤーの能力を見ることができず、あなた自身だけを見ることができます。 （これはおそらく、送信されるネットワークデータの量を削減するための設計によるものです。）
 
-Examples:
+### 20：NetworkWorld
+
+未使用。
+
+### 21：Network6D（アクターコントロールライン）
+
+参照： [ナリディレクトリ更新のドキュメントを](https://nonowazu.github.io/nari/types/event/directorupdate.html)
+
+アクターコントロールラインは、いくつかのその他のゾーンコマンド用です。
+
+* 音楽を変える
+* ワイプ後にゾーン全体をリセットする
+* ボスの限界ゲージ
+* 残り時間の更新（定期的、およびクリア後）
+
+構造： `21：TypeAndInstanceContentId：Command（4バイト）：データ（4x 4？ バイト追加データ）`
+
+例：
 
 ```log
-22:105E3321:Tini Poutini:105E3321:Tini Poutini:01
-22:40018065:Twintania:40018065:Twintania:00
+21：8003753A：40000010：00：00：00：00
+21：80034E52：8000000D：1601：00：00：00
+21：80037543：80000004：257：00：00：00
 ```
 
-### 23: NetworkTether
+`TypeAndContentId` は、型列挙型の2バイトです ここで、 `8003` は、インスタンス化されたコンテンツの更新タイプです。 その後、2バイトのコンテンツIDが続きます。 これは、InstanceContentテーブルのIDです。
 
-This log line is for tethers between enemies or enemies and players. This does not appear to be used for player to player skill tethers like dragonsight or cover. (It can be used for enemy-inflicted player to player tethers such as burning chains in Shinryu N/EX.)
+最も襲撃とprimalsにワイプこれらの日は、この正規表現を介して検出することができる： `21：........:40000010:`。  しかし、これは一部の古い戦いに発生しない、 ようなゾーンのシールがあるコイルターンとして。
 
-Structure: `23:[SourceId]:[SourceName]:[TargetId]:[TargetName]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:[TargetId]:[Unknown3 (4 bytes)]:[Unknown4 (4 bytes)]:`
+既知のタイプ：
 
-Examples:
+* 初期開始： `21：content：40000001：time：` （時間は秒単位のロックアウト時間です）
+* 再開： `21：content：40000006：time：00：00：00`
+* ロックアウト時間調整： `21：content：80000004：time：00：00：00`
+* チャージボスリミットブレイク： `21：content：8000000C：value1：value2：00：00`
+* 音楽の変更： `21：content：80000001：value：00：00：00`
+* フェードアウト： `21：content：40000005：00：00：00：00` （ワイプ）
+* フェードイン： `21：content：40000010：00：00：00：00` （常にバリアアップとペアになっています）
+* バリアアップ： `21：content：40000012：00：00：00：00` （常にフェードイン後に表示されます）
+* 勝利： `21：zone：40000003：00：00：00：00`
+
+注：cactbotはワイプトリガーとして「フェードイン」を使用し が、 が、テスト後に「フェードアウト」に切り替える必要があります。
+
+まだ不明：
+
+* `21：zone：40000007：00：00：00：00`
+
+### 22：NetworkNameToggle
+
+このログメッセージは、特定のエンティティのネームプレートを表示するかどうかを切り替えます。 これは、たとえば、暴徒がいつターゲットにできるかを知るのに役立ちます。
+
+構造： `22：[ObjectId]：[ターゲット名]：[ObjectId]：[ターゲット名]：[表示状態]`
+
+例：
 
 ```log
-23:40015B4E:Weapons Node:40015B4D:Gravity Node:751E:0000:000E:40015B4D:000F:7F4B:
-23:4000E84B:Zu Cockerel:1048638C:Tini Poutini:0000:0000:0006:1048638C:000F:7FEF:
-23:40001614:Omega:10532971:Potato Chippy:0023:0000:0054:10532971:000F:0000:
+22：105E3321：Tini Poutini：105E3321：Tini Poutini：01
+22：40018065：Twintania：40018065：Twintania：00
 ```
 
-The type of tether in the above three lines are `000E`, `0006`, and `0054` respectively.
+### 23：NetworkTether
 
-Like [1B: NetworkTargetIcon (Head Markers)](#1b-networktargeticon-head-markers), Type is consistent across fights and represents a particular visual style of tether.
+このログラインは、敵または敵とプレイヤーの間のテザー用です。 これは、ドラゴンサイトやカバーのようなプレイヤー間のスキルテザーには使用されていないようです。 （新竜N / EXでは、敵のプレイヤー同士のテザーを燃やすなどのテザーに使用できます。）
 
-There are also a number of examples where tethers are generated in some other way:
+構造： `23：[SourceId]：[SourceName]：[TargetId]：[TargetName]：[Unknown1（4バイト）]：[Unknown2（4バイト）]：[タイプ（4バイト）]：[TargetId]：[Unknown3（4バイト）]：[Unknown4 （4バイト）]：`
 
-* ultima aetheroplasm orbs: NpcSpawn parentActorId set to opposite orb
-* t12 redfire orb: NpcSpawn parentActorId set to target
-* t13 dark aether orbs: NpcSpawn parentActorId and targetId set to target player
-* Suzaku Extreme birbs: who knows
-* player to player tethers (dragonsight, cover, fairy tether)
-
-## 24: LimitBreak
-
-This log line is recorded every server tick where limit break energy is generated while in combat in a light or full party. (Generation is not recorded while at cap.) It starts at 0x0000 at the beginning of the instance (or encounter in the caseof a single-encounter instance,) and counts up by 0x00DC (220 decimal,) until the limit break is used, or the instance's maximum limit value is reached. This rate of increase is constant, but other actions taken can cause extra increments to happen independent of the base increase. (These other increments occur in the same packet as the base rate, but separately.)
-
-Each limit break bar is 0x2710 (10,000 decimal) units. Thus, the maximum possible recorded value would be 0x7530.
-
-Structure: `24:Limit Break: [Value]`
-
-Examples:
+例：
 
 ```log
-24:Limit Break: 7530
+23：40015B4E：武器ノード：40015B4D：重力ノード：751E：0000：000E：40015B4D：000F：7F4B：
+23：4000E84B：Zuおんどり：1048638C：Tini Poutini：0000：0000：0006：1048638C：000F：7FEF：
+23：40001614：オメガ：10532971：ポテトチッピー：0023：0000：0054：10532971：000F：0000：
 ```
 
-## 25: NetworkActionSync
+上記の3つの株におけるテザーの種類は、 `000E`、 `0006`、及び `0054` それぞれ。
 
-This log line is a sync packet that tells the client to render an action that has previously resolved. (This can be an animation or text in one of the game text logs.) It seems that it is emitted at the moment an action "actually happens" in-game, while the `14/15` line is emitted before, at the moment the action is "locked in". [As Ravahn explains it](https://discordapp.com/channels/551474815727304704/551476873717088279/733336512443187231):
+ように [1B：NetworkTargetIcon（ヘッドマーカー）](#1b-networktargeticon-head-markers)、 種類の戦いを通じて一貫してテザーの特定の視覚スタイルを表します。
 
-> "If I cast a spell, I will get [a `NetworkAbility`] packet (line type [`14/15`]) showing the damage amount, but the target isn't expected to actually take that damage yet. The [`25` log line]  has a unique identifier in it which refers back to the [`14/15`] line[,] and indicates that the damage should now take effect on the target. [The] FFXIV plugin doesn't use these lines currently, they are used by FFLogs. It would help though if I did, but ACT doesn't do multi-line parsing very easily[,] so I would need to do a lot of work-arounds."
+テザーが他の方法で生成される例もいくつかあります。
 
-Structure: `25:[Player ObjectId]:[Sequence Number]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:[packet data thereafter]`
+* ultima aetheroplasm orbs：NpcSpawnparentActorIdを反対のorbに設定
+* t12 redfire orb：NpcSpawnparentActorIdがターゲットに設定されました
+* t13ダークエーテルオーブ：NpcSpawnparentActorIdとtargetIdがターゲットプレーヤーに設定されています
+* 朱雀エクストリームバーブ：誰が知っている
+* プレイヤー間テザー（ドラゴンサイト、カバー、フェアリーテザー）
 
-Examples:
+## 24：LimitBreak
+
+このログ行は、ライトパーティーまたはフルパーティーでの戦闘中にリミットブレイクエネルギーが生成されるサーバーティックごとに記録されます。 （上限にある間は生成は記録されません。） インスタンスの開始時（または単一のインスタンスの場合は遭遇） で0x0000から始まり、制限ブレークが使用されるか、 またはインスタンスの最大制限値に達するまで、0x00DC（10進数で220）ずつカウントアップします。 。 この増加率は一定ですが、 が、他のアクションを実行すると、基本の増加とは関係なく、追加の増分が発生する可能性があります。 （これらの他の増分は、基本レートと同じパケットで発生しますが、別々に発生します。）
+
+各リミットブレイクバーは0x2710（10進数で10,000）単位です。 したがって、記録される可能性のある最大値は0x7530になります。
+
+構造： `24：リミットブレイク： [Value]`
+
+例：
 
 ```log
-25:12345678:PlayerOne:0000132A:33635:35817:10000:10000:0::0.3841706:-207.8767:2.901163:-3.00212:03E8:2500:0:01:03000000:0:0:E0000000:
+24：リミットブレイク：7530
 ```
 
-## 26: NetworkStatusEffects
+## 25：NetworkActionSync
 
-For NPC opponents (and possibly PvP) this log line is generated alongside `18:NetworkDoT` lines. For non-fairy allies, it is generated alongside [1A: NetworkBuff](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove), [1E: NetworkBuffRemove](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove), and [25:NetworkActionSync](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#25-NetworkActionSync).
+このログ行は、以前に解決されたアクションをレンダリングするようにクライアントに指示する同期パケットです。 （これは、ゲームのテキストログの1つにあるアニメーションまたはテキストである可能性があります。） ゲーム内でアクションが「実際に発生」した瞬間に放出されたようです 、前に `14/15` ラインが放出され、アクションが「ロックイン」された瞬間に放出されます。 [Ravahnが説明しているように](https://discordapp.com/channels/551474815727304704/551476873717088279/733336512443187231)：
 
-Structure: `26:[Target Id]:[Target Name]:[Job Levels]:[Current HP]:[Max Hp]:[Current Mp]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:<status list; format unknown>`
+> 私は呪文を唱える場合は」、私は、[取得します `NetworkAbility`]パケット（ラインタイプ[`14/15`ダメージ量を示す]）、 が、ターゲットが実際に期待されていないが、まだそのダメージを受けます。 [`25` ログ行]には、[`14/15`]行[、] を参照する一意の識別子があり、ダメージがターゲットに有効になることを示します。 [The] FFXIVプラグインは現在これらの行を使用しておらず、FFLogによって使用されています。 そうした場合は役に立ちますが、ACTは複数行の解析を簡単に実行できないため[、] 、多くの回避策を実行する必要があります。」
 
-Examples:
+構造： `25：[Player ObjectId]：[Sequence Number]：[Current HP]：[Max HP]：[Current MP]：[Max MP]：[Current TP]：[Max TP]：[Position X] ：[位置Y]：[位置Z]：[Facing]：[その後のパケットデータ]`
+
+例：
 
 ```log
-26:12345678:PlayerOne:3C503C1C:24136:24136:9045:10000:4:0:-0.4730835:-158.1598:-23.9:3.110625:03E8:45:0:020130:0:106501CA:0129:4172D113:106501CA:012A:4168C8B4:106501CA:012B:40919168:106501CA:0232:40E00000:E0000000:
+25：12345678：PlayerOne：0000132A：33635：35817：10000：10000：0：:0.3841706:-207.8767：2.901163：-3.00212：03E8：2500：0：01：03000000：0：0：E0000000：
 ```
 
-It seems likely that this line was added in order to extend functionality for the `18`, `1A`, and `1E` log lines without breaking previous content or plugins.
+## 26：NetworkStatusEffects
 
-## 27: NetworkUpdateHP
+（おそらくおよびPVP）NPC相手のために、このログラインが並んで生成された `NetworkDoT：18` 行。 非妖精同盟国のために、それが一緒に生成される [NetworkBuff：（a）](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove)、 [1E：NetworkBuffRemove](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove)、 および [25：NetworkActionSync](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#25-NetworkActionSync)。
 
-It's not completely clear what triggers this log line, but it contains basic information comparable to `25` and `26`. It applies to allies and fairies/pets.
+構造： `26：[ターゲットID]：[ターゲット名]：[ジョブレベル]：[現在のHP]：[最大Hp]：[現在のMp]：[最大MP]：[現在のTP]：[最大TP] ：[位置X]：[位置Y]：[位置Z]：[Facing]：<status list; format unknown>`
 
-Structure: `27:[Target ID]:[Target Name]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[position X]:[position Y]:[position Z]:[Facing]`
-
-Examples:
+例：
 
 ```log
-27:12345678:Eos:22851:22851:10000:10000:0:0:12.13086:-169.9398:-23.90031:-2.310888:
+26：12345678：PlayerOne：3C503C1C：24136：24136：9045：10000：4：0：-0.4730835：-158.1598：-23.9：3.110625：03E8：45：0：020130：0：106501CA：0129：4172D113：106501CA：012A ：4168C8B4：106501CA：012B：40919168：106501CA：0232：40E00000：E0000000：
 ```
 
-### FB: Debug
+なお、このラインを機能拡張するために追加されたことを思わ ための `18`、 `1A`、及び `1E` 以前コンテンツまたはプラグインを破壊することなく、ログライン。
 
-Lines are printed, but with blank data.
+## 27：NetworkUpdateHP
 
-As network log lines, they often have information like this: `251|2019-05-21T19:11:02.0268703-07:00|ProcessTCPInfo: New connection detected for Process [2644]: 192.168.1.70:49413=>204.2.229.85:55021|909171c500bed915f8d79fc04d3589fa`
+それは完全に、このログ行をトリガーするかが明確ではありません しかし、それはと同等の基本的な情報が含まれている `25` 及び `26`。 それは同盟国と妖精/ペットに適用されます。
 
-### FC: PacketDump
+構造： `27：[ターゲットID]：[ターゲット名]：[現在のHP]：[最大HP]：[現在のMP]：[最大MP]：[現在のTP]：[最大TP]：[位置X] ：[位置Y]：[位置Z]：[Facing]`
 
-If the setting to dump all network data to logfiles is turned on, then ACT will emit all network data into the network log itself. In the ACT log, these log lines are printed, but with blank data.
+例：
 
-This can be used to import a network log file into ffxivmon and inspect packet data.
+```log
+27：12345678：Eos：22851：22851：10000：10000：0：0：12.13086：-169.9398：-23.90031：-2.310888：
+```
 
-![dump network data screenshot](images/logguide_dumpnetworkdata.png)
+### FB：デバッグ
 
-### FD: Version
+行は印刷されますが、データは空白になります。
 
-Lines are printed, but with blank data.
+：ネットワーク・ログ・ラインとして、彼らはしばしば、このような情報を持って `11：02.0268703から07：| 2019-05-21T19 251 00 | ProcessTCPInfo：新しい接続が処理のために検出 [2644]192.168.1.70:49413=：>204.2.229.85： 55021 | 909171c500bed915f8d79fc04d3589fa`
 
-As network log lines, they usually look like this: `253|2019-05-21T19:11:02.0268703-07:00|FFXIV PLUGIN VERSION: 1.7.2.12, CLIENT MODE: FFXIV_64|845e2929259656c833460402c9263d5c`
+### FC：PacketDump
 
-### FE: Error
+すべてのネットワークデータをログファイルにダンプする設定がオンの場合、 場合、ACTはすべてのネットワークデータをネットワークログ自体に出力します。 ACTログでは、これらのログ行が印刷されますが、データは空白になります。
 
-These are lines emitted directly by the ffxiv plugin when something goes wrong.
+これを使用して、ネットワークログファイルをffxivmonにインポートし、パケットデータを検査できます。
 
-### FF: Timer
+![ネットワークデータのスクリーンショットをダンプ](images/logguide_dumpnetworkdata.png)
 
-Theoretically used when memory-parsing is used, but I haven't seen them.
+### FD：バージョン
 
-## Future Network Data Science
+行は印刷されますが、データは空白になります。
 
-It'd be nice for folks to dig into network data to figure out how some specific mechanics work that are currently not exposed in the log.
+ネットワークログの行として、彼らは通常、次のようになります。 `253 | 2019-05-21T19：11：02.0268703から07を：00 | FFXIV PLUGIN VERSION：1.7.2.12、クライアントモード：FFXIV_64 | 845e2929259656c833460402c9263d5c`
 
-* Boss headmarkers for Lamebrix Strikebocks (both A10S and Eureka Pyros)
-* Running into insta-kill walls
-* Figure out how t13 Dark Aether and Suzaku EX adds tether
-* Find network data zone sealing so game log lines don't have to be used
-* Network data for Absolute Virtue clone buffs (they're currently just game log lines)
-* How to detect a wipe in older content like coil?
-* How to differentiate fake mobs from real mobs in the added combatant data so they can be filtered out.
+### FE：エラー
 
-See: [importing into ffxivmon](#importing-into-ffxivmon).
+これらは、何か問題が発生したときにffxivプラグインによって直接発行される行です。
+
+### FF：タイマー
+
+理論的にはメモリ解析を使用する場合に使用されますが、私はそれらを見たことがありません。
+
+## 将来のネットワークデータサイエンス
+
+ネットワークデータを掘り下げて、現在ログに公開されていない特定のメカニズムがどのように機能するかを理解するのは良いことです。
+
+* Lamebrix Strikebocks（A10SとEureka Pyrosの両方）のボスヘッドマーカー
+* インスタキルの壁にぶつかる
+* t13ダークエーテルと朱雀EXがテザーを追加する方法を理解する
+* ゲームのログラインを使用する必要がないように、ネットワークデータゾーンのシーリングを見つけます
+* Absolute Virtueクローンバフのネットワークデータ（現在は単なるゲームログラインです）
+* コイルなどの古いコンテンツのワイプを検出するにはどうすればよいですか？
+* 追加された戦闘員データで偽のモブと本物のモブを区別して、フィルターで除外する方法。
+
+参照： [ffxivmonにインポートする](#importing-into-ffxivmon)。
