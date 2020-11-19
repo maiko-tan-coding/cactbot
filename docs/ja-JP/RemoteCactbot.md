@@ -1,92 +1,95 @@
-# Remote Cactbot
+# リモートCactbot
 
-This is a guide for allowing others to get their own cactbot callouts and DPS numbers without running ACT themselves. This is ideal for PS4 users who can't use ACT as well as DX9 users.
+これは、他の人がACTを実行せずに独自のcactbotコールアウトとDPS番号を取得できるようにするためのガイドです。 これは、DX9ユーザーだけでなくACTも使用できないPS4ユーザーにとって理想的です。
 
-The recommended method is to use the port forwarding built into OverlayPlugin. Port forwarding can give personalized triggers to each person connected. This method also will allow others to view dps meters or any other kind of overlay.
+推奨される方法は、OverlayPluginに組み込まれているポート転送を使用することです。 ポートフォワーディングは、接続されている各人にパーソナライズされたトリガーを与えることができます。 この方法では、他の人がdpsメーター または他の種類のオーバーレイを表示することもできます。
 
-Another way is to use the [discord bot plugin](https://github.com/Makar8000/ACT-Discord-Triggers/wiki/First-Time-Setup-Guide). The discord bot will play all of the tts from cactbot that you would hear and play it for the rest of the party. This is less great, because many cactbot triggers are personalized and it is not meant to be a generalized "raid caller" even if it sort of works that way. Currently, cactbot sounds do not play through the plugin.
+もう1つの方法は、 [不和ボットプラグイン](https://github.com/Makar8000/ACT-Discord-Triggers/wiki/First-Time-Setup-Guide)を使用することです。 不和ボットは、 が聞こえるcactbotからのすべてのttを再生し、パーティーの残りの部分で再生します。 これは、それほど素晴らしいです 多くのcactbotのトリガーがパーソナライズされているので、 、一般の「RAIDの発信者」であることを意味していない たとえそれが一種の作品のその方法。 現在、cactbotサウンドはプラグインを介して再生されません。
 
-This guide will only cover port forwarding. (Patches welcome to explain anything specific for ACT Discord Triggers + cactbot.)
+このガイドでは、ポート転送についてのみ説明します。 （パッチは、ACT Discord Triggers + cactbotに固有の説明を歓迎します。）
 
-## Port Forwarding Overview
+## ポートフォワーディングの概要
 
-Here are the steps you need to follow as the person running ACT:
+ACTを実行する人として従う必要のある手順は次のとおりです。
 
-- [Setup OverlayPlugin WSServer](#setup-overlayplugin-wsserver)
-- [Test Your Connection](#test-your-connection)
-- [Connect to Remote ACT](#connect-to-remote-act)
-- [Configure Raidboss](#configure-raidboss)
+- [OverlayPluginWSServerのセットアップ](#setup-overlayplugin-wsserver)
+- [接続をテストする](#test-your-connection)
+- [リモートACTに接続します](#connect-to-remote-act)
+- [Raidbossを構成する](#configure-raidboss)
 
-If you get lost, see the [HALP](#halp) section.
+あなたが迷子にした場合、参照 [HALP](#halp) セクションを。
 
-## Setup OverlayPlugin WSServer
+## OverlayPluginWSServerのセットアップ
 
-OverlayPlugin runs a server which accepts [WebSocket](https://en.wikipedia.org/wiki/WebSocket) connections that allows other applications to use ACT's data. (This is different from ACTWebSocket which is no longer maintained and cactbot does not support.) It also has built in support for ngrok to enable port forwarding so that others outside your local network can connect to that WebSocket server.
+OverlayPluginは受け入れるサーバーで実行さ [のWebSocket](https://en.wikipedia.org/wiki/WebSocket) 接続 他のアプリケーションがACTのデータを使用することができます。 （これは、 維持されなくなり、cactbotがサポートしないACTWebSocketとは異なります。） また、ngrokのサポートが組み込まれており、ポート転送 を有効にして、ローカルネットワーク外の他のユーザーがそのWebSocketサーバーに接続できるようにします。
 
-To enable this in ACT, go to **Plugins** -> **OverlayPlugin WSServer** -> **Shared Overlay**
+ACTでこれを有効にするには、 GO TO **プラグイン** -> **OverlayPlugin WSServer** -> **共有オーバーレイ**
 
-![image](images/remote_wsserver.png)
+![画像](images/remote_wsserver.png)
 
-On this page, select your region. Click `Start`. Your screen should look like the above image with `Launching ngrok...Done!` and it should say `Status: Active` at the top of the screen.
+このページで、地域を選択します。 `開始`クリックし` 。
+画面が持つ上記の画像のようになります。
+<code>起動ngrok ...完了します！` それは言うべき `ステータス：アクティブ` 画面の上部にあります。
 
-### Test Your Connection
+### 接続をテストする
 
-Now that you've established port forwarding, test your connection. In all of these examples in the rest of the documentation, replace the `a31a5403.ngrok.io` with the url shown in the log window. Going to <https://a31a5403.ngrok.io/> (substituting your server url) should give you the following "It Works" page.
+ポートフォワーディングを確立したので、接続をテストします。 ドキュメントの残りの部分でこれらのすべての例では、 置き換える `a31a5403.ngrok.io` ログウィンドウに表示されるURLと。 <https://a31a5403.ngrok.io/> （サーバーのURLを置き換える）に移動すると、次の「ItWorks」ページが表示されます。
 
-![image](images/remote_itworks.png)
+![画像](images/remote_itworks.png)
 
-If this is set up properly, you can select an overlay preset like `Cactbot Test` and it will give you a url to open in a browser, e.g. <https://quisquous.github.io/cactbot/ui/test/test.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
+これが適切に設定されている場合、 `Cactbot Test` ようなオーバーレイプリセットを選択すると、ブラウザで開くためのURLが提供されます（例： [https://quisquous.github.io/cactbot/ui/）。 test / test.html？OVERLAY_WS = wss：//a31a5403.ngrok.io/ws](https://quisquous.github.io/cactbot/ui/test/test.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws)
 
-That file is a web page being served by github, but the query string tells the overlay web page to connect to your ACT instance. With ACT and FFXIV open, you should see the test data update based on your actions in game.
+そのファイルはgithub、 によって提供されているWebページですが、クエリ文字列はオーバーレイWebページにACTインスタンスに接続するように指示します。 ACTとFFXIVを開くと、ゲーム内のアクションに基づいてテストデータが更新されます。
 
-![image](images/remote_testui.png)
+![画像](images/remote_testui.png)
 
-If this is not working or you are not seeing any information, see the [HALP](#halp) section.
+これが機能していないか、あなたはすべての情報が表示されない場合、参照 [HALP](#halp) セクションを。
 
-## Connect to Remote ACT
+## リモートACTに接続します
 
-Now, friends can connect to your ACT remotely. Unfortunately, all of the overlay html pages needs to be hosted remotely. Rather than loading local urls from your filesystem like `C:\Users\tinipoutini\cactbot\ui\raidboss\raidboss.html` you need to use github urls like `https://quisquous.github.io/cactbot/ui/raidboss/raidboss.html`.
+これで、友達はあなたのACTにリモートで接続できます。 残念ながら、すべてのオーバーレイHTMLページはリモートでホストする必要があります。 むしろのようなあなたのファイルシステムからローカルのURLをロードするよりも `C：\ユーザー\tinipoutini \ cactbot \ UI\raidboss\raidboss.html` あなたのようgithubのURLを使用する必要が `https://quisquous.github.io/cactbot/ UI / raidboss / raidboss.html`。
 
-In general, you can use the URL Generator at the bottom of the OverlayPlugin tab to generate urls for any presets.
+一般に、OverlayPluginタブ 下部にあるURLジェネレーターを使用して、任意のプリセットのURLを生成できます。
 
-For example:
+例えば：
 
-- cactbot raidboss overlay: <https://quisquous.github.io/cactbot/ui/raidboss/raidboss.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
-- rdmty DPS overlay: <https://quisquous.github.io/cactbot/ui/dps/rdmty/dps.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
-- cactbot oopsy: <https://quisquous.github.io/cactbot/ui/oopsyraidsy/oopsyraidsy.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
+- cactbot raidbossオーバーレイ： <https://quisquous.github.io/cactbot/ui/raidboss/raidboss.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
+- rdmty DPSオーバーレイ： <https://quisquous.github.io/cactbot/ui/dps/rdmty/dps.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
+- cactbot oopsy： <https://quisquous.github.io/cactbot/ui/oopsyraidsy/oopsyraidsy.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
 
-### Configure Raidboss
+### Raidbossを構成する
 
-If you load raidboss remotely, you will see a player selection dialog.
+raidbossをリモートでロードすると、プレーヤー選択ダイアログが表示されます。
 
-![image](images/remote_playerselect.png)
+![画像](images/remote_playerselect.png)
 
-The list of players will populate once you are in an instance. Choose yourself in this list, and click `Start Overlay` to begin raidboss.
+インスタンスに入ると、プレーヤーのリストが表示されます。 このリストから自分を選択し、[ `] [オーバーレイの開始` ]をクリックしてレイドボスを開始します。
 
-If you want TTS and the person hosting does not have TTS turned on, you can enable this with the `Force Enable Text To Speech` checkbox.
+あなたはTTSおよびホスティング人はTTSがオンになっていないが、必要な場合 あなたがこれを有効にすることができます `フォーステキストを音声に有効` チェックボックスをオンにします。
 
-Unfortunately at the moment, all of the cactbot customization is local and any remote player will inherit the customization of the host. The only option you can override right now is to enable TTS.
+残念ながら現時点では、 すべてのcactbotカスタマイズのは、地元である と任意のリモートプレイヤーがホストのカスタマイズを継承します。 現在オーバーライドできる唯一のオプションは、TTSを有効にすることです。
 
-In the future, it may be possible to append some additional parameters to load your own user directory, but not currently.
+将来的には、にいくつかの追加のパラメータを追加することも可能である ではなく、現在、負荷独自のユーザーディレクトリ。
 
-### Other Overlays
+### その他のオーバーレイ
 
-Not all overlays are able to be run remotely. cactbot, oopsy, pullcounter, and dps overlays are supported.
+すべてのオーバーレイをリモートで実行できるわけではありません。 cactbot、oopsy、pullcounter、およびdpsオーバーレイがサポートされています。
 
-radar, jobs, and fisher will not work as they require more information about your player.
+レーダー、ジョブ、フィッシャーは、プレーヤーに関する詳細情報を必要とするため、 では機能しません。
 
 ## HALP
 
-If you get stuck or confused on any of these steps, the best place to get help is the [FFXIV ACT discord](https://discord.gg/ahFKcmx) #troubleshooting channel. There is no cactbot discord; you should go here.
+あなたが立ち往生したり、これらのステップのいずれかで混乱している場合、 ヘルプを表示するのに最適な場所です [FFXIV ACTが不和](https://discord.gg/ahFKcmx) #troubleshootingチャンネルを。 サボテンの不和はありません。ここに行くべきです。
 
-Port forwarding is not really part of cactbot, so please only file a cactbot github issue if your raidboss party override doesn't work.
+ポートフォワーディングは実際にはcactbotの一部ではないため、 なので、raidbossパーティのオーバーライドが機能しない場合にのみ、cactbotgithubの問題を報告してください。
 
-### Troubleshooting Hints
+### トラブルシューティングのヒント
 
-If you are looking at url in the browser like <https://quisquous.github.io/cactbot/ui/test/test.html?OVERLAY_WS=wss://127.0.0.1:10501/ws> and you don't see any data, even though you are in game, ACT is running, and the ACT WSServer is running, then you should look at devtools.
+あなたは次のようにブラウザにURLを見ている場合は <https://quisquous.github.io/cactbot/ui/test/test.html?OVERLAY_WS=wss://127.0.0.1:10501/ws> 、あなたはドンゲーム中、 ACTが実行中、 、ACT WSServerが実行中であっても、データが表示されない場合は、devtoolsを確認する必要があります。
 
-In Chrome, right click on the page and go to `Inspect` (or hit Ctrl+Shift+I). Then click on `Console` to show the console output:
+Chromeで、ページを右クリックして `Inspect` 移動し` （またはCtrl + Shift + Iを押します）。
+次に、 <code>コンソール` をクリックして、コンソール出力を表示します。
 
-![image](images/remote_devtools.png)
+![画像](images/remote_devtools.png)
 
-This will give you more information to help diagnose your problem.
+これにより、問題の診断に役立つ詳細情報が得られます。
