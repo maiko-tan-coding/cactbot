@@ -39,9 +39,11 @@ Cactbot設定UIにすべての設定を行うことはできません。 だけ�
 
 Cactbot設定UIは、 ACT -> プラグイン-> OverlayPlugin.dll -> Cactbot -> Raidbossにあります。中には各トリガーの調整ができます。 これらのリストを使用して、トリガーごとに公開されているさまざまな構成設定を変更できます。
 
-Settings with a bell (🔔) next to their name are trigger outputs that you can override. For example, maybe there's an 🔔onTarget field whose text is `Tank Buster on ${player}`. これは、誰かにタンクバスターがいるときに画面上で（またはttsを介して）再生される文字列です。 `${player}` here is a parameter that will be set dynamically by the trigger. `${param}` ように見えるものはすべて、そのような動的パラメーターです。
+名前の横にベル（🔔）が付いている設定は、オーバーライドできるトリガー出力です。 たとえば、テキストが ${player}</code>`タンクバスターである🔔onTargetフィールドがあるかもしれません。
+これは、誰かにタンクバスターがいるときに画面上で（またはttsを介して）再生される文字列です。
+<code>${player}` ここでは、トリガーによって動的に設定されるパラメーターです。 `${param}` ように見えるものはすべて、そのような動的パラメーターです。
 
-You could change this to say `${player} is going to die!` instead. または、誰がオンになっているかを気にせず、テキストを `バスター` に編集して簡潔にすることもできます。 オーバーライドを元に戻したい場合は、テキストをクリアしてください。
+これを変更して、 `${player} が死ぬと言うことができます！代わりに`。 または、誰がオンになっているかを気にせず、テキストを `バスター` に編集して簡潔にすることもできます。 オーバーライドを元に戻したい場合は、テキストをクリアしてください。
 
 このオーバーライドにはいくつかの制限があります。 ロジックを変更することはできません。 あなたは作ることができない `TTS` より別の何かを言うために `alarmText` ほとんどの場合。 パラメータを追加することはできません。 これらのより複雑なオーバーライド（ いずれかを実行する場合は、 [オーバーライドレイドボストリガー](#overriding-raidboss-triggers) セクションを確認する必要があります。
 
