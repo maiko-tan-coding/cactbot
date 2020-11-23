@@ -1,0 +1,5 @@
+files:
+  - source: /docs/*.md
+    translation: /docs/%locale%/%original_file_name%
+  - source: /README.md
+    translation: /docs/%locale%/%original_file_name%
