@@ -1,13 +1,13 @@
-# Cactbot自訂教學
+# Cactbot自定義教學
 
 🌎 [**English**] [[简体中文](./zh-CN/CactbotCustomization.md)] [[한국어](./ko-KR/CactbotCustomization.md)]
 
-- [藉由cactbot使用者介面](#藉由cactbot使用者介面)
+- [使用cactbot使用者介面](#使用cactbot使用者介面)
 - [透過cactbot使用者介面改變觸發器文本](#透過cactbot使用者介面改變觸發器文本)
 - [用戶資料夾概況](#用戶資料夾概況)
 - [設置您自己的用戶資料夾](#設置您自己的用戶資料夾)
 - [樣式自定義](#樣式自定義)
-- [Raidboss觸發器自訂](#raidboss觸發器自訂)
+- [Raidboss觸發器自定義](#raidboss觸發器自訂)
   - [例1：改變輸出文本](#例1改變輸出文本)
   - [例2：使挑釁提示適用於全職業](#例2使挑釁提示適用於全職業)
   - [例3：添加自訂觸發器](#例3添加自訂觸發器)
@@ -18,9 +18,9 @@
   - [檢查檔案是否載入](#檢查檔案是否載入)
   - [檢查檔案是否有錯誤](#檢查檔案是否有錯誤)
 
-## 藉由cactbot使用者介面
+## 使用cactbot使用者介面
 
-自訂cactbot時，推薦透過cactbot的使用者介面進行操作。 該介面處於 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot。
+自定義cactbot時，推薦透過cactbot的使用者介面進行操作。 該介面處於 ACT -> Plugins -> OverlayPlugin.dll -> Cactbot。
 
 它可以提供如下功能：
 
