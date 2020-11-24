@@ -1,4 +1,4 @@
-# cactbot (ffxiv raiding overlay)
+# cactbot (ffxiv raid 悬浮窗)
 
 <img align="right" src="https://raw.githubusercontent.com/quisquous/cactbot/main/screenshots/cactbot-logo-320x320.png" />
 
@@ -6,89 +6,91 @@
 
 🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
 
-1. [About](#about)
-1. [Installing](#installing)
-1. [Building From Source](#building-from-source)
-1. [UI Module Overview](#ui-module-overview)
-1. [Troubleshooting](#troubleshooting)
-1. [Cactbot Customization](#cactbot-customization)
-1. [Supported Languages](#supported-languages)
+1. [关于](#about)
+1. [安装](#installing)
+1. [从源码构建](#building-from-source)
+1. [UI模块概述](#ui-module-overview)
+1. [疑难解答](#troubleshooting)
+1. [Cactbot自定义](#cactbot-customization)
+1. [支持语言](#supported-languages)
 
-## About
+## 关于
 
-cactbot is an ACT overlay that provides raiding tools for [Final Fantasy XIV](http://www.finalfantasyxiv.com/). This project is an overlay plugin for [ngld's OverlayPlugin](https://github.com/ngld/OverlayPlugin) which itself is a plugin for [Advanced Combat Tracker](http://advancedcombattracker.com/).
+cactbot是一个ACT悬浮窗，可为 [Final Fantasy XIV](http://www.finalfantasyxiv.com/)提供战斗辅助。 该项目是 [ngld的OverlayPlugin](https://github.com/ngld/OverlayPlugin) 的悬浮窗插件，而OverlayPlugin是 [Advanced Combat Tracker](http://advancedcombattracker.com/)的插件。
 
-cactbot provides these modules:
+cactbot提供以下模块：
 
-* raidboss: built-in timelines and triggers:
+* raidboss: 内置时间轴和触发器
 
 ![timeline screenshot](screenshots/promo_raidboss_timeline.png) ![triggers screenshot](screenshots/promo_raidboss_triggers.png)
 
-* oopsyraidsy: mistake and death reporting
+* oopsyraidsy: 错误和死亡报告
 
 ![oopsy screenshot](screenshots/promo_oopsy.png)
 
-* jobs: condensed gauges with buff and proc tracking
+* jobs: 用于buff与触发监控的紧凑型职业量谱
 
 ![rdm jobs screenshot](screenshots/promo_jobs.png)
 
-* eureka: Eureka NM tracking map
+* eureka: 优雷卡恶名精英监控地图
 
 ![eureka screenshot](screenshots/promo_eureka.png)
 
-* fisher: Fishing cast time tracking
+* fisher: 捕鱼垂钓时间监控
 
 ![fisher screenshot](screenshots/promo_fishing.png)
 
-* radar: hunt mob directions, puller notifications
+* radar: 通知狩猎怪方向及开怪信息
 
 ![radar screenshot](screenshots/promo_radar.png)
 
-* dps: extra features for dps meters
+* dps: 提供更多功能的dps悬浮窗
 
 ![xephero screenshot](screenshots/xephero.png)
 
-### Video Examples
+### 视频实例
 
-* [O4S raidboss + monk jobs](https://www.twitch.tv/videos/209562337)
-* [O3S spellblade callouts](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
+* [O4S raidboss + 武僧职业量谱](https://www.twitch.tv/videos/209562337)
+* [O3S 女王之舞提示](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
 
-## Installing
+## 安装
 
-### Dependencies
+### 依赖
 
-Install [.NET Framework](https://www.microsoft.com/net/download/framework) version 4.6.1 or above.
+安装4.6.1版本及以上的[.NET Framework](https://www.microsoft.com/net/download/framework)。
 
-You must have [DirectX 11](http://imgur.com/TjcnjmG) enabled for Final Fantasy XIV.
+您必须为最终幻想14启用 [DirectX 11](http://imgur.com/TjcnjmG)。
 
-Install the 64-bit version of [Advanced Combat Tracker](http://advancedcombattracker.com/), if you have not already.
+如果尚未安装64位版本的 [Advanced Combat Tracker](http://advancedcombattracker.com/)，请安装。
 
-### Install FFXIV ACT Plugin
+### 安装FFXIV ACT解析插件
 
-If you have just installed ACT, then you will be presented with a startup wizard. To get to the startup wizard otherwise, click on `Options` and then click on `Show Startup Wizard`.
+如果您刚刚安装了ACT， 那么你会看到一个启动向导。 否则，您需要通过点击 `Options` ， 然后点击 `Show Startup Wizard` 启动启动向导。
 
 ![startup wizard screenshot](screenshots/ffxiv_plugin_show_startup_wizard.png)
 
-In the startup wizard, select `FFXIV Parsing Plugin` and then click the `Download/Enable Plugin` button. This will download `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll` and enable it in the list of plugins.
+在启动向导中， 选择 `FFXIV Parsing Plugin` ，然后单击 `Download/Enable Plugin` 按钮。 这将下载 `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll`， 并在插件列表中启用它。
 
 ![startup wizard download screenshot](screenshots/ffxiv_plugin_parsing_plugin.png)
 
-Additionally, you must enable parsing from the network and make sure that ACT is not firewalled. Make sure the settings for the FFXIV plugin have the "Include HP for Triggers" button checked. This is under `Plugins` ->`FFXIV Settings` -> `Options`.
+此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 这是在 `插件列表` ->`FFXIV Settings` -> `Options<code>。</p>
 
-Alternative FFXIV Plugin Guides:
+<p spaces-before="0">其他FFXIV插件指南：</p>
 
-* [fflogs video guide](https://www.fflogs.com/help/start/)
-* [TomRichter guide](https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin)
+<ul>
+<li><a href="https://www.fflogs.com/help/start/">fflogs video guide</a></li>
+<li><a href="https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin">TomRichter guide</a></li>
+</ul>
 
-### Install ngld OverlayPlugin
+<h3 spaces-before="0">安装ngld OverlayPlugin</h3>
 
-At this point, if you select the `Plugins` tab and go to the `Plugin Listing`, your list of plugins should look something like this:
+<p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
 ![blank plugin listing screenshot](screenshots/get_plugins_blank.png)
 
-Click on `Get Plugins` to open up the ACT plugin installer.
+单击 `Get Plugins` 可以打开ACT插件安装程序。
 
-Select `Overlay Plugin` and then click `Download and Enable`.
+选择 `悬浮窗插件` ，然后单击 `Download and Enable`按钮。
 
 ![overlay plugin selection screenshot](screenshots/get_plugins_overlayplugin.png)
 
