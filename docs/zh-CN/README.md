@@ -94,40 +94,40 @@ cactbot提供以下模块：
 
 ![overlay plugin selection screenshot](screenshots/get_plugins_overlayplugin.png)
 
-This will download the ngld OverlayPlugin into `%APPDATA%Advanced Combat Tracker\Plugins\OverlayPlugin` and enable `OverlayPlugin.dll` in the list of plugins.
+这会将ngld OverlayPlugin下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\OverlayPlugin` 文件夹中， 并自动在插件列表中启用 `OverlayPlugin.dll`。
 
-As a note, you must use the [ngld](https://github.com/ngld) version of OverlayPlugin and not the original RainbowMage version or the hibiyasleep fork.
+注意，您必须使用 [ngld](https://github.com/ngld) 版本的OverlayPlugin， 而不是原本RainbowMage的版本或hibiyasleep的fork版本。
 
-### Installing cactbot
+### 安装cactbot
 
-Again, go to the `Plugins` tab and go to the `Plugin Listing`, and then select `Get Plugins`.
+其次，点开 `Plugins` 标签， 再点开 `Plugin Listing` 标签， 然后选择 `Get Plugins`。
 
-Select `Cactbot` and then click `Download and Enable`.
+选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
 ![cactbot selection screenshot](screenshots/get_plugins_cactbot.png)
 
-This will download the cactbot into `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot` and enable `CactbotOverlay.dll` in the list of plugins.
+这会将cactbot下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot` 文件夹中， 并在插件列表中启用 `CactbotOverlay.dll`。
 
-**Note**: Due to a difference in how ACT expects archives to be and how cactbot generates its zip files, there will be something like a `cactbot-0.15.2` folder that corresponds to the initial version that you downloaded cactbot. This folder name does not matter and is cosmetic.
+**注意**： 由于ACT和cactbot对于zip格式处理的差异性， 它可能会生成一个形如 `cactbot-0.15.2` 的文件夹， 这里的版本号是根据你下载cactbot时的最早版本决定的。 该文件夹的名称无关紧要，并且很美观。
 
-Verify your plugins are in the correct order. The order should be: FFXIV Plugin first, then OverlayPlugin, then cactbot. If you have followed the above instructions, it should look like the following:
+确认您的插件顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
 ![plugin order](screenshots/get_plugins_complete.png)
 
-Finally, restart ACT.
+最后，重启ACT。
 
-## Adding overlay modules
+## 添加悬浮窗模块
 
-Here's an example of how to set up the raidboss overlay module. Setting up other cactbot overlays works identically.
+下面的例子展示了如何设置raidboss悬浮窗模块。 设置其他的cactbot悬浮窗的操作也类似这样。
 
-1. Open ACT.
-1. Make sure you've restarted ACT after adding the cactbot plugin.
-1. Navigate to the `Plugins` tab of ACT and then the `OverlayPlugin.dll` tab inside it.
-1. Click the "New" button and then pick `Cactbot Raidboss` in the Preset list.
+1. 打开ACT。
+1. 添加了cactbot插件后，请确保已重新启动ACT。
+1. 导航到ACT的 `Plugins` 标签页，然后跳转到其中的 `OverlayPlugin.dll` 标签页。
+1. 单击“新建”按钮，然后在“预设”列表中选择 `Cactbot Raidboss`。
 
     ![new overlay plugin screenshot](screenshots/overlay_plugin_new.png)
 
-1. At this point, you should see some test UI appear on screen. cactbot provides default test UI, a large dashed red border, and a blue background to help with resizing and placing overlays on screen. These all go away when the overlay is locked in the config panel for the overlay. You should always lock your overlay once you are done resizing and placing it.
+1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 These all go away when the overlay is locked in the config panel for the overlay. You should always lock your overlay once you are done resizing and placing it.
 
     ![raidboss plugin unlocked](screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
