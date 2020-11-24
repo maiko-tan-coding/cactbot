@@ -37,13 +37,13 @@
 
 ## 透過cactbot使用者介面改變觸發器文本
 
-在cactbot使用者介面中，ACT-> 插件> -> Cactbot-> Raidboss下有單獨的觸發器列表。 You can use these listings to change various exposed configuration settings per trigger.
+在cactbot使用者介面中，ACT-> 插件> -> Cactbot-> Raidboss下有單獨的觸發器列表。 這裡的列表讓您可以更改每個觸發器支持外部更改的配置設置。
 
-Settings with a bell (🔔) next to their name are trigger outputs that you can override. For example, maybe there's an 🔔onTarget field whose text is `Tank Buster on ${player}`. This is the string that will get played on screen (or via tts) when there is a tank buster on some person. `${player}` here is a parameter that will be set dynamically by the trigger. Anything that looks like `${param}` is such a dynamic parameter.
+名稱旁邊帶有鈴鐺(🔔) 的設置項的觸發器輸出文本是可以被覆蓋的。 舉個例子，假設有一個🔔onTarget字段，其文本為 `死刑點${player}`。 當某人接到死刑技能時，這個字符串將出現在熒幕上（或通過tts播報）。 `${player}` 是一個將由觸發器動態設置的參數。 任何類似於 `${param}` 的字符串都是動態參數。
 
-You could change this to say `${player} is going to die!` instead. Or, maybe you don't care who it's on, and you can edit the text to `Buster` to be brief. If you want to undo your overriding, just clear the text.
+比如，您可以將這個文本更改為 `${player} 即將死亡！ `。 或者，也許您不關心誰是目標，那麼您可以將其改為 `死刑` 以使文本更加簡短。 如果您想撤消自己的更改，只需清空文本框即可。
 
-There are some limitations to this overriding. You cannot change the logic. You cannot make `tts` to say something different than the `alarmText` in most cases. You cannot add additional parameters. If you want to do any of these more complicated overrides, then you will want to look at the [Overriding Raidboss Triggers](#overriding-raidboss-triggers) section.
+但這個方式有一定的限制。 例如，您無法更改邏輯。 而且在大多數情況下，您無法使 `tts` 的播報與 `alarmText` 不同。 您無法添加更多的參數。 如果您想要對觸發器做出更加複雜的覆蓋操作， 那麼您需要查看 [Raidboss觸發器自訂](#raidboss觸發器自訂) 小節。
 
 ## 用戶資料夾概況
 
@@ -61,17 +61,17 @@ Cactbot的設計哲學要求任何用戶的自訂配置應當存放於用戶資�
 
 您可以透過cactbot配置界面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
 
-If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
+若您沒有選擇，cactbot會嘗試選擇安裝目錄下的默認資料夾。
 
-Ideally, you should select the `cactbot/user` folder from your cactbot installation. This is often in `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`. [This folder](../user) has example customization files.
+建議您選擇cactbot安裝目錄下的 `cactbot/user` 資料夾。 該資料夾通常位於 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置檔案位於 [此資料夾](../../user) 下。
 
 ## 樣式自定義
 
-The `user/<name>.css` file can change positions, sizes, colors, etc. for components of the UI module. See the `ui/<name>/<name>.css` to find the selectors you can modify.
+您可以通過修改 `user/<name >.css` 等文件，對UI模組的位置、尺寸、顏色等進行自定義。 可用的選擇器可以通過閱覽 `ui/<name>/<name>.css` 檔案找到。
 
-For example in [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css), you see the `#popup-text-container` and `#timeline-container` which can be changed via `user/raidboss.css` to different positions as desired. You can use `user/raidboss.css` to add additional styling.
+如您在[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中可發現諸如`#popup-text-container` 與`#timeline-container` 等選擇器， 則您可以在`user/raidboss.css` 中對其位置進行自定義。 您可以在 `user/raidboss.css` 中添加更多的樣式。
 
-The size and color of info text alerts can also be changed by making a CSS rule for the `.info-text` class such as below:
+同樣地，您可以在 `.info-text` 類中添加新的CSS規則，對信息文字的尺寸和顏色進行自定義。 例如：
 
 ```css
 .info-text {
@@ -80,51 +80,51 @@ The size and color of info text alerts can also be changed by making a CSS rule 
 }
 ```
 
-You can think about the CSS in the user file as being appended to the end of any built-in cactbot CSS file. Therefore, you need to keep in mind [CSS specificity rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity), possibly adding `!important` to force your rule to override. Additionally, you may need to unset properties by setting them to `auto`.
+簡單地說，您可以認為cactbot會將用戶檔案中的CSS規則添加至內置CSS檔案的末尾。 也就是說，您需要注意 [CSS優先級規則](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)， 例如添加 `!important` 讓您的規則可以強制覆蓋。 另一方面，您可能需要重置某些屬性為默認的 `auto` 值。
 
-The best way to debug CSS issues is to use [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools). You can open DevTools for an overlay by going to ACT -> Plugins -> OverlayPlugin.dll -> your overlay -> Open DevTools.
+我們推薦使用 [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) 以調試CSS問題。 您可以通過 ACT -> Plugins -> OverlayPlugin.dll -> 您的懸浮窗名字 -> 啟動Debug工具 以開啟DevTools。
 
-**Note**: some things are hard or impossible to customize, such as the timeline bars. This is because they use custom elements, and they don't expose a lot of knobs to tune. If you have particular things you want to change about the timeline bars that you can't, please feel free to submit a [github issue](https://github.com/quisquous/cactbot/issues/new/choose).
+**注意**：某些組件的自定義較為困難，甚至無法進行自定義，如時間軸的進度條等。 原因是，這些組件屬於自定義HTML元素，且沒有開放外部配置的接口。 如果您有特別的需求，但是您不知道如何修改此進度條，您可以提出一個 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
 
-**Warning**: cactbot makes no guarantees about preserving CSS backwards compatability. Future changes to cactbot may rearrange elements, change element names and classes, or change styling entirely. In general, you are on your own if you want to style cactbot with CSS.
+**警告**：cactbot不保證CSS的向後兼容性。 在以後的更改中，cactbot可能會重新組織網頁結構，改變元素名稱和類名稱，甚至完全重構所有樣式。 因此，您需知曉您的自定義CSS有在將來出現問題的風險。
 
 ## Raidboss觸發器自訂
 
-You can use your `cactbot/user/raidboss.js` to override how triggers behave. You can change the text that they output, what jobs they run for, and how long they stay on screen, and anything else.
+您可以通過 `cactbot/user/raidboss.js` 檔案自定義觸發器行為。 您可以修改輸出文本、適用職業、文本顯示的時間等等。
 
-In `cactbot/user/raidboss.js`, there is an `Options.Triggers` list that contains a list of trigger sets. You can use this to append new triggers and modify existing triggers. If a user file contains a trigger with the same id as any previous trigger (including triggers in cactbot), then that trigger will override it.
+在 `cactbot/user/raidboss.js` 檔案中， `Options.Triggers` 是一個存放了觸發器集合的列表。 您可以通過此變量添加新觸發器，或修改已有的觸發器。 若用戶檔案中存在與現有觸發器 (cactbot官方提供的) 相同id的觸發器，則會將後者其覆蓋。
 
-If you are going to modify triggers, it is worth reading the [trigger guide](RaidbossGuide.md) to understand what the various fields of each trigger means.
+在您修改觸發器前，我們推薦閱讀 [觸發器指南](RaidbossGuide.md) 以了解各觸發器的諸多屬性的含義。
 
-In general, the pattern to follow is to add a block of code to your `cactbot/user/raidboss.js` line that looks like this:
+通常情況下，在 `cactbot/user/raidboss.js` 中添加的程式碼應當形如：
 
 ```javascript
 Options.Triggers.push({
-  // Find the ZoneId from the top of the file,
-  // e.g. ZoneId.MatchAll (for all zones) or ZoneId.TheBozjanSouthernFront.
+  // 在檔案開頭定義ZoneId，
+  // 例如 ZoneId.MatchAll (指定所有區域) 或 ZoneId.TheBozjanSouthernFront 等
   zoneId: ZoneId.PutTheZoneFromTheTopOfTheFileHere,
   triggers: [
     {
-      // This is where you put the trigger object.
-      // e.g. id or netRegex or infoText
+      // 這裡定義的是觸發器(trigger)物件。
+      // 例如 id, netRegex或infoText等
     },
   ],
 });
 ```
 
-The easiest approach to modify triggers is to copy and paste the block of code above for each trigger. Modify the `zoneId` line to have the zone id for the zone you care about, usually from the top of the cactbot trigger file. [This file](../resources/zone_id.js) has a list of all the zone ids. If you specify one incorrectly, you will get a warning in the OverlayPlugin log window. Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
+最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [該檔案](../../resources/zone_id.js) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌窗口將會輸出警告信息。 然後複製觸發器文本並粘貼至此， 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
 
-**Note**: This method completely removes the original trigger, and so do not delete any logic when making edits. Also, this is JavaScript, and so it still needs to be valid JavaScript. If you are not a programmer, be extra careful with what and how you edit.
+**注意**：此方式會將原觸發器完全移除，因此請在修改時不要刪除任何邏輯。 此外，觸發器均採用JavaScript編寫，因此必須採用標準JavaScript語法。 若您不是程式員，您需要格外注意編輯方法。
 
 ### 例1：改變輸出文本
 
-Let's say hypothetically that you are doing UCOB and your group decides that they are going to do "fire out" first instead of "fire in" first like cactbot calls it by default. Additionally, you *also* want to have the tts say something different for this trigger. You keep forgetting to get out, so you want it to repeat a few times.
+假定您正在攻略巴哈姆特絕境戰(UCOB)， 您的固定隊採用的不是cactbot默認的火1集合吃的打法， 而是先單吃火1。 另外，您 *同時* 還想讓觸發器通過tts播報與文本不同的內容。 比如，您總是忘記出人群，因此您想讓它重復播報數次。
 
-If you only wanted to change the `infoText`, you could do this via [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui).
+我們推薦閱讀 [觸發器指南](RaidbossGuide. md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中現有的觸發器代碼。
 
-One way to adjust this is to edit the trigger output for this trigger. You can find the original fireball #1 trigger in [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743).
+其中一種調整方式是編輯觸發器的輸出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743) 中找到原本的 fireball #1 觸發器。
 
-This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
+您需要將以下的代碼粘貼至您的 `cactbot/user/raidboss.js` 中。
 
 ```javascript
 Options.Triggers.push({
@@ -140,7 +140,7 @@ Options.Triggers.push({
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 99999,
-      // The infoText is what appears on screen in green.
+      // infoText 是綠色的文字。
       infoText: {
         en: 'Fire OUT',
       },
@@ -155,15 +155,15 @@ Options.Triggers.push({
 });
 ```
 
-This edit also removed languages other than English.
+您也可以用同樣的辦法添加您的自定義觸發器。
 
 ### 例2：使挑釁提示適用於全職業
 
-Currently, provoke only works for players in your alliance and not for all jobs. This example shows how to make it work for all players. The provoke trigger can be found in [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30).
+目前，只有團隊成員的挑釁會觸發提示，並且不是所有職業都能收到提示。 該例子展示了如何使其適用於所有職業。 該挑釁觸發器可以在 [ui/raidboss/data/00-misc/general.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/00-misc/general.js#L11-L30) 中找到。
 
-Here is a modified version with a different `condition` function. Because this shares the same `General Provoke` id with the built-in cactbot trigger, it will override the built-in version.
+我們需要修改 `condition` 函數(function)。 由於此處的id與內置的 `General Provoke` 觸發器一致，因此會覆蓋同名的內置觸發器。
 
-This chunk of code is what you would paste into the bottom of your `cactbot/user/raidboss.js` file.
+您需要將以下的代碼粘貼至您的 `cactbot/user/raidboss.js` 中。
 
 ```javascript
 Options.Triggers.push([{
@@ -173,8 +173,8 @@ Options.Triggers.push([{
       id: 'General Provoke',
       netRegex: NetRegexes.ability({ id: '1D6D' }),
       condition: function(data, matches) {
-        // I want to see all provokes, even they are not in the party,
-        // or I am not a tank.
+        // 我希望看到所有的挑釁提示，即便他們不在我的隊伍中，
+        // 即便我不是坦克。
         return true;
       },
       infoText: function(data, matches) {
@@ -193,11 +193,11 @@ Options.Triggers.push([{
 ]);
 ```
 
-You could also just delete the `condition` function entirely here, as triggers without conditions will always run when their regex matches.
+當然，您也可以直接刪除整個 `condition` 函數， 因為沒有condition的觸發器只要正則匹配成功就會運行。
 
 ### 例3：添加自訂觸發器
 
-You can also use this same pattern to add your own custom triggers.
+您也可以用同樣的辦法添加您的自定義觸發器。
 
 Here's an example of a custom trigger that prints "Get out!!!", one second after you receive an effect called "Forked Lightning".
 
