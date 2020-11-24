@@ -3,16 +3,16 @@
 🌎 [[English](../CactbotCustomization.md)] [**简体中文**] [[한국어](../ko-KR/CactbotCustomization.md)]
 
 - [使用cactbot配置界面](#使用cactbot配置界面)
-- [用户文件夹概览](#通过cactbot配置界面改变触发器文本)
-- [设置您自己的用户文件夹](#用户文件夹概览)
-- [样式自定义](#设置您自己的用户文件夹)
-- [Raidboss触发器自定义](#样式自定义)
-- [Raidboss时间轴自定义](#raidboss触发器自定义)
+- [通过cactbot配置界面改变触发器文本](#通过cactbot配置界面改变触发器文本)
+- [用户文件夹概览](#用户文件夹概览)
+- [设置您自己的用户文件夹](#设置您自己的用户文件夹)
+- [样式自定义](#样式自定义)
+- [Raidboss触发器自定义](#raidboss触发器自定义)
   - [例1：改变输出文本](#例1改变输出文本)
   - [例2：使挑衅提示适用于全职业](#例2使挑衅提示适用于全职业)
   - [例3：添加自定义触发器](#例3添加自定义触发器)
-- [行为自定义](#raidboss时间轴自定义)
-- [用户文件的调试](#行为自定义)
+- [Raidboss时间轴自定义](#raidboss时间轴自定义)
+- [行为自定义](#行为自定义)
 - [用户文件的调试](#用户文件的调试)
   - [检查OverlayPlugin的错误日志](#检查OverlayPlugin的错误日志)
   - [检查文件是否加载](#检查文件是否加载)
@@ -26,16 +26,16 @@
 
 - 设置触发器输出TTS
 - 禁用触发器
+- 改变触发器输出
 - 改变cactbot语言
 - 音量设置
-- 隐藏奶酪图标
 - 隐藏奶酪图标
 
 您可能无法通过cactbot配置界面以配置所有您想要的更改。 但是它是最容易的方法，适合作为您定制化的第一步。 以后此界面会添加更多的选项。
 
 此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 但您并不需要也不应当直接修改该文件。
 
-## 用户文件夹概览
+## 通过cactbot配置界面改变触发器文本
 
 在位于ACT-> 插件> OverlayPlugin.dll-> Cactbot-> Raidboss的cactbot配置界面中， 罗列着所有的触发器。 这里的列表让您可以更改每个触发器支持外部更改的配置设置。
 
@@ -45,7 +45,7 @@
 
 但这个方式有一定的限制。 例如，您无法更改逻辑。 而且在大多数情况下，您无法使 `tts` 的播报与 `alarmText` 不同。 您无法添加更多的参数。 如果您想要对触发器做出更加复杂的覆盖操作， 那么您需要查看 [Raidboss触发器自定义](#raidboss触发器自定义) 小节。
 
-## 设置您自己的用户文件夹
+## 用户文件夹概览
 
 若cactbot配置界面不存在您所需的选项，您可能需要考虑以用户文件覆盖的方式进行自定义。 您需要编写JavaScript代码和CSS样式，这意味着您可能需要掌握一点点编程知识。
 
@@ -57,7 +57,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 在修改了这些文件之后，单击ACT中OverlayPlugin插件设置中的“重载悬浮窗”按钮，即可应用更改。
 
-## 样式自定义
+## 设置您自己的用户文件夹
 
 您可以通过cactbot配置界面设置用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
 
@@ -65,7 +65,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 建议您选择cactbot安装目录下的 `cactbot/user` 文件夹。 该文件夹通常为位于 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置文件位于 [此文件夹](../../user) 下。
 
-## Raidboss触发器自定义
+## 样式自定义
 
 您可以通过修改 `user/<name>.css` 等文件，对UI模块的位置、尺寸、颜色等进行自定义。 可用的选择器可以通过阅览 `ui/<name>/<name>.css` 文件找到。
 
@@ -88,7 +88,7 @@ Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户�
 
 **警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您需知晓您的自定义CSS有在将来出现问题的风险。
 
-## Raidboss时间轴自定义
+## Raidboss触发器自定义
 
 您可以通过 `cactbot/user/raidboss.js` 文件自定义触发器行为。 您可以修改输出文本、适用职业、文本显示的时间等等。
 
@@ -155,7 +155,7 @@ Options.Triggers.push({
 });
 ```
 
-您也可以用同样的办法添加您的自定义触发器。
+此处还删除了英语以外的语言。
 
 ### 例2：使挑衅提示适用于全职业
 
@@ -163,7 +163,7 @@ Options.Triggers.push({
 
 我们需要修改 `condition` 函数(function)。 由于此处的id与内置的 `General Provoke` 触发器一致，因此会覆盖同名的内置触发器。
 
-自定义时间轴与 [自定义触发器](#overriding-raidboss-triggers) 差不多。
+您需要将以下的代码粘贴至您的 `cactbot/user/raidboss.js` 中。
 
 ```javascript
 Options.Triggers.push([{
@@ -199,7 +199,7 @@ Options.Triggers.push([{
 
 您也可以用同样的办法添加您的自定义触发器。
 
-1) 在 user/raidboss.js 中添加代码
+这是一个示例触发器，当您中了“Forked Lightning”效果时，会在1秒后显示“Get out!!!”。
 
 ```javascript
 Options.Triggers.push([
@@ -223,9 +223,9 @@ Options.Triggers.push([
 ]);
 ```
 
-1) 按您的喜好编辑您自己的时间轴文件
+我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解如何撰写cactbot的触发器， 当然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中现有的触发器代码。
 
-## 行为自定义
+## Raidboss时间轴自定义
 
 自定义时间轴与 [自定义触发器](#overriding-raidboss-triggers) 差不多。
 
@@ -237,7 +237,7 @@ Options.Triggers.push([
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
     至 `user/the_epic_of_alexander.txt`。
 
-例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 文件中， 您可以通过 `PlayerNicks` 选项定义玩家的昵称。
+1) 在 user/raidboss.js 中添加代码
 
     如同我们添加触发器一样，您依旧需要定义 `zoneId`、 `overrideTimelineFile: true`，
     以及定义文本文件名称的`timelineFile` 属性。
@@ -261,7 +261,7 @@ Options.Triggers.push([
 
 **注意**：编辑时间轴文件有一定的风险， 这是因为部分触发器依赖于时间轴的特定文字。 例如在绝亚历山大中，`Fluid Swing` 与 `Propeller Wind` 都有对应的时间轴触发器。 如果这些文字被替换或移除，时间轴触发器也同样会失效。
 
-## 用户文件的调试
+## 行为自定义
 
 这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不是触发器的变量。
 
@@ -287,7 +287,7 @@ Options.PlayerNicks = {
 
 您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位于该窗口的底部的OverlayPlugin日志窗口，它是一个自动滚动的文本窗口。
 
-此处有一个例子：
+当运行错误时，错误信息会显示在此处。
 
 ### 检查文件是否加载
 
