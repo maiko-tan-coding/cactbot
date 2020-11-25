@@ -59,7 +59,7 @@ Cactbot的設計哲學要求任何用戶的自定義配置應當存放於用戶�
 
 ## 設置您自己的用戶資料夾
 
-您可以透過cactbot配置界面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
+您可以透過cactbot使用者介面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
 
 若您沒有選擇，cactbot會嘗試選擇安裝目錄下的默認資料夾。
 
@@ -67,7 +67,7 @@ Cactbot的設計哲學要求任何用戶的自定義配置應當存放於用戶�
 
 ## 樣式自定義
 
-您可以通過修改 `user/<name >.css` 等文件，對UI模組的位置、尺寸、顏色等進行自定義。 可用的選擇器可以通過閱覽 `ui/<name>/<name>.css` 檔案找到。
+您可以通過修改 `user/<name >.css` 等檔案，對UI模組的位置、尺寸、顏色等進行自定義。 可用的選擇器可以通過閱覽 `ui/<name>/<name>.css` 檔案找到。
 
 如您在[ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中可發現諸如`#popup-text-container` 與`#timeline-container` 等選擇器， 則您可以在`user/raidboss.css` 中對其位置進行自定義。 您可以在 `user/raidboss.css` 中添加更多的樣式。
 
@@ -120,11 +120,11 @@ Options.Triggers.push({
 
 假定您正在攻略巴哈姆特絕境戰(UCOB)， 您的固定隊採用的不是cactbot默認的火1集合吃的打法， 而是先單吃火1。 另外，您 *同時* 還想讓觸發器通過tts播報與文本不同的內容。 比如，您總是忘記出人群，因此您想讓它重復播報數次。
 
-我們推薦閱讀 [觸發器指南](RaidbossGuide. md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中現有的觸發器代碼。
+我們推薦閱讀 [觸發器指南](RaidbossGuide. md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中現有的觸發器程式碼。
 
 其中一種調整方式是編輯觸發器的輸出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743) 中找到原本的 fireball #1 觸發器。
 
-您需要將以下的代碼粘貼至您的 `cactbot/user/raidboss.js` 中。
+您需要將以下的程式碼粘貼至您的 `cactbot/user/raidboss.js` 中。
 
 ```javascript
 Options.Triggers.push({
@@ -163,7 +163,7 @@ Options.Triggers.push({
 
 我們需要修改 `condition` 函數(function)。 由於此處的id與內置的 `General Provoke` 觸發器一致，因此會覆蓋同名的內置觸發器。
 
-您需要將以下的代碼粘貼至您的 `cactbot/user/raidboss.js` 中。
+您需要將以下的程式碼粘貼至您的 `cactbot/user/raidboss.js` 中。
 
 ```javascript
 Options.Triggers.push([{
@@ -263,7 +263,7 @@ Options.Triggers.push([
 
 ## 行為自定義
 
-這一文段將討論自定義cactbot的其他方式。 Cactbot中有一些不在配置界面顯示，也不是觸發器的變量。
+這一文段將討論自定義cactbot的其他方式。 Cactbot中有一些不在使用者介面顯示，也不是觸發器的變量。
 
 每個cactbot模塊都有一個名為 `Options` 的變量，它包含了若干控制選項。 可用的 `Options` 變量會在每個 `ui/<name>/<name>.js` 檔案的頂部列出。
 
