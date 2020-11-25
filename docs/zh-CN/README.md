@@ -136,7 +136,7 @@ cactbot提供以下模块：
 
 1. 将悬浮窗拖放到所需的位置。
 
-1. In the `General` tab of the `Raidboss` overlay, click the `Lock Overlay` and `Enable Clickthrough` checkboxes. The test bars, debug text, dashed red border, and shaded blue background will disappear once the overlay has been locked.
+1. 在 `Raidboss` 悬浮窗的 `General` 选项卡中，勾选 `Lock Overlay` 和 `Enable Clickthrough` 复选框。 The test bars, debug text, dashed red border, and shaded blue background will disappear once the overlay has been locked.
 
     ![raidboss plugin config](screenshots/overlay_plugin_new_raidboss_locked.png)
 
