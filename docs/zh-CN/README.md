@@ -127,14 +127,14 @@ cactbot提供以下模块：
 
     ![new overlay plugin screenshot](screenshots/overlay_plugin_new.png)
 
-1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 These all go away when the overlay is locked in the config panel for the overlay. You should always lock your overlay once you are done resizing and placing it.
+1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 当您在悬浮窗的配置面板中锁定该悬浮窗时，这些测试用UI都将消失。 在您完成了调整悬浮窗大小和位置之后，应该始终保持锁定悬浮窗。
 
     ![raidboss plugin unlocked](screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
-1. Type in any name you'd like as the name of this overlay, e.g. `raidbossy`.
-1. Click the `OK` button to add this as an Overlay. It will now appear in the list of overlays in the `Plugins` -> `OverlayPlugin.dll` tab.
+1. 您可以输入任意的名字作为悬浮窗的名称，例如 `raidbossy`。
+1. 单击 `OK` 按钮将其添加为悬浮窗。 则它将会出现在 `Plugns` -> `OverlayPlugin.dll` 标签页的悬浮窗列表中。
 
-1. Drag and resize the overlay to the location that you want it in.
+1. 将悬浮窗拖放到所需的位置。
 
 1. In the `General` tab of the `Raidboss` overlay, click the `Lock Overlay` and `Enable Clickthrough` checkboxes. The test bars, debug text, dashed red border, and shaded blue background will disappear once the overlay has been locked.
 
