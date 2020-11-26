@@ -136,17 +136,17 @@ cactbot提供以下模块：
 
 1. 将悬浮窗拖放到所需的位置。
 
-1. 在 `Raidboss` 悬浮窗的 `General` 选项卡中，勾选 `Lock Overlay` 和 `Enable Clickthrough` 复选框。 The test bars, debug text, dashed red border, and shaded blue background will disappear once the overlay has been locked.
+1. 在 `Raidboss` 悬浮窗的 `General` 选项卡中，勾选 `Lock Overlay` 和 `Enable Clickthrough` 复选框。 一旦悬浮窗被锁定，测试用的进度条，文本，红色虚线边框，以及蓝色阴影背景都将会消失。
 
     ![raidboss plugin config](screenshots/overlay_plugin_new_raidboss_locked.png)
 
-1. If you want to test the raidboss plugin, teleport to Summerford Farms, and do a `/countdown 5`.
+1. 如果要测试raidboss插件，请传送到盛夏农庄，然后在聊天框输入 `/ countdown 5` 并回车。
 
-1. Adding other cactbot overlays is a similar process. Follow the same process but select a different cactbot preset.
+1. 您可以用同样的方法添加其他cactbot悬浮窗。 步骤是一样的，只是选择了不同的cactbot预设。
 
-## Building from source
+## 从源码构建
 
-Follow all the steps above for installing cactbot first. To install dependencies there are 2 methods: **per script** and **manually**
+请先遵循上述的步骤安装好cactbot。 To install dependencies there are 2 methods: **per script** and **manually**
 
 ### Dependencies: Script Method
 
