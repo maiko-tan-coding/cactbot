@@ -105,11 +105,11 @@
 
 ### 触发器元素
 
-Almost all trigger fields can either return a value or a `function(data, matches, output)`. For such functions:
+几乎所有触发器字段都可以返回特定类型的值或 `function(data, matches, output)`。 对于这些函数：
 
-- `data` is a consistent object that is passed to all triggers. Values can be set on it, and they will be there for any following functions to use.
+- `data` 是传递给所有触发器的同一对象。 您可以在该对象上设置值，并可以通过下述的任意函数使用。
 - `\y{Float}`：匹配浮点数，包含某些区域特定的编码。
-- `output` is a special object for turning fields in `outputStrings` into strings to return. See the `outputStrings` section below for more info. For triggers that return numbers, e.g. `delaySeconds` or `durationSeconds` and for triggers that don't output anything, e.g. `preRun` or `run`, the output field is largely meaningless.
+- `output` 是一个特殊对象，用于将 `outputStrings` 字段转换为要返回的字符串。 更多信息请参见下面的 `outputStrings` 部分。 对于返回数字的触发器字段（如 `delaySeconds` 或 `durationSeconds`）以及 不输出任何东西的触发器（如 `preRun` 或 `run`）来说，该output字段并没有什么用处。
 
 ### 触发器元素
 
@@ -135,7 +135,7 @@ Almost all trigger fields can either return a value or a `function(data, matches
 
 **preRun: function(data, matches)** 当触发器被激活时，该函数会在条件判定成功后立刻执行。
 
-**delaySeconds** 时间，单位为秒，规定从正则表达式匹配上到触发器激活之间的等待时间。 其值可以是数字或返回数字的 `function(data, matches)`。 This runs after `preRun` and before the `promise`.
+**delaySeconds** 时间，单位为秒，规定从正则表达式匹配上到触发器激活之间的等待时间。 其值可以是数字或返回数字的 `function(data, matches)`。 这个函数会在 `preRun` 之后，`promise` 之前执行。
 
 **promise: function(data, matches)** 设置该属性为返回Promise的函数，则触发器会在其resolve之前等待。 这个函数会在 `preRun` 之后，`delaySeconds` 之前执行。
 
@@ -186,9 +186,9 @@ outputStrings: {
 },
 ```
 
-`noTarget` and `onTarget` are the two keys for the `outputStrings`.
+`noTarget` 和 `onTarget` 是 `outputStrings` 的两个键。
 
-Here's an example using these `outputStrings`, passing parameters to the `onTarget` version:
+这是使用了 `outputStrings` 的示例，将参数传递给 `onTarget` 文本：
 
 ```javascript
 alarmText: (data, matches, output) => {
@@ -196,7 +196,7 @@ alarmText: (data, matches, output) => {
 },
 ```
 
-Calling `output.onTarget()` finds the string in `outputStrings.onTarget` for the current language. For each `param` passed in, it replaces `${param}` in the string with the value. Then it returns the replaced string for `alarmText` to use.
+调用 `output.onTarget()` 将在 `outputStrings.onTarget` 中提取当前语言的字符串。 对于每个传入的 `param` ，其值将会替换至字符串中的 `${param}`。 然后，它返回替换后的字符串，以供 `alarmText` 使用。
 
 尽管由于我们需要定义所有语言的正则表达式，该方法并未减少代码行数，但仍然远远优于：
 
@@ -206,7 +206,7 @@ infoText: (data, matches, output) => {
 },
 ```
 
-Triggers that use `response` with `outputStrings` are slightly different. `outputStrings` should not be set on the trigger itself, and instead `response` should return a function that calls `output.responseOutputStrings = {};` where `{}` is the outputStrings object you would have returned from the trigger `outputStrings` field. This is a bit awkward, but allows response to both return and use `outputStrings`, and keeps [resources/responses.js](../resources/responses.js) more encapsulated.
+使用 `response` 的触发器和使用 `outputStrings` 的触发器略有不同。 `outputStrings` should not be set on the trigger itself, and instead `response` should return a function that calls `output.responseOutputStrings = {};` where `{}` is the outputStrings object you would have returned from the trigger `outputStrings` field. This is a bit awkward, but allows response to both return and use `outputStrings`, and keeps [resources/responses.js](../resources/responses.js) more encapsulated.
 
 For example:
 
