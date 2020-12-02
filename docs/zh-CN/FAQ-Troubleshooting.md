@@ -30,7 +30,7 @@ ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactb
 - 请确认您正在运行的是x64版本的ACT (`Advanced Combat Tracker.exe`) 而非x86 (`ACTx86.exe`)。
 - 最后，在成功安装OverlayPlugin之后必须重新启动ACT。
 
-If you get an error similar to `Invalid Plugin: This assembly does not have a class that implements ACT's plugin interface, or scanning the assembly threw an error.` or `Load Error: Method 'LoadConfig' in type 'CactbotEventSource' etc etc does not have an implementation` then you should make sure that `CactbotOverlay.dll` is listed after `OverlayPlugin.dll` in **Plugins** -> **Plugin Listing**.
+如果您见到类似于如下的错误：`Invalid Plugin: This assembly does not have a class that implements ACT's plugin interface, or scanning the assembly threw an error.` 或者是 `Load Error: Method 'LoadConfig' in type 'CactbotEventSource' etc etc does not have an implementation`， 则您应当确保在 **Plugins**标签页的**Plugins Listing**标签页中`CactbotOverlay.dll`在`OverlayPlugin.dll`之后载入
 
 ## Cactbot相关问题
 
