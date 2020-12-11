@@ -212,23 +212,25 @@ ACT、 インストールしたばかりの場合は、スタートアップウ�
 
 このモジュールは、戦闘での今後のイベントの視覚的なタイムラインと、レイドの認識を高めるのに役立つテキストと音声の 通知を提供します。 テキストと音声によるアラートは、ファイト タイムラインに基づくことも、ACTの「カスタムトリガー」と同様にゲーム内で発生するログメッセージから取得することもできます。 モジュールを見て、に似て感じるように設計されて [大物Bossmods](https://mods.curse.com/addons/wow/big-wigs) World of Warcraftのためのアドオン。
 
-ファイトタイムラインがために設計されたファイルで提供されている [ACTタイムライン](https://github.com/grindingcoil/act_timeline) プラグイン、 [ここでは、文書化](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) と [いくつかの拡張機能](docs/TimelineGuide.md)。
+[This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists the currently supported set of content in cactbot. Support is continually added over time (patches welcome!) but a lot of old content may not be supported yet.
 
-：エスカレート重要度の順にテキストアラートの三つのレベル、あり `情報`、 `警告`、および `アラーム`。 テキストメッセージはこれらのいずれかになり、より重要なレベルはより大きく、より目を引く色になります。  画面のテキストよりも音声合成を設定したい場合は、音声合成を設定できます。
+Fight timelines are provided in files designed for the [ACT Timeline](https://github.com/grindingcoil/act_timeline) plugin, [documented here](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) with [some extensions](docs/TimelineGuide.md).
 
-タイムラインのファイルが中に発見された [UI / raidboss /データ/タイムライン](ui/raidboss/data/timelines)。 トリガ テキストと音アラートがで発見された [UI / raidboss /データ/トリガ](ui/raidboss/data/triggers)。
+There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
 
-このスクリーンショットでは、raidbossモジュールが強調表示され、タイムラインが赤で囲まれ、 テキストアラートが黄色で囲まれ、 `アラート`レベルのテキストメッセージが表示されています。
+Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
 
-![raidbossのスクリーンショット](screenshots/Raidboss.png)
+In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
+
+![raidboss screenshot](screenshots/Raidboss.png)
 
 ### raidbossエミュレーター
 
-：あなたがトリガやタイムラインを書き、それらをテストしたい場合は、raidbossエミュレータを使用することができます **UI / raidboss / raidemulator.html**。
+If you are writing triggers or timelines and want to test them, you can use the raidboss emulator: **ui/raidboss/raidemulator.html**.
 
-これは現在、ブラウザにのみロードでき、オーバーレイとしてはロードできません。 これはクロム、現在のバージョンで動作します と同様に他のブラウザでも動作するはずですが、これはあまりテストされています。
+This currently can only be loaded in a browser and not as an overlay. This will work in current version of Chrome, and should work in other browsers as well but this is less tested.
 
-指示：
+Instructions:
 
 1. ACTを開始します。
 1. -確かWS Serverは、プラグイン経由で開始されていることを確認> OverlayPlugin WSServer -> ストリーム/ローカルオーバーレイ。
@@ -238,128 +240,128 @@ ACT、 インストールしたばかりの場合は、スタートアップウ�
 1. [ネットワークログ](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) をページにドラッグアンドドロップします。
 1. ゾーンとの出会いを選択し、[OK]をクリックします `ロード出会い`。
 
-エミュレータが機能していない場合は、インスペクタのコンソールログでエラーを確認してください。 WebSocketを介してACTに接続されるまで、ボタンは機能しません。
+If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
 
-![raidbossエミュレータのスクリーンショット](screenshots/raidboss_emulator.png)
+![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
 
 ### [oopsyraidsy](ui/oopsyraidsy) モジュール
 
-このモジュールは、使用するには 点のcactbotを **UI / oopsyraidsy / oopsyraidsy.html** 又は使用 `Cactbot OopsyRaidsy` プリセット。
+To use this module, point cactbot at **ui/oopsyraidsy/oopsyraidsy.html** or use the `Cactbot OopsyRaidsy` preset.
 
-このモジュールは、ミス追跡と死亡報告を提供します。  Oopsy raidsyは、戦いで何がうまくいかなかったのか、人々がどのように死んだのかを理解するために無駄な時間を減らすことを目的としています。  戦闘中は（混乱を避けるために）限られた数のミスのみが表示されますが、その後は完全なスクロール可能なリストが表示されます。
+This module provides mistake tracking and death reporting.  Oopsy raidsy is meant to reduce the time wasted understanding what went wrong on fights and how people died.  During the fight, only a limited number of mistakes are shown (to avoid clutter), but afterwards a full scrollable list is displayed.
 
-誰かが死んだとき、彼らが最後にダメージを受けたものがログにリストされます。  たとえば、ログに「:skull: Poutine：Iron Chariot（82173/23703）」と指定されている場合、これは、PoutineがIron Chariotで死亡した可能性が高く、82173のダメージを受け、その時点で23703の体力を持っていることを意味します。  ヘルス値自体は完全ではなく、ホットティックまたは複数の同時ダメージソースが原因で、わずかに1秒遅れている可能性があります。
+When somebody dies, the last thing they took damage from is listed in the log.  For example, if the log specifies: ":skull: Poutine: Iron Chariot (82173/23703)" this means that Poutine most likely died to Iron Chariot, taking 82173 damage and having 23703 health at the time.  The health value itself is not perfect and may be slightly out of date by a ~second due to a hot tick or multiple simultaneous damage sources.
 
-回避可能なミスが発生すると、oopsyは警告（:warning:）メッセージと失敗（:no_entry_sign:）メッセージをログに記録し、何が悪かったのかを説明します。
+When mistakes are made that are avoidable, oopsy logs warning (:warning:) and failure (:no_entry_sign:) messages, explaining what went wrong.
 
-ミストリガーは、内の個々の戦いのために指定されている [UI / oopsyraidsy /データ](ui/oopsyraidsy/data) フォルダー。
+Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data](ui/oopsyraidsy/data) folder.
 
-![おっと、スクリーンショット](screenshots/promo_oopsy.png)
+![oopsy screenshot](screenshots/promo_oopsy.png)
 
 ### [ジョブ](ui/jobs) モジュール
 
-このモジュールを使用する の点cactbot **UI /ジョブ/ jobs.html** 又は使用 `Cactbotジョブ` プリセット。
+To use this module, point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
 
-このモジュールは、ヘルス、マナ、およびtpバーに加えて、 TheBalanceやTrickAttackなどの大きなレイドバフ用のアイコンとタイマーバーを提供します。 また、レベリング またはレイド時にフードバフを維持するためのフードバフ警告、および視覚的なプルカウントダウンも備えています。
+This module provides health and mana bars, as well as icons and timer bars for big raid buffs such as The Balance and Trick Attack. It also features a food buff warning to keep up your food buff when leveling or raiding, and a visual pull countdown.
 
-これは、より多くのいくつかの仕事をサポートして肉付けが、あるい *強く* 他の人のための作業進行中。
+It has more fleshed out support for some jobs but is *strongly* a Work In Progress for others.
 
 * 赤魔道士：白/黒のマナを表示し、Verstone、Verfire、Impactのprocを追跡し、進行中の近接コンボの状態を表示します。
 * ウォリアー：獣の量を表示し、残りのストームズアイバフ時間をgcdで追跡します。
 * モンク：チャクラの数、残りのグリースを塗った稲妻の時間を表示し、モンクのバフとデバフを追跡します。
 
-このスクリーンショットでは、RedMageジョブのジョブモジュールが強調表示されています。 ヘルスバーとマナバー、および とレッドメイジの白/黒のマナトラッキングは紫色で囲まれ、大きなレイドバフトラッキングはオレンジ色の横にある 指しています。 近接コンボの最初のステップが実行されました。これは、ヘルスバーの上に黄色の ボックスとして表示されます。 procトラッキングは、下の緑色の丸で囲まれています。
+In this screenshot, the jobs module is highlighted for the Red Mage job. The health and mana bars, as well as Red Mage white/black mana tracking is circled in purple, with the large raid buff tracking pointed to beside it in orange. The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar. The proc tracking is circled below in green.
 
-![仕事のスクリーンショット](screenshots/Jobs.png)
+![jobs screenshot](screenshots/Jobs.png)
 
 ### [ユーレカ](ui/eureka) モジュール
 
-このモジュールは、使用するには 点のcactbotを **UI /ユーレカ/ eureka.html** 又は使用 `Cactbotユーレカ` プリセット。
+To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactbot Eureka` preset.
 
-このモジュールは、ポップされた、または が強制終了されたNMの自動追跡を提供します。  強風/ナイトタイマーと、チャットに貼り付けられたローカルトラッカーリンク が表示されます。  チャットでのすべてのフラグは、一時的でもある 地図上含まれています。
+This module provides automatic tracking of NMs that are popped or have been killed.  It shows gales/night timers and any local tracker link that has been pasted in chat.  Any flags in chat are also temporarily included on the map.
 
-現在、トラッカー情報を直接読み取ることはありません。  ただし、 あなたは、左/をクリックした場合は、トラッカーにしてボタン「コピーNMSに殺された」RED あなたは例えば、ゲームでそれを貼り付けることができ、現在、死者のNMのリストをコピー `/エコー？ クールダウン時のNM：セルケト（7m） > ジュリカ（24m） > ポリ（54m）`
+It currently does not read the tracker information directly.  However, if you click on the left/red "Copy killed NMs" button in the tracker to copy the list of currently dead NMs, you can paste it in game, e.g. `/echo ? NMs on cooldown: Serket (7m) > Julika (24m) > Poly (54m)`
 
-あなたは絵文字が表示されない場合は、必ずインストールしている作る [このWindowsの更新プログラム](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
+If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
 
-![eurekaスクリーンショット](screenshots/promo_eureka.png)
+![eureka screenshot](screenshots/promo_eureka.png)
 
 ### [レーダー](ui/radar) モジュール
 
-このモジュールは、使用するには 点のcactbotを **UI /レーダー/ radar.html** 又は使用 `Cactbotレーダー` プリセット。
+To use this module, point cactbot at **ui/radar/radar.html** or use the `Cactbot Radar` preset.
 
-このモジュールでは、近くのハントモブ（Sランク、Aランクなど）について知ることができます。 ポップすると、矢印（キャラクターの見出しに基づく） と暴徒までの距離が表示されます。
+This module lets you know about nearby hunt mobs (S-rank, A-rank, etc). When one pops, it gives you an arrow (based on your character's heading) and a distance to the mob.
 
-誰が暴徒を引いたかを示すオプション、 、およびレーダーの表示を構成するオプションがあります。 さまざまなランク （たとえば、Sランクでは音を立てるが、Bランクでは無音にする）、 または任意のMob名にカスタムトリガーを設定することもできます。
+There are options to show who pulled the mob, as well as to configure the display of the radar. You can also set up custom options for different ranks (e.g. make noises for S rank, but be silent for B ranks), or set up custom triggers for any mob name you would like.
 
-参照してください `cactbot /ユーザー/レーダー-example.js` より多くのオプションのために。
+See the `cactbot/user/radar-example.js` for more options.
 
-![レーダーのスクリーンショット](screenshots/promo_radar.png)
+![radar screenshot](screenshots/promo_radar.png)
 
 ### [フィッシャー](ui/fisher) モジュール
 
-このモジュールは、使用するには 点のcactbotを **UI /フィッシャー/ fisher.html** 又は使用 `Cactbotフィッシャー` プリセット。
+To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactbot Fisher` preset.
 
-釣り場でラインをキャストするとき、このモジュールは特定の魚をリールするタイミングを追跡し、フックしたときに何が得られるかを把握します。
+When you cast your line at a fishing hole, this module keeps track of when you reel in particular fish so that you know what you might be getting when you hook it.
 
-![釣りのスクリーンショット](screenshots/promo_fishing.png)
+![fishing screenshot](screenshots/promo_fishing.png)
 
-現在、キャスト時間は釣りをしているときにのみ記録されるため、各魚を捕まえるまでデータはありません。 緑のバーは軽いタグボートを表し、黄色は中程度のタグボートを表し、赤いバーは伝説的/重いタグボートを表します。
+Cast times are currently only logged as you fish, so there won't be any data until you've caught each fish. Green bars represent light tugs, yellow is a medium tug and red bars are legendary/heavy tugs.
 
-[さまざまなタグボートの種類の例については、ここ](https://www.youtube.com/watch?v=GHgWIA-Zhug) を参照してください。
+[See here](https://www.youtube.com/watch?v=GHgWIA-Zhug) for examples of the different tug types.
 
-一般的なトラブルシューティングのヒントについては、 [ここ](docs/FAQ-Troubleshooting.md#fisher-module) を確認してください。
+Check [here](docs/FAQ-Troubleshooting.md#fisher-module) for common troubleshooting tips.
 
 ### [DPS](ui/dps) メートル
 
-cactbotはOverlayPluginのminiparseのために設計された任意のDPSメーターオーバーレイで使用することができます cactbotの追加のJavascriptを通じてより多くの機能を構築するためのオプションで、アドオン のAPI。  cactbotはワイプでの戦闘も自動停止するため、ACTの戦闘時間を 無限大に構成できます。
+cactbot can be used with any dps meter overlay designed for OverlayPlugin's miniparse addon, with the option to build out more features through cactbot's additional Javascript APIs.  cactbot also auto-stops fights on wipes, so you can configure ACT's fight time to infinity.
 
-[xephero](ui/dps/xephero) dpsメーターは、ミニ解析用に構築された同じdpsメーターに基づいており、 は、追加の列に表示される、フェーズごとのdpsトラッキングを実行する追加機能を備えています。 以下のスクリーンショットでは、フェーズの名前はB1、B2、B3です。  これらはダンジョンのボスから自動生成されますが、レイドファイトフェーズを区別するために使用できます。
+The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for miniparse, with the additional ability to do per-phase dps tracking, displayed in additional columns. In the screenshot below the phases are named B1, B2, B3.  These autogenerate from dungeon bosses, but could be used to differentiate raid fight phases.
 
-![xepheroスクリーンショット](screenshots/xephero.png)
+![xephero screenshot](screenshots/xephero.png)
 
-[rdmty](ui/dps/rdmty) DPS計はminiparseに対して同じDPSメーターに基づいて、更新された Stormbloodジョブのと一致するように再着色 [fflogs](http://fflogs.com)。
+The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
 
-![rdmtyスクリーンショット](screenshots/rdmty.png)
+![rdmty screenshot](screenshots/rdmty.png)
 
 ### [プルカウンター](ui/pullcounter) モジュール
 
-この小さなモジュールは、画面上のボスを襲撃するための現在のプルカウントを固定します。 これは主に、多くのストリーミングを行い、ビデオ映像を確認したい人向けです。 画面に数字があると、ビデオを簡単にスクラブして、レビューする特定のプルを 見つけることができます。
+This small module sticks the current pull count for raiding bosses on screen. This is primarily for folks who stream a lot and want to review video footage. Having a number on screen makes it easy to scrub through video and find particular pulls to review.
 
-ほとんどの場合、 `/ echo pullcounter reset`入力すると、現在のボス/ゾーンのカウントをリセットできます。 また、あなたに直接カウントを編集することができます `%APPDATA%\高度な戦闘トラッカー\ Configを\RainbowMage.OverlayPlugin.config.json` ファイル。
+In most cases, you can reset the count for the current boss/zone by typing `/echo pullcounter reset`. You can also edit the counts directly in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file.
 
-![プルカウンターのスクリーンショット](screenshots/pullcounter.png)
+![pull counter screenshot](screenshots/pullcounter.png)
 
 ### [テスト](ui/test) モジュール
 
-このモジュールは、使用するには 点のcactbotを **UI /試験/ test.htmlという** 又は使用 `Cactbotテスト` プリセット。
+To use this module, point cactbot at **ui/test/test.html** or use the `Cactbot Test` preset.
 
-このモジュールは、cactbot変数の画面上のテストであり、再生中に使用することを意図したものではありません。 すべてが期待どおりに機能していることを確認したり、オーバーレイの問題のデバッグに使用したりすると便利です。
+This module is just an onscreen test of cactbot variables and is not meant to be used while playing. It can be useful to try out to make sure everything is working as expected or to use to help debug overlay issues.
 
-![テストのスクリーンショット](screenshots/test.png)
+![test screenshot](screenshots/test.png)
 
 ## トラブルシューティング
 
-一般的なFAQは、一般的なCactbotの問題の解決策を含む [ここ](docs/FAQ-Troubleshooting.md) ます。
+A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
 
 ## Cactbotのカスタマイズ
 
-最も一般的なcactbotの構成は、ACT内の のコントロールパネルを介して行うことができます。
+Most common cactbot configuration can be done via the control panel, inside of ACT.
 
-![設定パネル](screenshots/config_panel.png)
+![config panel](screenshots/config_panel.png)
 
-これは、 プラグイン> OverlayPlugin.dll-> Cactbotイベントソース に移動し、そこでオプションをクリックすることで見つけることができます。
+This can be found by going to Plugins -> OverlayPlugin.dll -> Cactbot Event Source, and then clicking on options there.
 
-特に、 あなたは、raidbossアラートのためにスピーチへのテキストを使用したい場合は あなたはあることを「デフォルトのアラート出力」を変更することができます 「のみTTS」または「テキストとTTS」。 これは、トリガーごとに変更することもできます。
+In particular, if you want to use text to speech for raidboss alerts, you can change the "Default alert output" to be "TTS Only" or "Text and TTS". You can also change this on a per trigger basis.
 
-それとも、何らかの理由であれば（???）あなたは、準備チェック警告音を望んでいない あなたは同じオプションパネルを経由して、これを無効にすることができます。 - Raidbossに行く> 一般的なトリガ-> 一般-> 一般的な準備のチェック、 し、それを設定する `障害者` の代わりに、 `デフォルト`。
+Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
 
-これらのオプションは、あなたの中に保存されている `%APPDATA%\高度な戦闘トラッカー\ Configを\RainbowMage.OverlayPlugin.config.json` ファイル。 これは、このファイルを直接編集するにはお勧めしません それがでなければならないとして [厳格なJSON](https://jsonlint.com/) と、ファイルが誤って記述されている場合、ACTは、負荷に失敗することがあります。
+These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
 
-ほとんどの構成は、ユーザーファイルではなく、このコントロールパネル を介して行うことをお勧めします。 `cactbot / user /` ファイルはより強力で 、コントロールパネルから何でも上書きできます。 ただし、これは、コントロールパネルが何か 適切に調整せず、 `cactbot / user /` ファイルがサイレントにオーバーライドされている場合にも混乱を招く可能性があります。
+It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
 
-参照してください。 [この文書](docs/CactbotCustomization.md#user-folder-config-overrides) 、ユーザのjavascriptとcssファイルの詳細については。
+See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrides) for more details about user javascript and css files.
 
 ## サポートされている言語
 
-cactbotはテストされ、現在の 国際（英語、ドイツ語、フランス語、日本語）バージョン、 現在の中国語バージョン、 および現在の韓国語バージョンで動作します。 一部の翻訳はまだ進行中です。
+cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
