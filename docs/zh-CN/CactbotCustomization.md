@@ -59,7 +59,7 @@ cactbot将按照字母顺序优先加载user文件夹中的子文件夹里的文
 
 在本文档中，“用户自定义js文件”指代以上两者。 除了加载顺序以外，`user/raidboss.js` 和 `user/raidboss/some_file.js` 没有区别。 同样地，“用户自定义css文件”同时指代 `user/radar.css` 和 `user/radar/some_file.css` 二者。 用户文件夹中分出子目录是为了让分享触发器和自定义配置更容易。
 
-当开发者模式开启时，你可以从[调试信息](#check-if-your-file-is-loaded)中得到更多关于加载顺序的信息。
+当开发者模式开启时，你可以从[调试信息](#检查文件是否加载)中得到更多关于加载顺序的信息。
 
 `user/` 文件夹中包含了一部分示例配置文件，您可以对其重命名并直接使用。 如 [user/raidboss-example.js](../../user/raidboss-example.js) 文件 可被重命名为 `user/raidboss.js`，对其所做的更改可应用于 `raidboss` 模块。
 
@@ -77,7 +77,7 @@ cactbot将按照字母顺序优先加载user文件夹中的子文件夹里的文
 
 用户自定义css文件可以对UI模块的位置、尺寸、颜色等进行自定义。 可用的选择器可以通过阅览 `ui/<name>/<name>.css` 文件找到。
 
-例如您在 [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css) 中，可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中或其他 `user/raidboss/` 下的 `.css` 中添加更多的样式。
+例如您在 [ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中，可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中或其他 `user/raidboss/` 下的 `.css` 中添加更多的样式。
 
 同样地，您可以在 `.info-text` 类中添加新的CSS规则，对信息文字的尺寸和颜色进行自定义。 例如：
 
