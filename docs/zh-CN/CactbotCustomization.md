@@ -49,35 +49,35 @@
 
 若cactbot配置界面不存在您所需的选项，您可能需要考虑以用户文件覆盖的方式进行自定义。 您需要编写JavaScript代码和CSS样式，这意味着您可能需要掌握一点点编程知识。
 
-Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户文件夹的文件中。 同时这也能防止您所做的更改在今后cactbot的更新中被覆盖失效。 不仅如此，以后您将无法通过直接修改cactbot的文件应用您的更改，除非您了解如何构建您自己的项目。
+Cactbot的设计哲学要求任何用户的自定义配置应当存放于用户文件夹的文件中。 同时这也能防止您所做的更改在今后cactbot的更新中被覆盖失效。 另外，目前您无法通过直接修改cactbot的文件应用您的更改，除非您了解如何构建您自己的项目。
 
-所有的cactbot模块都会从 [user/](../../user/) 文件夹加载用户设置。 `raidboss` 模块会加载 `user/raidboss.js` 与 `user/raidboss.css`。 (时间轴`.txt`文件必须与引用它们的`.js`文件直接处于同一个文件夹中。) 这些用户自定义文件将在cactbot自身加载完毕后被加载，并可以覆盖对应的模块的设置。
+所有的cactbot模块都会从 [user/](../../user/) 文件夹加载用户设置。 `raidboss` 模块会加载 `user/raidboss.js` 与 `user/raidboss.css`，以及所有`user/raidboss/` 目录下及其子目录下的 `.js` 和 `.css` 文件。 (时间轴`.txt`文件必须与引用它们的`.js`文件放在同一个文件夹中。) 这些用户自定义文件将在cactbot自身加载完毕后被加载，并可以覆盖对应的模块的设置。
 
-`oopsyraidsy` 模块会加载 `user/oopsyraidsy.js` 与 `user/oopsyraidsy.css`。 依此类推，每个模块都支持以此方式（以文件名）加载对应自定义文件。
+`oopsyraidsy` 模块会加载 `user/oopsyraidsy.js` 与 `user/oopsyraidsy.css`，以及`user/oopsyraidsy/` 目录下的所有 `.js` 和 `.css` 文件。 依此类推，每个模块都支持以此方式（以文件名）加载对应自定义文件。
 
-cactbot将按照字母顺序优先加载user文件夹中的子文件夹里的文件，其次加载子文件夹外的文件。 这就是为什么`user/raidboss.js`文件总是最后被加载并可以覆盖`user/raidboss/`文件夹中任何文件中的配置。 For example, `user/alphascape/some_file.js` will load before `user/mystatic/some_file.js`, which will both load before `user/raidboss.js`. The same ordering applies to `.css` files.
+cactbot将按照字母顺序优先加载user文件夹中的子文件夹里的文件，其次加载子文件夹外的文件。 这就是为什么`user/raidboss.js`文件总是最后被加载并可以覆盖`user/raidboss/`文件夹中任何文件中的配置。 例如，`user/alphascape/some_file.js` 先加载， `user/mystatic/some_file.js` 再加载，最后是`user/raidboss.js` 加载。 `.css` 文件遵循同样的顺序。
 
-In this documentation, any reference to "user-defined js file" applies to both of these. There is no difference between `user/raidboss.js` and `user/raidboss/some_file.js`, other than the order in which they load. Similarly, "user-defined css file" means both `user/radar.css` and `user/radar/some_file.css`. Subdirectories in the user folder are intended to make it easier to share triggers and customizations with others.
+在本文档中，“用户自定义js文件”指代以上两者。 除了加载顺序以外，`user/raidboss.js` 和 `user/raidboss/some_file.js` 没有区别。 同样地，“用户自定义css文件”同时指代 `user/radar.css` 和 `user/radar/some_file.css` 二者。 用户文件夹中分出子目录是为了让分享触发器和自定义配置更容易。
 
-若您没有选择，cactbot会尝试选择安装目录下的默认文件夹。
+当开发者模式开启时，你可以从[调试信息](#check-if-your-file-is-loaded)中得到更多关于加载顺序的信息。
 
 `user/` 文件夹中包含了一部分示例配置文件，您可以对其重命名并直接使用。 如 [user/raidboss-example.js](../../user/raidboss-example.js) 文件 可被重命名为 `user/raidboss.js`，对其所做的更改可应用于 `raidboss` 模块。
 
-在修改了这些文件之后，单击ACT中OverlayPlugin插件设置中的“重载悬浮窗”按钮，即可应用更改。
+在修改了这些文件之后，单击ACT中OverlayPlugin插件对应悬浮窗设置中的“重载悬浮窗”按钮，即可应用更改。
 
 ## 设置您自己的用户文件夹
 
 您可以通过cactbot配置界面设置用户文件夹： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用户文件夹。 单击 `选择文件夹` 按钮，选择磁盘上的一个文件夹。
 
-If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
+如果没有选择，cactbot将自动选择其安装目录下的默认文件夹。
 
 建议您选择cactbot安装目录下的 `cactbot/user` 文件夹。 该文件夹通常为位于 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置文件位于 [此文件夹](../../user) 下。
 
 ## 样式自定义
 
-您可以通过修改 `user/<name>.css` 等文件，对UI模块的位置、尺寸、颜色等进行自定义。 可用的选择器可以通过阅览 `ui/<name>/<name>.css` 文件找到。
+用户自定义css文件可以对UI模块的位置、尺寸、颜色等进行自定义。 可用的选择器可以通过阅览 `ui/<name>/<name>.css` 文件找到。
 
-如您在 [ui/raidboss/raidboss.css](../../ui/raidboss/raidboss.css) 中 可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中添加更多的样式。
+例如您在 [ui/raidboss/raidboss.css](../ui/raidboss/raidboss.css) 中，可发现诸如 `#popup-text-container` 与 `#timeline-container` 等选择器， 则您可以在 `user/raidboss.css` 中对其位置进行自定义。 您可以在 `user/raidboss.css` 中或其他 `user/raidboss/` 下的 `.css` 中添加更多的样式。
 
 同样地，您可以在 `.info-text` 类中添加新的CSS规则，对信息文字的尺寸和颜色进行自定义。 例如：
 
@@ -92,13 +92,13 @@ If you haven't selected one, it will try to select one based on where you have i
 
 我们推荐使用 [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) 以调试CSS问题。 您可以通过 ACT -> Plugins -> OverlayPlugin.dll -> 您的悬浮窗名字 -> 启动Debug工具 以开启DevTools。
 
-**注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有开放外部配置的接口。 如果您有特别的需求，但是您不知道如何修改此进度条，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
+**注意**：某些组件的自定义较为困难，甚至无法进行自定义，如时间轴的进度条等。 原因是，这些组件属于自定义HTML元素，且没有开放外部配置的接口。 如果您有特别的需求，但是不知道如何修改，您可以提出一个 [github issue](https://github.com/quisquous/cactbot/issues/new/choose)。
 
 **警告**：cactbot不保证CSS的向后兼容性。 在以后的更改中，cactbot可能会重新组织网页结构，改变元素名称和类名称，甚至完全重构所有样式。 因此，您需知晓您的自定义CSS有在将来出现问题的风险。
 
 ## Raidboss触发器自定义
 
-您可以通过 `cactbot/user/raidboss.js` 文件自定义触发器行为。 您可以修改输出文本、适用职业、文本显示的时间等等。
+您可以通过用户自定义js文件(例如 `user/raidboss.js` 或 `user/raidboss/` 目录下的任意`.js` 文件)自定义触发器行为。 您可以修改输出文本、适用职业、文本显示的时间等等。
 
 在 `cactbot/user/raidboss.js` 文件中， `Options.Triggers` 是一个存放了触发器集合的列表。 您可以通过此变量添加新触发器，或修改已有的触发器。 若用户文件中存在与现有触发器 (cactbot官方提供的) 相同id的触发器，则会将后者其覆盖。
 
@@ -120,7 +120,7 @@ Options.Triggers.push({
 });
 ```
 
-The easiest approach to modify triggers is to copy and paste the block of code above for each trigger. 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.js) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
+最简单的定制触发器方式是直接复制上面那一大块代码再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.js) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
 
 **注意**：此方式会将原触发器完全移除，因此请在修改时不要删除任何逻辑。 此外，触发器均采用JavaScript编写，因此必须采用标准JavaScript语法。 若您不是程序员，您需要格外注意编辑方法。
 
