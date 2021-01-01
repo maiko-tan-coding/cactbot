@@ -151,7 +151,7 @@ cactbot提供以下模块：
 ### 安装依赖：脚本方式
 
 1. 必须先安装 `curl`（用于下载依赖项）
-1. Execute the `./util/fetch_deps.py` script
+1. 运行 `./util/fetch_deps.py` 脚本
 1. 下转 **构建步骤**
 
 ### 安装依赖：手动方式
@@ -195,88 +195,88 @@ ThirdParty
    |- OverlayPlugin.dll
 ```
 
-### Steps to build plugin
+### 构建插件的步骤
 
 1. 在Visual Studio中打开解决方案（Visual Studio 2017测试通过）。
 1. 采用“Release”和“ x64”的配置开始构建。
 1. 该插件将构建到 **bin/x64/Release/CactbotOverlay.dll**。
 1. 将构建好的插件添加到ACT。  在ACT-> Plugins -> Plugin Listing 标签页中，单击 `Browse` 按钮，然后导航至构建完成的 **bin/x64/Release/CactbotOverlay.dll** 文件。  然后单击 `Add/Enable Plugin` 按钮。
 
-### npm and webpack
+### npm 和 webpack
 
-If you are not a cactbot developer and are trying to modify cactbot for your own personal triggers, you should instead refer to the [customization documentation](docs/CactbotCustomization.md) instead of changing your local cactbot files.
+如果您不是cactbot开发人员，并且尝试修改cactbot，添加自己的个人触发器。 您不应直接修改本地的cactbot文件，而应该参考 [自定义文档](docs/zh-CN/CactbotCustomization.md)进行自定义。
 
-To install npm and start Webpack, follow these steps:
+安装npm并启动Webpack，请按照下列步骤操作：
 
-1. Install [nodejs and npm](https://nodejs.org/en/download/)
-1. Run `npm install` in the root of the cactbot directory.
-1. Run `npm run build` or `npm start`.
+1. 安装 [nodejs 和 npm](https://nodejs.org/en/download/)
+1. 在cactbot的根目录下运行 `npm install`。
+1. 运行 `npm run build` 或 `npm start`。
 
-See the [contributing](CONTRIBUTING.md#validating-changes-via-webpack) documentation for more details about using Webpack.
+关于使用Webpack的更多信息，请参见 [贡献文档](CONTRIBUTING.md#validating-changes-via-webpack) 。
 
 ## UI模块概述
 
-The [ui/](ui/) directory contains cactbot's ui modules. If you installed cactbot following the instructions above, this will most likely be `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`.
+[ui/](ui/) 文件夹中包含cactbot的所有ui模块。 如果您按照上述说明安装了cactbot， 则很有可能是 `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`。
 
-Each cactbot ui module should be added as a separate overlay. See the [Adding Overlay Modules](#adding-overlay-modules) section for more details about setup.
+每个cactbot ui模块都应当作为单独的悬浮窗添加。 有关配置的更多信息，请参见“ [添加悬浮窗模块](#adding-overlay-modules) 部分。
 
-### [raidboss](ui/raidboss) module
+### [raidboss](ui/raidboss) 模块
 
-To use this module, point cactbot at **ui/raidboss/raidboss.html** or use the `Cactbot Raidboss` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/raidboss.html** 或使用 `Cactbot Raidboss` 预设。
 
-This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) addon for World of Warcraft.
+此模块提供预知战斗事件的时间轴， 以及文本和音频提示，以帮助提高团队对raid的意识。 这些文字和声音警报一般基于战斗时间轴，或是来自游戏中发生的日志消息。简单地说，这是一个类似于ACT的“自定义触发器”的功能。 该模块被设计为类似于《魔兽世界》的 [BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) 插件的外观和感觉。
 
-[This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists the currently supported set of content in cactbot. Support is continually added over time (patches welcome!) but a lot of old content may not be supported yet.
+[此页面](https://quisquous.github.io/cactbot/util/coverage/coverage.html) 列出了当前cactbot中支持的副本。 我们会持续添加更多支持 (随时欢迎贡献代码！) 尽管目前大部分旧副本仍未支持。
 
-Fight timelines are provided in files designed for the [ACT Timeline](https://github.com/grindingcoil/act_timeline) plugin, [documented here](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) with [some extensions](docs/TimelineGuide.md).
+战斗时间轴原本是设计为用于 [ACT时间轴](https://github.com/grindingcoil/act_timeline)插件的文件， 具有 [特殊的扩展名](docs/TimelineGuide.md)， 这里是该插件的 [文档](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)。
 
-There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
+这里有三个等级的警报提示，重要性从低到高分别为： `info(信息)`、 `alert(警告)` 和 `alarm(警报)`。 文本信息只会有这三种等级，等级越高，越重要，则文字会越大，颜色也会越醒目。  如果你更喜欢文本到语音(TTS)，你也可以配置这个提示方式。
 
-Timeline files and triggers for text and sound alerts are found in [ui/raidboss/data](ui/raidboss/data), timeline files with `.txt` extension and trigger files with `.js` extension.
+在[ui/raidboss/data](ui/raidboss/data)文件夹下存在定义了文本显示和声音提示的时间轴和触发器等， 时间轴文件拥有 `.txt` 扩展名，而触发器文件则为 `.js` 扩展名。
 
-In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
+在下方的截图中，高亮的是raidboss模块，其中时间轴用红色圆圈圈出， 文本警报用黄色圆圈圈出，可见的是 `警告`等级的文字提示。
 
 ![raidboss screenshot](screenshots/Raidboss.png)
 
-### raidboss emulator
+### raidboss模拟器
 
-If you are writing triggers or timelines and want to test them, you can use the raidboss emulator: **ui/raidboss/raidemulator.html**.
+如果在编写触发器或时间轴，并要对其进行测试， 您可以使用此处的raidboss模拟器： **ui/raidboss/raidemulator.html**。
 
-This currently can only be loaded in a browser and not as an overlay. This will work in current version of Chrome, and should work in other browsers as well but this is less tested.
+但是，目前只能在浏览器中加载它，不支持加载为悬浮窗。 该模拟器在最新版本的Chrome中可以完美运行， 理论上在其他浏览器中也可以运行，但是并没有测试过。
 
-Instructions:
+操作步骤：
 
-1. Start ACT.
-1. Make sure the WS Server is started via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
-1. Select `Cactbot Raidboss (Combined Alerts and Timelines)` from the URL Generator list.
-1. Edit the url to say `raidemulator.html` instead of `raidboss.html`.
-1. Copy and paste this edited url into Chrome.
-1. Drag and drop a [network log](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) onto the page.
-1. Select the zone and encounter, and then click `Load Encounter`.
+1. 启动ACT。
+1. 确保WS Server已启动，可以在 Plugins -> OverlayPlugin WSServer-> Stream/Local Overlay 中对此进行配置。
+1. 从URL列表中选择 `Cactbot Raidboss (Combined Alerts and Timelines)`。
+1. 编辑网址，将 `raidboss.html` 替换为 `raidemulator.html`。
+1. 将修改后的网址复制并粘贴到Chrome中。
+1. 拖放一个 [网络日志](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) 文件到该页面中。
+1. 选择区域和战斗记录，然后单击 `Load Encounter`。
 
-If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
+如果模拟器无法正常工作，请检查控制台中是否打印了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
 
 ![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
 
-### [oopsyraidsy](ui/oopsyraidsy) module
+### [oopsyraidsy](ui/oopsyraidsy) 模块
 
-To use this module, point cactbot at **ui/oopsyraidsy/oopsyraidsy.html** or use the `Cactbot OopsyRaidsy` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/oopsyraidsy.html** 或使用 `Cactbot OopsyRaidsy` 预设。
 
-This module provides mistake tracking and death reporting.  Oopsy raidsy is meant to reduce the time wasted understanding what went wrong on fights and how people died.  During the fight, only a limited number of mistakes are shown (to avoid clutter), but afterwards a full scrollable list is displayed.
+此模块提供错误追踪和死亡报告。  通过 oopsy raidsy 模块可以检查战斗中出了什么问题，以及队友死亡的原因，以减少攻略副本的时间。  在战斗中，仅显示一定数量的错误（以避免混乱），但脱战后可以显示完整的可滚动列表。
 
-When somebody dies, the last thing they took damage from is listed in the log.  For example, if the log specifies: ":skull: Poutine: Iron Chariot (82173/23703)" this means that Poutine most likely died to Iron Chariot, taking 82173 damage and having 23703 health at the time.  The health value itself is not perfect and may be slightly out of date by a ~second due to a hot tick or multiple simultaneous damage sources.
+当某人死亡时，他/她遭受伤害的最后一个伤害事件会记录在日志中。  例如，当日志显示：":skull: Poutine: Iron Chariot (82173/23703)"，这意味着Poutine最有可能死于Iron Chariot这个技能，造成了82173伤害，且当时他具有23703的血量。  血量值本身并不完美，由于服务器更新周期的存在，或者因为同时存在多个伤害技能，血量值可能有数秒的延迟。
 
-When mistakes are made that are avoidable, oopsy logs warning (:warning:) and failure (:no_entry_sign:) messages, explaining what went wrong.
+当错误本身可以避免时，oopsy会将其记录为警告（:warning:）和失败（:no_entry_sign:）消息，并说明出现了什么问题。
 
-Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data](ui/oopsyraidsy/data) folder.
+[ui/oopsyraidsy/data](ui/oopsyraidsy/data) 文件夹中为每个副本指定了错误触发器。
 
 ![oopsy screenshot](screenshots/promo_oopsy.png)
 
-### [jobs](ui/jobs) module
+### [jobs](ui/jobs) 模块
 
-To use this module, point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/jobs.html** 或使用 `Cactbot Jobs` 预设。
 
-This module provides health and mana bars, as well as icons and timer bars for big raid buffs such as The Balance and Trick Attack. It also features a food buff warning to keep up your food buff when leveling or raiding, and a visual pull countdown.
+该模块提供了HP和MP条，以及重要团辅技能的图标和计时条等，如太阳神之衡和攻其不备。 该模块同样提供食物增益效果提示，使您可在迷宫或Raid中保持食物增益。 此外，该模块还提供了可视化的倒计时条。
 
 It has more fleshed out support for some jobs but is *strongly* a Work In Progress for others.
 
