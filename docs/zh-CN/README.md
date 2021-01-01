@@ -151,7 +151,7 @@ cactbot提供以下模块：
 ### 安装依赖：脚本方式
 
 1. 必须先安装 `curl`（用于下载依赖项）
-1. 运行 `./utils/fetch_deps.py` 脚本
+1. Execute the `./util/fetch_deps.py` script
 1. 下转 **构建步骤**
 
 ### 安装依赖：手动方式
@@ -195,24 +195,36 @@ ThirdParty
    |- OverlayPlugin.dll
 ```
 
-### 构建步骤
+### Steps to build plugin
 
 1. 在Visual Studio中打开解决方案（Visual Studio 2017测试通过）。
 1. 采用“Release”和“ x64”的配置开始构建。
 1. 该插件将构建到 **bin/x64/Release/CactbotOverlay.dll**。
 1. 将构建好的插件添加到ACT。  在ACT-> Plugins -> Plugin Listing 标签页中，单击 `Browse` 按钮，然后导航至构建完成的 **bin/x64/Release/CactbotOverlay.dll** 文件。  然后单击 `Add/Enable Plugin` 按钮。
 
+### npm and webpack
+
+If you are not a cactbot developer and are trying to modify cactbot for your own personal triggers, you should instead refer to the [customization documentation](docs/CactbotCustomization.md) instead of changing your local cactbot files.
+
+To install npm and start Webpack, follow these steps:
+
+1. Install [nodejs and npm](https://nodejs.org/en/download/)
+1. Run `npm install` in the root of the cactbot directory.
+1. Run `npm run build` or `npm start`.
+
+See the [contributing](CONTRIBUTING.md#validating-changes-via-webpack) documentation for more details about using Webpack.
+
 ## UI模块概述
 
-[ui/](ui/) 文件夹中包含cactbot的所有ui模块。 如果您按照上述说明安装了cactbot， 则很有可能是 `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`。
+The [ui/](ui/) directory contains cactbot's ui modules. If you installed cactbot following the instructions above, this will most likely be `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`.
 
-每个cactbot ui模块都应当作为单独的悬浮窗添加。 有关配置的更多信息，请参见“ [添加悬浮窗模块](#adding-overlay-modules) 部分。
+Each cactbot ui module should be added as a separate overlay. See the [Adding Overlay Modules](#adding-overlay-modules) section for more details about setup.
 
-### [raidboss](ui/raidboss) 模块
+### [raidboss](ui/raidboss) module
 
-要使用该模块，定位到cactbot下面的 **ui/raidboss/raidboss.html** 或使用 `Cactbot Raidboss` 预设。
+To use this module, point cactbot at **ui/raidboss/raidboss.html** or use the `Cactbot Raidboss` preset.
 
-此模块提供预知战斗事件的时间轴， 以及文本和音频提示，以帮助提高团队对raid的意识。 这些文字和声音警报一般基于战斗时间轴，或是来自游戏中发生的日志消息。简单地说，这是一个类似于ACT的“自定义触发器”的功能。 该模块被设计为类似于《魔兽世界》的 [BigWigs Bossmods](https://mods.curse.com/addons/wow/big-wigs) 插件的外观和感觉。
+This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) addon for World of Warcraft.
 
 [This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists the currently supported set of content in cactbot. Support is continually added over time (patches welcome!) but a lot of old content may not be supported yet.
 
@@ -220,13 +232,13 @@ Fight timelines are provided in files designed for the [ACT Timeline](https://gi
 
 There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
 
-Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
+Timeline files and triggers for text and sound alerts are found in [ui/raidboss/data](ui/raidboss/data), timeline files with `.txt` extension and trigger files with `.js` extension.
 
 In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
 
 ![raidboss screenshot](screenshots/Raidboss.png)
 
-### raidboss模拟器
+### raidboss emulator
 
 If you are writing triggers or timelines and want to test them, you can use the raidboss emulator: **ui/raidboss/raidemulator.html**.
 
@@ -234,19 +246,19 @@ This currently can only be loaded in a browser and not as an overlay. This will 
 
 Instructions:
 
-1. 启动ACT。
-1. 确保WS Server已启动，可以在 Plugins -> OverlayPlugin WSServer-> Stream/Local Overlay 中对此进行配置。
-1. 从URL列表中选择 `Cactbot Raidboss (Combined Alerts and Timelines)`。
-1. 编辑网址，将 `raidboss.html` 替换为 `raidemulator.html`。
-1. 将修改后的网址复制并粘贴到Chrome中。
-1. 拖放一个 [网络日志](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) 文件到该页面中。
-1. 选择区域和战斗记录，然后单击 `Load Encounter`。
+1. Start ACT.
+1. Make sure the WS Server is started via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
+1. Select `Cactbot Raidboss (Combined Alerts and Timelines)` from the URL Generator list.
+1. Edit the url to say `raidemulator.html` instead of `raidboss.html`.
+1. Copy and paste this edited url into Chrome.
+1. Drag and drop a [network log](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) onto the page.
+1. Select the zone and encounter, and then click `Load Encounter`.
 
 If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
 
 ![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
 
-### [oopsyraidsy](ui/oopsyraidsy) 模块
+### [oopsyraidsy](ui/oopsyraidsy) module
 
 To use this module, point cactbot at **ui/oopsyraidsy/oopsyraidsy.html** or use the `Cactbot OopsyRaidsy` preset.
 
@@ -260,7 +272,7 @@ Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data
 
 ![oopsy screenshot](screenshots/promo_oopsy.png)
 
-### [jobs](ui/jobs) 模块
+### [jobs](ui/jobs) module
 
 To use this module, point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
 
@@ -342,11 +354,11 @@ This module is just an onscreen test of cactbot variables and is not meant to be
 
 ![test screenshot](screenshots/test.png)
 
-## Troubleshooting
+## 疑难解答
 
 A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
 
-## Cactbot Customization
+## Cactbot自定义教程
 
 Most common cactbot configuration can be done via the control panel, inside of ACT.
 
@@ -358,12 +370,12 @@ In particular, if you want to use text to speech for raidboss alerts, you can ch
 
 Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
 
 It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
 
 See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrides) for more details about user javascript and css files.
 
-## Supported Languages
+## 支持语言
 
 cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
