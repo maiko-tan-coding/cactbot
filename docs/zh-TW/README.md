@@ -149,7 +149,7 @@ Follow all the steps above for installing cactbot first. To install dependencies
 ### Dependencies: Script Method
 
 1. `curl` MUST be installed (this is used to download dependencies)
-1. Execute the `./utils/fetch_deps.py` script
+1. Execute the `./util/fetch_deps.py` script
 1. Continue with **Steps to build**
 
 ### Dependencies: Manual Method
@@ -193,12 +193,24 @@ ThirdParty
    |- OverlayPlugin.dll
 ```
 
-### Steps to build
+### Steps to build plugin
 
 1. Open the solution in Visual Studio (tested with Visual Studio 2017).
 1. Build for "Release" and "x64".
 1. The plugin will be built as **bin/x64/Release/CactbotOverlay.dll**.
 1. Add the built plugin directly as an ACT plugin.  In the ACT -> Plugins -> Plugin Listing tab, click the `Browse` button and find the **bin/x64/Release/CactbotOverlay.dll** where this file was built.  Then click `Add/Enable Plugin`.
+
+### npm and webpack
+
+If you are not a cactbot developer and are trying to modify cactbot for your own personal triggers, you should instead refer to the [customization documentation](docs/CactbotCustomization.md) instead of changing your local cactbot files.
+
+To install npm and start Webpack, follow these steps:
+
+1. Install [nodejs and npm](https://nodejs.org/en/download/)
+1. Run `npm install` in the root of the cactbot directory.
+1. Run `npm run build` or `npm start`.
+
+See the [contributing](CONTRIBUTING.md#validating-changes-via-webpack) documentation for more details about using Webpack.
 
 ## UI module overview
 
@@ -210,7 +222,7 @@ Each cactbot ui module should be added as a separate overlay. See the [Adding Ov
 
 To use this module, point cactbot at **ui/raidboss/raidboss.html** or use the `Cactbot Raidboss` preset.
 
-This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://mods.curse.com/addons/wow/big-wigs) addon for World of Warcraft.
+This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) addon for World of Warcraft.
 
 [This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists the currently supported set of content in cactbot. Support is continually added over time (patches welcome!) but a lot of old content may not be supported yet.
 
@@ -218,7 +230,7 @@ Fight timelines are provided in files designed for the [ACT Timeline](https://gi
 
 There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
 
-Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
+Timeline files and triggers for text and sound alerts are found in [ui/raidboss/data](ui/raidboss/data), timeline files with `.txt` extension and trigger files with `.js` extension.
 
 In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
 
@@ -356,7 +368,7 @@ In particular, if you want to use text to speech for raidboss alerts, you can ch
 
 Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+此處的選項會存儲於 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 檔案中。 It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
 
 It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
 
