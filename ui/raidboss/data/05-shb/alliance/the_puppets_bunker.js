@@ -1,9 +1,31 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: is it worth adding triggers for gaining/losing shield protocol? effect 8F[0-2]
 // TODO: Incongruous Spin timeline trigger?
 
-[{
+const swipeOutputStrings = {
+  right: {
+    en: 'Right',
+    de: 'Rechts',
+    fr: 'Droite ',
+    ja: '右へ',
+    cn: '右',
+    ko: '오른쪽',
+  },
+  left: {
+    en: 'Left',
+    de: 'Links',
+    fr: 'Gauche',
+    ja: '左へ',
+    cn: '左',
+    ko: '왼쪽',
+  },
+};
+
+export default {
   zoneId: ZoneId.ThePuppetsBunker,
   timelineFile: 'the_puppets_bunker.txt',
   triggers: [
@@ -26,30 +48,36 @@
       netRegex: NetRegexes.headMarker({ id: '00C6', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 5,
-      infoText: function(data) {
+      infoText: function(data, _, output) {
         if (!data.busterTargets)
           return;
         if (data.busterTargets.includes(data.me))
           return;
 
-        if (data.role === 'healer') {
-          return {
-            en: 'Tank Buster',
-            de: 'Tank buster',
-            fr: 'Tank buster',
-            ja: 'タンクバスター',
-            cn: '坦克死刑',
-            ko: '탱버',
-          };
-        }
-        return {
+        if (data.role === 'healer')
+          return output.tankBuster();
+
+        return output.avoidTankBuster();
+      },
+      run: (data) => delete data.busterTargets,
+      outputStrings: {
+        tankBuster: {
+          en: 'Tank Buster',
+          de: 'Tank buster',
+          fr: 'Tank buster',
+          ja: 'タンクバスター',
+          cn: '坦克死刑',
+          ko: '탱버',
+        },
+        avoidTankBuster: {
           en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
           fr: 'Évitez le tank buster',
+          ja: 'タンクバスターに避け',
+          cn: '远离坦克死刑',
           ko: '탱버 피하기',
-        };
+        },
       },
-      run: (data) => delete data.busterTargets,
     },
     {
       id: 'Puppet Aegis Beam Cannons',
@@ -57,22 +85,33 @@
       netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '5073', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '5073', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '5073', capture: false }),
-      alertText: {
-        en: 'Go To Narrow Intersection',
-        de: 'Geh zu der nahen Überschneidung',
-        fr: 'Allez sur l\'intersection étroite',
-        ko: '조금 겹친 곳으로 이동',
+      netRegexCn: NetRegexes.startsUsing({ source: '813P：装备据点防卫装置', id: '5073', capture: false }),
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Go To Narrow Intersection',
+          de: 'Geh zu der nahen Überschneidung',
+          fr: 'Allez sur l\'intersection étroite',
+          ja: '狭い重なる範囲に',
+          cn: '去窄交叉口',
+          ko: '조금 겹친 곳으로 이동',
+        },
       },
     },
     {
       id: 'Puppet Aegis Aerial Support Surface Laser',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: (data, matches) => data.me === matches.target && data.phase !== 'superior',
-      alarmText: {
-        en: 'Chasing Laser: Get Away',
-        de: 'Verfolgende Laser: Weg gehen',
-        fr: 'Soutien aérien : Évitez',
-        ko: '추격 레이저: 이동',
+      alarmText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Chasing Laser: Get Away',
+          de: 'Verfolgende Laser: Weg gehen',
+          fr: 'Soutien aérien : Évitez',
+          ja: 'レザー: 外へ',
+          cn: '激光点名：快出去',
+          ko: '추격 레이저: 이동',
+        },
       },
     },
     {
@@ -81,13 +120,19 @@
       netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '5080', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '5080', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '5080', capture: false }),
-      alertText: function(data) {
-        return {
+      netRegexCn: NetRegexes.startsUsing({ source: '813P：装备据点防卫装置', id: '5080', capture: false }),
+      alertText: function(data, _, output) {
+        return output.text();
+      },
+      outputStrings: {
+        text: {
           en: 'Go Left, Behind Wing',
           de: 'Geh links hinter den Flügel',
           fr: 'À gauche, derrière l\'aile',
+          ja: '左へ、翼の後ろに',
+          cn: '去左边，翅膀后',
           ko: '왼쪽으로 이동 (날개 뒤)',
-        };
+        },
       },
     },
     {
@@ -96,13 +141,19 @@
       netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '507F', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '507F', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '507F', capture: false }),
-      alertText: function(data) {
-        return {
+      netRegexCn: NetRegexes.startsUsing({ source: '813P：装备据点防卫装置', id: '507F', capture: false }),
+      alertText: function(data, _, output) {
+        return output.text();
+      },
+      outputStrings: {
+        text: {
           en: 'Go Right, Behind Wing',
           de: 'Geh rechts hinter den Flügel',
           fr: 'À droite, derrière l\'aile',
+          ja: '右へ、翼の後ろに',
+          cn: '去右边，翅膀后',
           ko: '오른쪽으로 이동 (날개 뒤)',
-        };
+        },
       },
     },
     {
@@ -112,6 +163,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '508F', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '508F', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '508F', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '813P：装备据点防卫装置', id: '508F', capture: false }),
       response: Responses.stackMarker(),
     },
     {
@@ -120,14 +172,20 @@
       netRegexDe: NetRegexes.startsUsing({ source: '813P: Bollwerk', id: '53B3', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '813P : Avec Unité Rempart', id: '53B3', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '８１３Ｐ：拠点防衛ユニット装備', id: '53B3', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '813P：装备据点防卫装置', id: '53B3', capture: false }),
       // This is more a "if you haven't done this ever or in a while, here's a reminder."
       // Tell it once, but as this repeats nearly continously forever, only say it once.
       suppressSeconds: 9999,
-      infoText: {
-        en: 'Dodge into ring gap',
-        de: 'In die Lücke des Ringes ausweichen',
-        fr: 'Esquivez en vous plaçant dans l\'ouverture',
-        ko: '고리 사이로 이동',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Dodge into ring gap',
+          de: 'In die Lücke des Ringes ausweichen',
+          fr: 'Esquivez en vous plaçant dans l\'ouverture',
+          ja: '円の安置へ',
+          cn: '躲入环形缺口',
+          ko: '고리 사이로 이동',
+        },
       },
     },
     {
@@ -136,6 +194,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5211' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5211' }),
       netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5211' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '轻型陆战装置', id: '5211' }),
       condition: (data) => data.CanSilence(),
       // Multiple of these cast at the same time.
       suppressSeconds: 5,
@@ -157,6 +216,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213' }),
       netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '轻型陆战装置', id: '5213' }),
       condition: Conditions.targetIsYou(),
       response: Responses.tankBuster('alert'),
     },
@@ -166,6 +226,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213' }),
       netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '轻型陆战装置', id: '5213' }),
       run: function(data, matches) {
         data.busterTargets = data.busterTargets || [];
         data.busterTargets.push(matches.target);
@@ -177,28 +238,32 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Leicht(?:e|er|es|en) Infanterieeinheit', id: '5213', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Unité Terrestre Légère', id: '5213', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '軽陸戦ユニット', id: '5213', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '轻型陆战装置', id: '5213', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 5,
-      infoText: function(data) {
+      infoText: function(data, _, output) {
         if (!data.busterTargets)
           return;
         if (data.busterTargets.includes(data.me))
           return;
 
-        if (data.role === 'healer') {
-          return {
-            en: 'Tank Buster',
-            de: 'Tank buster',
-            fr: 'Tank buster',
-            ja: 'タンクバスター',
-            cn: '坦克死刑',
-            ko: '탱버',
-          };
-        }
+        if (data.role === 'healer')
+          return output.text();
+
 
         // Note: this doesn't cleave, so don't say anything about avoiding it.
       },
       run: (data) => delete data.busterTargets,
+      outputStrings: {
+        text: {
+          en: 'Tank Buster',
+          de: 'Tank buster',
+          fr: 'Tank buster',
+          ja: 'タンクバスター',
+          cn: '坦克死刑',
+          ko: '탱버',
+        },
+      },
     },
     {
       id: 'Puppet Superior Shield Protocol',
@@ -217,11 +282,16 @@
       id: 'Puppet Superior Incendiary Bombing',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: (data, matches) => data.me === matches.target && data.phase === 'superior',
-      alertText: {
-        en: 'Fire Puddle on YOU',
-        de: 'Feuer Fläche auf DIR',
-        fr: 'Zone au sol de feu sur VOUS',
-        ko: '불 장판 대상자',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Fire Puddle on YOU',
+          de: 'Feuer Fläche auf DIR',
+          fr: 'Zone au sol de feu sur VOUS',
+          ja: '自分にファイヤ',
+          cn: '火圈点名',
+          ko: '불 장판 대상자',
+        },
       },
     },
     {
@@ -229,11 +299,16 @@
       // Note: no 1B marker for this???
       netRegex: NetRegexes.startsUsing({ id: '4FB4', capture: false }),
       suppressSeconds: 5,
-      alertText: {
-        en: 'Line Stack (Point Outside)',
-        de: 'Auf einer Linie sammeln (nach außen zeigen)',
-        fr: 'Package en ligne (orientez vers l\'extérieur)',
-        ko: '쉐어 레이저 (밖으로 유도)',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Line Stack (Point Outside)',
+          de: 'Auf einer Linie sammeln (nach außen zeigen)',
+          fr: 'Package en ligne (orientez vers l\'extérieur)',
+          ja: '直線頭割り (外に向け)',
+          cn: '直线分摊（指向场外）',
+          ko: '쉐어 레이저 (밖으로 유도)',
+        },
       },
     },
     {
@@ -244,11 +319,16 @@
       netRegex: NetRegexes.startsUsing({ id: '4FAB', capture: false }),
       delaySeconds: 3,
       suppressSeconds: 5,
-      alertText: {
-        en: 'Dodge Sword Charges',
-        de: 'Schwerteransturm ausweichen',
-        fr: 'Esquivez les charges',
-        ko: '돌진 피하기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Dodge Sword Charges',
+          de: 'Schwerteransturm ausweichen',
+          fr: 'Esquivez les charges',
+          ja: 'ソード突進に避け',
+          cn: '躲避左右刀冲锋',
+          ko: '돌진 피하기',
+        },
       },
     },
     {
@@ -270,77 +350,67 @@
       netRegex: NetRegexes.startsUsing({ id: '4FC5', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 5,
-      infoText: function(data) {
+      infoText: function(data, _, output) {
         if (!data.busterTargets)
           return;
         if (data.busterTargets.includes(data.me))
           return;
 
-        if (data.role === 'healer') {
-          return {
-            en: 'Tank Buster',
-            de: 'Tank buster',
-            fr: 'Tank buster',
-            ja: 'タンクバスター',
-            cn: '坦克死刑',
-            ko: '탱버',
-          };
-        }
-        return {
+        if (data.role === 'healer')
+          return output.tankBuster();
+
+        return output.avoidTankBuster();
+      },
+      run: (data) => delete data.busterTargets,
+      outputStrings: {
+        tankBuster: {
+          en: 'Tank Buster',
+          de: 'Tank buster',
+          fr: 'Tank buster',
+          ja: 'タンクバスター',
+          cn: '坦克死刑',
+          ko: '탱버',
+        },
+        avoidTankBuster: {
           en: 'Avoid tank buster',
           de: 'Tank buster ausweichen',
           fr: 'Évitez le tank buster',
+          ja: 'タンクバスターに避け',
+          cn: '远离坦克死刑',
           ko: '탱버 피하기',
-        };
+        },
       },
-      run: (data) => delete data.busterTargets,
     },
     {
       id: 'Puppet Superior Sliding Swipe First',
       netRegex: NetRegexes.startsUsing({ id: ['4FA[CD]', '550[DEF]', '5510'] }),
       preRun: function(data, matches) {
         data.swipe = data.swipe || [];
-        const kRight = {
-          en: 'Right',
-          de: 'Rechts',
-          fr: 'Droite ',
-          ja: '右へ',
-          cn: '右',
-          ko: '오른쪽',
-        };
-        const kLeft = {
-          en: 'Left',
-          de: 'Links',
-          fr: 'Gauche',
-          ja: '左へ',
-          cn: '左',
-          ko: '왼쪽',
-        };
-
         data.swipe.push({
-          '4FAC': kRight,
-          '4FAD': kLeft,
-          '550D': kRight,
-          '550E': kLeft,
-          '550F': kRight,
-          '5510': kLeft,
+          '4FAC': 'right',
+          '4FAD': 'left',
+          '550D': 'right',
+          '550E': 'left',
+          '550F': 'right',
+          '5510': 'left',
         }[matches.id]);
       },
       durationSeconds: 6,
-      alertText: function(data) {
+      alertText: function(data, _, output) {
         if (data.swipe.length !== 1)
           return;
 
         // Call and clear the first swipe so we can not call it a second time below.
         const swipe = data.swipe[0];
         data.swipe[0] = null;
-        return swipe;
+        return output[swipe]();
       },
+      outputStrings: swipeOutputStrings,
     },
     {
       id: 'Puppet Superior Sliding Swipe Others',
       netRegex: NetRegexes.ability({ id: ['4FA[CD]', '550[DEF]', '5510'] }),
-      alertText: function(data, matches) {
+      alertText: function(data, matches, output) {
         if (!data.swipe)
           return;
 
@@ -351,8 +421,9 @@
           swipe = data.swipe.shift();
         if (!swipe)
           return;
-        return swipe;
+        return output[swipe]();
       },
+      outputStrings: swipeOutputStrings,
     },
     {
       id: 'Puppet Heavy Volt Array',
@@ -360,6 +431,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5006', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5006', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5006', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '5006', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
@@ -369,11 +441,17 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FED', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FED', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FED', capture: false }),
-      alertText: {
-        en: 'Get Outside Upper Laser',
-        de: 'Raus aus dem oberen Laser',
-        fr: 'Éloignez-vous des lasers supérieurs',
-        ko: '높은 레이저 쪽 밖으로 이동',
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '4FED', capture: false }),
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get Outside Upper Laser',
+          de: 'Raus aus dem oberen Laser',
+          fr: 'Éloignez-vous des lasers supérieurs',
+          ja: '外へ、高いレザー放射方角',
+          cn: '躲避远程激光',
+          ko: '높은 레이저 쪽 밖으로 이동',
+        },
       },
     },
     {
@@ -382,6 +460,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5086', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5086', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5086', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '5086', capture: false }),
       delaySeconds: 5.3,
       suppressSeconds: 5,
       response: Responses.moveAway('info'),
@@ -390,11 +469,16 @@
       id: 'Puppet Heavy Unconventional Voltage',
       netRegex: NetRegexes.headMarker({ id: '00AC' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: 'Voltage cleave on YOU',
-        de: 'Spannungs-Cleave auf DIR',
-        fr: 'Arcs : Cleave sur VOUS',
-        ko: '전압 장판 대상자',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Voltage cleave on YOU',
+          de: 'Spannungs-Cleave auf DIR',
+          fr: 'Arcs : Cleave sur VOUS',
+          ja: '自分に扇形AoE',
+          cn: '扇形AOE点名',
+          ko: '전압 장판 대상자',
+        },
       },
     },
     {
@@ -403,6 +487,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5000', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5000', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5000', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '5000', capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -412,25 +497,31 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '5001' }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '5001' }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '5001' }),
-      response: function(data, matches) {
-        if (data.role === 'tank' || matches.target === data.me) {
-          return {
-            alertText: {
-              en: 'Tank Laser Cleave on YOU',
-              de: 'Tank Laser cleave auf DIR',
-              fr: 'Tank Laser cleave sur VOUS',
-              ko: '탱커 레이저 대상자',
-            },
-          };
-        }
-        return {
-          infoText: {
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '5001' }),
+      response: function(data, matches, output) {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          tankCleaveOnYou: {
+            en: 'Tank Laser Cleave on YOU',
+            de: 'Tank Laser cleave auf DIR',
+            fr: 'Tank Laser cleave sur VOUS',
+            ja: '自分にタンクレザー',
+            cn: '坦克直线激光点名',
+            ko: '탱커 레이저 대상자',
+          },
+          avoidTankCleaves: {
             en: 'Avoid tank laser cleaves',
             de: 'Tank Laser cleave ausweichen',
             fr: 'Évitez les cleaves du laser sur les tanks',
+            ja: 'タンクレザーに避け',
+            cn: '躲避坦克直线激光',
             ko: '탱커 레이저 피하기',
           },
         };
+        if (data.role === 'tank' || matches.target === data.me)
+          return { alertText: output.tankCleaveOnYou() };
+
+        return { infoText: output.avoidTankCleaves() };
       },
     },
     {
@@ -439,29 +530,38 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FE9', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FE9', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FE9', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '4FE9', capture: false }),
       // This is approximately when the pods appear.
       delaySeconds: 6,
-      alertText: function(data) {
+      alertText: function(data, _, output) {
         data.heavyPodCount = data.heavyPodCount || 0;
         data.heavyPodCount++;
         if (data.heavyPodCount <= 2) {
           // The first two are lasers/hammers in either order.
           // The safe spot in both cases is the same direction.
-          return {
-            en: 'Get Outside Between Pods',
-            de: 'Zwischen den Pods raus gehen',
-            fr: 'À l\'extérieur entre les Pods',
-            ko: '포드 사이로 이동',
-          };
+          return output.getOutsideBetweenPods();
         }
         // There's nothing in the log that indicates what the screens do.
         // TODO: could check logs for tether target/source and say shift left/right?
-        return {
+        return output.getBetweenLasersWatchTethers();
+      },
+      outputStrings: {
+        getOutsideBetweenPods: {
+          en: 'Get Outside Between Pods',
+          de: 'Zwischen den Pods raus gehen',
+          fr: 'À l\'extérieur entre les Pods',
+          ja: '外へ、二つポッドの真ん中に',
+          cn: '去场边两个辅助机之间',
+          ko: '포드 사이로 이동',
+        },
+        getBetweenLasersWatchTethers: {
           en: 'Get Between Lasers (Watch Tethers)',
           de: 'Zwischen Laser gehen (auf die Verbindungen achten)',
           fr: 'Allez entre les lasers (regardez les liens)',
+          ja: 'レザーの真ん中に (線を気にして)',
+          cn: '去激光之间（观察直线）',
           ko: '레이저 사이로 이동 (연결된 모니터 확인)',
-        };
+        },
       },
     },
     {
@@ -470,23 +570,34 @@
       netRegexDe: NetRegexes.startsUsing({ source: '905P: Läufer', id: '4FEC', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '905P : Avec Unité Terrestre Lourde', id: '4FEC', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '９０５Ｐ：重陸戦ユニット装備', id: '4FEC', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '905P：装备重型陆战装置', id: '4FEC', capture: false }),
       // TODO: should this say "towers"? or...something else to indicate variable people needed?
-      alertText: {
-        en: 'Turn Towers Blue',
-        de: 'Türme zu Blau ändern',
-        fr: 'Changez les tours en bleu',
-        ko: '장판이 파랑색이 되도록 들어가기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Turn Towers Blue',
+          de: 'Türme zu Blau ändern',
+          fr: 'Changez les tours en bleu',
+          ja: '塔を青色に',
+          cn: '多人踩圈至蓝色',
+          ko: '장판이 파랑색이 되도록 들어가기',
+        },
       },
     },
     {
       id: 'Puppet Hallway Targeted Laser',
       netRegex: NetRegexes.headMarker({ id: '00A4' }),
       condition: Conditions.targetIsYou(),
-      infoText: {
-        en: 'Laser on YOU',
-        de: 'Laser auf DIR',
-        fr: 'Laser sur VOUS',
-        ko: '레이저 대상자',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Laser on YOU',
+          de: 'Laser auf DIR',
+          fr: 'Laser sur VOUS',
+          ja: '自分にレザー',
+          cn: '激光点名',
+          ko: '레이저 대상자',
+        },
       },
     },
     {
@@ -495,6 +606,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B8', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B8', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B8', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '融合的人偶群', id: '51B8', capture: false }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
       run: (data) => data.phase = 'compound',
@@ -505,6 +617,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B3', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B3', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B3', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '融合的人偶群', id: '51B3', capture: false }),
       response: Responses.goSides(),
     },
     {
@@ -513,6 +626,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Puppenklumpen', id: '51B4', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Agglomérat De Pantins', id: '51B4', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '融合シタ人形タチ', id: '51B4', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '融合的人偶群', id: '51B4', capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -521,6 +635,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: '51B8', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: '51B8', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: '51B8', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：融合体', id: '51B8', capture: false }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.aoe(),
       // Cover this phase for the checkpoint as well.
@@ -532,6 +647,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['541F', '5198'], capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['541F', '5198'], capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['541F', '5198'], capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：融合体', id: ['541F', '5198'], capture: false }),
       response: Responses.getOut(),
     },
     {
@@ -540,6 +656,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['5420', '5199'], capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['5420', '5199'], capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['5420', '5199'], capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：融合体', id: ['5420', '5199'], capture: false }),
       response: Responses.getBehind(),
     },
     {
@@ -548,6 +665,7 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: ['5421', '519A'], capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: ['5421', '519A'], capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: ['5421', '519A'], capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：融合体', id: ['5421', '519A'], capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -566,26 +684,29 @@
       netRegex: NetRegexes.headMarker({ id: '00DA', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 5,
-      alertText: function(data) {
+      alertText: function(data, _, output) {
         if (!data.busterTargets)
           return;
         if (data.busterTargets.includes(data.me))
           return;
 
-        if (data.role === 'healer') {
-          return {
-            en: 'Tank Buster',
-            de: 'Tank buster',
-            fr: 'Tank buster',
-            ja: 'タンクバスター',
-            cn: '坦克死刑',
-            ko: '탱버',
-          };
-        }
+        if (data.role === 'healer')
+          return output.text();
+
 
         // Note: do not call out "avoid tank" here because there's a lot of markers going out.
       },
       run: (data) => delete data.busterTargets,
+      outputStrings: {
+        text: {
+          en: 'Tank Buster',
+          de: 'Tank buster',
+          fr: 'Tank buster',
+          ja: 'タンクバスター',
+          cn: '坦克死刑',
+          ko: '탱버',
+        },
+      },
     },
     {
       id: 'Puppet Compound 2P Three Parts Disdain',
@@ -605,33 +726,31 @@
       id: 'Puppet Compound 2P Four Parts Resolve',
       netRegex: NetRegexes.headMarker({ id: ['004F', '0050', '0051', '0052'] }),
       condition: Conditions.targetIsYou(),
-      alertText: function(data, matches) {
+      alertText: function(data, matches, output) {
         return {
-          '004F': {
-            en: 'Jump #1 on YOU',
-            de: 'Sprung #1 auf DIR',
-            fr: 'Saut #1 sur VOUS',
-            ko: '점프 #1 대상자',
-          },
-          '0050': {
-            en: 'Cleave #1 on YOU',
-            de: 'Cleave #1 auf DIR',
-            fr: 'Cleave #1 sur VOUS',
-            ko: '직선공격 #1 대상자',
-          },
-          '0051': {
-            en: 'Jump #2 on YOU',
-            de: 'Sprung #2 auf DIR',
-            fr: 'Saut #2 sur VOUS',
-            ko: '점프 #2 대상자',
-          },
-          '0052': {
-            en: 'Cleave #2 on YOU',
-            de: 'Cleave #2 auf DIR',
-            fr: 'Cleave #2 sur VOUS',
-            ko: '직선공격 #2 대상자',
-          },
+          '004F': output.jump({ num: 1 }),
+          '0050': output.cleave({ num: 1 }),
+          '0051': output.jump({ num: 2 }),
+          '0052': output.cleave({ num: 2 }),
         }[matches.id];
+      },
+      outputStrings: {
+        jump: {
+          en: 'Jump #${num} on YOU',
+          de: 'Sprung #${num} auf DIR',
+          fr: 'Saut #${num} sur VOUS',
+          ja: '自分にジャンプ #${num}',
+          cn: '单体跳砍#${num}点名',
+          ko: '점프 #${num} 대상자',
+        },
+        cleave: {
+          en: 'Cleave #${num} on YOU',
+          de: 'Cleave #${num} auf DIR',
+          fr: 'Cleave #${num} sur VOUS',
+          ja: '自分に直線AoE #${num}',
+          cn: '直线劈砍#${num}点名',
+          ko: '직선공격 #${num} 대상자',
+        },
       },
     },
     {
@@ -640,14 +759,18 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Fusion', id: '51A6', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: '2P : Amalgame', id: '51A6', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：融合体', id: '51A6', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：融合体', id: '51A6', capture: false }),
       delaySeconds: 4,
-      infoText: {
-        en: 'Get Towers',
-        de: 'Türme nehmen',
-        fr: 'Prenez les tours',
-        ja: '塔を踏む',
-        ko: '장판 들어가기',
-        cn: '踩塔',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get Towers',
+          de: 'Türme nehmen',
+          fr: 'Prenez les tours',
+          ja: '塔を踏む',
+          cn: '踩塔',
+          ko: '장판 들어가기',
+        },
       },
     },
     {
@@ -656,13 +779,19 @@
       netRegexDe: NetRegexes.startsUsing({ source: 'Pod: Fusion', id: '541B', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Pod : Amalgame', id: '541B', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ポッド：融合体', id: '541B', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '辅助机：融合体', id: '541B', capture: false }),
       suppressSeconds: 2,
       // TODO: maybe this could be smarter and we could tell you where to go??
-      infoText: {
-        en: 'Avoid Lasers',
-        de: 'Laser ausweichen',
-        fr: 'Évitez les lasers',
-        ko: '레이저 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid Lasers',
+          de: 'Laser ausweichen',
+          fr: 'Évitez les lasers',
+          ja: 'レザーに避け',
+          cn: '躲避激光',
+          ko: '레이저 피하기',
+        },
       },
     },
     {
@@ -671,14 +800,20 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '5421', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '5421', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '5421', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：分裂体', id: '5421', capture: false }),
       suppressSeconds: 2,
       // TODO: have only seen this happen for the guaranteed Puppet In at 6250.7 with 4 clones.
       // TODO: can this happen at other times??
-      alertText: {
-        en: 'Get Under Clone Corner',
-        de: 'Unter den Klon in einer Ecke gehen',
-        fr: 'Allez dans un coin sous un clone',
-        ko: '구석의 분신 아래로 이동',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get Under Clone Corner',
+          de: 'Unter den Klon in einer Ecke gehen',
+          fr: 'Allez dans un coin sous un clone',
+          ja: 'コーナーにいる分裂体へ',
+          cn: '去分身脚下',
+          ko: '구석의 분신 아래로 이동',
+        },
       },
     },
     {
@@ -687,16 +822,22 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '519A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '519A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '519A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：分裂体', id: '519A', capture: false }),
       suppressSeconds: 2,
       // TODO: when I've seen this happen at 6379.4, it's been two clones, that start
       // at corners and then teleport to two cardinals across from each other with fake
       // teleports on the other cardinals.
       // TODO: fix this if these clones can go to corners.
-      alertText: {
-        en: 'Get Under Cardinal Clone',
-        de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
-        fr: 'Allez sous un clone sur un point cardinal',
-        ko: '분신 아래로 이동',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get Under Cardinal Clone',
+          de: 'Unter den Klon in einer der Himmelsrichtungen gehen',
+          fr: 'Allez sous un clone sur un point cardinal',
+          ja: '十字にいる分裂体へ',
+          cn: '去真分身脚下',
+          ko: '분신 아래로 이동',
+        },
       },
     },
     {
@@ -705,15 +846,21 @@
       netRegexDe: NetRegexes.startsUsing({ source: '2P: Spaltung', id: '5198', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Clone', id: '5198', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '２Ｐ：分裂体', id: '5198', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '2P：分裂体', id: '5198', capture: false }),
       suppressSeconds: 2,
       // Have seen this be either:
       // * 4 clones teleporting around the outside of the arena (corner to corner)
       // * 4 clones teleporting in (to cardinals)
-      alertText: {
-        en: 'Away From Clones',
-        de: 'Weg von den Klonen',
-        fr: 'Éloignez-vous des clones',
-        ko: '분신에게서 떨어지기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Away From Clones',
+          de: 'Weg von den Klonen',
+          fr: 'Éloignez-vous des clones',
+          ja: '分裂体に離れ',
+          cn: '远离分身',
+          ko: '분신에게서 떨어지기',
+        },
       },
     },
   ],
@@ -1005,5 +1152,103 @@
         'Upper Laser': '上部レーザー',
       },
     },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        '724P-Operated Superior Flight Unit \\\\\\(A-Lpha\\\\\\)': '724P：强化型飞行装置[A-lpha]',
+        '767P-Operated Superior Flight Unit \\\\\\(B-Eta\\\\\\)': '767P：强化型飞行装置[B-eta]',
+        '772P-Operated Superior Flight Unit \\\\\\(C-Hi\\\\\\)': '772P：强化型飞行装置[C-hi]',
+        '813P-Operated Aegis Unit': '813P：装备据点防卫装置',
+        '905P-Operated Heavy Artillery Unit': '905P：装备重型陆战装置',
+        'Compound 2P': '2P：融合体',
+        'Compound Pod': '辅助机：融合体',
+        '(?<!Superior )Flight Unit': '飞行装置',
+        'Light Artillery Unit': '轻型陆战装置',
+        '(?<!Compound )Pod': '辅助机',
+        'Puppet 2P': '2P：分裂体',
+        'The Compound': '融合的人偶群',
+        'The elevated detritus': '残骸A',
+        'The sunken detritus': '残骸B',
+        'The launch deck': '发射甲板',
+        'Core Command': '第二司令室',
+        'The passage': '通道',
+      },
+      'replaceText': {
+        '(?<=\\()In': '内',
+        'Out(?=\\)|/)': '外',
+        '(?<=\\(|/)Behind(?=\\))': '后',
+        'Aerial Support: Bombardment': '航空支援：轰炸',
+        'Aerial Support: Swoop': '航空支援：突击',
+        'Anti-Personnel Missile': '对人导弹乱射',
+        'Apply Shield Protocol': '启用防御程序',
+        'Authorization: No Restrictions': '扩展：解除武装锁定',
+        'Centrifugal Slice': '全方位斩机',
+        'Chemical Burn': '化合物爆炸',
+        'Chemical Conflagration': '化合物大爆炸',
+        'Compound Pod: R011': '辅助机融合体：R011',
+        'Compound Pod: R012': '辅助机融合体：R012',
+        'Energy Bombardment': '迫击能量弹',
+        'Energy Compression': '能量凝缩',
+        'Explosion': '爆炸',
+        'Firing Order: Anti-Personnel Laser': '炮击命令：对人激光',
+        'Firing Order: High-Powered Laser': '炮击命令：高功率激光',
+        'Firing Order: Surface Laser': '炮击命令：对地激光',
+        'Flight Path': '突击机动',
+        'Forced Transfer': '强制传送',
+        'Formation: Air Raid': '协作：突袭轰炸',
+        'Formation: Sharp Turn': '协作：回转斩击',
+        'Formation: Sliding Swipe': '协作：冲锋斩击',
+        'Four Parts Resolve': '四连断重击',
+        '(?<!(Maneuver|Firing Order): )High-Powered Laser': '高功率激光',
+        'Homing Missile Impact': '追尾导弹命中',
+        'Incendiary Barrage': '大型燃烬导弹',
+        'Incongruous Spin': '逆断震回旋',
+        'Initiate Self-Destruct': '自爆系统启动',
+        'Lethal Revolution': '旋回斩击',
+        'Life\'s Last Song': '终焉之歌',
+        'Lower Laser': '下方激光',
+        'Maneuver: Area Bombardment': '攻击：导弹乱射',
+        'Maneuver: Beam Cannons': '攻击：收束粒子炮',
+        'Maneuver: Collider Cannons': '攻击：旋回粒子炮',
+        'Maneuver: High-Order Explosive Blast': '攻击：气浪效果弹头',
+        'Maneuver: High-Powered Laser': '攻击：高功率激光',
+        'Maneuver: Impact Crusher': '攻击：穿地溃碎',
+        'Maneuver: Incendiary Bombing': '攻击：燃烬导弹',
+        'Maneuver: Long-Barreled Laser': '攻击：长炮激光',
+        'Maneuver: Martial Arm': '攻击：格斗机械臂',
+        'Maneuver: Missile Command': '攻击：导弹全弹发射',
+        'Maneuver: Precision Guided Missile': '攻击：高性能诱导导弹',
+        'Maneuver: Refraction Cannons': '攻击：偏向粒子炮',
+        'Maneuver: Revolving Laser': '攻击：回旋激光',
+        'Maneuver: Saturation Bombing': '攻击：全方位导弹轰炸',
+        'Maneuver: Unconventional Voltage': '攻击：集束电压',
+        'Maneuver: Volt Array': '攻击：扩散电压',
+        'Mechanical Contusion': '碎机光击',
+        'Mechanical Decapitation(?!/)': '斩机光击',
+        'Mechanical Decapitation/Dissection': '斩机光击/断机光击',
+        'Mechanical Dissection(?!/)': '断机光击',
+        'Mechanical Dissection/Decapitation': '断机光击/斩机光击',
+        'Mechanical Laceration': '压制光击',
+        'Operation: Access Self-Consciousness Data': '通信：21O自我数据',
+        'Operation: Activate Laser Turret': '通信：激光炮塔',
+        'Operation: Activate Suppressive Unit': '通信：环状枪击装置',
+        'Operation: Pod Program': '通信：辅助机程序',
+        'Operation: Synthesize Compound': '通信：爆炸性化合物',
+        'Prime Blade': '斩机击：填充',
+        'R010: Laser': 'R010:激光',
+        'R011: Laser': 'R011：激光',
+        'R012: Laser': 'R012：激光',
+        'R030: Hammer': 'R030:重锤',
+        'Relentless Spiral': '涡状光线奔涌',
+        'Reproduce': '分裂体生成',
+        '(?<!Formation: )Sharp Turn': '回转斩击',
+        '(?<!Formation: )Sliding Swipe': '冲锋斩击',
+        'Support: Pod': '支援：辅助机射出',
+        'Surface Missile Impact': '对地导弹命中',
+        'Three Parts Disdain': '三连冲击斩',
+        'Three Parts Resolve': '三连冲击斩 结束',
+        'Upper Laser': '上方激光',
+      },
+    },
   ],
-}];
+};

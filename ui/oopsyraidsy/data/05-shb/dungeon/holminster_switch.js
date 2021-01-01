@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.HolminsterSwitch,
   damageWarn: {
     'Holminster Thumbscrew': '3DC6',
@@ -24,4 +24,4 @@
   shareFail: {
     'Holminster Taphephobia': '4181',
   },
-}];
+};

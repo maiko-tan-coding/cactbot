@@ -1,6 +1,7 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseFulmination,
   damageWarn: {
     'E5N Impact': '4E3A', // Stratospear landing AoE
@@ -45,7 +46,17 @@
         return !data.hasOrb[e.targetName];
       },
       mistake: function(e) {
-        return { type: 'fail', blame: e.targetName, text: e.abilityName + ' (no orb)' };
+        return {
+          type: 'fail',
+          blame: e.targetName,
+          text: {
+            en: e.abilityName + ' (no orb)',
+            de: e.abilityName + ' (kein Orb)',
+            fr: e.abilityName + '(pas d\'orbe)',
+            ja: e.abilityName + '(雷玉無し)',
+            cn: e.abilityName + '(没吃球)',
+          },
+        };
       },
     },
     {
@@ -62,11 +73,17 @@
       damageRegex: '4B9D',
       suppressSeconds: 30,
       mistake: function(e, data) {
-        for (let m of data.cloudMarkers) {
+        for (const m of data.cloudMarkers) {
           return {
             type: 'fail',
             blame: data.cloudMarkers[m],
-            text: e.abilityName + '(clouds too close)',
+            text: {
+              en: e.abilityName + '(clouds too close)',
+              de: e.abilityName + '(Wolken zu nahe)',
+              fr: e.abilityName + '(nuages trop proches)',
+              ja: e.abilityName + '(雲近すぎ)',
+              cn: e.abilityName + '(雷云重叠)',
+            },
           };
         }
       },
@@ -80,4 +97,4 @@
       },
     },
   ],
-}];
+};

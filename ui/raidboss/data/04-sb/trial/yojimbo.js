@@ -1,53 +1,54 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.KuganeOhashi,
   timelineFile: 'yojimbo.txt',
   triggers: [
     {
       id: 'Yojimbo Giga Jump',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
-      condition: function(data, matches) {
-        return matches.target == data.me;
-      },
-      alertText: {
-        en: 'Run Marker Away',
-        de: 'Mit Marker weglaufen',
-        fr: 'Fuyez avec le marqueur',
-        ja: 'マークから離れ',
-        cn: '远离点名',
-        ko: '징 멀리 떨어뜨리기',
+      condition: Conditions.targetIsYou(),
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Run Marker Away',
+          de: 'Mit Marker weglaufen',
+          fr: 'Fuyez avec le marqueur',
+          ja: 'マークから離れ',
+          cn: '远离点名',
+          ko: '징 멀리 떨어뜨리기',
+        },
       },
     },
     {
       id: 'Yojimbo Dorito',
       netRegex: NetRegexes.headMarker({ id: '0037' }),
-      condition: function(data, matches) {
-        return matches.target == data.me;
-      },
+      condition: Conditions.targetIsYou(),
       response: Responses.doritoStack(),
     },
     {
       id: 'Yojimbo Gekko',
       netRegex: NetRegexes.headMarker({ id: '0090' }),
-      condition: function(data, matches) {
-        return matches.target == data.me;
-      },
-      infoText: {
-        en: 'Gekko Marker',
-        de: 'Gekko Marker',
-        fr: 'Marqueur Gekkô',
-        ja: '月光マーキング',
-        cn: '月光点名',
-        ko: '월광 징',
+      condition: Conditions.targetIsYou(),
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Gekko Marker',
+          de: 'Gekko Marker',
+          fr: 'Marqueur Gekkô',
+          ja: '月光マーキング',
+          cn: '月光点名',
+          ko: '월광 징',
+        },
       },
     },
     {
       id: 'Yojimbo Enchain',
       netRegex: NetRegexes.headMarker({ id: '0005' }),
-      condition: function(data, matches) {
-        return matches.target == data.me;
-      },
+      condition: Conditions.targetIsYou(),
       response: Responses.getOut(),
     },
   ],
@@ -213,4 +214,4 @@
       },
     },
   ],
-}];
+};

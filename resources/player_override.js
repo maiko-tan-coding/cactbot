@@ -1,4 +1,4 @@
-'use strict';
+import { Util } from './common.js';
 
 // Will redirect calls from `onPlayerChangedEvent` to |func| overriding with
 // |playerName| and their job.  Job is important for raidboss.
@@ -10,7 +10,7 @@
 // jobs remotely due to gauge data being local and many bits of information
 // loaded from memory.
 
-const addPlayerChangedOverrideListener = function(playerName, func) {
+export const addPlayerChangedOverrideListener = function(playerName, func) {
   if (!func)
     return;
 
@@ -54,7 +54,7 @@ const addPlayerChangedOverrideListener = function(playerName, func) {
 // Only used for raidboss, but could ostensibly be reused for oopsy,
 // if there's ever player specific stuff.
 // TODO: it would be nice to show the "connected / not connected" bit in the UI.
-const addRemotePlayerSelectUI = function(lang) {
+export const addRemotePlayerSelectUI = function(lang) {
   const instructionTextByLang = {
     en: 'Select a Player\n(the list will update when in an instance)',
     de: 'Wähle einen Spieler\n(Diese Liste aktualisiert sich, sobald eine Instance betretten wird)',
@@ -98,32 +98,32 @@ const addRemotePlayerSelectUI = function(lang) {
   };
 
   // Add common UI to select a player.
-  let container = document.createElement('div');
+  const container = document.createElement('div');
   container.id = 'player-select';
   document.body.appendChild(container);
 
-  let instructionElem = document.createElement('div');
+  const instructionElem = document.createElement('div');
   instructionElem.id = 'player-select-instructions';
   instructionElem.innerHTML = instructionTextByLang[lang] || instructionTextByLang['en'];
   container.appendChild(instructionElem);
 
-  let listElem = document.createElement('div');
+  const listElem = document.createElement('div');
   listElem.id = 'player-select-list';
   container.appendChild(listElem);
 
-  let ttsElem = document.createElement('input');
+  const ttsElem = document.createElement('input');
   ttsElem.type = 'checkbox';
   ttsElem.id = 'player-select-tts';
   ttsElem.name = 'player-select-tts';
   container.appendChild(ttsElem);
 
-  let ttsLabel = document.createElement('label');
+  const ttsLabel = document.createElement('label');
   ttsLabel.id = 'player-select-tts-label';
   ttsLabel.htmlFor = 'player-select-tts';
   ttsLabel.innerHTML = forceTTSByLang[lang] || forceTTSByLang['en'];
   container.appendChild(ttsLabel);
 
-  let buttonElem = document.createElement('button');
+  const buttonElem = document.createElement('button');
   buttonElem.id = 'player-select-button';
   buttonElem.name = 'player-select-button';
   buttonElem.innerHTML = buttonTextByLang[lang] || buttonTextByLang['en'];
@@ -148,7 +148,7 @@ const addRemotePlayerSelectUI = function(lang) {
 
     // Preserve existing parameters.
     const currentParams = new URLSearchParams(window.location.search);
-    let paramMap = {};
+    const paramMap = {};
     // Yes, this is (v, k) and not (k, v).
     currentParams.forEach((v, k) => paramMap[k] = decodeURIComponent(v));
 
@@ -196,20 +196,20 @@ const addRemotePlayerSelectUI = function(lang) {
     };
 
     const defaultText = defaultTextByLang[lang] || defaultTextByLang['en'];
-    let defaultElem = addRadio(defaultText, '', 'player-radio-default');
+    const defaultElem = addRadio(defaultText, '', 'player-radio-default');
     defaultElem.checked = true;
 
     if (lastSelectedPlayer) {
-      let last = addRadio(lastSelectedPlayer, lastSelectedPlayer, 'player-radio-last');
+      const last = addRadio(lastSelectedPlayer, lastSelectedPlayer, 'player-radio-last');
       last.checked = true;
     }
 
-    const partyPlayers = party.filter((p) => p.inParty && p.name != lastSelectedPlayer);
+    const partyPlayers = party.filter((p) => p.inParty && p.name !== lastSelectedPlayer);
     const partyNames = partyPlayers.map((p) => p.name).sort();
     for (const name of partyNames)
       addRadio(name, name, 'player-radio-party');
 
-    const alliancePlayers = party.filter((p) => !p.inParty && p.name != lastSelectedPlayer);
+    const alliancePlayers = party.filter((p) => !p.inParty && p.name !== lastSelectedPlayer);
     const allianceNames = alliancePlayers.map((p) => p.name).sort();
     for (const name of allianceNames)
       addRadio(name, name, 'player-radio-alliance');
@@ -219,10 +219,3 @@ const addRemotePlayerSelectUI = function(lang) {
   });
   buildList([]);
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    addPlayerChangedOverrideListener: addPlayerChangedOverrideListener,
-    addRemotePlayerSelectUI: addRemotePlayerSelectUI,
-  };
-}

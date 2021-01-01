@@ -1,15 +1,20 @@
-'use strict';
-
-const { Responses, severityMap, triggerFunctions } = require('../../resources/responses.js');
-
-const { assert } = require('chai');
-
+import { Responses, severityMap, triggerFunctions, builtInResponseStr } from '../../resources/responses.js';
+import chai from 'chai';
+const { assert } = chai;
 // test_trigger.js will validate the field names, so no need to do that here.
 
-let tests = {
+const outputStringSetterStr = 'output.responseOutputStrings = ';
+
+const tests = {
   defaultSeverity: () => {
-    for (let response in Responses) {
+    for (const response in Responses) {
       let result = Responses[response]();
+      if (typeof result === 'function') {
+        assert.include(result.toString(), outputStringSetterStr);
+        assert.include(result.toString(), builtInResponseStr);
+        result = result({}, {}, {});
+      }
+
       assert.isObject(result);
 
       // Must only include valid keys.
@@ -19,16 +24,21 @@ let tests = {
     }
   },
   singleSeverity: () => {
-    for (let response in Responses) {
-      let result = Responses[response]();
+    for (const response in Responses) {
+      const result = Responses[response]();
 
       // Every function accepts as a single arg one of the keys from severityMap.
       // If passed, it then that text must appear.  e.g. 'info' must create 'infoText'.
-      for (let sev in severityMap) {
+      for (const sev in severityMap) {
         let result = Responses[response](sev);
+        if (typeof result === 'function') {
+          assert.include(result.toString(), outputStringSetterStr);
+          assert.include(result.toString(), builtInResponseStr);
+          result = result({}, {}, {});
+        }
         assert.isObject(result);
 
-        let keys = Object.keys(result);
+        const keys = Object.keys(result);
         // Must only include valid keys.
         assert.includeMembers(triggerFunctions, keys);
 
@@ -41,7 +51,7 @@ let tests = {
   },
   doubleSeverity: () => {
     // TODO: we could figure out which has multiple parameters programatically.
-    let doubleFuncs = [
+    const doubleFuncs = [
       'tankBuster',
       'tankBusterSwap',
       'knockbackOn',
@@ -49,9 +59,14 @@ let tests = {
     ];
 
     for (let i = 0; i < doubleFuncs.length; ++i) {
-      for (let sev1 in severityMap) {
-        for (let sev2 in severityMap) {
+      for (const sev1 in severityMap) {
+        for (const sev2 in severityMap) {
           let result = Responses[doubleFuncs[i]](sev1, sev2);
+          if (typeof result === 'function') {
+            assert.include(result.toString(), outputStringSetterStr);
+            assert.include(result.toString(), builtInResponseStr);
+            result = result({}, {}, {});
+          }
           assert.isObject(result);
 
           // Must only include valid keys.
@@ -66,7 +81,7 @@ let tests = {
   },
 };
 
-let keys = Object.keys(tests);
+const keys = Object.keys(tests);
 let exitCode = 0;
 for (let i = 0; i < keys.length; ++i) {
   try {

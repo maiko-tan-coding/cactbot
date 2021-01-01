@@ -1,7 +1,8 @@
-'use strict';
+import NetRegexes from '../../../../resources/netregexes.js';
+import ZoneId from '../../../../resources/zone_id.js';
 
 // General mistakes; these apply everywhere.
-[{
+export default {
   zoneId: ZoneId.MatchAll,
   triggers: [
     {
@@ -68,4 +69,4 @@
       },
     },
   ],
-}];
+};

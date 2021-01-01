@@ -1,7 +1,9 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O7N - Sigmascape 3.0 Normal
-[{
+export default {
   zoneId: ZoneId.SigmascapeV30,
   timelineFile: 'o7n.txt',
   triggers: [
@@ -13,21 +15,16 @@
       netRegexJa: NetRegexes.startsUsing({ id: '276B', source: 'ガーディアン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '276B', source: '守护者', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '276B', source: '가디언', capture: false }),
-      alertText: {
-        en: 'Magitek Ray',
-        de: 'Magitek-Laser',
-        fr: 'Rayon Magitek',
-        ja: '魔導レーザー',
-        cn: '直线AOE',
-        ko: '마도 레이저',
-      },
-      tts: {
-        en: 'beam',
-        de: 'les er strahl',
-        fr: 'laser',
-        ja: 'レザー',
-        cn: '直线AOE',
-        ko: '레이저',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Magitek Ray',
+          de: 'Magitek-Laser',
+          fr: 'Rayon Magitek',
+          ja: '魔導レーザー',
+          cn: '直线AOE',
+          ko: '마도 레이저',
+        },
       },
     },
     {
@@ -240,4 +237,4 @@
       },
     },
   ],
-}];
+};

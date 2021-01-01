@@ -1,7 +1,8 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O4N - Deltascape 4.0 Normal
-[{
+export default {
   zoneId: ZoneId.DeltascapeV40,
   damageWarn: {
     'O4N Blizzard III': '24BC', // Targeted circle AoEs, Exdeath
@@ -24,14 +25,34 @@
       id: 'O4N Doom', // Kills target if not cleansed
       netRegex: NetRegexes.gainsEffect({ effectId: '38E' }),
       deathReason: function(e, data, matches) {
-        return { type: 'fail', name: e.target, reason: { en: 'Cleansers missed Doom!' } };
+        return {
+          type: 'fail',
+          name: e.target,
+          reason: {
+            en: 'Cleansers missed Doom!',
+            de: 'Doom-Reinigung vergessen!',
+            fr: 'N\'a pas été dissipé(e) du Glas !',
+            ja: '死の宣告',
+            cn: '没解死宣',
+          },
+        };
       },
     },
     {
       id: 'O4N Vacuum Wave', // Short knockback from Exdeath
       damageRegex: '24B8',
       deathReason: function(e) {
-        return { type: 'fail', name: e.targetName, reason: { en: 'Pushed off!' } };
+        return {
+          type: 'fail',
+          name: e.targetName,
+          reason: {
+            en: 'Pushed off!',
+            de: 'Runter geschubst!',
+            fr: 'A été poussé(e) !',
+            ja: '落ちた',
+            cn: '击退坠落',
+          },
+        };
       },
     },
     {
@@ -42,4 +63,4 @@
       },
     },
   ],
-}];
+};

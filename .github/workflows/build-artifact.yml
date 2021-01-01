@@ -2,9 +2,24 @@ name: Build artifact
 
 on:
   push:
-    branches:
-        - "master"
-        - "main"
+    paths:
+      - '.github/workflows/build-artifact.yml'
+      - 'plugin/**'
+      - 'util/publish.sh'
+      - 'util/DEPS.py'
+      - 'util/fetch_deps.py'
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - '.github/workflows/build-artifact.yml'
+      - 'plugin/**'
+      - 'util/publish.sh'
+      - 'util/DEPS.py'
+      - 'util/fetch_deps.py'
+  workflow_dispatch:
 
 jobs:
   msbuild:
@@ -17,7 +32,7 @@ jobs:
       shell: bash
       run: |
         sha=$(echo ${{ github.sha }} | cut -c 1-8)
-        echo "::set-env name=artifact_sha::$sha"
+        echo "artifact_sha=$sha" >> $GITHUB_ENV
 
     - name: Check dependencies cache
       id: cache-dependencies
@@ -41,7 +56,7 @@ jobs:
         python .\util\fetch_deps.py
 
     - name: Set up msbuild
-      uses: microsoft/setup-msbuild@v1.0.1
+      uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Add Custom Problem Matcher
       run: |
@@ -50,6 +65,13 @@ jobs:
     - name: MSBuild
       run: msbuild /p:Configuration=Release /p:Platform=x64 plugin/Cactbot.sln
       shell: cmd
+
+    - name: Install Node Dependencies
+      run: |
+        npm install
+    - name: Build JavaScript UI Module Bundles
+      run: |
+        npm run build
 
     - name: Generate artifact
       shell: bash
@@ -60,3 +82,4 @@ jobs:
       with:
         name: cactbot-${{ env.artifact_sha }}
         path: publish/cactbot-release/
+        retention-days: 30

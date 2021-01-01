@@ -73,6 +73,9 @@ along with a suite of linters and tests to ensure code quality.
 These validations are done both on a client-side (your computer)
 and on the server-side (GitHub).
 
+You will need to [install](README.md#npm-and-webpack) `nodejs` and run `npm install`
+in order to install local versions of husky, lint-staged, and eslint.
+
 If the pre-commit validations are causing you significant problems,
 feel free to bypass the checks with `--no-verify` flag,
 such as `git commit --no-verify`,
@@ -82,6 +85,37 @@ and it helps us find any potentially confusing areas in the code.
 
 New contributors are always welcome
 and we definitely don't expect anyone to know everything right away.
+
+#### Validating Changes via Webpack
+
+Cactbot uses [Webpack](https://webpack.js.org/) to bundle assets.
+Over time, it has become necessary to bundle various things,
+such as helper JavaScript files, assets, triggers, and timelines
+into the modules themselves
+instead of loading files directly off the user's computer.
+These assets are bundled by cactbot module (raidboss, oopsyraidsy, etc.)
+and can be found within the `dist/` folder
+after running either `npm start` or `npm run build`
+as `<module>.bundle.js`.
+
+`npm start` will open a local server at <http://localhost:8080>,
+allowing you to access cactbot modules at <http://localhost:8080/ui/raidboss/raidboss.html>
+(or similar) for the various modules.
+The advantage of this approach is that any changes made locally
+will immediately update the overlay,
+prompting a refresh within the module itself.
+This is the recommended approach of validating local code changes.
+
+Alternatively, `npm run build` will locally create a production distribution
+of cactbot. This shouldn't be necessary for developing
+and will be slower than running `npm start` for validating changes,
+but might be useful before checking in code to make sure everything works
+as expected if making changes to the [webpack configuration](./webpack.config.cjs)
+directly.
+Please note that `npm run build` may work currently for testing local changes,
+but will break in the future
+as development continues away from using local files.
+Please consider using `npm start` instead.
 
 #### Validating Changes via Remote URLs
 

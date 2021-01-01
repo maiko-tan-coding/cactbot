@@ -1,6 +1,14 @@
-'use strict';
+import EmulatorCommon from '../EmulatorCommon.js';
+import EventBus from '../EventBus.js';
+import { PopupTextGenerator } from '../../popup-text.js';
+import RaidEmulatorTimelineController from '../overrides/RaidEmulatorTimelineController.js';
+import RaidEmulatorTimelineUI from '../overrides/RaidEmulatorTimelineUI.js';
+import PopupTextAnalysis from '../data/PopupTextAnalysis.js';
+import { TimelineLoader } from '../../timeline.js';
+import { Util } from '../../../../resources/common.js';
+import raidbossFileData from '../../data/manifest.txt';
 
-class AnalyzedEncounter extends EventBus {
+export default class AnalyzedEncounter extends EventBus {
   constructor(options, encounter, emulator) {
     super();
     this.options = options;
@@ -11,7 +19,7 @@ class AnalyzedEncounter extends EventBus {
   }
 
   selectPerspective(ID) {
-    let partyMember = this.encounter.combatantTracker.combatants[ID];
+    const partyMember = this.encounter.combatantTracker.combatants[ID];
     this.popupText.OnPlayerChange({
       detail: {
         name: partyMember.name,
@@ -41,15 +49,14 @@ class AnalyzedEncounter extends EventBus {
       return;
     }
 
-    const popupText = new PopupTextAnalysis(this.popupText.options);
-    const gTimelineUI = new RaidEmulatorTimelineUI(this.options);
-    const gTimelineController = new RaidEmulatorTimelineController(this.options, gTimelineUI);
+    const timelineUI = new RaidEmulatorTimelineUI(this.options);
+    const timelineController =
+        new RaidEmulatorTimelineController(this.options, timelineUI, raidbossFileData);
+    const popupText = new PopupTextAnalysis(
+        this.popupText.options, new TimelineLoader(timelineController), raidbossFileData);
 
-    gTimelineController.SetPopupTextInterface(new PopupTextGenerator(gPopupText));
-    gTimelineController.SetDataFiles(this.emulator.dataFilesEvent.detail.files);
-    popupText.SetTimelineLoader(new TimelineLoader(gTimelineController));
-    popupText.OnDataFilesRead(this.emulator.dataFilesEvent);
-    popupText.ReloadTimelines();
+    timelineController.SetPopupTextInterface(new PopupTextGenerator(popupText));
+
     popupText.partyTracker.onPartyChanged({
       party: this.encounter.combatantTracker.partyMembers.map((ID) => {
         return {
@@ -109,6 +116,3 @@ class AnalyzedEncounter extends EventBus {
     }
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = AnalyzedEncounter;

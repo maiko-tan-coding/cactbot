@@ -1,5 +1,3 @@
-'use strict';
-
 let fakeEncounter;
 
 function addCombatant() {
@@ -23,8 +21,8 @@ function generateDpsEvent() {
 }
 
 function generateStartPhaseEvent(name) {
-  let dps = generateDpsEvent().detail;
-  let e = {
+  const dps = generateDpsEvent().detail;
+  const e = {
     'type': 'onFightPhaseStart',
     'detail': {
       'name': name,
@@ -38,7 +36,7 @@ function generateStartPhaseEvent(name) {
 }
 
 function generateEndPhaseEvent(name) {
-  let e = generateStartPhaseEvent(name);
+  const e = generateStartPhaseEvent(name);
   e.type = 'onFightPhaseEnd';
   return e;
 }
@@ -49,7 +47,7 @@ function resetDps() {
 
 function updateDerivedDpsValues(data, encounter) {
   // "duration" is a formatted string, e.g. "04:24"
-  let duration = data.DURATION;
+  const duration = data.DURATION;
   let minutes = Math.floor(duration / 60);
   if (minutes < 10)
     minutes = '0' + minutes;
@@ -60,7 +58,7 @@ function updateDerivedDpsValues(data, encounter) {
 
   data.duration = minutes + ':' + seconds;
 
-  let damage = data.damage;
+  const damage = data.damage;
   data['damage-m'] = Math.floor(100 * damage / 1000000) / 100;
   data['damage-k'] = Math.floor(100 * damage / 1000) / 100;
   data['DAMAGE-m'] = Math.floor(data['damage-m']);
@@ -81,7 +79,7 @@ function updateDerivedDpsValues(data, encounter) {
   data['crithit%'] = Math.floor(100 * data.crithits / data.swings) + '%';
 }
 
-let FakeEncounter = function() {
+const FakeEncounter = function() {
   this.combatants = [];
   this.floatDuration = 0;
 
@@ -162,7 +160,7 @@ FakeEncounter.prototype.update = function(elapsedSeconds) {
   // Sum up values from combatants.
   for (let i = 0; i < this.totalledFromCombatants.length; ++i) {
     let total = 0;
-    let strKey = this.totalledFromCombatants[i];
+    const strKey = this.totalledFromCombatants[i];
     for (let j = 0; j < this.combatants.length; ++j) {
       // TODO: probably should make sure this is a number <_<
       total += this.combatants[j].data[strKey];
@@ -177,9 +175,9 @@ FakeEncounter.prototype.update = function(elapsedSeconds) {
 };
 
 FakeEncounter.prototype.getDpsUpdate = function() {
-  let combatantDetail = {};
+  const combatantDetail = {};
 
-  this.combatants.sort(function(a, b) {
+  this.combatants.sort((a, b) => {
     return b.data.damage - a.data.damage;
   });
 
@@ -193,7 +191,7 @@ FakeEncounter.prototype.getDpsUpdate = function() {
   };
 };
 
-let FakeCombatant = function(name, job) {
+const FakeCombatant = function(name, job) {
   // Generate all the fields that anything might ask for from ACT.
   this.data = {
     'n': '\n',
@@ -262,7 +260,7 @@ let FakeCombatant = function(name, job) {
 FakeCombatant.prototype.setName = function(name) {
   this.data.name = name;
   for (let i = 3; i <= 15; ++i) {
-    let str = 'NAME' + i;
+    const str = 'NAME' + i;
 
     // ACT provides a whole bunch of shorter names.
     this.data['NAME' + i] = name.substr(0, i);
@@ -277,7 +275,7 @@ FakeCombatant.prototype.update = function(elapsedSeconds) {
   this.floatDuration += elapsedSeconds;
   this.data.DURATION = Math.floor(this.floatDuration);
 
-  if (this.remainingDeadSeconds != null) {
+  if (this.remainingDeadSeconds !== null) {
     this.remainingDeadSeconds -= elapsedSeconds;
     if (this.remainingDeadSeconds > 0)
       return;
@@ -294,8 +292,8 @@ FakeCombatant.prototype.update = function(elapsedSeconds) {
     return;
   }
 
-  let gcds = Math.floor((this.gcdRemainder + elapsedSeconds) / this.gcd);
-  if (gcds == 0) {
+  const gcds = Math.floor((this.gcdRemainder + elapsedSeconds) / this.gcd);
+  if (gcds === 0) {
     this.gcdRemainder += elapsedSeconds;
     return;
   }

@@ -1,4 +1,5 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: missing an orb during tornado phase
 // TODO: jumping in the tornado damage??
@@ -7,7 +8,7 @@
 // TODO: taking explosion from the wrong Chiaro/Scuro orb
 // TODO: handle 4C89 Silver Stake tankbuster 2nd hit, as it's ok to have two in.
 
-let wrongBuff = (str) => {
+const wrongBuff = (str) => {
   return {
     en: str + ' (wrong buff)',
     de: str + ' (falscher Buff)',
@@ -18,7 +19,7 @@ let wrongBuff = (str) => {
   };
 };
 
-let noBuff = (str) => {
+const noBuff = (str) => {
   return {
     en: str + ' (no buff)',
     de: str + ' (kein Buff)',
@@ -29,7 +30,7 @@ let noBuff = (str) => {
   };
 };
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseIconoclasmSavage,
   damageWarn: {
     'E7S Silver Sword': '4C8E', // ground aoe
@@ -50,7 +51,7 @@ let noBuff = (str) => {
       id: 'E7S Stygian Stake',
       damageRegex: '4C34',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -61,7 +62,7 @@ let noBuff = (str) => {
       id: 'E7S Silver Shot',
       damageRegex: '4C92',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -72,7 +73,7 @@ let noBuff = (str) => {
       id: 'E7S Silver Scourge',
       damageRegex: '4C93',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -83,7 +84,7 @@ let noBuff = (str) => {
       id: 'E7S Chiaro Scuro Explosion',
       damageRegex: '4D1[45]',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -167,6 +168,7 @@ let noBuff = (str) => {
           reason: {
             en: 'Knocked off',
             de: 'Runtergefallen',
+            fr: 'A été assommé(e)',
             ja: 'ノックバック',
             cn: '击退坠落',
           },
@@ -174,4 +176,4 @@ let noBuff = (str) => {
       },
     },
   ],
-}];
+};

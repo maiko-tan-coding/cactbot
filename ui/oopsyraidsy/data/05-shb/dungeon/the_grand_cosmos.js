@@ -1,7 +1,7 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // The Grand Cosmos
-[{
+export default {
   zoneId: ZoneId.TheGrandCosmos,
   damageWarn: {
     'Cosmos Iron Justice': '491F',
@@ -38,4 +38,4 @@
     'Cosmos Black Flame': '475D',
     'Cosmos Fire\'s Domain': '4760',
   },
-}];
+};

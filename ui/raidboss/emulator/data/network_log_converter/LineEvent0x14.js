@@ -1,7 +1,8 @@
-'use strict';
+import LineEvent from './LineEvent.js';
+import EmulatorCommon from '../../EmulatorCommon.js';
 
 // Ability use event
-class LineEvent0x14 extends LineEvent {
+export class LineEvent0x14 extends LineEvent {
   constructor(repo, line, parts) {
     super(repo, line, parts);
 
@@ -28,7 +29,7 @@ class LineEvent0x14 extends LineEvent {
   }
 
   convert() {
-    let target = this.targetName.length === 0 ? 'Unknown' : this.targetName;
+    const target = this.targetName.length === 0 ? 'Unknown' : this.targetName;
 
     this.convertedLine = this.prefix() +
       this.abilityId + ':' +
@@ -41,11 +42,4 @@ class LineEvent0x14 extends LineEvent {
   }
 }
 
-class LineEvent20 extends LineEvent0x14 {}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    LineEvent0x14: LineEvent0x14,
-    LineEvent20: LineEvent20,
-  };
-}
+export class LineEvent20 extends LineEvent0x14 {}

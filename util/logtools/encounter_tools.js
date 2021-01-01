@@ -1,15 +1,13 @@
-'use strict';
+import NetRegexes from '../../resources/netregexes.js';
+import ZoneInfo from '../../resources/zone_info.js';
+import ContentType from '../../resources/content_type.js';
 
-const NetRegexes = require('../../resources/netregexes.js');
-const ZoneInfo = require('../../resources/zone_info.js');
-const ContentType = require('../../resources/content_type.js');
-
-const { commonReplacement, syncKeys } = require('../../ui/raidboss/common_replacement.js');
+import { commonReplacement, syncKeys } from '../../ui/raidboss/common_replacement.js';
 
 // TODO: add some error checking that a zone has been found before a fight.
 // This can happen on partial logs.
 
-class EncounterFinder {
+export class EncounterFinder {
   constructor() {
     this.currentZone = null;
     this.currentFight = null;
@@ -146,7 +144,7 @@ class EncounterFinder {
       }
     }
 
-    for (let regex of this.sealRegexes) {
+    for (const regex of this.sealRegexes) {
       m = line.match(regex);
       if (m) {
         this.haveSeenSeals = true;
@@ -159,7 +157,7 @@ class EncounterFinder {
       }
     }
 
-    for (let regex of this.unsealRegexes) {
+    for (const regex of this.unsealRegexes) {
       m = line.match(regex);
       if (m) {
         this.onUnseal(line, this.currentSeal, m.groups);
@@ -186,7 +184,7 @@ class EncounterFinder {
   onUnseal(line, name, matches) {}
 }
 
-class EncounterCollector extends EncounterFinder {
+export class EncounterCollector extends EncounterFinder {
   constructor() {
     super();
     this.zones = [];
@@ -247,11 +245,4 @@ class EncounterCollector extends EncounterFinder {
   onUnseal(line, name, matches) {
     this.lastSeal = null;
   }
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    EncounterFinder: EncounterFinder,
-    EncounterCollector: EncounterCollector,
-  };
 }

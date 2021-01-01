@@ -1,4 +1,5 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: FIX luminous aetheroplasm warning not working
 // TODO: FIX doll death not working
@@ -16,7 +17,7 @@
 // TODO: failures of plaint of solidarity (shared sentence)
 // TODO: ordained capital punishment hitting non-tanks
 
-[{
+export default {
   zoneId: ZoneId.TheEpicOfAlexanderUltimate,
   damageWarn: {
     'TEA Sluice': '49B1',
@@ -68,13 +69,19 @@
       id: 'TEA Exhaust',
       damageRegex: '481F',
       condition: function(e, data) {
-        return e.targetName == e.attackerName;
+        return e.targetName === e.attackerName;
       },
       mistake: function(e, data) {
         return {
           type: 'fail',
           blame: e.targetName,
-          text: 'luminous aetheroplasm',
+          text: {
+            en: 'luminous aetheroplasm',
+            de: 'Luminiszentes Ätheroplasma',
+            fr: 'Éthéroplasma lumineux',
+            ja: '光性爆雷',
+            cn: '光性爆雷',
+          },
         };
       },
     },
@@ -101,7 +108,13 @@
           type: 'fail',
           // This may be undefined, which is fine.
           name: data.jagdTether ? data.jagdTether[e.attackerId] : undefined,
-          text: 'Doll Death',
+          text: {
+            en: 'Doll Death',
+            de: 'Puppe Tot',
+            fr: 'Poupée morte',
+            ja: 'ドールが死んだ',
+            cn: '浮士德死亡',
+          },
         };
       },
     },
@@ -158,11 +171,11 @@
       damageRegex: '488D',
       condition: function(e, data) {
         // Single Tap
-        return e.type == '15';
+        return e.type === '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
   ],
-}];
+};

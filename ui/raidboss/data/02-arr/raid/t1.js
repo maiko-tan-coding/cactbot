@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.TheBindingCoilOfBahamutTurn1,
   triggers: [
     {
@@ -11,9 +14,7 @@
       netRegexJa: NetRegexes.startsUsing({ source: '制御システム', id: '5A7' }),
       netRegexCn: NetRegexes.startsUsing({ source: '自卫系统', id: '5A7' }),
       netRegexKo: NetRegexes.startsUsing({ source: '제어 시스템', id: '5A7' }),
-      condition: function(data) {
-        return data.CanSilence();
-      },
+      condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
     {
@@ -25,9 +26,7 @@
       netRegexJa: NetRegexes.ability({ source: 'カドゥケウス', id: '4B8.*?', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '神杖巨蛇', id: '4B8.*?', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '카두케우스', id: '4B8.*?', capture: false }),
-      run: function(data) {
-        data.started = true;
-      },
+      run: (data) => data.started = true,
     },
     {
       id: 'T1 Regorge',
@@ -37,15 +36,16 @@
       netRegexJa: NetRegexes.ability({ source: 'カドゥケウス', id: '4BA' }),
       netRegexCn: NetRegexes.ability({ source: '神杖巨蛇', id: '4BA' }),
       netRegexKo: NetRegexes.ability({ source: '카두케우스', id: '4BA' }),
-      condition: function(data, matches) {
-        return data.me == matches.target;
-      },
-      alertText: {
-        en: 'Spit on YOU',
-        de: 'Spucke auf DIR',
-        fr: 'Crachat sur VOUS',
-        ja: '自分にリゴージ',
-        cn: '吐痰点名',
+      condition: Conditions.targetIsYou(),
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Spit on YOU',
+          de: 'Spucke auf DIR',
+          fr: 'Crachat sur VOUS',
+          ja: '自分にリゴージ',
+          cn: '吐痰点名',
+        },
       },
     },
     {
@@ -56,16 +56,17 @@
       netRegexJa: NetRegexes.addedCombatant({ name: 'カドゥケウス.*?', capture: false }),
       netRegexCn: NetRegexes.addedCombatant({ name: '神杖巨蛇.*?', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '카두케우스.*?', capture: false }),
-      condition: function(data) {
-        return data.started;
-      },
+      condition: (data) => data.started,
       suppressSeconds: 5,
-      alertText: {
-        en: 'Split',
-        de: 'Teilen',
-        fr: 'Division',
-        ja: '分裂',
-        cn: '分裂',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Split',
+          de: 'Teilen',
+          fr: 'Division',
+          ja: '分裂',
+          cn: '分裂',
+        },
       },
     },
     {
@@ -76,17 +77,18 @@
       netRegexJa: NetRegexes.ability({ source: 'カドゥケウス', id: '4B8' }),
       netRegexCn: NetRegexes.ability({ source: '神杖巨蛇', id: '4B8' }),
       netRegexKo: NetRegexes.ability({ source: '카두케우스', id: '4B8' }),
-      condition: function(data, matches) {
-        return data.me == matches.target;
-      },
+      condition: Conditions.targetIsYou(),
       delaySeconds: 8,
       suppressSeconds: 5,
-      infoText: {
-        en: 'Hood Swing in 10',
-        de: 'Kapuzenschwung in 10',
-        fr: 'Coup de capot dans 10s',
-        ja: '十秒以内タンクバスター',
-        cn: '10秒内死刑',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Hood Swing in 10',
+          de: 'Kapuzenschwung in 10',
+          fr: 'Coup de capot dans 10s',
+          ja: '十秒以内タンクバスター',
+          cn: '10秒内死刑',
+        },
       },
     },
     {
@@ -99,12 +101,15 @@
       netRegexKo: NetRegexes.message({ line: '알라그 유적 will be sealed off.*?', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 5,
-      infoText: {
-        en: 'Slime Soon',
-        de: 'Schleim bald',
-        fr: 'Gluant bientôt',
-        ja: 'まもなくスライム',
-        cn: '软泥即将出现',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Slime Soon',
+          de: 'Schleim bald',
+          fr: 'Gluant bientôt',
+          ja: 'まもなくスライム',
+          cn: '软泥即将出现',
+        },
       },
     },
     {
@@ -117,12 +122,15 @@
       netRegexKo: NetRegexes.addedCombatant({ name: '암흑물질 슬라임.*?', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 5,
-      infoText: {
-        en: 'Slime Soon',
-        de: 'Schleim bald',
-        fr: 'Gluant bientôt',
-        ja: 'まもなくスライム',
-        cn: '软泥即将出现',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Slime Soon',
+          de: 'Schleim bald',
+          fr: 'Gluant bientôt',
+          ja: 'まもなくスライム',
+          cn: '软泥即将出现',
+        },
       },
     },
   ],
@@ -173,4 +181,4 @@
       },
     },
   ],
-}];
+};

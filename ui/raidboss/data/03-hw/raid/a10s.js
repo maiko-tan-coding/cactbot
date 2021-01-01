@@ -1,9 +1,47 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Notes:
 // Ignoring Gobsway Rumblerocks (1AA0) aoe trigger, as it is small and frequent.
 
-[{
+const chargeOutputStrings = {
+  getIn: {
+    en: 'In',
+    de: 'Rein',
+    fr: 'Intérieur',
+    ja: '中へ',
+    cn: '靠近',
+    ko: '안으로',
+  },
+  getOut: {
+    en: 'Out',
+    de: 'Raus',
+    fr: 'Exterieur',
+    ja: '外へ',
+    cn: '远离',
+    ko: '밖으로',
+  },
+  spread: {
+    en: 'Spread',
+    de: 'Verteilen',
+    fr: 'Dispersez-vous',
+    ja: '散開',
+    cn: '分散',
+    ko: '산개',
+  },
+  stackMarker: {
+    en: 'Stack',
+    de: 'Sammeln',
+    fr: 'Packez-vous',
+    ja: '頭割り',
+    cn: '分摊',
+    ko: '쉐어뎀',
+  },
+};
+
+export default {
   zoneId: ZoneId.AlexanderTheBreathOfTheCreatorSavage,
   timelineFile: 'a10s.txt',
   timelineTriggers: [
@@ -20,13 +58,16 @@
       regex: /Gobbie Adds/,
       beforeSeconds: 0,
       suppressSeconds: 1,
-      infoText: {
-        en: 'Hit Adds With Weight Trap',
-        de: 'Adds mit Gewichtsfalle treffen',
-        fr: 'Frappez les Adds avec le Piège à poids',
-        ja: '鉄球ギミックを使って雑魚を倒す',
-        cn: '使用铁锤陷阱击中小怪',
-        ko: '철퇴 함정으로 쫄 맞추기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Hit Adds With Weight Trap',
+          de: 'Adds mit Gewichtsfalle treffen',
+          fr: 'Frappez les Adds avec le Piège à poids',
+          ja: '鉄球ギミックを使って雑魚を倒す',
+          cn: '使用铁锤陷阱击中小怪',
+          ko: '철퇴 함정으로 쫄 맞추기',
+        },
       },
     },
   ],
@@ -39,13 +80,16 @@
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB2', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB2', capture: false }),
-      infoText: {
-        en: 'Floor Spikes',
-        de: 'Boden-Stachel',
-        fr: 'Pics au sol',
-        ja: '罠: 棘',
-        cn: '地刺陷阱',
-        ko: '가시 함정',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Floor Spikes',
+          de: 'Boden-Stachel',
+          fr: 'Pics au sol',
+          ja: '罠: 棘',
+          cn: '地刺陷阱',
+          ko: '가시 함정',
+        },
       },
     },
     {
@@ -56,13 +100,16 @@
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB1', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB1', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB1', capture: false }),
-      infoText: {
-        en: 'Frost Lasers',
-        de: 'Eislaser',
-        fr: 'Lasers de glace',
-        ja: '罠: 氷',
-        cn: '冰晶陷阱',
-        ko: '얼음화살 함정',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Frost Lasers',
+          de: 'Eislaser',
+          fr: 'Lasers de glace',
+          ja: '罠: 氷',
+          cn: '冰晶陷阱',
+          ko: '얼음화살 함정',
+        },
       },
     },
     {
@@ -73,13 +120,16 @@
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB0', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB0', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB0', capture: false }),
-      infoText: {
-        en: 'Ceiling Weight',
-        de: 'Gewichte von der Decke',
-        fr: 'Poids du plafond',
-        ja: '罠: 鉄球',
-        cn: '铁球陷阱',
-        ko: '철퇴 함정',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Ceiling Weight',
+          de: 'Gewichte von der Decke',
+          fr: 'Poids du plafond',
+          ja: '罠: 鉄球',
+          cn: '铁球陷阱',
+          ko: '철퇴 함정',
+        },
       },
     },
     {
@@ -94,16 +144,20 @@
       preRun: function(data, matches) {
         data.charges = data.charges || [];
         data.charges.push({
-          '1AB8': Responses.getIn,
-          '1AB9': Responses.getOut,
-          '1ABA': Responses.spread,
-          '1ABB': Responses.stack,
+          '1AB8': 'getIn',
+          '1AB9': 'getOut',
+          '1ABA': 'spread',
+          '1ABB': 'stackMarker',
         }[matches.id]);
       },
-      response: function(data) {
+      response: function(data, _, output) {
+        // cactbot-builtin-response
+        output.responseOutputStrings = chargeOutputStrings;
+
         // Call the first one out with alert, the other two with info.
-        let severity = data.charges.length > 1 ? 'info' : 'alert';
-        return data.charges[data.charges.length - 1](severity);
+        data.charges = data.charges || [];
+        const severity = data.charges.length > 1 ? 'infoText' : 'alertText';
+        return { [severity]: output[data.charges[data.charges.length - 1]]() };
       },
     },
     {
@@ -128,11 +182,14 @@
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A9[ABCE]', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A9[ABCE]', capture: false }),
       suppressSeconds: 0.5,
-      response: function(data) {
+      response: function(data, _, output) {
+        // cactbot-builtin-response
+        output.responseOutputStrings = chargeOutputStrings;
+
         if (!data.charges || !data.charges.length)
           return;
 
-        return data.charges.shift()('alert');
+        return { alertText: output[data.charges.shift()]() };
       },
     },
     {
@@ -168,41 +225,45 @@
       netRegexJa: NetRegexes.tether({ source: '傭兵のレイムプリクス', id: '0039' }),
       netRegexCn: NetRegexes.tether({ source: '佣兵雷姆普里克斯', id: '0039' }),
       netRegexKo: NetRegexes.tether({ source: '용병 레임브릭스', id: '0039' }),
-      alarmText: function(data, matches) {
-        if (data.me != matches.target)
+      alarmText: function(data, matches, output) {
+        if (data.me !== matches.target)
           return;
-        return {
+        return output.tankSwapGetAway();
+      },
+      alertText: function(data, matches, output) {
+        if (data.me === matches.target)
+          return;
+        if (data.role === 'tank')
+          return output.tankSwap();
+
+        if (data.role === 'healer' || data.job === 'BLU')
+          return output.shieldPlayer({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        tankSwap: {
+          en: 'Tank Swap!',
+          de: 'Tankwechsel!',
+          fr: 'Tank swap !',
+          ja: 'タンクスイッチ!',
+          cn: '换T！',
+          ko: '탱 교대',
+        },
+        shieldPlayer: {
+          en: 'Shield ${player}',
+          de: 'Schild ${player}',
+          fr: 'Bouclier ${player}',
+          ja: '${player}にバリア',
+          cn: '单盾${player}',
+          ko: '"${player}" 보호막',
+        },
+        tankSwapGetAway: {
           en: 'Tank Swap, Get Away',
           de: 'Tankwechsel, geh weg',
           fr: 'Tank swap, éloignez-vous',
           ja: 'タンクスイッチ、離れ',
           cn: '换T并且远离',
           ko: '탱 교대, 멀리가기',
-        };
-      },
-      alertText: function(data, matches) {
-        if (data.me == matches.target)
-          return;
-        if (data.role == 'tank') {
-          return {
-            en: 'Tank Swap!',
-            de: 'Tankwechsel!',
-            fr: 'Tank swap !',
-            ja: 'タンクスイッチ!',
-            cn: '换T！',
-            ko: '탱 교대',
-          };
-        }
-        if (data.role == 'healer' || data.job == 'BLU') {
-          return {
-            en: 'Shield ' + data.ShortName(matches.target),
-            de: 'Schild ' + data.ShortName(matches.target),
-            fr: 'Bouclier ' + data.ShortName(matches.target),
-            ja: data.ShortName(matches.target) + 'にバリア',
-            cn: '单盾' + data.ShortName(matches.target),
-            ko: '"' + data.ShortName(matches.target) + '" 보호막',
-          };
-        }
+        },
       },
     },
     {
@@ -246,13 +307,16 @@
       id: 'A10S Brighteyes Prey Marker',
       netRegex: NetRegexes.headMarker({ id: '0029' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: 'Prey on YOU',
-        de: 'Makierung auf DIR',
-        fr: 'Marquage sur VOUS',
-        ja: '自分に狙い目',
-        cn: '火圈点名',
-        ko: '징 대상자',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Prey on YOU',
+          de: 'Makierung auf DIR',
+          fr: 'Marquage sur VOUS',
+          ja: '自分に狙い目',
+          cn: '火圈点名',
+          ko: '징 대상자',
+        },
       },
     },
     {
@@ -260,16 +324,19 @@
       netRegex: NetRegexes.headMarker({ id: '0029' }),
       condition: function(data, matches) {
         // Only need to pass on the first one.
-        return data.me == matches.target && !data.seenBrighteyes;
+        return data.me === matches.target && !data.seenBrighteyes;
       },
       delaySeconds: 5,
-      infoText: {
-        en: 'Pass Prey',
-        de: 'Makierung weitergeben',
-        fr: 'Passez le marquage',
-        ja: '狙い目を渡す',
-        cn: '传递点名',
-        ko: '징 넘김',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Pass Prey',
+          de: 'Makierung weitergeben',
+          fr: 'Passez le marquage',
+          ja: '狙い目を渡す',
+          cn: '传递点名',
+          ko: '징 넘김',
+        },
       },
     },
     {
@@ -280,13 +347,16 @@
       netRegexJa: NetRegexes.startsUsing({ source: '傭兵のレイムプリクス', id: '1A92', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '佣兵雷姆普里克斯', id: '1A92', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '용병 레임브릭스', id: '1A92', capture: false }),
-      infoText: {
-        en: 'Hit Floor Trap',
-        de: 'Aktiviere Bodenfalle',
-        fr: 'Activez le Piège au sol',
-        ja: '棘を踏む',
-        cn: '踩地刺陷阱',
-        ko: '가시함정 밟기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Hit Floor Trap',
+          de: 'Aktiviere Bodenfalle',
+          fr: 'Activez le Piège au sol',
+          ja: '棘を踏む',
+          cn: '踩地刺陷阱',
+          ko: '가시함정 밟기',
+        },
       },
     },
     {
@@ -307,13 +377,16 @@
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1A8F', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A8F', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A8F', capture: false }),
-      infoText: {
-        en: 'Hit Boss With Ice',
-        de: 'Boss mit Eis treffen',
-        fr: 'Frappez le boss avec la Glace',
-        ja: '氷を踏む',
-        cn: '踩冰晶陷阱',
-        ko: '보스에게 얼음함정 맞히기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Hit Boss With Ice',
+          de: 'Boss mit Eis treffen',
+          fr: 'Frappez le boss avec la Glace',
+          ja: '氷を踏む',
+          cn: '踩冰晶陷阱',
+          ko: '보스에게 얼음함정 맞히기',
+        },
       },
     },
   ],
@@ -549,4 +622,4 @@
       },
     },
   ],
-}];
+};

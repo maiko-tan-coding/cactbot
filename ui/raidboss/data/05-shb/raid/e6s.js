@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseFurorSavage,
   timelineFile: 'e6s.txt',
   triggers: [
@@ -13,7 +16,7 @@
       netRegexCn: NetRegexes.startsUsing({ source: ['伊弗利特', '赤翼罗羯坨博叉'], id: '4BD3', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: ['이프리트', '락타팍샤'], id: '4BD3', capture: false }),
       delaySeconds: 11,
-      promise: async (data) => {
+      promise: async (data, _, output) => {
         const ifritLocaleNames = {
           en: 'Ifrit',
           de: 'Ifrit',
@@ -58,7 +61,7 @@
 
         // we need to filter for the Ifrit with the highest ID
         // since that one is always the safe spot.
-        let currentHighestCombatant =
+        const currentHighestCombatant =
           combatantData.combatants.sort((a, b) => a.ID - b.ID).pop();
 
         // all variation ranges for all the 9 ball positions for the kicking actors
@@ -70,66 +73,92 @@
         // south      x: 96-104   y: 107-115
         // southeast  x: 107-115  y: 107-115
         // southwest  x: 85-93    y: 107-115
-        let safeZoneObj1 = null;
-        let safeZoneObj2 = null;
+        let safeZone1 = null;
+        let safeZone2 = null;
 
         // don't need to go through all the posibilities,
         // only those 4 ifs do reflect the above positions
-        if (currentHighestCombatant.PosY > 84 && currentHighestCombatant.PosY < 94) {
-          safeZoneObj1 = {
-            en: 'north',
-            de: 'nord',
-            fr: 'nord',
-            ko: '북',
-            cn: '前',
-          };
-        } else if (currentHighestCombatant.PosY > 106 && currentHighestCombatant.PosY < 116) {
-          safeZoneObj1 = {
-            en: 'south',
-            de: 'süd',
-            fr: 'sud',
-            ko: '남',
-            cn: '后',
-          };
-        }
+        if (currentHighestCombatant.PosY > 84 && currentHighestCombatant.PosY < 94)
+          safeZone1 = output.north();
+        else if (currentHighestCombatant.PosY > 106 && currentHighestCombatant.PosY < 116)
+          safeZone1 = output.south();
 
-        if (currentHighestCombatant.PosX > 84 && currentHighestCombatant.PosX < 94) {
-          safeZoneObj2 = {
-            en: 'west',
-            de: 'west',
-            fr: 'ouest',
-            ko: '서',
-            cn: '左',
-          };
-        } else if (currentHighestCombatant.PosX > 106 && currentHighestCombatant.PosX < 116) {
-          safeZoneObj2 = {
-            en: 'east',
-            de: 'ost',
-            fr: 'est',
-            ko: '동',
-            cn: '右',
-          };
-        }
 
-        let concatSafeZones = (lang) => {
-          let str1 = safeZoneObj1 ? safeZoneObj1[lang] : '';
-          let str2 = safeZoneObj2 ? safeZoneObj2[lang] : '';
+        if (currentHighestCombatant.PosX > 84 && currentHighestCombatant.PosX < 94)
+          safeZone2 = output.west();
+        else if (currentHighestCombatant.PosX > 106 && currentHighestCombatant.PosX < 116)
+          safeZone2 = output.east();
 
-          if (lang === 'fr' && str1 && str2)
-            return str1 + ' ' + str2;
-          return str1 + str2;
-        };
 
-        data.safeZone = {
-          en: concatSafeZones('en'),
-          de: concatSafeZones('de'),
-          fr: concatSafeZones('fr'),
-          cn: concatSafeZones('cn'),
-          ko: concatSafeZones('ko') + '쪽으로',
-        };
+        if (safeZone1 && safeZone2)
+          data.safeZone = output.twoDirs({ dir1: safeZone1, dir2: safeZone2 });
+        else if (safeZone1)
+          data.safeZone = output.oneDir({ dir: safeZone1 });
+        else if (safeZone2)
+          data.safeZone = output.oneDir({ dir: safeZone2 });
+        else
+          data.safeZone = null;
       },
-      infoText: function(data) {
-        return data.safeZone === null ? '???' : data.safeZone;
+      infoText: function(data, _, output) {
+        return !data.safeZone ? output.unknown() : data.safeZone;
+      },
+      outputStrings: {
+        oneDir: {
+          en: '${dir}',
+          de: '${dir}',
+          fr: '${dir}',
+          ja: '${dir}へ',
+          cn: '去${dir}',
+          ko: '${dir}쪽으로',
+        },
+        twoDirs: {
+          en: '${dir1}${dir2}',
+          de: '${dir1}${dir2}',
+          fr: '${dir1} ${dir2}',
+          ja: '${dir1}${dir2}へ',
+          cn: '去${dir2}${dir1}',
+          ko: '${dir1}${dir2}쪽으로',
+        },
+        unknown: {
+          en: '???',
+          de: '???',
+          fr: '???',
+          ja: '???',
+          cn: '???',
+          ko: '???',
+        },
+        north: {
+          en: 'north',
+          de: 'nord',
+          fr: 'nord',
+          ja: '北',
+          cn: '北',
+          ko: '북',
+        },
+        south: {
+          en: 'south',
+          de: 'süd',
+          fr: 'sud',
+          ja: '南',
+          cn: '南',
+          ko: '남',
+        },
+        west: {
+          en: 'west',
+          de: 'west',
+          fr: 'ouest',
+          ja: '西',
+          cn: '西',
+          ko: '서',
+        },
+        east: {
+          en: 'east',
+          de: 'ost',
+          fr: 'est',
+          ja: '東',
+          cn: '东',
+          ko: '동',
+        },
       },
     },
     {
@@ -154,35 +183,45 @@
       netRegexJa: NetRegexes.startsUsing({ source: ['ガルーダ', 'ラクタパクシャ'], id: ['4BF[EF]', '4C0[45]'], capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['迦楼罗', '赤翼罗羯坨博叉'], id: ['4BF[EF]', '4C0[45]'], capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: ['가루다', '락타팍샤'], id: ['4BF[EF]', '4C0[45]'], capture: false }),
-      infoText: {
-        en: 'Avoid green nails',
-        de: 'Weiche den grünen Nägeln aus',
-        fr: 'Évitez les griffes',
-        cn: '躲避风刃',
-        ko: '초록 발톱 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid green nails',
+          de: 'Weiche den grünen Nägeln aus',
+          fr: 'Évitez les griffes',
+          ja: '緑の杭に避け',
+          cn: '躲避风刃',
+          ko: '초록 발톱 피하기',
+        },
       },
     },
     {
       id: 'E6S Air Bump',
       netRegex: NetRegexes.headMarker({ id: '00D3' }),
       suppressSeconds: 1,
-      infoText: function(data, matches) {
-        if (data.me == matches.target) {
-          return {
-            en: 'Enumeration on YOU',
-            de: 'Enumeration aud DIR',
-            fr: 'Énumération sur VOUS',
-            cn: '蓝圈分摊点名',
-            ko: '2인 장판 대상자',
-          };
-        }
-        return {
+      infoText: function(data, matches, output) {
+        if (data.me === matches.target)
+          return output.enumerationOnYou();
+
+        return output.enumeration();
+      },
+      outputStrings: {
+        enumerationOnYou: {
+          en: 'Enumeration on YOU',
+          de: 'Enumeration aud DIR',
+          fr: 'Énumération sur VOUS',
+          ja: '自分にエアーバンプ',
+          cn: '蓝圈分摊点名',
+          ko: '2인 장판 대상자',
+        },
+        enumeration: {
           en: 'Enumeration',
           de: 'Enumeration',
           fr: 'Énumération',
+          ja: 'エアーバンプ',
           cn: '蓝圈分摊',
           ko: '2인 장판',
-        };
+        },
       },
     },
     {
@@ -229,25 +268,31 @@
       condition: function(data) {
         return data.handsOfFlame;
       },
-      infoText: function(data, matches) {
-        if (data.me == matches.target) {
-          return {
-            en: 'Charge on YOU',
-            de: 'Ansturm auf DIR',
-            fr: 'Charge sur VOUS',
-            cn: '冲锋点名',
-            ko: '나에게 보스 돌진',
-          };
-        }
-        if (data.role != 'tank' || data.phase == 'both')
+      infoText: function(data, matches, output) {
+        if (data.me === matches.target)
+          return output.chargeOnYou();
+
+        if (data.role !== 'tank' || data.phase === 'both')
           return;
-        return {
+        return output.tankSwap();
+      },
+      outputStrings: {
+        chargeOnYou: {
+          en: 'Charge on YOU',
+          de: 'Ansturm auf DIR',
+          fr: 'Charge sur VOUS',
+          ja: '自分に突進',
+          cn: '冲锋点名',
+          ko: '나에게 보스 돌진',
+        },
+        tankSwap: {
           en: 'Tank Swap',
           de: 'Tank Swap',
           fr: 'Tank Swap',
+          ja: 'タンクスイッチ',
           cn: '换T',
           ko: '탱 교대',
-        };
+        },
       },
     },
     {
@@ -288,12 +333,16 @@
       id: 'E6S Hands of Hell',
       netRegex: NetRegexes.headMarker({ id: '0016' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: 'Tether Marker on YOU',
-        de: 'Verbindung auf DIR',
-        fr: 'Marque de lien sur VOUS',
-        cn: '连线点名',
-        ko: '선 징 대상자',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Tether Marker on YOU',
+          de: 'Verbindung auf DIR',
+          fr: 'Marque de lien sur VOUS',
+          ja: '自分に線マーカー',
+          cn: '连线点名',
+          ko: '선 징 대상자',
+        },
       },
     },
     {
@@ -312,24 +361,32 @@
       id: 'E6S Hated of the Vortex Effect',
       netRegex: NetRegexes.gainsEffect({ effectId: '8BB' }),
       condition: Conditions.targetIsYou(),
-      infoText: {
-        en: 'Attack Garuda',
-        de: 'Greife Garuda an',
-        fr: 'Attaquez Garuda',
-        cn: '打风神',
-        ko: '가루다 공격하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Attack Garuda',
+          de: 'Greife Garuda an',
+          fr: 'Attaquez Garuda',
+          ja: 'ガルーダに攻撃',
+          cn: '打风神',
+          ko: '가루다 공격하기',
+        },
       },
     },
     {
       id: 'E6S Hated of the Embers Effect',
       netRegex: NetRegexes.gainsEffect({ effectId: '8BC' }),
       condition: Conditions.targetIsYou(),
-      infoText: {
-        en: 'Attack Ifrit',
-        de: 'Greife Ifrit an',
-        fr: 'Attaquez Ifrit',
-        cn: '打火神',
-        ko: '이프리트 공격하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Attack Ifrit',
+          de: 'Greife Ifrit an',
+          fr: 'Attaquez Ifrit',
+          ja: 'イフリートに攻撃',
+          cn: '打火神',
+          ko: '이프리트 공격하기',
+        },
       },
     },
     {
@@ -372,37 +429,39 @@
       netRegexJa: NetRegexes.startsUsing({ source: 'ラクタパクシャ', id: '4C10', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '赤翼罗羯坨博叉', id: '4C10', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '락타팍샤', id: '4C10', capture: false }),
-      infoText: {
-        en: 'go to spots for chains',
-        de: 'Gehe zu den Stellen für die Kette',
-        fr: 'Positions pour les chaines',
-        cn: '连线站位',
-        ko: '대화재 준비',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'go to spots for chains',
+          de: 'Gehe zu den Stellen für die Kette',
+          fr: 'Positions pour les chaines',
+          ja: '安置へ、鎖が繋がれる',
+          cn: '连线站位',
+          ko: '대화재 준비',
+        },
       },
     },
     {
       id: 'E6S Irons Of Purgatory',
       netRegex: NetRegexes.tether({ id: '006C' }),
       condition: function(data, matches) {
-        return data.me == matches.target || data.me == matches.source;
+        return data.me === matches.target || data.me === matches.source;
       },
-      alertText: function(data, matches) {
-        if (data.me == matches.source) {
-          return {
-            en: 'Tethered to ' + data.ShortName(matches.target),
-            de: 'Verbunden mit ' + data.ShortName(matches.target),
-            fr: 'Lié à ' + data.ShortName(matches.target),
-            cn: '和' + data.ShortName(matches.target) + '连线',
-            ko: '선 연결 짝: ' + data.ShortName(matches.target),
-          };
-        }
-        return {
-          en: 'Tethered to ' + data.ShortName(matches.source),
-          de: 'Verbunden mit ' + data.ShortName(matches.source),
-          fr: 'Lié à ' + data.ShortName(matches.source),
-          cn: '和' + data.ShortName(matches.source) + '连线',
-          ko: '선 연결 짝: ' + data.ShortName(matches.source),
-        };
+      alertText: function(data, matches, output) {
+        if (data.me === matches.source)
+          return output.tetheredToPlayer({ player: data.ShortName(matches.target) });
+
+        return output.tetheredToPlayer({ player: data.ShortName(matches.source) });
+      },
+      outputStrings: {
+        tetheredToPlayer: {
+          en: 'Tethered to ${player}',
+          de: 'Verbunden mit ${player}',
+          fr: 'Lié à ${player}',
+          ja: '${player}と繋がった',
+          cn: '和${player}连线',
+          ko: '선 연결 짝: ${player}',
+        },
       },
     },
     {
@@ -614,4 +673,4 @@
       },
     },
   ],
-}];
+};

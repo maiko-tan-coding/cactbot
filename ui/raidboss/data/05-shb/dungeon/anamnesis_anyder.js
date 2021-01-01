@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.AnamnesisAnyder,
   timelineFile: 'anamnesis_anyder.txt',
   timelineTriggers: [
@@ -27,13 +30,16 @@
       netRegexKo: NetRegexes.startsUsing({ source: '정체불명', id: '4E25', capture: false }),
       delaySeconds: 3,
       durationSeconds: 7,
-      infoText: {
-        en: 'Avoid Arrow',
-        de: 'Pfeil ausweichen',
-        fr: 'Évitez la flèche',
-        ja: '矢印を避け',
-        cn: '躲箭头',
-        ko: '화살표 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid Arrow',
+          de: 'Pfeil ausweichen',
+          fr: 'Évitez la flèche',
+          ja: '矢印を避け',
+          cn: '躲箭头',
+          ko: '화살표 피하기',
+        },
       },
     },
     {
@@ -143,13 +149,16 @@
       netRegexJa: NetRegexes.startsUsing({ source: 'ルクスィー・ディーマ', id: '4B84', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '鲁克嘶·蒂母', id: '4B84', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '루크쉬 디마', id: '4B84', capture: false }),
-      infoText: {
-        en: 'Avoid Hands',
-        de: 'Händen ausweichen',
-        fr: 'Évitez les mains',
-        ja: '手を避け',
-        cn: '躲手',
-        ko: '손 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid Hands',
+          de: 'Händen ausweichen',
+          fr: 'Évitez les mains',
+          ja: '手を避け',
+          cn: '躲手',
+          ko: '손 피하기',
+        },
       },
     },
   ],
@@ -365,4 +374,4 @@
       },
     },
   ],
-}];
+};

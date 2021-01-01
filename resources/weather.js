@@ -1,11 +1,12 @@
-'use strict';
+import gWeatherRates from './weather_rate.js';
+import ZoneInfo from './zone_info.js';
 
-function getWeather(timeMs, zoneId) {
-  let chance = getWeatherChanceValue(timeMs);
+export function getWeather(timeMs, zoneId) {
+  const chance = getWeatherChanceValue(timeMs);
 
   // See weather_rate.js and territory_type.js for details.
-  let rateIdx = ZoneInfo[zoneId].weatherRate;
-  let entry = gWeatherRates[rateIdx];
+  const rateIdx = ZoneInfo[zoneId].weatherRate;
+  const entry = gWeatherRates[rateIdx];
   if (!entry)
     return;
 
@@ -18,71 +19,71 @@ function getWeather(timeMs, zoneId) {
 // From https://github.com/ufx/SaintCoinach/blob/4bf6d951957502a7faa056ffc1cc7026a18fb253/SaintCoinach/Xiv/WeatherRate.cs
 // Relicensed from the "Do What the F*ck You Want To Public License".
 function getWeatherChanceValue(timeMs) {
-  let unix = Math.floor(timeMs / 1000);
+  const unix = Math.floor(timeMs / 1000);
   // Get Eorzea hour for weather start
-  let bell = unix / 175;
+  const bell = unix / 175;
   // Do the magic 'cause for calculations 16:00 is 0, 00:00 is 8 and 08:00 is 16
-  let increment = (bell + 8 - (bell % 8)) % 24;
+  const increment = (bell + 8 - (bell % 8)) % 24;
 
   // Take Eorzea days since unix epoch
-  let totalDays = (unix / 4200) >>> 0;
+  const totalDays = (unix / 4200) >>> 0;
 
   // The following math all needs to be done as unsigned integers.
-  let calcBase = ((totalDays * 0x64) + increment) >>> 0;
+  const calcBase = ((totalDays * 0x64) + increment) >>> 0;
 
-  let step1 = ((calcBase << 0xB) ^ calcBase) >>> 0;
-  let step2 = ((step1 >>> 8) ^ step1) >>> 0;
+  const step1 = ((calcBase << 0xB) ^ calcBase) >>> 0;
+  const step2 = ((step1 >>> 8) ^ step1) >>> 0;
 
   return step2 % 0x64;
 }
 
 function floorTimeToStartOfWeather(timeMs) {
-  let eightHours = 1000 * 8 * 175;
+  const eightHours = 1000 * 8 * 175;
   return Math.floor(timeMs / eightHours) * eightHours;
 }
 
-function findNextWeather(timeMs, zoneId, searchWeather, maxTimeMs) {
+export function findNextWeather(timeMs, zoneId, searchWeather, maxTimeMs) {
   maxTimeMs = (maxTimeMs || 1000 * 60 * 1000) + timeMs;
 
   for (; timeMs < maxTimeMs; timeMs += 8 * 175 * 1000) {
-    let weather = getWeather(timeMs, zoneId);
-    if (weather == searchWeather)
+    const weather = getWeather(timeMs, zoneId);
+    if (weather === searchWeather)
       return floorTimeToStartOfWeather(timeMs);
   }
   return undefined;
 }
 
-function findNextWeatherNot(timeMs, zoneId, searchWeather, maxTimeMs) {
+export function findNextWeatherNot(timeMs, zoneId, searchWeather, maxTimeMs) {
   maxTimeMs = (maxTimeMs || 1000 * 60 * 1000) + timeMs;
 
   for (; timeMs < maxTimeMs; timeMs += 8 * 175 * 1000) {
-    let weather = getWeather(timeMs, zoneId);
-    if (weather != searchWeather)
+    const weather = getWeather(timeMs, zoneId);
+    if (weather !== searchWeather)
       return floorTimeToStartOfWeather(timeMs);
   }
   return undefined;
 }
 
 function findNextHour(timeMs, searchHour) {
-  let oneHour = 1000 * 175;
-  let fullDay = 24 * oneHour;
-  let startOfDay = Math.floor(timeMs / fullDay) * fullDay;
+  const oneHour = 1000 * 175;
+  const fullDay = 24 * oneHour;
+  const startOfDay = Math.floor(timeMs / fullDay) * fullDay;
   let time = startOfDay + searchHour * oneHour;
   if (time < timeMs)
     time += fullDay;
   return time;
 }
 
-function findNextNight(timeMs) {
+export function findNextNight(timeMs) {
   return findNextHour(timeMs, 19);
 }
 
-function findNextDay(timeMs) {
+export function findNextDay(timeMs) {
   return findNextHour(timeMs, 6);
 }
 
-function isNightTime(timeMs) {
-  let hour = (timeMs / 1000 / 175) % 24;
+export function isNightTime(timeMs) {
+  const hour = (timeMs / 1000 / 175) % 24;
   return hour < 6 || hour > 19;
 }
 

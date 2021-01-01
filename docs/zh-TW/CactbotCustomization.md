@@ -260,7 +260,7 @@ The steps to override a timeline are:
 
 
     （假設您已經做完了第一步，並且該文本檔案的名稱為 `user/the_epic_of_alexander.txt` ）
-    
+
     設置 `overrideTimelineFile: true` 是為了告訴cactbot將內置的時間軸完全替換為您添加的檔案。
 
 例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 檔案中， 您可以通過 `PlayerNicks` 選項定義玩家的暱稱。

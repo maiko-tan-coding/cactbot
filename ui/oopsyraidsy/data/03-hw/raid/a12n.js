@@ -1,6 +1,7 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.AlexanderTheSoulOfTheCreator,
   damageWarn: {
     'A12N Sacrament': '1AE6', // Cross Lasers
@@ -29,7 +30,16 @@
         return data.assault.includes(matches.target);
       },
       mistake: function(e, data, matches) {
-        return { type: 'fail', blame: matches.target, text: { en: 'Didn\'t Spread!' } };
+        return {
+          type: 'fail',
+          blame: matches.target,
+          text: {
+            en: 'Didn\'t Spread!',
+            fr: 'Ne s\'est pas dispersé(e) !',
+            ja: '散開しなかった!',
+            cn: '没有散开!',
+          },
+        };
       },
     },
     {
@@ -42,4 +52,4 @@
       },
     },
   ],
-}];
+};

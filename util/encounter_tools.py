@@ -5,6 +5,13 @@ import re
 import argparse
 
 
+class tcolor:
+    WARN = "\033[33m"
+    FAIL = "\033[91m"
+    CAUTION = "\033[93m"
+    END = "\033[0m"
+
+
 def timestamp_type(arg):
     """Defines the timestamp input format"""
     if arg and re.match(r"\d{2}:\d{2}:\d{2}\.\d{3}", arg) is None:
@@ -43,35 +50,74 @@ def str_time(timestamp):
 def is_line_end(line_fields):
     if is_zone_unseal(line_fields):
         return True
+    if is_ce_end(line_fields):
+        return True
     return is_encounter_end_code(line_fields)
 
 
 def is_zone_seal(line_fields):
+    if len(line_fields) <= 4:
+        return False
     return line_fields[4].endswith("sealed off in 15 seconds!")
 
 
 def is_zone_unseal(line_fields):
+    if len(line_fields) <= 4:
+        return False
     return line_fields[4].endswith("no longer sealed!")
 
 
+def is_ce_start(line_fields):
+    if len(line_fields) <= 2:
+        return False
+    if line_fields[0] != "00" or line_fields[2] != "0039":
+        return False
+    return get_ce_name(line_fields)
+
+
+def get_ce_name(line_fields):
+    if len(line_fields) <= 4:
+        return False
+    m = re.match(r"You have joined the critical engagement, (.*)\. Access", line_fields[4])
+    if not m:
+        return ""
+    return m[1]
+
+
+def is_ce_end(line_fields):
+    if len(line_fields) <= 4:
+        return False
+    return line_fields[0] == "33" and line_fields[3] == "80000014" and line_fields[4] == "00"
+
+
 def is_line_attack(line_fields):
+    if len(line_fields) <= 6:
+        return False
     # We want only situations where a friendly attacks an enemy
     return line_fields[0] in ("21", "22") and line_fields[6].startswith("4")
 
 
 def is_instance_begun(line_fields):
+    if len(line_fields) <= 4:
+        return False
     return line_fields[4].endswith("has begun.")
 
 
 def is_instance_updated(line_fields):
+    if len(line_fields) <= 3:
+        return False
     return line_fields[0] == "33" and line_fields[3] in ["40000001", "40000006"]
 
 
 def is_instance_ended(line_fields):
+    if len(line_fields) <= 4:
+        return False
     return line_fields[4].endswith("has ended.")
 
 
 def is_encounter_end_code(line_fields):
+    if len(line_fields) <= 3:
+        return False
     if not line_fields[0] == "33":
         return False
     return line_fields[3] in ("40000010", "40000003")
@@ -128,6 +174,13 @@ def find_fights_in_file(file):
             ]
             encounter_in_progress = True
             continue
+        if is_ce_start(line_fields):
+            encounter_start_staging = [
+                parse_event_time(line),
+                "CE: %s" % get_ce_name(line_fields),
+            ]
+            encounter_in_progress = True
+            continue
         elif not encounter_in_progress and is_line_attack(line_fields):
             encounter_start_staging = [parse_event_time(line), current_instance]
             encounter_in_progress = True
@@ -145,15 +198,31 @@ def find_fights_in_file(file):
         # Ignore fights under 1 minute
         if (e_ends[i] - e_starts[i][0]).total_seconds() < 60:
             continue
-        encounter_info = [str_time((e_starts[i][0])), str_time(e_ends[i]), str(e_starts[i][1])]
+        # Since the duration will only ever be used as a display string,
+        # there's probably no need to do this "correctly".
+        duration = str(e_ends[i] - e_starts[i][0]).split(".")[0][2:]
+        encounter_info = [
+            str_time((e_starts[i][0])),
+            str_time(e_ends[i]),
+            duration,
+            str(e_starts[i][1]),
+        ]
         encounter_sets.append(encounter_info)
     file.seek(0)
     return encounter_sets
 
 
+def list_fights_in_file(args, encounter_sets):
+    return [
+        f'{str(i + 1).zfill(2)}. {" | ".join(e_info)}' for i, e_info in enumerate(encounter_sets)
+    ]
+
+
 def choose_fight_times(args, encounters):
     start_time = end_time = 0
     if args.search_fights:
+        if args.search_fights > len(encounters):
+            raise Exception("Selected fight index not in selected ACT log.")
         # Indexing is offset here to allow for 1-based indexing for the user.
         start_time = encounters[args.search_fights - 1][0]
         end_time = encounters[args.search_fights - 1][1]
@@ -204,3 +273,15 @@ def is_tl_line_log(poss_match):
 
 def is_tl_line_adds(poss_match):
     return re.search(r"Added new combatant (.*$)", poss_match)
+
+
+def colorize(input_text, color_code):
+    return "{}{}{}".format(color_code, input_text, tcolor.END)
+
+
+def color_fail(entry_text):
+    return colorize(tcolor.FAIL, entry_text)
+
+
+def color_warn(entry_text):
+    return colorize(tcolor.WARN, entry_text)

@@ -1,9 +1,10 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: could track people get hitting by markers they shouldn't
 // TODO: could track non-tanks getting hit by tankbusters, megaliths
 // TODO: could track non-target getting hit by tankbuster
-[{
+export default {
   zoneId: ZoneId.EdensGateSepultureSavage,
   damageWarn: {
     'E4S Weight of the Land': '4108',
@@ -42,7 +43,7 @@
       id: 'E4S Fault Line',
       damageRegex: '411E',
       condition: function(e, data, matches) {
-        return data.faultLineTarget != e.targetName;
+        return data.faultLineTarget !== e.targetName;
       },
       mistake: function(e, data) {
         return {
@@ -51,7 +52,7 @@
           text: {
             en: 'Run Over',
             de: e.abilityName,
-            fr: 'Écrasé',
+            fr: 'A été écrasé(e)',
             ja: e.abilityName,
             cn: e.abilityName,
             ko: e.abilityName,
@@ -60,4 +61,4 @@
       },
     },
   ],
-}];
+};

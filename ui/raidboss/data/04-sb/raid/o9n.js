@@ -1,7 +1,9 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O9N - Alphascape 1.0
-[{
+export default {
   zoneId: ZoneId.AlphascapeV10,
   timelineFile: 'o9n.txt',
   triggers: [
@@ -24,15 +26,18 @@
       netRegexCn: NetRegexes.startsUsing({ id: '315C', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '315C', source: '카오스', capture: false }),
       condition: function(data) {
-        return data.role == 'tank';
+        return data.role === 'tank';
       },
-      alarmText: {
-        en: 'Orb Tethers',
-        de: 'Kugel-Verbindungen',
-        fr: 'Attrapez les orbes',
-        ja: '線',
-        cn: '连线',
-        ko: '구슬 줄',
+      alarmText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Orb Tethers',
+          de: 'Kugel-Verbindungen',
+          fr: 'Attrapez les orbes',
+          ja: '線',
+          cn: '连线',
+          ko: '구슬 줄',
+        },
       },
     },
   ],
@@ -159,4 +164,4 @@
       },
     },
   ],
-}];
+};

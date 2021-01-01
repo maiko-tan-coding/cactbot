@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.CapeWestwind,
   timelineFile: 'cape_westwind.txt',
   triggers: [
@@ -80,13 +80,13 @@
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'My shields are impregnable': '반역자여, 나의 방패',
         'Rhitahtyn sas Arvina': '리트아틴 사스 아르비나',
         'Your defeat will bring': '놓치지 않겠다……',
       },
       'replaceText': {
+        'Adds': '쫄 소환',
         'Drill Shot': '철갑탄',
         'Firebomb': '화염탄',
         'Gate Of Tartarus': '타르타로스의 문',
@@ -97,4 +97,4 @@
       },
     },
   ],
-}];
+};

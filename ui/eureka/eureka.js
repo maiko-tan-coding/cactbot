@@ -1,90 +1,113 @@
-'use strict';
+import Regexes from '../../resources/regexes.js';
+import UserConfig from '../../resources/user_config.js';
+import ZoneId from '../../resources/zone_id.js';
+import ZoneInfo from '../../resources/zone_info.js';
+import { getWeather, findNextWeather, findNextWeatherNot, findNextNight, findNextDay, isNightTime } from '../../resources/weather.js';
 
-let bunnyLabel = {
+import './eureka_config.js';
+import '../../resources/common.js';
+
+const bunnyLabel = {
   en: 'Bunny',
   de: 'Hase',
   fr: 'Lapin',
   ja: 'うさぎ',
-  ko: '토끼',
   cn: '兔子',
+  ko: '토끼',
 };
 
-let Options = {
+const Options = {
+  Debug: false,
   PopSound: '../../resources/sounds/PowerAuras/sonar.ogg',
   BunnyPopSound: '../../resources/sounds/WeakAuras/WaterDrop.ogg',
+  CriticalPopSound: '../../resources/sounds/PowerAuras/sonar.ogg',
   timeStrings: {
     weatherFor: {
       en: (nowMs, stopTime) => {
         if (stopTime) {
-          let min = (stopTime - nowMs) / 1000 / 60;
+          const min = (stopTime - nowMs) / 1000 / 60;
           return ' for ' + Math.ceil(min) + 'm';
         }
         return ' for ???';
       },
       de: (nowMs, stopTime) => {
         if (stopTime) {
-          let min = (stopTime - nowMs) / 1000 / 60;
+          const min = (stopTime - nowMs) / 1000 / 60;
           return ' für ' + Math.ceil(min) + 'min';
         }
         return ' für ???';
       },
       fr: (nowMs, stopTime) => {
         if (stopTime) {
-          let min = (stopTime - nowMs) / 1000 / 60;
+          const min = (stopTime - nowMs) / 1000 / 60;
           return ' pour ' + Math.ceil(min) + ' min ';
         }
         return ' pour ???';
       },
-      ko: (nowMs, stopTime) => {
+      ja: (nowMs, stopTime) => {
         if (stopTime) {
-          let min = (stopTime - nowMs) / 1000 / 60;
-          return ' ' + Math.ceil(min) + '분 동안';
+          const min = (stopTime - nowMs) / 1000 / 60;
+          return ' 終わるまであと ' + Math.ceil(min) + ' 分 ';
         }
-        return ' ??? 동안';
+        return ' 終わるまであと ???';
       },
       cn: (nowMs, stopTime) => {
         if (stopTime) {
-          let min = (stopTime - nowMs) / 1000 / 60;
+          const min = (stopTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '分钟后结束';
         }
         return ' ??? 分钟';
+      },
+      ko: (nowMs, stopTime) => {
+        if (stopTime) {
+          const min = (stopTime - nowMs) / 1000 / 60;
+          return ' ' + Math.ceil(min) + '분 동안';
+        }
+        return ' ??? 동안';
       },
     },
     weatherIn: {
       en: (nowMs, startTime) => {
         if (startTime) {
-          let min = (startTime - nowMs) / 1000 / 60;
+          const min = (startTime - nowMs) / 1000 / 60;
           return ' in ' + Math.ceil(min) + 'm';
         }
         return ' in ???';
       },
       de: (nowMs, startTime) => {
         if (startTime) {
-          let min = (startTime - nowMs) / 1000 / 60;
+          const min = (startTime - nowMs) / 1000 / 60;
           return ' in ' + Math.ceil(min) + 'min';
         }
         return ' in ???';
       },
       fr: (nowMs, startTime) => {
         if (startTime) {
-          let min = (startTime - nowMs) / 1000 / 60;
+          const min = (startTime - nowMs) / 1000 / 60;
           return ' dans ' + Math.ceil(min) + ' min ';
         }
         return ' dans ???';
       },
-      ko: (nowMs, startTime) => {
+      ja: (nowMs, startTime) => {
         if (startTime) {
-          let min = (startTime - nowMs) / 1000 / 60;
-          return ' ' + Math.ceil(min) + '분 후';
+          const min = (startTime - nowMs) / 1000 / 60;
+          return ' あと ' + Math.ceil(min) + ' 分 ';
         }
-        return ' ??? 후';
+        return ' あと ???';
       },
       cn: (nowMs, startTime) => {
         if (startTime) {
-          let min = (startTime - nowMs) / 1000 / 60;
+          const min = (startTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '分钟后';
         }
         return ' ??? 后';
+      },
+      ko: (nowMs, startTime) => {
+        if (startTime) {
+          const min = (startTime - nowMs) / 1000 / 60;
+          return ' ' + Math.ceil(min) + '분 후';
+        }
+        return ' ??? 후';
       },
     },
     timeFor: {
@@ -97,24 +120,30 @@ let Options = {
       fr: (dayNightMin) => {
         return ' pour ' + dayNightMin + ' min ';
       },
-      ko: (dayNightMin) => {
-        return ' ' + dayNightMin + '분 동안';
+      ja: (dayNightMin) => {
+        return ' ' + dayNightMin + '分';
       },
       cn: (dayNightMin) => {
         return ' ' + dayNightMin + '分钟';
+      },
+      ko: (dayNightMin) => {
+        return ' ' + dayNightMin + '분 동안';
       },
     },
     minute: {
       en: 'm',
       de: 'min',
       fr: ' min ',
-      ko: '분',
+      ja: '分',
       cn: '分',
+      ko: '분',
     },
   },
   Regex: {
+    // de, fr, ja languages all share the English regexes here.
+    // If you ever need to add another language, include all of the regexes for it.
     en: {
-      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)Eureka (?:Anemos|Pagos|Pyros|Hydatos) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
+      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)(?:Eureka (?:Anemos|Pagos|Pyros|Hydatos)|Bozjan Southern Front) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': Regexes.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': Regexes.parse(/00:00..:(.*)NMs on cooldown: (\S.*\))/),
       'gTimeRegex': Regexes.parse(/(.*) \((\d*)m\)/),
@@ -134,15 +163,21 @@ let Options = {
   },
   ZoneInfo: {
     // Fate IDs
+    //
+    // Eureka
     // Anemos:  https://xivapi.com/search?indexes=Fate&filters=ID>=1328,ID<=1348&columns=Description,Name,Url
     // Pagos:   https://xivapi.com/search?indexes=Fate&filters=ID>=1351,ID<=1369&columns=Description,Name,Url
     // Pyros:   https://xivapi.com/search?indexes=Fate&filters=ID>=1388,ID<=1408&columns=Description,Name,Url
     // Hydatos: https://xivapi.com/search?indexes=Fate&filters=ID>=1412,ID<=1425&columns=Description,Name,Url
+
+    // Bozja
+    // Southern Front: https://xivapi.com/search?indexes=Fate&filters=ID%3E=1597,ID%3C=1628&columns=Description,Name,Url
     [ZoneId.TheForbiddenLandEurekaAnemos]: {
       mapImage: 'anemos.png',
       mapWidth: 1300,
       mapHeight: 950,
       shortName: 'anemos',
+      hasTracker: true,
       primaryWeather: ['Gales'],
       // TODO: these could be a little better tuned :C
       mapToPixelXScalar: 41.12,
@@ -153,6 +188,7 @@ let Options = {
         en: 'Anemos Elemental',
         de: 'Anemos-Elementar',
         fr: 'Élémentaire Anemos',
+        ja: 'アネモス・エレメンタル',
         cn: '常风元灵',
         ko: '아네모스 정령',
       },
@@ -163,16 +199,16 @@ let Options = {
             de: 'Sabo',
             fr: 'Pampa',
             ja: 'サボ',
-            ko: '사보텐더',
             cn: '仙人掌',
+            ko: '사보텐더',
           },
           trackerName: {
             en: 'Sabo',
             de: 'Sabo',
             fr: 'Pampa',
             ja: 'サボテン',
-            ko: '사보',
             cn: '仙人掌',
+            ko: '사보',
           },
           x: 13.9,
           y: 21.9,
@@ -184,16 +220,16 @@ let Options = {
             de: 'Prinz',
             fr: 'Seigneur',
             ja: 'ロード',
-            ko: '문어',
             cn: '章鱼',
+            ko: '문어',
           },
           trackerName: {
             en: 'Lord',
             de: 'Prinz',
             fr: 'Seigneur',
             ja: 'ロード',
-            ko: '대왕',
             cn: '章鱼',
+            ko: '대왕',
           },
           x: 29.7,
           y: 27.1,
@@ -205,16 +241,16 @@ let Options = {
             de: 'Teles',
             fr: 'Teles',
             ja: 'テレス',
-            ko: '텔레스',
             cn: '鸟',
+            ko: '텔레스',
           },
           trackerName: {
             en: 'Teles',
             de: 'Teles',
             fr: 'Teles',
             ja: 'テレス',
-            ko: '텔레스',
             cn: '鸟',
+            ko: '텔레스',
           },
           x: 25.6,
           y: 27.4,
@@ -226,16 +262,16 @@ let Options = {
             de: 'Kaiser',
             fr: 'Empereur',
             ja: 'アネモス',
-            ko: '잠자리',
             cn: '蜻蜓',
+            ko: '잠자리',
           },
           trackerName: {
             en: 'Emperor',
             de: 'Kaiser',
             fr: 'Empereur',
             ja: 'エンペラ',
-            ko: '황제',
             cn: '蜻蜓',
+            ko: '황제',
           },
           x: 17.2,
           y: 22.2,
@@ -247,16 +283,16 @@ let Options = {
             de: 'Callisto',
             fr: 'Callisto',
             ja: 'カリスト',
-            ko: '칼리스토',
             cn: '熊',
+            ko: '칼리스토',
           },
           trackerName: {
             en: 'Callisto',
             de: 'Callisto',
             fr: 'Callisto',
             ja: 'カリスト',
-            ko: '칼리스토',
             cn: '熊',
+            ko: '칼리스토',
           },
           // 25.5, 22.3 from the tracker, but collides with number
           x: 26.2,
@@ -269,16 +305,16 @@ let Options = {
             de: 'Zahl',
             fr: 'Number',
             ja: 'ナンバーズ',
-            ko: '넘버즈',
             cn: '群偶',
+            ko: '넘버즈',
           },
           trackerName: {
             en: 'Number',
             de: 'Zahl',
             fr: 'Number',
             ja: 'ナンバ',
-            ko: '넘버즈',
             cn: '群偶',
+            ko: '넘버즈',
           },
           // 23.5, 22.7 from the tracker, but collides with callisto
           x: 23.5,
@@ -291,16 +327,16 @@ let Options = {
             de: 'Jaha',
             fr: 'Jahann',
             ja: 'ジャハ',
-            ko: '자하남',
             cn: '台风',
+            ko: '자하남',
           },
           trackerName: {
             en: 'Jaha',
             de: 'Jaha',
             fr: 'Jahann',
             ja: 'ジャハ',
-            ko: '자하남',
             cn: '台风',
+            ko: '자하남',
           },
           x: 17.7,
           y: 18.6,
@@ -313,16 +349,16 @@ let Options = {
             de: 'Amemet',
             fr: 'Amemet',
             ja: 'アミメット',
-            ko: '아메메트',
             cn: '暴龙',
+            ko: '아메메트',
           },
           trackerName: {
             en: 'Amemet',
             de: 'Amemet',
             fr: 'Amemet',
             ja: 'アミメ',
-            ko: '아메메트',
             cn: '暴龙',
+            ko: '아메메트',
           },
           x: 15.0,
           y: 15.6,
@@ -334,16 +370,16 @@ let Options = {
             de: 'Caym',
             fr: 'Caym',
             ja: 'カイム',
-            ko: '카임',
             cn: '盖因',
+            ko: '카임',
           },
           trackerName: {
             en: 'Caym',
             de: 'Caym',
             fr: 'Caym',
             ja: 'カイム',
-            ko: '카임',
             cn: '盖因',
+            ko: '카임',
           },
           x: 13.8,
           y: 12.5,
@@ -355,16 +391,16 @@ let Options = {
             de: 'Bomba',
             fr: 'Bomba',
             ja: 'ボンバ',
-            ko: '봄바딜',
             cn: '举高高',
+            ko: '봄바딜',
           },
           trackerName: {
             en: 'Bomba',
             de: 'Bomba',
             fr: 'Bomba',
             ja: 'ボンバ',
-            ko: '봄바',
             cn: '举高高',
+            ko: '봄바',
           },
           x: 28.3,
           y: 20.4,
@@ -377,16 +413,16 @@ let Options = {
             de: 'Serket',
             fr: 'Serket',
             ja: 'セルケト',
-            ko: '전갈',
             cn: '蝎子',
+            ko: '전갈',
           },
           trackerName: {
             en: 'Serket',
             de: 'Serket',
             fr: 'Serket',
             ja: 'セルケト',
-            ko: '세르케트',
             cn: '蝎子',
+            ko: '세르케트',
           },
           x: 24.8,
           y: 17.9,
@@ -398,16 +434,16 @@ let Options = {
             de: 'Julika',
             fr: 'Julika',
             ja: 'ジュリカ',
-            ko: '줄리카',
             cn: '魔界花',
+            ko: '줄리카',
           },
           trackerName: {
             en: 'Julika',
             de: 'Julika',
             fr: 'Julika',
             ja: 'ジュリカ',
-            ko: '줄리카',
             cn: '魔界花',
+            ko: '줄리카',
           },
           x: 21.9,
           y: 15.6,
@@ -419,16 +455,16 @@ let Options = {
             de: 'Reiter',
             fr: 'Cavalier',
             ja: 'ライダー',
-            ko: '기수',
             cn: '白骑士',
+            ko: '기수',
           },
           trackerName: {
             en: 'Rider',
             de: 'Reiter',
             fr: 'Cavalier',
             ja: 'ライダー',
-            ko: '기수',
             cn: '白骑士',
+            ko: '기수',
           },
           x: 20.3,
           y: 13.0,
@@ -441,16 +477,16 @@ let Options = {
             de: 'Poly',
             fr: 'Poly',
             ja: 'ポリ',
-            ko: '외눈',
             cn: '独眼',
+            ko: '외눈',
           },
           trackerName: {
             en: 'Poly',
             de: 'Poly',
             fr: 'Poly',
             ja: 'ポリュ',
-            ko: '폴리',
             cn: '独眼',
+            ko: '폴리',
           },
           x: 26.4,
           y: 14.3,
@@ -462,16 +498,16 @@ let Options = {
             de: 'Simurghs',
             fr: 'Trotteur',
             ja: 'シームルグ',
-            ko: '즈',
             cn: '阔步西牟鸟',
+            ko: '즈',
           },
           trackerName: {
             en: 'Strider',
             de: 'Läufer',
             fr: 'Trotteur',
             ja: 'シムルグ',
-            ko: '시무르그',
             cn: '祖',
+            ko: '시무르그',
           },
           x: 28.6,
           y: 13.0,
@@ -483,16 +519,16 @@ let Options = {
             de: 'Hazmat',
             fr: 'Hazmat',
             ja: 'ハズマット',
-            ko: '하즈마트',
             cn: '极其危险物质',
+            ko: '하즈마트',
           },
           trackerName: {
             en: 'Hazmat',
             de: 'Hazmat',
             fr: 'Hazmat',
             ja: 'ハズマ',
-            ko: '하즈마트',
             cn: '爆弹',
+            ko: '하즈마트',
           },
           x: 35.3,
           y: 18.3,
@@ -504,16 +540,16 @@ let Options = {
             de: 'Fafnir',
             fr: 'Fafnir',
             ja: 'ファヴニル',
-            ko: '파프니르',
             cn: '法夫纳',
+            ko: '파프니르',
           },
           trackerName: {
             en: 'Fafnir',
             de: 'Fafnir',
             fr: 'Fafnir',
             ja: 'ファヴ',
-            ko: '파프니르',
             cn: '法夫纳',
+            ko: '파프니르',
           },
           x: 35.5,
           y: 21.5,
@@ -526,16 +562,16 @@ let Options = {
             de: 'Amarok',
             fr: 'Amarok',
             ja: 'アマロック',
-            ko: '아마록',
             cn: '阿玛洛克',
+            ko: '아마록',
           },
           trackerName: {
             en: 'Amarok',
             de: 'Amarok',
             fr: 'Amarok',
             ja: 'アマロ',
-            ko: '아마록',
             cn: '狗',
+            ko: '아마록',
           },
           x: 7.6,
           y: 18.2,
@@ -547,16 +583,16 @@ let Options = {
             de: 'Lama',
             fr: 'Lama',
             ja: 'ラマ',
-            ko: '라마슈투',
             cn: '拉玛什图',
+            ko: '라마슈투',
           },
           trackerName: {
             en: 'Lamashtu',
             de: 'Lamashtu',
             fr: 'Lamashtu',
             ja: 'ラマシュ',
-            ko: '라마슈투',
             cn: '嫂子',
+            ko: '라마슈투',
           },
           // 7.7, 23.3 from the tracker but mobs are farther south.
           x: 7.7,
@@ -570,16 +606,16 @@ let Options = {
             de: 'Pazuzu',
             fr: 'Pazuzu',
             ja: 'パズズ',
-            ko: '파주주',
             cn: '帕祖祖',
+            ko: '파주주',
           },
           trackerName: {
             en: 'Paz',
             de: 'Paz',
             fr: 'Pazuzu',
             ja: 'パズズ',
-            ko: '파주주',
             cn: 'Pzz',
+            ko: '파주주',
           },
           x: 7.4,
           y: 21.7,
@@ -593,6 +629,7 @@ let Options = {
       mapWidth: 1500,
       mapHeight: 950,
       shortName: 'pagos',
+      hasTracker: true,
       mapToPixelXScalar: 41.08333,
       mapToPixelXConstant: -85.28333,
       mapToPixelYScalar: 41.09158,
@@ -601,6 +638,7 @@ let Options = {
         en: 'Pagos Elemental',
         de: 'Pagos-Elementar',
         fr: 'Élémentaire Pagos',
+        ja: 'パゴス・エレメンタル',
         cn: '恒冰元灵',
         ko: '파고스 정령',
       },
@@ -627,16 +665,16 @@ let Options = {
             de: 'Schneekönigin',
             fr: 'Reine',
             ja: '女王',
-            ko: '눈의 여왕',
             cn: '周冬雨',
+            ko: '눈의 여왕',
           },
           trackerName: {
             en: 'Queen',
             de: 'Königin',
             fr: 'Reine',
             ja: '女王',
-            ko: '눈 여왕',
             cn: '周冬雨',
+            ko: '눈 여왕',
           },
           x: 21.5,
           y: 26.5,
@@ -648,16 +686,16 @@ let Options = {
             de: 'Taxim',
             fr: 'Taxim',
             ja: 'タキシム',
-            ko: '텍심',
             cn: '读书人',
+            ko: '텍심',
           },
           trackerName: {
             en: 'Taxim',
             de: 'Taxim',
             fr: 'Taxim',
             ja: 'タキシム',
-            ko: '텍심',
             cn: '读书人',
+            ko: '텍심',
           },
           x: 25.5,
           y: 28.3,
@@ -670,16 +708,16 @@ let Options = {
             de: 'Aschedrache',
             fr: 'Dragon',
             ja: 'ドラゴン',
-            ko: '용',
             cn: '灰烬龙',
+            ko: '용',
           },
           trackerName: {
             en: 'Dragon',
             de: 'Drache',
             fr: 'Dragon',
             ja: 'アッシュ',
-            ko: '잿더미 용',
             cn: '灰烬龙',
+            ko: '잿더미 용',
           },
           x: 29.7,
           y: 30.0,
@@ -691,16 +729,16 @@ let Options = {
             de: 'Glavoid',
             fr: 'Graboïde',
             ja: 'グラヴォイド',
-            ko: '지렁이',
             cn: '魔虫',
+            ko: '지렁이',
           },
           trackerName: {
             en: 'Glavoid',
             de: 'Glavoid',
             fr: 'Graboïde',
             ja: 'グラヴォ',
-            ko: '그라보이드',
             cn: '魔虫',
+            ko: '그라보이드',
           },
           x: 33.0,
           y: 28.0,
@@ -712,16 +750,16 @@ let Options = {
             de: 'Anapo',
             fr: 'Anapos',
             ja: 'アナポ',
-            ko: '아나포',
             cn: '安娜波',
+            ko: '아나포',
           },
           trackerName: {
             en: 'Anapos',
             de: 'Anapos',
             fr: 'Anapos',
             ja: 'アナポ',
-            ko: '아나포',
             cn: '安娜波',
+            ko: '아나포',
           },
           x: 33.0,
           y: 21.5,
@@ -734,16 +772,16 @@ let Options = {
             de: 'Hakutaku',
             fr: 'Haku',
             ja: 'ハクタク',
-            ko: '백택',
             cn: '白泽',
+            ko: '백택',
           },
           trackerName: {
             en: 'Haku',
             de: 'Haku',
             fr: 'Haku',
             ja: 'ハクタク',
-            ko: '백택',
             cn: '白泽',
+            ko: '백택',
           },
           x: 29.0,
           y: 22.5,
@@ -755,16 +793,16 @@ let Options = {
             de: 'Iglu',
             fr: 'Igloo',
             ja: 'イグル',
-            ko: '이글루',
             cn: '雪屋王',
+            ko: '이글루',
           },
           trackerName: {
             en: 'Igloo',
             de: 'Iglu',
             fr: 'Igloo',
             ja: 'イグルー',
-            ko: '이글루',
             cn: '雪屋王',
+            ko: '이글루',
           },
           x: 17,
           y: 16,
@@ -776,16 +814,16 @@ let Options = {
             de: 'Asag',
             fr: 'Asag',
             ja: 'アサグ',
-            ko: '아사그',
             cn: '阿萨格',
+            ko: '아사그',
           },
           trackerName: {
             en: 'Asag',
             de: 'Asag',
             fr: 'Asag',
             ja: 'アサグ',
-            ko: '아사그',
             cn: '阿萨格',
+            ko: '아사그',
           },
           x: 11.3,
           y: 10.5,
@@ -797,16 +835,16 @@ let Options = {
             de: 'Surabhi',
             fr: 'Surabhi',
             ja: 'スラビー',
-            ko: '염소',
             cn: '山羊',
+            ko: '염소',
           },
           trackerName: {
             en: 'Surabhi',
             de: 'Surabhi',
             fr: 'Surabhi',
             ja: 'スラビー',
-            ko: '수라비',
             cn: '山羊',
+            ko: '수라비',
           },
           x: 10.5,
           y: 20.5,
@@ -818,16 +856,16 @@ let Options = {
             de: 'König Athro',
             fr: 'Arthro',
             ja: 'アースロ',
-            ko: '게',
             cn: '螃蟹',
+            ko: '게',
           },
           trackerName: {
             en: 'Arthro',
             de: 'Athro',
             fr: 'Arthro',
             ja: 'アスロ',
-            ko: '아스로',
             cn: '螃蟹',
+            ko: '아스로',
           },
           x: 8.0,
           y: 15.2,
@@ -840,16 +878,16 @@ let Options = {
             de: 'Minotauren',
             fr: 'Minotaures',
             ja: 'ミノタウロス',
-            ko: '미노타우루스',
             cn: '双牛',
+            ko: '미노타우루스',
           },
           trackerName: {
             en: 'Brothers',
             de: 'Brüder',
             fr: 'Frères',
             ja: 'ミノ',
-            ko: '형제',
             cn: '双牛',
+            ko: '형제',
           },
           x: 13.8,
           y: 18.4,
@@ -861,16 +899,16 @@ let Options = {
             de: 'Heilsbringer',
             fr: 'Vache sacrée',
             ja: '聖牛',
-            ko: '소',
             cn: '圣牛',
+            ko: '소',
           },
           trackerName: {
             en: 'Holy Cow',
             de: 'Heil',
             fr: 'Vache',
             ja: '聖牛',
-            ko: '신성 소',
             cn: '圣牛',
+            ko: '신성 소',
           },
           x: 26,
           y: 16,
@@ -882,16 +920,16 @@ let Options = {
             de: 'Hadhayosh',
             fr: 'Hadha',
             ja: 'ハダヨッシュ',
-            ko: '하다요쉬',
             cn: '贝爷',
+            ko: '하다요쉬',
           },
           trackerName: {
             en: 'Behe',
             de: 'Hadhayosh',
             fr: 'Hadha',
             ja: 'ハダヨ',
-            ko: '하다요쉬',
             cn: '贝爷',
+            ko: '하다요쉬',
           },
           x: 30,
           y: 19,
@@ -904,16 +942,16 @@ let Options = {
             de: 'Horus',
             fr: 'Horus',
             ja: 'ホルス',
-            ko: '호루스',
             cn: '荷鲁斯',
+            ko: '호루스',
           },
           trackerName: {
             en: 'Horus',
             de: 'Horus',
             fr: 'Horus',
             ja: 'ホルス',
-            ko: '호루스',
             cn: '荷鲁斯',
+            ko: '호루스',
           },
           x: 26,
           y: 20,
@@ -926,16 +964,16 @@ let Options = {
             de: 'Mainyu',
             fr: 'Mainyu',
             ja: 'マンユ',
-            ko: '마이뉴',
             cn: '大眼',
+            ko: '마이뉴',
           },
           trackerName: {
             en: 'Mainyu',
             de: 'Mainyu',
             fr: 'Mainyu',
             ja: 'マンユ',
-            ko: '마이뉴',
             cn: '大眼',
+            ko: '마이뉴',
           },
           x: 25,
           y: 24,
@@ -947,16 +985,16 @@ let Options = {
             de: 'Cassie',
             fr: 'Cassie',
             ja: 'キャシ',
-            ko: '캐시',
             cn: '凯西',
+            ko: '캐시',
           },
           trackerName: {
             en: 'Cassie',
             de: 'Cassie',
             fr: 'Cassie',
             ja: 'キャシー',
-            ko: '캐시',
             cn: '凯西',
+            ko: '캐시',
           },
           weather: 'Blizzards',
           x: 22,
@@ -969,16 +1007,16 @@ let Options = {
             de: 'Louhi',
             fr: 'Louhi',
             ja: 'ロウヒ',
-            ko: '로우히',
             cn: '娄希',
+            ko: '로우히',
           },
           trackerName: {
             en: 'Louhi',
             de: 'Louhi',
             fr: 'Louhi',
             ja: 'ロウヒ',
-            ko: '로우히',
             cn: '娄希',
+            ko: '로우히',
           },
           x: 36,
           y: 18.5,
@@ -992,6 +1030,7 @@ let Options = {
       mapWidth: 1350,
       mapHeight: 1450,
       shortName: 'pyros',
+      hasTracker: true,
       mapToPixelXScalar: 42.515,
       mapToPixelXConstant: -344.064,
       mapToPixelYScalar: 42.486,
@@ -1000,6 +1039,7 @@ let Options = {
         en: 'Pyros Elemental',
         de: 'Pyros-Elementar',
         fr: 'Élémentaire Pyros',
+        ja: 'ピューロス・エレメンタル',
         cn: '涌火元灵',
         ko: '피로스 정령',
       },
@@ -1391,6 +1431,7 @@ let Options = {
       mapWidth: 1500,
       mapHeight: 800,
       shortName: 'hydatos',
+      hasTracker: true,
       mapToPixelXScalar: 37.523,
       mapToPixelXConstant: -48.160,
       mapToPixelYScalar: 37.419,
@@ -1399,6 +1440,7 @@ let Options = {
         en: 'Hydatos Elemental',
         de: 'Hydatos-Elementar',
         fr: 'Élémentaire d\'Hydatos',
+        ja: 'ヒュダトス・エレメンタル',
         cn: '丰水元灵',
         ko: '히다토스 정령',
       },
@@ -1673,10 +1715,573 @@ let Options = {
         },
       },
     },
+    [ZoneId.TheBozjanSouthernFront]: {
+      mapImage: 'bozjasouthern.png',
+      mapWidth: 1600,
+      mapHeight: 1400,
+      shortName: 'bozjasouthern',
+      hasTracker: false,
+      dontShowInactive: true,
+      treatNMsAsSkirmishes: true,
+      mapToPixelXScalar: 47.911,
+      mapToPixelXConstant: -292.56,
+      mapToPixelYScalar: 48.938,
+      mapToPixelYConstant: -349.22,
+      nms: {
+        sneak: {
+          label: {
+            en: 'Sneak',
+            de: 'Taktisches Gemetzel',
+            fr: 'Les yeux de l\'ennemi',
+            ja: '術士大隊との会敵',
+          },
+          x: 20.3,
+          y: 26.8,
+          fateID: 1597,
+        },
+        robots: {
+          label: {
+            en: 'Robots',
+            de: 'Nichts als Schrott',
+            fr: 'Les araignées de fer',
+            ja: '無人魔導兵器との会敵',
+          },
+          x: 24.8,
+          y: 27.5,
+          fateID: 1598,
+        },
+        beasts: {
+          label: {
+            en: 'Beasts',
+            de: 'Husch, ins Körbchen!',
+            fr: 'Museler le Chien',
+            ja: '忠犬との遭遇',
+          },
+          x: 20.3,
+          y: 26.8,
+          fateID: 1599,
+        },
+        unrest: {
+          label: {
+            en: 'Unrest',
+            de: 'Wer rastet, der blutet',
+            fr: 'Pas de quartier',
+            ja: '術士大隊への奇襲',
+          },
+          x: 24.8,
+          y: 27.5,
+          fateID: 1600,
+        },
+        machine: {
+          label: {
+            en: 'Machine',
+            de: 'Auf zum Gegenangriff',
+            fr: 'Machines aux trousses',
+            ja: '有人魔導兵器の迎撃',
+          },
+          x: 28.4,
+          y: 29.3,
+          fateID: 1601,
+        },
+        plants: {
+          label: {
+            en: 'Plants',
+            de: 'Linientreue',
+            fr: 'Des racines et des crocs',
+            ja: '野生生物を排除せよ',
+          },
+          x: 34.4,
+          y: 29.3,
+          fateID: 1602,
+        },
+        seeq: {
+          label: {
+            en: 'Seeq',
+            de: 'Dem Rüpel seine Meute',
+            fr: 'Ménagerie guerrière',
+            ja: '豚面の魔獣使い',
+          },
+          x: 28.9,
+          y: 26.1,
+          fateID: 1603,
+        },
+        pets: {
+          label: {
+            en: 'Pets',
+            de: 'Ungeheuerlich!',
+            fr: 'Belles plantes',
+            ja: '華麗なる珍獣使い',
+          },
+          x: 17.3,
+          y: 26.6,
+          fateID: 1604,
+        },
+        firstlaw: {
+          label: {
+            en: 'First Law',
+            de: 'Schufter-10',
+            fr: 'Que des numéros dix',
+            ja: '労働十号破壊命令',
+          },
+          x: 34.4,
+          y: 29.3,
+          fateID: 1605,
+        },
+        heal: {
+          label: {
+            en: 'Heal',
+            de: 'Nächstenliebe',
+            fr: 'Miséricorde impériale',
+            ja: '恩徳の術士たち',
+          },
+          x: 28.9,
+          y: 26.1,
+          fateID: 1606,
+        },
+        mash: {
+          label: {
+            en: 'Mash',
+            de: 'Rache ist Blutwurst',
+            fr: 'Le retour du chien fidèle',
+            ja: '忠犬の逆襲',
+          },
+          x: 31.3,
+          y: 22.0,
+          fateID: 1607,
+        },
+        alert: {
+          label: {
+            en: 'Alert',
+            de: 'Großes Federlassen',
+            fr: 'Quand les chocobos voient rouge',
+            ja: '豚面と赤い馬鳥',
+          },
+          x: 27.3,
+          y: 17.7,
+          fateID: 1608,
+        },
+        unicorn: {
+          label: {
+            en: 'Unicorn',
+            de: 'Llofii',
+            fr: 'La licorne des plaines',
+            ja: '潔白の脱走兵',
+          },
+          x: 32.3,
+          y: 17.0,
+          fateID: 1609,
+        },
+        recreation: {
+          label: {
+            en: 'Recreation',
+            de: 'Aufräumen im Dienst',
+            fr: 'La bataille de l\'innovation',
+            ja: '敵新兵器を調査せよ',
+          },
+          x: 25.6,
+          y: 22.6,
+          fateID: 1610,
+        },
+        element: {
+          label: {
+            en: 'Element',
+            de: 'Verhinderte Wartung',
+            fr: 'Couper les vivres',
+            ja: '整備場奇襲作戦',
+          },
+          x: 17.5,
+          y: 23.4,
+          fateID: 1611,
+        },
+        heavyboots: {
+          label: {
+            en: 'Boots',
+            de: 'Arbeitsniederlegung',
+            fr: 'Force ouvrière',
+            ja: '魔導レイバー破壊命令',
+          },
+          x: 31.3,
+          y: 22.0,
+          fateID: 1612,
+        },
+        camping: {
+          label: {
+            en: 'Camping',
+            de: 'Unfreundlicher Besuch',
+            fr: 'Idéaux irréconciliables',
+            ja: '野営地への先制攻撃',
+          },
+          x: 17.5,
+          y: 23.4,
+          fateID: 1613,
+        },
+        scavengers: {
+          label: {
+            en: 'Scavengers',
+            de: 'Zurück ins Nichts',
+            fr: 'Les dévoreurs d\'âmes',
+            ja: '魂喰いの妖異たち',
+          },
+          x: 25.6,
+          y: 22.6,
+          fateID: 1614,
+        },
+        helpwanted: {
+          label: {
+            en: 'Help Wanted',
+            de: 'Jedes Leben zählt',
+            fr: 'Résister ou mourir',
+            ja: '術士大隊の猛攻',
+          },
+          x: 18.3,
+          y: 20.7,
+          fateID: 1615,
+        },
+        pyromancer: {
+          label: {
+            en: 'Pyromancer',
+            de: 'Pyromant',
+            fr: 'Duel brûlant',
+            ja: '最強のパイロマンサー',
+          },
+          x: 18.3,
+          y: 20.7,
+          fateID: 1616,
+        },
+        rainbow: {
+          label: {
+            en: 'Rainbow',
+            de: 'Ende einer ... Karriere',
+            fr: 'De toutes les couleurs',
+            ja: '華麗なるお気に入り',
+          },
+          x: 25.1,
+          y: 15.0,
+          fateID: 1617,
+        },
+        wildbunch: {
+          label: {
+            en: 'Wild Bunch',
+            de: 'Revierkämpfe',
+            fr: 'Sans maîtres ni loi',
+            ja: '暴走魔獣の排除',
+          },
+          x: 21.0,
+          y: 14.3,
+          fateID: 1618,
+        },
+        familyotheranimals: {
+          label: {
+            en: 'Family',
+            de: 'rüpelhaftes Großmaul',
+            fr: 'L\'incorruptible',
+            ja: '豚面の勧誘者',
+          },
+          x: 11.0,
+          y: 14.6,
+          fateID: 1619,
+        },
+        mechanicalman: {
+          label: {
+            en: 'Mechanical Man',
+            de: 'Arbeitsniederlegung - Plan B',
+            fr: 'Plan B',
+            ja: '魔導レイバーB型破壊命令',
+          },
+          x: 20.8,
+          y: 17.7,
+          fateID: 1620,
+        },
+        murder: {
+          label: {
+            en: 'Murder',
+            de: 'Neu und besser',
+            fr: 'Des machines et des hommes',
+            ja: '強化兵部隊の襲撃',
+          },
+          x: 14.0,
+          y: 15.3,
+          fateID: 1621,
+        },
+        seeking: {
+          label: {
+            en: 'Seeking',
+            de: 'fällt selbst hinein',
+            fr: 'Ceux qui creusent',
+            ja: '戦場の盗掘者',
+          },
+          x: 24.8,
+          y: 17.1,
+          fateID: 1622,
+        },
+        suppliesparty: {
+          label: {
+            en: 'Supplies',
+            de: 'Deins wird meins',
+            fr: 'Casser la voie',
+            ja: '補給物資強奪作戦',
+          },
+          x: 21.0,
+          y: 14.3,
+          fateID: 1623,
+        },
+        demonic: {
+          label: {
+            en: 'Demonic',
+            de: 'Der Geruch der Angst',
+            fr: 'Par l\'hémoglobine alléchés',
+            ja: '血の匂いに誘われて',
+          },
+          x: 11.1,
+          y: 20.2,
+          fateID: 1624,
+        },
+        absentfriends: {
+          label: {
+            en: 'Absent',
+            de: 'Eine neue Unordnung',
+            fr: 'Miséricorde vengeresse',
+            ja: '燃え上がる南方戦線',
+          },
+          x: 13.8,
+          y: 18.3,
+          fateID: 1625,
+        },
+        steelflame: {
+          label: {
+            en: 'Steel',
+            de: 'Auf und ab',
+            fr: 'Le fer et le feu',
+            ja: '続・燃え上がる南方戦線',
+          },
+          x: 13.8,
+          y: 18.3,
+          fateID: 1626,
+        },
+        dogsofwar: {
+          label: {
+            en: 'Dogs',
+            de: 'Vor die Hunde gekommen',
+            fr: 'Brigade canine',
+            ja: '戦場の犬を解き放て',
+          },
+          x: 14.0,
+          y: 15.3,
+          fateID: 1627,
+        },
+        warmachines: {
+          label: {
+            en: 'War',
+            de: 'Ende Gelände',
+            fr: 'Cent mille guerriers de métal',
+            ja: 'シシニアスの実験場',
+          },
+          x: 11.1,
+          y: 20.2,
+          fateID: 1628,
+        },
+        castrumlacuslitore: {
+          label: {
+            en: 'Castrum',
+            de: 'Castrum',
+            fr: 'Castrum',
+            ja: 'カストルム',
+          },
+          x: 18.9,
+          y: 12.6,
+          isCritical: true,
+          ceKey: 0,
+          respawnMinutes: 60,
+        },
+        killitwithfire: {
+          label: {
+            en: 'Kill It With Fire',
+            de: 'Peeriefool',
+            fr: 'Grandeur et pestilence',
+            ja: 'ピーリフール',
+          },
+          x: 17.4,
+          y: 26.9,
+          isCritical: true,
+          ceKey: 1,
+        },
+        bayinghounds: {
+          label: {
+            en: 'Hounds',
+            de: 'Canis dirus',
+            fr: 'Le chien des enfers',
+            ja: 'カニスディルス',
+          },
+          x: 22.8,
+          y: 28.8,
+          isCritical: true,
+          ceKey: 2,
+        },
+        vigilforthelost: {
+          label: {
+            en: 'Vigil',
+            de: 'Vigil',
+            fr: 'Vigile de feu',
+            ja: 'ヴィジル',
+          },
+          x: 28.4,
+          y: 29.5,
+          isCritical: true,
+          ceKey: 3,
+        },
+        aceshigh: {
+          label: {
+            en: 'Aces High',
+            de: 'Gabriel',
+            fr: 'Force divine',
+            ja: 'ガブリエル',
+          },
+          x: 32.3,
+          y: 26.8,
+          isCritical: true,
+          isDuel: true,
+          ceKey: 4,
+        },
+        shadowdeathshand: {
+          label: {
+            en: 'Shadow',
+            de: 'Akbaba',
+            fr: 'Les ailes noires de la mort',
+            ja: '黒アクババ',
+          },
+          x: 36.5,
+          y: 25.8,
+          isCritical: true,
+          ceKey: 5,
+        },
+        finalfurlong: {
+          label: {
+            en: 'Final Furlong',
+            de: 'Spartoi',
+            fr: 'Menace spectrale',
+            ja: 'スパルトイ',
+          },
+          x: 33.3,
+          y: 17.5,
+          isCritical: true,
+          ceKey: 6,
+        },
+        choctober: {
+          label: {
+            en: 'Choctober',
+            de: 'Roter Meteor',
+            fr: 'Une ruée en rouge',
+            ja: '赤レッドコメット',
+          },
+          x: 27.3,
+          y: 17.7,
+          isCritical: true,
+          ceKey: 7,
+        },
+        beastofman: {
+          label: {
+            en: 'Beast of Man',
+            de: 'Lyon',
+            fr: 'Le Roi bestial',
+            ja: '獣王ライアン',
+          },
+          x: 23.3,
+          y: 20.4,
+          isCritical: true,
+          isDuel: true,
+          ceKey: 8,
+        },
+        firesofwar: {
+          label: {
+            en: 'Fires of War',
+            de: 'Flammenden Hundert',
+            fr: 'Brasier de guerre',
+            ja: '火焔百人隊',
+          },
+          x: 20.8,
+          y: 23.9,
+          isCritical: true,
+          ceKey: 9,
+        },
+        patriotgames: {
+          label: {
+            en: 'Patriot Games',
+            de: 'Verteidigungsmaschine',
+            fr: 'Les fusils du patriote',
+            ja: 'パトリオット',
+          },
+          x: 14.2,
+          y: 21.2,
+          isCritical: true,
+          ceKey: 10,
+        },
+        trampledunderhoof: {
+          label: {
+            en: 'Trampled',
+            de: 'Die bösen Blicke der Eale',
+            fr: 'L\'œil du malin',
+            ja: '邪エアレー',
+          },
+          x: 9.9,
+          y: 18.1,
+          isCritical: true,
+          ceKey: 11,
+        },
+        flameswenthigher: {
+          label: {
+            en: 'Flames',
+            de: 'Sartauvoir',
+            fr: '"L\'envol du phénix',
+            ja: 'サルトヴォアール',
+          },
+          x: 18.8,
+          y: 15.9,
+          isCritical: true,
+          isDuel: true,
+          ceKey: 12,
+        },
+        metalfoxchaos: {
+          label: {
+            en: 'Metal Fox Chaos',
+            de: 'Dáinsleif',
+            fr: 'Le guerrier de métal',
+            ja: 'ダーインスレイヴ',
+          },
+          x: 13.8,
+          y: 18.3,
+          isCritical: true,
+          ceKey: 13,
+        },
+        riseoftherobots: {
+          label: {
+            en: 'Rise',
+            de: 'Modell X',
+            fr: 'Le soulèvement des machines',
+            ja: '魔導レイバーX型',
+          },
+          x: 21.2,
+          y: 17.6,
+          isCritical: true,
+          ceKey: 14,
+        },
+        wherestrodebehemoth: {
+          label: {
+            en: 'Behemoth',
+            de: 'Der untote Chlevnik',
+            fr: 'Le mastodonte enragé',
+            ja: 'チルヴニク',
+          },
+          x: 24.2,
+          y: 14.9,
+          isCritical: true,
+          ceKey: 15,
+        },
+      },
+    },
   },
 };
 
-let gWeatherIcons = {
+const gWeatherIcons = {
   'Gales': '&#x1F300;',
   'Fog': '&#x2601;',
   'Blizzards': '&#x2744;',
@@ -1689,8 +2294,8 @@ let gWeatherIcons = {
   'Showers': '&#x2614;',
   'Gloom': '&#x2639;',
 };
-let gNightIcon = '&#x1F319;';
-let gDayIcon = '&#x263C;';
+const gNightIcon = '&#x1F319;';
+const gDayIcon = '&#x263C;';
 
 let gTracker;
 class EurekaTracker {
@@ -1700,14 +2305,21 @@ class EurekaTracker {
     this.ResetZone();
     this.updateTimesHandle = null;
     this.fateQueue = [];
+    this.CEQueue = [];
   }
 
-  TransByParserLang(obj) {
-    return obj[this.options.ParserLanguage] || obj['en'];
+  TransByParserLang(obj, key) {
+    const fromObj = obj[this.options.ParserLanguage] || obj['en'];
+    if (!key)
+      return fromObj;
+    return fromObj ? fromObj[key] : obj['en'][key];
   }
 
-  TransByDispLang(obj) {
-    return obj[this.options.DisplayLanguage] || obj['en'];
+  TransByDispLang(obj, key) {
+    const fromObj = obj[this.options.DisplayLanguage] || obj['en'];
+    if (!key)
+      return fromObj;
+    return fromObj ? fromObj[key] : obj['en'][key];
   }
 
   SetStyleFromMap(style, mx, my) {
@@ -1716,9 +2328,9 @@ class EurekaTracker {
       return;
     }
 
-    let zi = this.zoneInfo;
-    let px = zi.mapToPixelXScalar * mx + zi.mapToPixelXConstant;
-    let py = zi.mapToPixelYScalar * my + zi.mapToPixelYConstant;
+    const zi = this.zoneInfo;
+    const px = zi.mapToPixelXScalar * mx + zi.mapToPixelXConstant;
+    const py = zi.mapToPixelYScalar * my + zi.mapToPixelYConstant;
 
     style.left = (px / zi.mapWidth * 100) + '%';
     style.top = (py / zi.mapHeight * 100) + '%';
@@ -1751,24 +2363,31 @@ class EurekaTracker {
     this.SetStyleFromMap(style, mx, my);
   }
 
-  AddElement(container, nm) {
-    let label = document.createElement('div');
+  AddElement(container, nmKey) {
+    const nm = this.nms[nmKey];
+    const label = document.createElement('div');
     label.classList.add('nm');
-    label.id = nm;
+
+    if (nm.isCritical)
+      label.classList.add('critical');
+    if (this.zoneInfo.dontShowInactive)
+      label.classList.add('nm-hidden');
+
+    label.id = nmKey;
 
     this.SetStyleFromMap(label.style, nm.x, nm.y);
 
-    let icon = document.createElement('span');
+    const icon = document.createElement('span');
     icon.classList.add('nm-icon');
-    let name = document.createElement('span');
+    const name = document.createElement('span');
     name.classList.add('nm-name');
     name.classList.add('text');
-    name.innerText = this.TransByParserLang(nm.label);
-    let progress = document.createElement('span');
+    name.innerText = this.TransByDispLang(nm.label);
+    const progress = document.createElement('span');
     progress.innerText = '';
     progress.classList.add('nm-progress');
     progress.classList.add('text');
-    let time = document.createElement('span');
+    const time = document.createElement('span');
     time.classList.add('nm-time');
     time.classList.add('text');
 
@@ -1793,24 +2412,28 @@ class EurekaTracker {
     // Anemos has no bunny fates
     this.nmKeys = Object.keys(this.nms);
 
-    let container = document.getElementById('nm-labels');
+    const container = document.getElementById('nm-labels');
+    container.classList.add(this.zoneInfo.shortName);
 
-    for (let i = 0; i < this.nmKeys.length; ++i)
-      this.AddElement(container, this.nms[this.nmKeys[i]]);
+    for (const key of this.nmKeys)
+      this.AddElement(container, key);
 
 
     this.fairy = this.zoneInfo.fairy;
-    let fairyName = this.TransByParserLang(this.fairy);
-    this.fairy.regex = Regexes.addedCombatantFull({ name: fairyName });
+    if (this.fairy) {
+      const fairyName = this.TransByParserLang(this.fairy);
+      this.fairy.regex = Regexes.addedCombatantFull({ name: fairyName });
+    }
     this.playerElement = document.createElement('div');
     this.playerElement.classList.add('player');
     container.appendChild(this.playerElement);
   }
 
   ResetZone() {
-    let container = document.getElementById('nm-labels');
+    const container = document.getElementById('nm-labels');
     container.innerHTML = '';
     this.currentTracker = null;
+    container.className = '';
   }
 
   OnPlayerChange(e) {
@@ -1823,31 +2446,33 @@ class EurekaTracker {
     this.zoneId = e.zoneID;
 
     this.zoneInfo = this.options.ZoneInfo[this.zoneId];
-    let container = document.getElementById('container');
+    const container = document.getElementById('container');
     if (this.zoneInfo) {
       this.ResetZone();
 
-      let aspect = document.getElementById('aspect-ratio');
+      const aspect = document.getElementById('aspect-ratio');
       while (aspect.classList.length > 0)
         aspect.classList.remove(aspect.classList.item(0));
       aspect.classList.add('aspect-ratio-' + this.zoneInfo.shortName);
 
-      document.getElementById('map-image').src = this.zoneInfo.mapImage;
+      if (this.zoneInfo.mapImage) {
+        document.getElementById('map-image').src = this.zoneInfo.mapImage;
+        window.clearInterval(this.updateTimesHandle);
+        this.updateTimesHandle = window.setInterval(() => this.UpdateTimes(),
+            this.options.RefreshRateMs);
+        container.classList.remove('hide');
+      }
       this.InitNMs();
       this.ProcessFateQueue();
+      this.ProcessCEQueue();
       this.UpdateTimes();
-      container.classList.remove('hide');
-      window.clearInterval(this.updateTimesHandle);
-      this.updateTimesHandle = window.setInterval((function() {
-        this.UpdateTimes();
-      }).bind(this), this.options.RefreshRateMs);
     } else {
       if (this.updateTimesHandle)
         window.clearInterval(this.updateTimesHandle);
       container.classList.add('hide');
     }
 
-    let flags = document.getElementById('flag-labels');
+    const flags = document.getElementById('flag-labels');
 
     for (let i = 0; i < flags.children.length; ++i)
       flags.removeChild(flags.children[i]);
@@ -1860,51 +2485,88 @@ class EurekaTracker {
     return respawnTimeMs + (+new Date());
   }
 
+  DebugPrint(str) {
+    if (this.options.Debug)
+      console.log(str);
+  }
+
   OnFatePop(fate) {
-    fate.element.classList.add('nm-pop');
+    this.DebugPrint(`OnFatePop: ${this.TransByDispLang(fate.label)}`);
+    if (fate.element.classList.contains('nm-hidden'))
+      fate.element.classList.remove('nm-hidden');
+
+    if (fate.isCritical)
+      fate.element.classList.add('critical-pop');
+    else
+      fate.element.classList.add('nm-pop');
+
     fate.element.classList.remove('nm-down');
     fate.lastPopTimeMsLocal = +new Date();
     fate.respawnTimeMsLocal = this.RespawnTime(fate);
 
     if (fate.bunny) {
-      if (this.options.BunnyPopSound && this.options.BunnyPopVolume) {
-        let audio = new Audio(this.options.BunnyPopSound);
-        audio.volume = this.options.BunnyPopVolume;
-        audio.play();
-      }
+      const shouldPlay = this.options.PopNoiseForBunny;
+      if (shouldPlay && this.options.BunnyPopSound && this.options.BunnyPopVolume)
+        this.PlaySound(this.options.BunnyPopSound, this.options.BunnyPopVolume);
+    } else if (fate.isCritical) {
+      const shouldPlay = fate.isDuel && this.options.PopNoiseForDuel ||
+          !fate.isDuel && this.options.PopNoiseForCriticalEngagement;
+      if (shouldPlay && this.options.CriticalPopSound && this.options.CriticalPopVolume)
+        this.PlaySound(this.options.CriticalPopSound, this.options.CriticalPopVolume);
     } else {
-      if (this.options.PopSound && this.options.PopVolume) {
-        let audio = new Audio(this.options.PopSound);
-        audio.volume = this.options.PopVolume;
-        audio.play();
-      }
+      const shouldPlay = this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForSkirmish ||
+          !this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForNM;
+      if (shouldPlay && this.options.PopSound && this.options.PopVolume)
+        this.PlaySound(this.options.PopSound, this.options.PopVolume);
     }
   }
 
+  PlaySound(sound, volume) {
+    const audio = new Audio(sound);
+    audio.volume = volume;
+    audio.play();
+  }
+
   OnFateUpdate(fate, percent) {
-    if (fate.element.classList.contains('nm-pop'))
+    this.DebugPrint(`OnFateUpdate: ${this.TransByDispLang(fate.label)}: ${percent}%`);
+    if (fate.element.classList.contains('nm-pop') || fate.element.classList.contains('critical-pop'))
       fate.progressElement.innerText = percent + '%';
   }
 
   OnFateKill(fate) {
+    this.DebugPrint(`OnFateKill: ${this.TransByDispLang(fate.label)}`);
     this.UpdateTimes();
     if (fate.element.classList.contains('nm-pop')) {
+      if (this.zoneInfo.dontShowInactive)
+        fate.element.classList.add('nm-hidden');
       fate.element.classList.add('nm-down');
       fate.element.classList.remove('nm-pop');
+      fate.progressElement.innerText = null;
+      return;
+    } else if (fate.element.classList.contains('critical-pop')) {
+      if (this.zoneInfo.dontShowInactive)
+        fate.element.classList.add('nm-hidden');
+      fate.element.classList.add('critical-down');
+      fate.element.classList.remove('critical-pop');
       fate.progressElement.innerText = null;
       return;
     }
   }
 
   ProcessFateQueue() {
-    while (this.fateQueue.length != 0)
+    while (this.fateQueue.length !== 0)
       this.OnFate(this.fateQueue.pop());
   }
 
-  UpdateTimes() {
-    let nowMs = +new Date();
+  ProcessCEQueue() {
+    while (this.CEQueue.length !== 0)
+      this.OnCE(this.CEQueue.pop());
+  }
 
-    let primaryWeatherList = this.zoneInfo.primaryWeather;
+  UpdateTimes() {
+    const nowMs = +new Date();
+
+    const primaryWeatherList = this.zoneInfo.primaryWeather;
     if (primaryWeatherList) {
       for (let i = 0; i < 5; ++i) {
         document.getElementById('label-weather-icon' + i).innerHTML = '';
@@ -1912,26 +2574,26 @@ class EurekaTracker {
       }
 
       for (let i = 0; i < 5 && i < primaryWeatherList.length; ++i) {
-        let primaryWeather = primaryWeatherList[i];
+        const primaryWeather = primaryWeatherList[i];
         if (!primaryWeather)
           continue;
-        let weather = getWeather(nowMs, this.zoneId);
-        let weatherIcon = gWeatherIcons[primaryWeather];
+        const weather = getWeather(nowMs, this.zoneId);
+        const weatherIcon = gWeatherIcons[primaryWeather];
         let weatherStr;
-        if (weather == primaryWeather) {
-          let stopTime = findNextWeatherNot(nowMs, this.zoneId, primaryWeather);
+        if (weather === primaryWeather) {
+          const stopTime = findNextWeatherNot(nowMs, this.zoneId, primaryWeather);
           weatherStr = this.TransByDispLang(this.options.timeStrings.weatherFor)(nowMs, stopTime);
         } else {
-          let startTime = findNextWeather(nowMs, this.zoneId, primaryWeather);
+          const startTime = findNextWeather(nowMs, this.zoneId, primaryWeather);
           weatherStr = this.TransByDispLang(this.options.timeStrings.weatherIn)(nowMs, startTime);
         }
         document.getElementById('label-weather-icon' + i).innerHTML = weatherIcon;
         document.getElementById('label-weather-text' + i).innerHTML = weatherStr;
       }
     } else {
-      let currentWeather = getWeather(nowMs, this.zoneId);
-      let stopTime = findNextWeatherNot(nowMs, this.zoneId, currentWeather);
-      let weatherIcon = gWeatherIcons[currentWeather];
+      const currentWeather = getWeather(nowMs, this.zoneId);
+      const stopTime = findNextWeatherNot(nowMs, this.zoneId, currentWeather);
+      const weatherIcon = gWeatherIcons[currentWeather];
       let weatherStr = this.TransByDispLang(this.options.timeStrings.weatherFor)(nowMs, stopTime);
       document.getElementById('label-weather-icon0').innerHTML = weatherIcon;
       document.getElementById('label-weather-text0').innerHTML = weatherStr;
@@ -1940,9 +2602,9 @@ class EurekaTracker {
       let lastTime = nowMs;
       let lastWeather = currentWeather;
       for (let i = 1; i < 5; ++i) {
-        let startTime = findNextWeatherNot(lastTime, this.zoneId, lastWeather);
-        let weather = getWeather(startTime + 1, this.zoneId);
-        let weatherIcon = gWeatherIcons[weather];
+        const startTime = findNextWeatherNot(lastTime, this.zoneId, lastWeather);
+        const weather = getWeather(startTime + 1, this.zoneId);
+        const weatherIcon = gWeatherIcons[weather];
         weatherStr = this.TransByDispLang(this.options.timeStrings.weatherIn)(nowMs, startTime);
         document.getElementById('label-weather-icon' + i).innerHTML = weatherIcon;
         document.getElementById('label-weather-text' + i).innerHTML = weatherStr;
@@ -1951,23 +2613,29 @@ class EurekaTracker {
       }
     }
 
-    let nextDay = findNextNight(nowMs);
-    let nextNight = findNextDay(nowMs);
+    const nextDay = findNextNight(nowMs);
+    const nextNight = findNextDay(nowMs);
     let timeIcon;
     if (nextDay > nextNight)
       timeIcon = gNightIcon;
     else
       timeIcon = gDayIcon;
 
-    let dayNightMin = Math.ceil((Math.min(nextDay, nextNight) - nowMs) / 1000 / 60);
-    let timeStr = this.TransByDispLang(this.options.timeStrings.timeFor)(dayNightMin);
+    const dayNightMin = Math.ceil((Math.min(nextDay, nextNight) - nowMs) / 1000 / 60);
+    const timeStr = this.TransByDispLang(this.options.timeStrings.timeFor)(dayNightMin);
     document.getElementById('label-time-icon').innerHTML = timeIcon;
     document.getElementById('label-time-text').innerHTML = timeStr;
 
     document.getElementById('label-tracker').innerHTML = this.currentTracker;
 
+    // TODO: don't early out here, because it means bozja can't show a timer.
+    // Instead, maybe add a per-zone default respawn time which, if null/zero,
+    // means don't show respawn times unless specified.
+    if (this.zoneInfo.shortName === 'bozjasouthern')
+      return;
+
     for (let i = 0; i < this.nmKeys.length; ++i) {
-      let nm = this.nms[this.nmKeys[i]];
+      const nm = this.nms[this.nmKeys[i]];
 
       let respawnMs = null;
       if (nm.respawnTimeMsLocal)
@@ -1976,16 +2644,16 @@ class EurekaTracker {
         respawnMs = nm.respawnTimeMsTracker;
 
 
-      let popRespawnMs = respawnMs;
+      const popRespawnMs = respawnMs;
 
       // Ignore respawns in the past.
       respawnMs = Math.max(respawnMs, nowMs);
       let respawnIcon = '';
 
       if (nm.weather) {
-        let respawnWeather = getWeather(respawnMs, this.zoneId);
-        if (respawnWeather != nm.weather) {
-          let weatherStartTime =
+        const respawnWeather = getWeather(respawnMs, this.zoneId);
+        if (respawnWeather !== nm.weather) {
+          const weatherStartTime =
             findNextWeather(respawnMs, this.zoneId, nm.weather);
           if (weatherStartTime > respawnMs) {
             respawnIcon = gWeatherIcons[nm.weather];
@@ -1994,10 +2662,10 @@ class EurekaTracker {
         }
       }
 
-      if (nm.time == 'Night') {
-        let isNight = isNightTime(respawnMs);
+      if (nm.time === 'Night') {
+        const isNight = isNightTime(respawnMs);
         if (!isNight) {
-          let nextNight = findNextNight(respawnMs);
+          const nextNight = findNextNight(respawnMs);
           if (nextNight > respawnMs) {
             respawnIcon = gNightIcon;
             respawnMs = nextNight;
@@ -2005,22 +2673,22 @@ class EurekaTracker {
         }
       }
 
-      let remainingMs = respawnMs - nowMs;
+      const remainingMs = respawnMs - nowMs;
       if (remainingMs <= 0) {
         let openUntil = null;
         if (nm.weather) {
-          let weatherStartTime = findNextWeatherNot(nowMs, this.zoneId, nm.weather);
+          const weatherStartTime = findNextWeatherNot(nowMs, this.zoneId, nm.weather);
           respawnIcon = gWeatherIcons[nm.weather];
           openUntil = weatherStartTime;
         }
-        if (nm.time == 'Night') {
+        if (nm.time === 'Night') {
           respawnIcon = gNightIcon;
           openUntil = findNextDay(nowMs);
         }
 
         if (openUntil) {
-          let openMin = (openUntil - nowMs) / 1000 / 60;
-          let nmString = respawnIcon + Math.ceil(openMin) +
+          const openMin = (openUntil - nowMs) / 1000 / 60;
+          const nmString = respawnIcon + Math.ceil(openMin) +
             this.TransByDispLang(this.options.timeStrings.minute);
           nm.timeElement.innerHTML = nmString;
         } else {
@@ -2032,8 +2700,8 @@ class EurekaTracker {
         if (popRespawnMs > nowMs)
           respawnIcon = '';
 
-        let remainingMinutes = Math.ceil(remainingMs / 1000 / 60);
-        let nmString = respawnIcon + remainingMinutes +
+        const remainingMinutes = Math.ceil(remainingMs / 1000 / 60);
+        const nmString = respawnIcon + remainingMinutes +
           this.TransByDispLang(this.options.timeStrings.minute);
         nm.timeElement.innerHTML = nmString;
         nm.element.classList.add('nm-down');
@@ -2042,9 +2710,9 @@ class EurekaTracker {
   }
 
   ImportFromTracker(importText) {
-    let trackerToNM = {};
+    const trackerToNM = {};
     for (let i = 0; i < this.nmKeys.length; ++i) {
-      let nm = this.nms[this.nmKeys[i]];
+      const nm = this.nms[this.nmKeys[i]];
       if (!nm.trackerName)
         continue;
       trackerToNM[this.TransByParserLang(nm.trackerName).toLowerCase()] = nm;
@@ -2052,16 +2720,16 @@ class EurekaTracker {
 
     let regex = this.TransByParserLang(this.options.Regex);
     regex = regex['gTimeRegex'];
-    let importList = importText.split(' → ');
+    const importList = importText.split(' → ');
     for (let i = 0; i < importList.length; i++) {
-      let m = importList[i].match(regex);
+      const m = importList[i].match(regex);
       if (!m) {
         console.error('Unknown tracker entry: ' + importList[i]);
         continue;
       }
-      let name = m[1];
-      let time = m[2];
-      let nm = trackerToNM[name.toLowerCase()];
+      const name = m[1];
+      const time = m[2];
+      const nm = trackerToNM[name.toLowerCase()];
       if (nm)
         nm.respawnTimeMsTracker = (time * 60 * 1000) + (+new Date());
       else
@@ -2074,27 +2742,32 @@ class EurekaTracker {
   OnLog(e) {
     if (!this.zoneInfo)
       return;
-    for (let idx = 0; idx < e.detail.logs.length; idx++) {
-      let log = e.detail.logs[idx];
-      let gRegex = this.TransByParserLang(this.options.Regex);
-      let gFlagRegex = gRegex['gFlagRegex'];
+    for (const log of e.detail.logs) {
+      const gFlagRegex = this.TransByParserLang(this.options.Regex, 'gFlagRegex');
       let match = log.match(gFlagRegex);
       if (match)
         this.AddFlag(match[2], match[3], match[1], match[4]);
-      let gTrackerRegex = gRegex['gTrackerRegex'];
+
+      if (this.fairy) {
+        if (log.includes(' 03:') || log.includes('00:0839:')) {
+          match = log.match(this.fairy.regex);
+          if (match)
+            this.AddFairy(match.groups);
+        }
+      }
+
+      if (!this.zoneInfo.hasTracker)
+        return;
+
+      const gTrackerRegex = this.TransByParserLang(this.options.Regex, 'gTrackerRegex');
       match = log.match(gTrackerRegex);
       if (match)
         this.currentTracker = match[1];
-      let gImportRegex = gRegex['gImportRegex'];
+      const gImportRegex = this.TransByParserLang(this.options.Regex, 'gImportRegex');
       match = log.match(gImportRegex);
       if (match) {
         this.ImportFromTracker(match[2]);
         continue;
-      }
-      if (log.includes(' 03:') || log.includes('00:0839:')) {
-        match = log.match(this.fairy.regex);
-        if (match)
-          this.AddFairy(match.groups);
       }
     }
   }
@@ -2110,27 +2783,27 @@ class EurekaTracker {
 
     switch (e.detail.eventType) {
     case 'add':
-      for (let key of this.nmKeys) {
-        let nm = this.nms[key];
-        if (e.detail.fateID == nm.fateID) {
+      for (const key of this.nmKeys) {
+        const nm = this.nms[key];
+        if (e.detail.fateID === nm.fateID) {
           this.OnFatePop(nm);
           return;
         }
       }
       break;
     case 'remove':
-      for (let key of this.nmKeys) {
-        let nm = this.nms[key];
-        if (e.detail.fateID == nm.fateID) {
+      for (const key of this.nmKeys) {
+        const nm = this.nms[key];
+        if (e.detail.fateID === nm.fateID) {
           this.OnFateKill(nm);
           return;
         }
       }
       break;
     case 'update':
-      for (let key of this.nmKeys) {
-        let nm = this.nms[key];
-        if (e.detail.fateID == nm.fateID) {
+      for (const key of this.nmKeys) {
+        const nm = this.nms[key];
+        if (e.detail.fateID === nm.fateID) {
           this.OnFateUpdate(nm, e.detail.progress);
           return;
         }
@@ -2139,10 +2812,45 @@ class EurekaTracker {
     }
   }
 
-  SimplifyText(beforeText, afterText) {
-    let str = (beforeText + ' ' + afterText).toLowerCase();
+  OnCE(e) {
+    // Upon entering Eureka we usually receive the CE info before
+    // this.zoneInfo is loaded, so lets store the events until we're
+    // able to process them.
+    // TODO: don't make pop noises for CEs that have already started.
 
-    let dict = {
+    if (!this.zoneInfo) {
+      this.CEQueue.push(e);
+      return;
+    }
+
+    let nm = null;
+    for (const key of this.nmKeys) {
+      if (e.detail.data.ceKey === this.nms[key].ceKey) {
+        nm = this.nms[key];
+        break;
+      }
+    }
+    if (!nm)
+      return;
+
+    switch (e.detail.eventType) {
+    case 'add':
+      this.OnFatePop(nm);
+      break;
+    case 'remove':
+      this.OnFateKill(nm);
+      break;
+    case 'update':
+      if (e.detail.data.status === 3)
+        this.OnFateUpdate(nm, e.detail.data.progress);
+      break;
+    }
+  }
+
+  SimplifyText(beforeText, afterText) {
+    const str = (beforeText + ' ' + afterText).toLowerCase();
+
+    const dict = {
       'train': [
         'train',
         'tren',
@@ -2176,11 +2884,11 @@ class EurekaTracker {
         '狗狗',
       ],
     };
-    let keys = Object.keys(dict);
+    const keys = Object.keys(dict);
     for (let i = 0; i < keys.length; ++i) {
-      let key = keys[i];
+      const key = keys[i];
       for (let j = 0; j < dict[key].length; ++j) {
-        let m = dict[key][j];
+        const m = dict[key][j];
         if (str.includes(m))
           return key;
       }
@@ -2188,34 +2896,34 @@ class EurekaTracker {
   }
 
   AddFlag(x, y, beforeText, afterText) {
-    let simplify = this.SimplifyText(beforeText, afterText);
+    const simplify = this.SimplifyText(beforeText, afterText);
     if (simplify) {
       beforeText = simplify;
       afterText = '';
     }
     beforeText = beforeText.replace(/(?: at|@)$/, '');
 
-    let container = document.getElementById('flag-labels');
-    let label = document.createElement('div');
+    const container = document.getElementById('flag-labels');
+    const label = document.createElement('div');
     label.classList.add('flag');
     this.SetStyleFromMap(label.style, x, y);
 
-    let icon = document.createElement('span');
+    const icon = document.createElement('span');
     icon.classList.add('flag-icon');
-    let name = document.createElement('span');
+    const name = document.createElement('span');
     name.classList.add('flag-name');
     name.classList.add('text');
     name.innerText = beforeText;
-    if (beforeText != '' && afterText != '')
+    if (beforeText !== '' && afterText !== '')
       name.innerText += ' ';
     name.innerText += afterText;
     label.appendChild(icon);
     label.appendChild(name);
     container.appendChild(label);
 
-    window.setTimeout(function() {
+    window.setTimeout(() => {
       // Changing zones can also orphan all the labels.
-      if (label.parentElement == container)
+      if (label.parentElement === container)
         container.removeChild(label);
     }, this.options.FlagTimeoutMs);
   }
@@ -2227,18 +2935,21 @@ class EurekaTracker {
   }
 }
 
-UserConfig.getUserConfigLocation('eureka', Options, function(e) {
-  addOverlayListener('onPlayerChangedEvent', function(e) {
+UserConfig.getUserConfigLocation('eureka', Options, (e) => {
+  addOverlayListener('onPlayerChangedEvent', (e) => {
     gTracker.OnPlayerChange(e);
   });
-  addOverlayListener('ChangeZone', function(e) {
+  addOverlayListener('ChangeZone', (e) => {
     gTracker.OnChangeZone(e);
   });
-  addOverlayListener('onLogEvent', function(e) {
+  addOverlayListener('onLogEvent', (e) => {
     gTracker.OnLog(e);
   });
-  addOverlayListener('onFateEvent', function(e) {
+  addOverlayListener('onFateEvent', (e) => {
     gTracker.OnFate(e);
+  });
+  addOverlayListener('onCEEvent', (e) => {
+    gTracker.OnCE(e);
   });
 
   gTracker = new EurekaTracker(Options);

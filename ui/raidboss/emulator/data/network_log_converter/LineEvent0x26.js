@@ -1,14 +1,16 @@
-'use strict';
+import LineEvent from './LineEvent.js';
+import EmulatorCommon from '../../EmulatorCommon.js';
+import { Util } from '../../../../../resources/common.js';
 
 // Network status effect event
-class LineEvent0x26 extends LineEvent {
+export class LineEvent0x26 extends LineEvent {
   constructor(repo, line, parts) {
     super(repo, line, parts);
 
     this.id = parts[2].toUpperCase();
     this.name = parts[3];
 
-    let padded = EmulatorCommon.zeroPad(parts[4], 8);
+    const padded = EmulatorCommon.zeroPad(parts[4], 8);
 
     this.jobIdHex = padded.substr(6, 2).toUpperCase();
     this.jobIdDec = parseInt(this.jobIdHex, 16);
@@ -29,11 +31,4 @@ class LineEvent0x26 extends LineEvent {
   }
 }
 
-class LineEvent38 extends LineEvent0x26 {}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    LineEvent0x26: LineEvent0x26,
-    LineEvent38: LineEvent38,
-  };
-}
+export class LineEvent38 extends LineEvent0x26 {}

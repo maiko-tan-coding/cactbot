@@ -1,7 +1,8 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Hades Ex
-[{
+export default {
   zoneId: ZoneId.TheMinstrelsBalladHadessElegy,
   damageWarn: {
     'HadesEx Shadow Spread 2': '47AA',
@@ -48,7 +49,7 @@
       damageRegex: '47BA',
       condition: function(e, data) {
         // Don't blame people who don't have tethers.
-        return e.type != '15' && data.me in data.hasDark;
+        return e.type !== '15' && data.me in data.hasDark;
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
@@ -146,4 +147,4 @@
       },
     },
   ],
-}];
+};

@@ -1,7 +1,10 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O8N - Sigmascape 4.0 Normal
-[{
+export default {
   zoneId: ZoneId.SigmascapeV40,
   timelineFile: 'o8n.txt',
   triggers: [
@@ -13,40 +16,7 @@
       netRegexJa: NetRegexes.startsUsing({ id: '292E', source: 'ケフカ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '292E', source: '凯夫卡' }),
       netRegexKo: NetRegexes.startsUsing({ id: '292E', source: '케프카' }),
-      alertText: function(data, matches) {
-        if (matches.target == data.me) {
-          return {
-            en: 'Hyperdrive on YOU',
-            fr: 'Colonne de feu sur VOUS',
-            de: 'Hyperantrieb auf DIR',
-            ja: '自分にハイパードライブ',
-            cn: '死刑点名',
-            ko: '하이퍼드라이브 대상자',
-          };
-        }
-        if (data.role == 'healer') {
-          return {
-            en: 'Hyperdrive on ' + data.ShortName(matches.target),
-            fr: 'Colonne de feu sur ' + data.ShortName(matches.target),
-            de: 'Hyperantrieb auf ' + data.ShortName(matches.target),
-            ja: data.ShortName(matches.target) + 'にハイパードライブ',
-            cn: '死刑点名' + data.ShortName(matches.target),
-            ko: '"' + data.ShortName(matches.target) + '" 하이퍼드라이브',
-          };
-        }
-      },
-      tts: function(data, matches) {
-        if (matches.target == data.me) {
-          return {
-            en: 'buster',
-            fr: 'Colonne de feu',
-            de: 'hyperantrieb',
-            ja: 'タンクバスター',
-            cn: '死刑',
-            ko: '탱버',
-          };
-        }
-      },
+      response: Responses.tankBuster(),
     },
     {
       id: 'O8N Shockwave',
@@ -87,21 +57,16 @@
       netRegexJa: NetRegexes.startsUsing({ id: '292B', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '292B', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '292B', source: '신들의 상', capture: false }),
-      alertText: {
-        en: 'Look At Statue',
-        fr: 'Regardez la statue',
-        de: 'Statue anschauen',
-        ja: '神々の像を見て',
-        cn: '面对神像',
-        ko: '시선 바라보기',
-      },
-      tts: {
-        en: 'look towards',
-        fr: 'Regardez la statue',
-        de: 'anschauen',
-        ja: '像を見て',
-        cn: '面对神像',
-        ko: '쳐다보기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Look At Statue',
+          de: 'Statue anschauen',
+          fr: 'Regardez la statue',
+          ja: '神々の像を見て',
+          cn: '面对神像',
+          ko: '시선 바라보기',
+        },
       },
     },
     {
@@ -112,21 +77,16 @@
       netRegexJa: NetRegexes.startsUsing({ id: '292C', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '292C', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '292C', source: '신들의 상', capture: false }),
-      alertText: {
-        en: 'Look Away From Statue',
-        fr: 'Ne regardez pas la statue',
-        de: 'Von Statue wegschauen',
-        ja: '神々の像を見ないで',
-        cn: '背对神像',
-        ko: '시선 피하기',
-      },
-      tts: {
-        en: 'look away',
-        fr: 'Ne regardez pas la statue',
-        de: 'weckschauen',
-        ja: '見るな！',
-        cn: '背对神像',
-        ko: '뒤돌기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Look Away From Statue',
+          de: 'Von Statue wegschauen',
+          fr: 'Ne regardez pas la statue',
+          ja: '神々の像を見ないで',
+          cn: '背对神像',
+          ko: '시선 피하기',
+        },
       },
     },
     {
@@ -142,22 +102,16 @@
     {
       id: 'O8N Flagrant Fire Single',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
-      condition: function(data, matches) {
-        return matches.target == data.me;
-      },
-      infoText: {
-        en: 'fire on YOU',
-        fr: 'Feu sur VOUS',
-        de: 'Feuer auf DIR',
-        ja: '自分にファイガ',
-        cn: '火点名',
-      },
-      tts: {
-        en: 'fire',
-        fr: 'feu',
-        de: 'Feuer',
-        ja: 'ファイガ',
-        cn: '火',
+      condition: Conditions.targetIsYou(),
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'fire on YOU',
+          de: 'Feuer auf DIR',
+          fr: 'Feu sur VOUS',
+          ja: '自分にファイガ',
+          cn: '火点名',
+        },
       },
     },
     {
@@ -174,21 +128,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '291D', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '291D', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'True Thunder',
-        fr: 'Vraie foudre',
-        de: 'Wahrer Blitz',
-        ja: '真サンダガ',
-        cn: '真雷',
-        ko: '진실 선더가',
-      },
-      tts: {
-        en: 'True',
-        fr: 'Vrai',
-        de: 'Wahr',
-        ja: 'ほんもの',
-        cn: '真',
-        ko: '진실',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'True Thunder',
+          de: 'Wahrer Blitz',
+          fr: 'Vraie foudre',
+          ja: '真サンダガ',
+          cn: '真雷',
+          ko: '진실 선더가',
+        },
       },
     },
     {
@@ -200,21 +149,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '291B', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '291B', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'Fake Thunder',
-        fr: 'Fausse foudre',
-        de: 'Falscher Blitz',
-        ja: 'にせサンダガ',
-        cn: '假雷',
-        ko: '거짓 선더가',
-      },
-      tts: {
-        en: 'Fake',
-        fr: 'Fausse',
-        de: 'Falsch',
-        ja: 'にせもの',
-        cn: '假',
-        ko: '거짓',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Fake Thunder',
+          de: 'Falscher Blitz',
+          fr: 'Fausse foudre',
+          ja: 'にせサンダガ',
+          cn: '假雷',
+          ko: '거짓 선더가',
+        },
       },
     },
     {
@@ -226,21 +170,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '2916', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2916', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'Fake Ice: Get out',
-        fr: 'Fausse glace : Sortez',
-        de: 'Falsches Eis: Rausgehen',
-        ja: '偽ブリザガ: 外へ',
-        cn: '假冰：远离',
-        ko: '거짓 블리자가: 밖으로',
-      },
-      tts: {
-        en: 'Get out',
-        fr: 'Sortez',
-        de: 'Rausgehen',
-        ja: '外へ',
-        cn: '远离',
-        ko: '밖으로',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Fake Ice: Get out',
+          de: 'Falsches Eis: Rausgehen',
+          fr: 'Fausse glace : Sortez',
+          ja: '偽ブリザガ: 外へ',
+          cn: '假冰：远离',
+          ko: '거짓 블리자가: 밖으로',
+        },
       },
     },
     {
@@ -252,21 +191,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '2919', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2919', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'True Ice: Get in',
-        fr: 'Vraie glace: Rentrez dedans',
-        de: 'Wahre Eis: Reingehen',
-        ja: '真ブリザガ: 入る',
-        cn: '真冰：靠近',
-        ko: '진실 블리자가: 안으로',
-      },
-      tts: {
-        en: 'Get in',
-        fr: 'rentrez dedans',
-        de: 'Reingehen',
-        ja: '入る',
-        cn: '靠近',
-        ko: '안으로',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'True Ice: Get in',
+          de: 'Wahre Eis: Reingehen',
+          fr: 'Vraie glace: Rentrez dedans',
+          ja: '真ブリザガ: 入る',
+          cn: '真冰：靠近',
+          ko: '진실 블리자가: 안으로',
+        },
       },
     },
     {
@@ -278,21 +212,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '2914', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2914', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'Fake Ice: Get in',
-        fr: 'Fausse glace: Rentrez dedans',
-        de: 'Falsches Eis: Reingehen',
-        ja: '偽ブリザガ: 入る',
-        cn: '假冰：靠近',
-        ko: '거짓 블리자가: 안으로',
-      },
-      tts: {
-        en: 'Get in',
-        fr: 'rentrez dedans',
-        de: 'Reingehen',
-        ja: '入る',
-        cn: '靠近',
-        ko: '안으로',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Fake Ice: Get in',
+          de: 'Falsches Eis: Reingehen',
+          fr: 'Fausse glace: Rentrez dedans',
+          ja: '偽ブリザガ: 入る',
+          cn: '假冰：靠近',
+          ko: '거짓 블리자가: 안으로',
+        },
       },
     },
     {
@@ -304,21 +233,16 @@
       netRegexCn: NetRegexes.startsUsing({ id: '2918', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2918', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: {
-        en: 'True Ice: Get out',
-        fr: 'Vraie glace: Sortez',
-        de: 'Wahres Eis: Rausgehen',
-        ja: '真ブリザガ: 外へ',
-        cn: '真冰：远离',
-        ko: '진실 블리자가: 밖으로',
-      },
-      tts: {
-        en: 'Get out',
-        fr: 'Sortez',
-        de: 'raus da',
-        ja: '外へ',
-        cn: '远离',
-        ko: '밖으로',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'True Ice: Get out',
+          de: 'Wahres Eis: Rausgehen',
+          fr: 'Vraie glace: Sortez',
+          ja: '真ブリザガ: 外へ',
+          cn: '真冰：远离',
+          ko: '진실 블리자가: 밖으로',
+        },
       },
     },
   ],
@@ -436,4 +360,4 @@
       },
     },
   ],
-}];
+};

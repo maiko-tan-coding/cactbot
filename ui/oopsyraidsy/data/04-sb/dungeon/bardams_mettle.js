@@ -1,4 +1,5 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Bardam's Mettle
 
@@ -16,7 +17,7 @@ function abilityWarn(args) {
     id: args.id,
     netRegex: NetRegexes.abilityFull({ id: args.abilityId }),
     condition: function(e, data, matches) {
-      return matches.flags.substr(-2) == '0E';
+      return matches.flags.substr(-2) === '0E';
     },
     mistake: function(e, data, matches) {
       return { type: 'warn', blame: matches.target, text: matches.ability };
@@ -24,7 +25,7 @@ function abilityWarn(args) {
   };
 }
 
-[{
+export default {
   zoneId: ZoneId.BardamsMettle,
   damageWarn: {
     'Bardam Dirty Claw': '21A8', // Frontal cleave, Gulo Gulo trash
@@ -87,4 +88,4 @@ function abilityWarn(args) {
     // Circle AoEs, Star Shard, second boss
     abilityWarn({ id: 'Bardam Comet Impact', abilityId: '2580' }),
   ],
-}];
+};

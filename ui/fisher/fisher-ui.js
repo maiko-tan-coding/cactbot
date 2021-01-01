@@ -1,4 +1,4 @@
-'use strict';
+import TimerBar from '../../resources/timerbar.js';
 
 class FisherBar extends TimerBar {
   stop() {
@@ -16,9 +16,10 @@ if (window.customElements) {
   });
 }
 
-class FisherUI {
-  constructor(element) {
+export default class FisherUI {
+  constructor(element, options) {
     this.element = element;
+    this.options = options;
     this.baitEl = element.querySelector('#bait-name');
     this.placeEl = element.querySelector('#place-name');
     this.timeEl = element.querySelector('#cast-duration');
@@ -33,8 +34,8 @@ class FisherUI {
   }
 
   draw() {
-    let timeMs = (new Date() - this.castStart);
-    let time = (timeMs / 1000).toFixed(1);
+    const timeMs = (new Date() - this.castStart);
+    const time = (timeMs / 1000).toFixed(1);
 
     this.timeEl.innerHTML = time;
     this.arrowEl.style.top = (timeMs / 600) + '%';
@@ -47,10 +48,10 @@ class FisherUI {
   }
 
   setPlace(place) {
-    let oldPlace = this.placeEl.innerHTML;
+    const oldPlace = this.placeEl.innerHTML;
 
     if (!place) {
-      if (oldPlace && oldPlace[0] != '(')
+      if (oldPlace && oldPlace[0] !== '(')
         this.placeEl.innerHTML = '(' + oldPlace + ')';
       else
         this.placeEl.innerHTML = '------------';
@@ -60,31 +61,31 @@ class FisherUI {
   }
 
   startTimers() {
-    let barData = {};
+    const barData = {};
 
-    let rows = this.element.querySelectorAll('.table-row');
+    const rows = this.element.querySelectorAll('.table-row');
 
     for (let i = 0; i < rows.length; i++) {
-      let row = rows[i];
-      let min = row.getAttribute('data-min');
-      let max = row.getAttribute('data-max');
-      let bar = document.createElement('fisher-bar');
+      const row = rows[i];
+      const min = row.getAttribute('data-min');
+      const max = row.getAttribute('data-max');
+      const bar = document.createElement('fisher-bar');
       let timeouts = [];
 
       bar.centertext = row.getAttribute('data-fish');
 
       // Step one: fill until the minimum time
-      if ((min && min != 'undefined') && (max && max != 'undefined')) {
+      if ((min && min !== 'undefined') && (max && max !== 'undefined')) {
         row.opacity = 0.8;
         bar.duration = min / 1000;
         bar.style = 'fill';
         // Step two: empty until the maximum time
-        timeouts.push(setTimeout(function() {
+        timeouts.push(setTimeout(() => {
           row.style.opacity = 1;
           bar.style = 'empty';
           bar.value = 0;
           bar.duration = (max - min) / 1000;
-          timeouts.push(setTimeout(function() {
+          timeouts.push(setTimeout(() => {
             row.style.opacity = 0.5;
           }, (max - min)));
         }, min));
@@ -94,7 +95,7 @@ class FisherUI {
       }
 
       if (row.getAttribute('data-tug'))
-        bar.fg = Options.Colors[this.tugNames[row.getAttribute('data-tug')]];
+        bar.fg = this.options.Colors[this.tugNames[row.getAttribute('data-tug')]];
 
 
       while (row.lastChild)
@@ -118,9 +119,9 @@ class FisherUI {
     cancelAnimationFrame(this.animationFrame);
     this.animationFrame = null;
 
-    this.bars.forEach(function(bar) {
+    this.bars.forEach((bar) => {
       // Stops the timed events
-      bar.timeouts.forEach(function(timeout) {
+      bar.timeouts.forEach((timeout) => {
         clearTimeout(timeout);
       });
 
@@ -131,8 +132,8 @@ class FisherUI {
 
   redrawFish(hookTimes, tugTypes) {
     // Sort hook times by minimum time, with undefineds being at the end
-    let sortedKeys = Object.keys(hookTimes).sort(function(a, b) {
-      let t = hookTimes;
+    const sortedKeys = Object.keys(hookTimes).sort((a, b) => {
+      const t = hookTimes;
 
       if ((!t[a] || !t[a].min) && (!t[b] || !t[b].min))
         return 0;
@@ -145,31 +146,31 @@ class FisherUI {
     });
 
     // Remove current values from all wells
-    Array.prototype.forEach.call(this.element.querySelectorAll('.well-entry, .table-row'), function(node) {
+    Array.prototype.forEach.call(this.element.querySelectorAll('.well-entry, .table-row'), (node) => {
       node.parentNode.removeChild(node);
     });
 
     for (let i = 0; i < sortedKeys.length; i++) {
       // First, draw on the well
-      let fish = sortedKeys[i];
+      const fish = sortedKeys[i];
 
       if (tugTypes[fish] && hookTimes[fish].min && hookTimes[fish].max) {
-        let tug = tugTypes[fish];
+        const tug = tugTypes[fish];
         // Create the element with fish-specific styles
-        let el = document.createElement('div');
+        const el = document.createElement('div');
         el.classList.add('well-entry');
         el.setAttribute('data-fish', fish);
         el.style.top = (hookTimes[fish].min / 600).toString() + '%';
         el.style.height = ((hookTimes[fish].max - hookTimes[fish].min) / 600).toString() + '%';
-        el.style.backgroundColor = Options.Colors[this.tugNames[tug]];
+        el.style.backgroundColor = this.options.Colors[this.tugNames[tug]];
 
         // Put the element in the well
-        let well = this.element.querySelector('#fisher-well-' + this.tugNames[tug]);
+        const well = this.element.querySelector('#fisher-well-' + this.tugNames[tug]);
         well.appendChild(el);
       }
 
       // Next, make the row for the table
-      let row = document.createElement('div');
+      const row = document.createElement('div');
       row.classList.add('table-row');
       row.setAttribute('data-fish', fish);
       row.setAttribute('data-tug', tugTypes[fish]);
@@ -177,7 +178,7 @@ class FisherUI {
       row.setAttribute('data-max', hookTimes[fish].max);
 
       // Add the row to the table
-      let table = this.element.querySelector('#fisher-table');
+      const table = this.element.querySelector('#fisher-table');
       table.appendChild(row);
     }
   }
@@ -195,6 +196,3 @@ class FisherUI {
     this.animationFrame = null;
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = FisherUI;

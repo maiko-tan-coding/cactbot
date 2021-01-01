@@ -1,47 +1,47 @@
-'use strict';
+import fs from 'fs';
+import path from 'path';
+import Regexes from '../resources/regexes.js';
+import { Timeline } from '../ui/raidboss/timeline.js';
+import { commonReplacement, partialCommonReplacementKeys } from '../ui/raidboss/common_replacement.js';
 
-let triggersFile = process.argv[2];
-let locale = process.argv[3];
-let localeReg = 'regex' + locale[0].toUpperCase() + locale[1];
+const triggersFile = process.argv[2];
+const locale = process.argv[3];
+const localeReg = 'regex' + locale[0].toUpperCase() + locale[1];
+findMissing(triggersFile, locale, localeReg);
 
-const fs = require('fs');
-const Regexes = require('../resources/regexes.js');
-const NetRegexes = require('../resources/netregexes.js');
-const Conditions = require('../resources/conditions.js');
-const ZoneId = require('../resources/zone_id.js');
-const { Responses } = require('../resources/responses.js');
-const { Timeline } = require('../ui/raidboss/timeline.js');
-const { commonReplacement, partialCommonReplacementKeys } = require('../ui/raidboss/common_replacement.js');
+async function findMissing(triggersFile, locale, localeReg) {
+  // Hackily assume that any file with a txt file of the same name is a trigger/timeline.
+  const timelineFile = triggersFile.replace(/\.js$/, '.txt');
+  if (!fs.existsSync(timelineFile))
+    process.exit(-1);
 
-// Hackily assume that any file with a txt file of the same name is a trigger/timeline.
-let timelineFile = triggersFile.replace(/\.js$/, '.txt');
-if (!fs.existsSync(timelineFile))
-  process.exit(-1);
+  const timelineText = String(fs.readFileSync(timelineFile));
+  const timeline = new Timeline(timelineText);
 
-let timelineText = String(fs.readFileSync(timelineFile));
-let timeline = new Timeline(timelineText);
-let triggerText = String(fs.readFileSync(triggersFile));
-let triggerLines = triggerText.split('\n');
-let triggerSetList = eval(triggerText);
-let triggerSet = triggerSetList[0];
-if (!triggerSet)
-  process.exit(-1);
-let triggers = triggerSet.triggers;
+  const importPath = '../' + path.relative(process.cwd(), triggersFile).replace(/\\/g, '/');
 
-let translations = triggerSet.timelineReplace;
-if (!translations)
-  process.exit(0);
+  const triggerText = String(fs.readFileSync(triggersFile));
+  const triggerLines = triggerText.split('\n');
 
-let trans = {
-  replaceSync: {},
-  replaceText: {},
-};
+  const triggerSet = (await import(importPath)).default;
+  const translations = triggerSet.timelineReplace;
+  if (!translations)
+    return;
 
-for (let transBlock of translations) {
-  if (!transBlock.locale || transBlock.locale !== locale)
-    continue;
-  trans = transBlock;
-  break;
+  let trans = {
+    replaceSync: {},
+    replaceText: {},
+  };
+
+  for (const transBlock of translations) {
+    if (!transBlock.locale || transBlock.locale !== locale)
+      continue;
+    trans = transBlock;
+    break;
+  }
+
+  findMissingRegex(triggerSet.triggers, triggerLines, timeline, trans, localeReg);
+  findMissingTimeline(timelineFile, triggerSet, timeline, trans);
 }
 
 // An extremely hacky helper to turn a trigger id back into a line number.
@@ -52,13 +52,13 @@ function findLineNumberByTriggerId(text, id) {
   // Other regex characters just need to be escaped once to get out of
   // Regexes.parse unscathed.
   escapedId = escapedId.replace(/([+^$*])/, '\\$1');
-  let regex = Regexes.parse('^\\s*id: \'' + escapedId + '\',');
+  const regex = Regexes.parse('^\\s*id: \'' + escapedId + '\',');
 
   let lineNumber = 0;
-  for (let line of text) {
+  for (const line of text) {
     lineNumber++;
 
-    if (line.match(regex))
+    if (regex.test(line))
       return lineNumber;
   }
 
@@ -67,27 +67,27 @@ function findLineNumberByTriggerId(text, id) {
   return '?';
 }
 
-function findMissingRegex() {
-  for (let trigger of triggers) {
+function findMissingRegex(triggers, triggerLines, timeline, trans, localeReg) {
+  for (const trigger of triggers) {
     let origRegex = trigger.regex;
     if (!origRegex)
       continue;
 
-    let lineNumber = findLineNumberByTriggerId(triggerLines, trigger.id);
+    const lineNumber = findLineNumberByTriggerId(triggerLines, trigger.id);
 
     origRegex = origRegex.source.toLowerCase();
 
     let foundMatch = false;
 
     let transRegex = origRegex;
-    for (let regex in trans.replaceSync) {
-      let replace = Regexes.parseGlobal(regex);
+    for (const regex in trans.replaceSync) {
+      const replace = Regexes.parseGlobal(regex);
       if (transRegex.match(replace))
         foundMatch = true;
       transRegex = transRegex.replace(replace, trans.replaceSync[regex]);
     }
-    for (let regex in commonReplacement.replaceSync) {
-      let replace = Regexes.parseGlobal(regex);
+    for (const regex in commonReplacement.replaceSync) {
+      const replace = Regexes.parseGlobal(regex);
       if (transRegex.match(replace))
         foundMatch = true;
       transRegex = transRegex.replace(replace, commonReplacement.replaceSync[regex][locale]);
@@ -113,9 +113,9 @@ function findMissingRegex() {
       continue;
 
     // Any missing translations in the ignore list should be skipped.
-    let ignore = timeline.GetMissingTranslationsToIgnore();
+    const ignore = timeline.GetMissingTranslationsToIgnore();
     let foundIgnore = false;
-    for (let ig of ignore) {
+    for (const ig of ignore) {
       if (origRegex.match(ig)) {
         foundIgnore = true;
         break;
@@ -132,13 +132,13 @@ function findMissingRegex() {
   }
 }
 
-function findMissingTimeline() {
+function findMissingTimeline(timelineFile, triggerSet, timeline, trans) {
   // Don't bother translating timelines that are old.
   if (triggerSet.timelineNeedsFixing)
     return;
 
   // TODO: merge this with test_timeline.js??
-  let testCases = [
+  const testCases = [
     {
       type: 'replaceSync',
       items: new Set(timeline.syncStarts.map((x) =>
@@ -157,9 +157,9 @@ function findMissingTimeline() {
   const skipPartialCommon = true;
 
   // Add all common replacements, so they can be checked for collisions as well.
-  for (let testCase of testCases) {
-    let common = commonReplacement[testCase.type];
-    for (let key in common) {
+  for (const testCase of testCases) {
+    const common = commonReplacement[testCase.type];
+    for (const key in common) {
       if (skipPartialCommon && partialCommonReplacementKeys.includes(key))
         continue;
       if (!common[key][trans.locale]) {
@@ -178,23 +178,23 @@ function findMissingTimeline() {
     }
   }
 
-  let ignore = timeline.GetMissingTranslationsToIgnore();
-  let isIgnored = (x) => {
-    for (let ig of ignore) {
+  const ignore = timeline.GetMissingTranslationsToIgnore();
+  const isIgnored = (x) => {
+    for (const ig of ignore) {
       if (x.match(ig))
         return true;
     }
     return false;
   };
 
-  let output = {};
+  const output = {};
 
-  for (let testCase of testCases) {
-    for (let item of testCase.items) {
+  for (const testCase of testCases) {
+    for (const item of testCase.items) {
       if (isIgnored(item.text))
         continue;
       let matched = false;
-      for (let regex in testCase.replace) {
+      for (const regex in testCase.replace) {
         if (item.text.match(Regexes.parse(regex))) {
           matched = true;
           break;
@@ -203,20 +203,17 @@ function findMissingTimeline() {
       if (!matched) {
         // Because we handle syncs separately from texts, in order to
         // sort them all properly together, create a key to be used with sort().
-        let sortKey = String(item.line).padStart(8, '0') + testCase.label;
-        let value = `${timelineFile}:${item.line} ${testCase.label} "${item.text}"`;
+        const sortKey = String(item.line).padStart(8, '0') + testCase.label;
+        const value = `${timelineFile}:${item.line} ${testCase.label} "${item.text}"`;
         output[sortKey] = value;
       }
     }
   }
 
-  let keys = Object.keys(output).sort();
-  for (let key of keys)
+  const keys = Object.keys(output).sort();
+  for (const key of keys)
     console.log(output[key]);
 
   if (keys.length === 0 && trans.missingTranslations)
     console.log(`${triggersFile}: missingTranslations set true when not needed`);
 }
-
-findMissingRegex();
-findMissingTimeline();

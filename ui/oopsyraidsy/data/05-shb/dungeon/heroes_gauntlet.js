@@ -1,8 +1,9 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: Berserker 2nd/3rd wild anguish should be shared with just a rock
 
-[{
+export default {
   zoneId: ZoneId.TheHeroesGauntlet,
   damageWarn: {
     'THG Blade\'s Benison': '5228', // pld conal
@@ -53,10 +54,10 @@
       // This should always be shared.  On all times but the 2nd and 3rd, it's a party share.
       // TODO: on the 2nd and 3rd time this should only be shared with a rock.
       // TODO: alternatively warn on taking one of these with a 472 Magic Vulnerability Up effect
-      condition: (e) => e.type == 15,
+      condition: (e) => e.type === '15',
       mistake: function(e, data, matches) {
         return { type: 'warn', blame: matches.target, text: matches.ability };
       },
     },
   ],
-}];
+};

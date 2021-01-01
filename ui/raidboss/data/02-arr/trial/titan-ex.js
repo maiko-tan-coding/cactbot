@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.TheNavelExtreme,
   timelineFile: 'titan-ex.txt',
   timelineTriggers: [
@@ -8,57 +11,99 @@
       id: 'TitanEx Mountain Buster',
       regex: /Mountain Buster/,
       beforeSeconds: 7,
-      condition: function(data) {
-        return data.role == 'healer' || data.role == 'tank';
-      },
+      condition: (data) => data.role === 'healer' || data.role === 'tank',
       response: Responses.tankBuster(),
     },
     {
       id: 'TitanEx Mountain Buster Avoid',
       regex: /Mountain Buster/,
       beforeSeconds: 7,
-      condition: function(data) {
-        return data.role != 'healer' && data.role != 'tank';
-      },
+      condition: (data) => data.role !== 'healer' && data.role !== 'tank',
       response: Responses.tankCleave(),
     },
     {
       id: 'TitanEx Tumult',
       regex: /Tumult/,
       beforeSeconds: 5,
-      condition: function(data) {
-        return data.role == 'healer' || data.role == 'tank' || data.CanAddle();
-      },
+      condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
     },
     {
       id: 'TitanEx Gaoler Adds',
       regex: /Gaoler Adds/,
       beforeSeconds: 1,
-      infoText: {
-        en: 'Gaoler Adds',
-        de: 'graniten Kerkermeister Adds',
-        fr: 'Adds geôlier',
-        ja: '雑魚: 子タイタン',
-        cn: '小土豆出现',
-        ko: '화강암 감옥 쫄',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Gaoler Adds',
+          de: 'graniten Kerkermeister Adds',
+          fr: 'Adds geôlier',
+          ja: '雑魚: 子タイタン',
+          cn: '小土豆出现',
+          ko: '화강암 감옥 쫄',
+        },
       },
     },
     {
       id: 'TitanEx Double Weight',
       regex: /Weight Of The Land 1/,
       beforeSeconds: 4,
-      infoText: {
-        en: 'Double Weight',
-        de: 'Doppeltes Gaias Gewicht',
-        fr: 'Double poids',
-        ja: '大地の重み2連',
-        cn: '二连流沙',
-        ko: '2연속 대지의 무게',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Double Weight',
+          de: 'Doppeltes Gaias Gewicht',
+          fr: 'Double poids',
+          ja: '大地の重み2連',
+          cn: '二连流沙',
+          ko: '2연속 대지의 무게',
+        },
       },
     },
   ],
   triggers: [
+    {
+      // Doesn't seem like this happens twice, but let's be safe.
+      id: 'TitanEx Rock Throw',
+      netRegex: NetRegexes.tether({ id: '0007' }),
+      suppressSeconds: 1,
+      alertText: (data, matches, output) => {
+        if (matches.source === data.me || matches.target === data.me)
+          return output.jailOnYou();
+      },
+      infoText: (data, matches, output) => {
+        if (matches.source !== data.me && matches.target !== data.me)
+          return output.jails();
+      },
+      outputStrings: {
+        jailOnYou: {
+          en: 'Jail on YOU',
+          de: 'Gefängnis auf DIR',
+          fr: 'Geôle sur VOUS',
+          ja: '自分にジェイル',
+          cn: '石牢点名',
+        },
+        jails: {
+          en: 'Jails',
+          de: 'Gefängnis',
+          fr: 'Geôles',
+          ja: 'ジェイル',
+          cn: '石牢',
+          ko: '돌감옥',
+        },
+      },
+    },
+    {
+      id: 'TitanEx Upheaval',
+      // Five second cast time.
+      netRegex: NetRegexes.startsUsing({ source: 'Titan', id: '5BA', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Titan', id: '5BA', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ source: 'Titan', id: '5BA', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ source: 'タイタン', id: '5BA', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '泰坦', id: '5BA', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '타이탄', id: '5BA', capture: false }),
+      response: Responses.knockback('info'),
+    },
   ],
   timelineReplace: [
     {
@@ -190,6 +235,12 @@
         'Titan': '타이탄',
       },
       'replaceText': {
+        '\\(all\\)': '(모두)',
+        '\\(clock\\)': '(시계 방향)',
+        '\\(one side\\)': '(한 방향)',
+        '\\(row 1\\)': '(1열)',
+        '\\(row 2\\)': '(2열)',
+        '\\(row 3\\)': '(3열)',
         'Burst': '대폭발',
         'Bury': '충격',
         'Earthen Fury': '대지의 분노',
@@ -204,4 +255,4 @@
       },
     },
   ],
-}];
+};

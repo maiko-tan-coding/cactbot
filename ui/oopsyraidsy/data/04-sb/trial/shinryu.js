@@ -1,8 +1,9 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Shinryu Normal
 
-[{
+export default {
   zoneId: ZoneId.TheRoyalMenagerie,
   damageWarn: {
     'Shinryu Akh Rhai': '1FA6', // Sky lasers alongside Akh Morn.
@@ -24,14 +25,34 @@
       // Thin Ice
       netRegex: NetRegexes.gainsEffect({ effectId: '38F' }),
       deathReason: function(e, data, matches) {
-        return { type: 'fail', name: matches.target, reason: { en: 'Slid off!' } };
+        return {
+          type: 'fail',
+          name: matches.target,
+          reason: {
+            en: 'Slid off!',
+            de: 'Runter gerutscht!',
+            fr: 'A glissé(e) !',
+            ja: '滑った',
+            cn: '滑落',
+          },
+        };
       },
     },
     {
       id: 'Shinryu Tidal Wave',
       damageRegex: '1F8B',
       deathReason: function(e) {
-        return { type: 'fail', name: e.targetName, reason: { en: 'Pushed off!' } };
+        return {
+          type: 'fail',
+          name: e.targetName,
+          reason: {
+            en: 'Pushed off!',
+            de: 'Runter geschubst!',
+            fr: 'A été poussé(e) !',
+            ja: '落ちた',
+            cn: '击退坠落',
+          },
+        };
       },
     },
     {
@@ -39,9 +60,19 @@
       id: 'Shinryu Aerial Blast',
       damageRegex: '1F90',
       deathReason: function(e) {
-        return { type: 'fail', name: e.targetName, reason: { en: 'Pushed off!' } };
+        return {
+          type: 'fail',
+          name: e.targetName,
+          reason: {
+            en: 'Pushed off!',
+            de: 'Runter geschubst!',
+            fr: 'A été pousser !',
+            ja: '落ちた',
+            cn: '击退坠落',
+          },
+        };
       },
     },
   ],
-}];
+};
 

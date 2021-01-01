@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.TheTempleOfTheFist,
   damageWarn: {
     'Temple Fire Break': '21ED', // Conal AoE, Bloodglider Monk trash
@@ -22,4 +22,4 @@
   shareWarn: {
     'Temple Heat Lightning': '1FD7', // Purple spread circles, boss 1
   },
-}];
+};

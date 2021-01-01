@@ -1,5 +1,3 @@
-'use strict';
-
 // Rename this file to `oopsyraidsy.js` then edit to change the oopsyraidsy ui.
 
 // A set of triggers to be ignored. The key is the 'id' of the trigger, and
@@ -45,10 +43,10 @@ Options.Triggers = [
         id: 'Test Self Crit Adlo',
         healRegex: 'B9', // Adloquium ability id
         condition: function(e, data, matches) {
-          return e.targetName == data.me && matches.flags === '10004';
+          return e.targetName === data.me && matches.flags === '10004';
         },
         mistake: function(e, data) {
-          let text = e.abilityName + ': ' + e.damageStr;
+          const text = e.abilityName + ': ' + e.damageStr;
           return { type: 'good', blame: e.targetName, text: text };
         },
       },

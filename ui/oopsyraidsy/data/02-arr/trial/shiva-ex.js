@@ -1,8 +1,9 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Shiva Extreme
-[{
-  zoneId: ZoneId.AkhAfahAmphitheatreExtreme,
+export default {
+  zoneId: ZoneId.TheAkhAfahAmphitheatreExtreme,
   damageWarn: {
     // Large white circles.
     'ShivaEx Icicle Impact': 'BEB',
@@ -50,4 +51,4 @@
       },
     },
   ],
-}];
+};

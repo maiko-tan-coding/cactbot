@@ -1,13 +1,11 @@
-'use strict';
-
-class AutoplayHelper {
+export default class AutoplayHelper {
   static Check() {
-    let context = new AudioContext();
+    const context = new AudioContext();
     return context.state === 'suspended';
   }
 
   static Prompt() {
-    let button = document.createElement('button');
+    const button = document.createElement('button');
     button.innerText = 'Click to enable audio';
     button.classList.add('autoplay-helper-button');
     button.onclick = function() {
@@ -21,6 +19,3 @@ class AutoplayHelper {
       AutoplayHelper.Prompt();
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = AutoplayHelper;

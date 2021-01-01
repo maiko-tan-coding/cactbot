@@ -1,9 +1,12 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: some sort of warning about extra tank damage during bow phase?
 // TODO: should the post-staff "spread" happen unconditionally prior to marker?
 
-[{
+export default {
   zoneId: ZoneId.TheAkhAfahAmphitheatreUnreal,
   timelineFile: 'shiva-un.txt',
   timelineTriggers: [
@@ -20,13 +23,16 @@
       id: 'ShivaUn Icebrand',
       regex: /Icebrand/,
       beforeSeconds: 5,
-      alertText: {
-        en: 'Party Share Tankbuster',
-        de: 'Tankbuster mit der Gruppe Teilen',
-        fr: 'Partagez le Tank buster avec le groupe',
-        ja: '頭割りタンクバスター',
-        cn: '团队分摊死刑',
-        ko: '파티 쉐어 탱버',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Party Share Tankbuster',
+          de: 'Tankbuster mit der Gruppe Teilen',
+          fr: 'Partagez le Tank buster avec le groupe',
+          ja: '頭割りタンクバスター',
+          cn: '团队分摊死刑',
+          ko: '파티 쉐어 탱버',
+        },
       },
     },
     {
@@ -46,24 +52,18 @@
       netRegexJa: NetRegexes.ability({ source: 'シヴァ', id: '5367', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '시바', id: '5367', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '希瓦', id: '5367', capture: false }),
-      response: function(data) {
-        if (data.role === 'tank') {
-          if (data.currentTank && data.blunt && data.blunt[data.currentTank]) {
-            return {
-              alertText: {
-                en: 'Staff (Tank Swap)',
-                de: 'Stab (Tankwechsel)',
-                fr: 'Bâton (Tank Swap)',
-                ja: '杖 (スイッチ)',
-                cn: '权杖（换T）',
-                ko: '지팡이 (탱커 교대)',
-              },
-            };
-          }
-        }
-
-        return {
-          infoText: {
+      response: (data, _, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          staffTankSwap: {
+            en: 'Staff (Tank Swap)',
+            de: 'Stab (Tankwechsel)',
+            fr: 'Bâton (Tank Swap)',
+            ja: '杖 (スイッチ)',
+            cn: '权杖（换T）',
+            ko: '지팡이 (탱커 교대)',
+          },
+          staff: {
             en: 'Staff',
             de: 'Stab',
             fr: 'Bâton',
@@ -72,6 +72,13 @@
             ko: '지팡이',
           },
         };
+
+        if (data.role === 'tank') {
+          if (data.currentTank && data.blunt && data.blunt[data.currentTank])
+            return { alertText: output.staffTankSwap() };
+        }
+
+        return { infoText: output.staff() };
       },
       run: function(data) {
         data.soonAfterWeaponChange = true;
@@ -85,24 +92,18 @@
       netRegexJa: NetRegexes.ability({ source: 'シヴァ', id: '5366', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '시바', id: '5366', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '希瓦', id: '5366', capture: false }),
-      response: function(data) {
-        if (data.role === 'tank') {
-          if (data.currentTank && data.slashing && data.slashing[data.currentTank]) {
-            return {
-              alertText: {
-                en: 'Sword (Tank Swap)',
-                de: 'Schwert (Tankwechsel)',
-                fr: 'Épée (Tank Swap)',
-                ja: '剣 (スイッチ)',
-                cn: '剑（换T）',
-                ko: '검 (탱커 교대)',
-              },
-            };
-          }
-        }
-
-        return {
-          infoText: {
+      response: (data, _, output) => {
+        // cactbot-builtin-response
+        output.responseOutputStrings = {
+          swordTankSwap: {
+            en: 'Sword (Tank Swap)',
+            de: 'Schwert (Tankwechsel)',
+            fr: 'Épée (Tank Swap)',
+            ja: '剣 (スイッチ)',
+            cn: '剑（换T）',
+            ko: '검 (탱커 교대)',
+          },
+          sword: {
             en: 'Sword',
             de: 'Schwert',
             fr: 'Épée',
@@ -111,6 +112,12 @@
             ko: '검',
           },
         };
+        if (data.role === 'tank') {
+          if (data.currentTank && data.slashing && data.slashing[data.currentTank])
+            return { alertText: output.swordTankSwap() };
+        }
+
+        return { infoText: output.sword() };
       },
       run: function(data) {
         data.soonAfterWeaponChange = true;
@@ -220,26 +227,32 @@
       netRegex: NetRegexes.headMarker({ id: '001A' }),
       condition: Conditions.targetIsYou(),
       // Responses.knockback does not quite give the 'laser cleave' aspect here.
-      alarmText: {
-        en: 'Knockback Laser on YOU',
-        de: 'Rückstoß-Laser auf DIR',
-        fr: 'Poussée-Laser sur VOUS',
-        ja: '自分にノックバックレザー',
-        cn: '击退激光点名',
-        ko: '넉백 레이저 대상자',
+      alarmText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Knockback Laser on YOU',
+          de: 'Rückstoß-Laser auf DIR',
+          fr: 'Poussée-Laser sur VOUS',
+          ja: '自分にノックバックレザー',
+          cn: '击退激光点名',
+          ko: '넉백 레이저 대상자',
+        },
       },
     },
     {
       id: 'ShivaUn Avalanche Marker Other',
       netRegex: NetRegexes.headMarker({ id: '001A' }),
       condition: Conditions.targetIsNotYou(),
-      infoText: {
-        en: 'Avoid Laser',
-        de: 'Laser ausweichen',
-        fr: 'Évitez le laser',
-        ja: 'ノックバックレザーを避け',
-        cn: '躲避击退激光',
-        ko: '레이저 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid Laser',
+          de: 'Laser ausweichen',
+          fr: 'Évitez le laser',
+          ja: 'ノックバックレザーを避け',
+          cn: '躲避击退激光',
+          ko: '레이저 피하기',
+        },
       },
     },
     {
@@ -255,8 +268,8 @@
         if (!data.seenDiamondDust || data.soonAfterWeaponChange)
           return false;
 
-        let x = parseFloat(matches.x);
-        let y = parseFloat(matches.y);
+        const x = parseFloat(matches.x);
+        const y = parseFloat(matches.y);
         return Math.abs(x) < 0.1 && Math.abs(y) < 0.1;
       },
       // This can hit multiple people.
@@ -272,15 +285,18 @@
       id: 'ShivaUn Ice Boulder',
       netRegex: NetRegexes.ability({ id: '537A' }),
       condition: Conditions.targetIsNotYou(),
-      infoText: function(data, matches) {
-        return {
-          en: 'Free ' + data.ShortName(matches.target),
-          de: 'Befreie ' + data.ShortName(matches.target),
-          fr: 'Libérez ' + data.ShortName(matches.target),
-          ja: data.ShortName(matches.target) + 'を救って',
-          cn: '解救' + data.ShortName(matches.target),
-          ko: data.ShortName(matches.target) + '감옥 해제',
-        };
+      infoText: function(data, matches, output) {
+        return output.text({ player: data.ShortName(matches.target) });
+      },
+      outputStrings: {
+        text: {
+          en: 'Free ${player}',
+          de: 'Befreie ${player}',
+          fr: 'Libérez ${player}',
+          ja: '${player}を救って',
+          cn: '解救${player}',
+          ko: '${player}감옥 해제',
+        },
       },
     },
   ],
@@ -402,12 +418,14 @@
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Ice Soldier': '얼음 병사',
         'Shiva': '시바',
       },
       'replaceText': {
+        '\\(circle\\)': '(원형)',
+        '\\(cross\\)': '(십자)',
+        '--frozen--': '--동결--',
         'Absolute Zero': '절대영도',
         'Avalanche': '눈사태',
         'Diamond Dust': '다이아몬드 더스트',
@@ -427,4 +445,4 @@
       },
     },
   ],
-}];
+};

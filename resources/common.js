@@ -1,6 +1,4 @@
-'use strict';
-
-const Util = (() => {
+export const Util = (() => {
   const kTankJobs = ['GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB'];
   const kHealerJobs = ['CNJ', 'WHM', 'SCH', 'AST'];
   const kMeleeDpsJobs = ['PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM'];
@@ -110,12 +108,12 @@ const Util = (() => {
   if (typeof location === 'undefined')
     return;
 
-  let wsUrl = /[\?&]OVERLAY_WS=([^&]+)/.exec(location.href);
+  const wsUrl = /[\?&]OVERLAY_WS=([^&]+)/.exec(location.href);
   let ws = null;
   let queue = [];
   let rseqCounter = 0;
-  let responsePromises = {};
-  let subscribers = {};
+  const responsePromises = {};
+  const subscribers = {};
   let sendMessage = null;
 
   if (wsUrl) {
@@ -126,7 +124,7 @@ const Util = (() => {
         ws.send(JSON.stringify(msg));
     };
 
-    let connectWs = function() {
+    const connectWs = function() {
       ws = new WebSocket(wsUrl[1]);
 
       ws.addEventListener('error', (e) => {
@@ -136,7 +134,7 @@ const Util = (() => {
       ws.addEventListener('open', () => {
         console.log('Connected!');
 
-        let q = queue;
+        const q = queue;
         queue = null;
 
         sendMessage({
@@ -144,7 +142,7 @@ const Util = (() => {
           events: Object.keys(subscribers),
         });
 
-        for (let msg of q)
+        for (const msg of q)
           sendMessage(msg);
       });
 
@@ -184,13 +182,13 @@ const Util = (() => {
         OverlayPluginApi.callHandler(JSON.stringify(obj), cb);
     };
 
-    let waitForApi = function() {
+    const waitForApi = function() {
       if (!window.OverlayPluginApi || !window.OverlayPluginApi.ready) {
         setTimeout(waitForApi, 300);
         return;
       }
 
-      let q = queue;
+      const q = queue;
       queue = null;
 
       window.__OverlayCallback = processEvent;
@@ -200,7 +198,7 @@ const Util = (() => {
         events: Object.keys(subscribers),
       }, null);
 
-      for (let [msg, resolve] of q)
+      for (const [msg, resolve] of q)
         sendMessage(msg, resolve);
     };
 
@@ -209,7 +207,7 @@ const Util = (() => {
 
   function processEvent(msg) {
     if (subscribers[msg.type]) {
-      for (let sub of subscribers[msg.type])
+      for (const sub of subscribers[msg.type])
         sub(msg);
     }
   }
@@ -233,8 +231,8 @@ const Util = (() => {
 
   window.removeOverlayListener = (event, cb) => {
     if (subscribers[event]) {
-      let list = subscribers[event];
-      let pos = list.indexOf(cb);
+      const list = subscribers[event];
+      const pos = list.indexOf(cb);
 
       if (pos > -1) list.splice(pos, 1);
     }
@@ -253,7 +251,7 @@ const Util = (() => {
     } else {
       p = new Promise((resolve) => {
         sendMessage(msg, (data) => {
-          resolve(data == null ? null : JSON.parse(data));
+          resolve(data === null ? null : JSON.parse(data));
         });
       });
     }
@@ -261,9 +259,3 @@ const Util = (() => {
     return p;
   };
 })();
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    Util: Util,
-  };
-}

@@ -260,7 +260,7 @@ Options.Triggers.push([
 
 
     （假设您已经做完了第一步，并且该文本文件的名称为 `user/the_epic_of_alexander.txt` ）
-    
+
     设置 `overrideTimelineFile: true` 是为了告诉cactbot将内置的时间轴完全替换为您添加的文件。
 
 1) 按您的喜好编辑您自己的时间轴文件

@@ -1,6 +1,10 @@
-'use strict';
+import FisherUI from './fisher-ui.js';
+import SeaBase from './seabase.js';
+import UserConfig from '../../resources/user_config.js';
 
-let Options = {
+import '../../resources/common.js';
+
+const Options = {
   IQRHookQuantity: 100,
   IQRTugQuantity: 10,
   Colors: {
@@ -114,7 +118,7 @@ class Fisher {
         'cast': /00:08c3:(?:[\w\s-'\u4e00-\u9fa5·]+)在([\w\s-'\u4e00-\u9fa5·\uff08\uff09]+)甩出了鱼线开始钓鱼。/,
         'bite': /00:08c3:有鱼上钩了！/,
         'catch': /00:0843:(?:[\w\s-'\u4e00-\u9fa5·]+)?成功钓上了.*?([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf·]+\d*).*（\d+\.\d星寸）。/,
-        'nocatch': /00:08c3:([\w\s-'\u4e00-\u9fa5·]+)?(?:不经意间鱼饵被吃掉了……|不经意间丢掉了.+……|不经意间鱼饵被吃掉了……|上钩的鱼逃走了……|鱼线断了！|没有钓到任何东西……\n\n现在使用的鱼饵可能不太适合这片钓场。|没有钓到任何东西……|.+收竿停止了钓鱼。|鱼带着.+逃走了……|这里的鱼现在警惕性很高，看来还是换个地点比较好。|无法持有更多的.+，(?:[\w\s-'\u4e00-\u9fa5·]+)?将刚钓上的东西放生了。)/,
+        'nocatch': /00:08c3:([\w\s-'\u4e00-\u9fa5·]+)?(?:不经意间鱼饵被吃掉了……|不经意间丢掉了.+……|不经意间.+不见了……|不经意间鱼饵被吃掉了……|上钩的鱼逃走了……|鱼线断了！|没有钓到任何东西……\n\n现在使用的鱼饵可能不太适合这片钓场。|没有钓到任何东西……|.+收竿停止了钓鱼。|鱼带着.+逃走了……|这里的鱼现在警惕性很高，看来还是换个地点比较好。|无法持有更多的.+，(?:[\w\s-'\u4e00-\u9fa5·]+)?将刚钓上的东西放生了。)/,
         'mooch': /00:08c3:(?:[\w\s-'\u4e00-\u9fa5·]+)开始利用上钩的.*?([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf·]+\d*).*尝试以小钓大。/,
         'chumgain': /00:08ae:(?:[\w\s-'\u4e00-\u9fa5·]+)附加了“.*撒饵.*”效果。/,
         'chumfade': /00:08b0:(?:[\w\s-'\u4e00-\u9fa5·]+)的“.*撒饵.*”状态效果消失了。/,
@@ -139,7 +143,7 @@ class Fisher {
       },
     };
 
-    this.ui = new FisherUI(element);
+    this.ui = new FisherUI(element, Options);
     this.seaBase = new SeaBase(Options);
   }
 
@@ -153,12 +157,12 @@ class Fisher {
   updateFishData() {
     // We can only know data for both of these
     if (!this.place || !this.getActiveBait()) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(((resolve, reject) => {
         resolve();
-      });
+      }));
     }
 
-    let _this = this;
+    const _this = this;
     this.hookTimes = {};
     this.tugTypes = {};
 
@@ -168,13 +172,13 @@ class Fisher {
     // We should update twice for each fish, one for hook times and one for tugs
     let queue = this.placeFish.length * 2;
 
-    return new Promise(function(resolve, reject) {
-      for (let index in _this.placeFish) {
-        let fish = _this.placeFish[index];
+    return new Promise(((resolve, reject) => {
+      for (const index in _this.placeFish) {
+        const fish = _this.placeFish[index];
 
         // Get the hook min and max times for the fish/bait/chum combo
         _this.seaBase.getHookTimes(fish, _this.getActiveBait(), _this.chum)
-          .then(function(hookTimes) {
+          .then((hookTimes) => {
             _this.hookTimes[fish.name] = hookTimes;
             queue -= 1;
             if (!queue) {
@@ -184,7 +188,7 @@ class Fisher {
           });
 
         // Get the tug type for the fish
-        _this.seaBase.getTug(fish).then(function(tug) {
+        _this.seaBase.getTug(fish).then((tug) => {
           _this.tugTypes[fish.name] = tug;
           queue -= 1;
           if (!queue) {
@@ -193,7 +197,7 @@ class Fisher {
           }
         });
       }
-    });
+    }));
   }
 
   handleBait(bait) {
@@ -236,9 +240,9 @@ class Fisher {
     // due to differing cast vs location names.
     if (this.place.id)
       this.ui.setPlace(this.place.name);
-    let _this = this;
+    const _this = this;
 
-    this.updateFishData().then(function() {
+    this.updateFishData().then(() => {
       _this.ui.startFishing();
     });
   }
@@ -310,8 +314,8 @@ class Fisher {
   handleChumFade() {
     // Chum fades just before the catch appears, so we need to
     // delay it to record the catch with chum active
-    let _this = this;
-    setTimeout(function() {
+    const _this = this;
+    setTimeout(() => {
       _this.chum = false;
     }, 1000);
   }
@@ -336,9 +340,9 @@ class Fisher {
   parseLine(log) {
     let result = null;
 
-    for (let type in this.regex[Options.ParserLanguage]) {
+    for (const type in this.regex[Options.ParserLanguage]) {
       result = this.regex[Options.ParserLanguage][type].exec(log);
-      if (result != null) {
+      if (result) {
         switch (type) {
         // case 'bait': this.handleBait(result[1]); break;
         case 'cast': this.handleCast(result[1]); break;
@@ -358,7 +362,7 @@ class Fisher {
   }
 
   OnLogEvent(e) {
-    if (this.job == 'FSH')
+    if (this.job === 'FSH')
       e.detail.logs.forEach(this.parseLine, this);
   }
 
@@ -370,7 +374,7 @@ class Fisher {
 
   OnPlayerChange(e) {
     this.job = e.detail.job;
-    if (this.job == 'FSH') {
+    if (this.job === 'FSH') {
       this.element.style.display = 'block';
       if (!this.fishing)
         this.handleBait(e.detail.bait);
@@ -380,18 +384,18 @@ class Fisher {
   }
 }
 
-UserConfig.getUserConfigLocation('fisher', Options, function() {
+UserConfig.getUserConfigLocation('fisher', Options, () => {
   gFisher = new Fisher(document.getElementById('fisher'));
 
-  addOverlayListener('onLogEvent', function(e) {
+  addOverlayListener('onLogEvent', (e) => {
     gFisher.OnLogEvent(e);
   });
 
-  addOverlayListener('ChangeZone', function(e) {
+  addOverlayListener('ChangeZone', (e) => {
     gFisher.OnChangeZone(e);
   });
 
-  addOverlayListener('onPlayerChangedEvent', function(e) {
+  addOverlayListener('onPlayerChangedEvent', (e) => {
     gFisher.OnPlayerChange(e);
   });
 });

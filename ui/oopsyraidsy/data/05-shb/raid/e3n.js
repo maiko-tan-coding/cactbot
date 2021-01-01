@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensGateInundation,
   damageWarn: {
     'E3N Monster Wave 1': '3FCA',
@@ -18,11 +18,11 @@
       id: 'E3N Rip Current',
       damageRegex: '3FC7',
       condition: function(e, data) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
   ],
-}];
+};

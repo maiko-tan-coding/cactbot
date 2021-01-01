@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseFulmination,
   timelineFile: 'e5n.txt',
   triggers: [
@@ -40,12 +43,16 @@
       netRegexKo: NetRegexes.ability({ id: '4B8D', source: '라무', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '4B8D', source: '拉姆', capture: false }),
       delaySeconds: 5,
-      infoText: {
-        en: 'Look for small spear',
-        de: 'Halt nach kleinem Speer ausschau',
-        fr: 'Allez sur la petite lance',
-        ko: '작은 지팡이 확인',
-        cn: '找短矛',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Look for small spear',
+          de: 'Halt nach kleinem Speer ausschau',
+          fr: 'Allez sur la petite lance',
+          ja: '低い杖を探す',
+          cn: '找短矛',
+          ko: '작은 지팡이 확인',
+        },
       },
     },
     {
@@ -56,12 +63,16 @@
       netRegexJa: NetRegexes.startsUsing({ id: '4B91', source: 'ラムウ', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4B91', source: '라무', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4B91', source: '拉姆', capture: false }),
-      infoText: {
-        en: 'Look for adds',
-        de: 'Halt nach dem Add ausschau',
-        fr: 'Cherchez les adds',
-        ko: '쫄 위치 확인',
-        cn: '注意小怪',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Look for adds',
+          de: 'Halt nach dem Add ausschau',
+          fr: 'Cherchez les adds',
+          ja: '雑魚に注意',
+          cn: '注意小怪',
+          ko: '쫄 위치 확인',
+        },
       },
     },
     {
@@ -72,12 +83,16 @@
       netRegexJa: NetRegexes.startsUsing({ id: '4B90', source: 'ラムウ', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4B90', source: '라무', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4B90', source: '拉姆', capture: false }),
-      infoText: {
-        en: 'Fury\'s Bolt',
-        de: 'Wütender Blitz',
-        fr: 'Boule de foudre',
-        ko: '라무 강화',
-        cn: '蓄雷',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Fury\'s Bolt',
+          de: 'Wütender Blitz',
+          fr: 'Boule de foudre',
+          ja: 'チャージボルト',
+          cn: '蓄雷',
+          ko: '라무 강화',
+        },
       },
     },
     {
@@ -102,24 +117,32 @@
       condition: function(data) {
         return !data.surgeProtection;
       },
-      alertText: {
-        en: 'Grab an orb',
-        de: 'Einen Orb nehmen',
-        fr: 'Prenez un orbe',
-        ko: '구슬 줍기',
-        cn: '吃球',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Grab an orb',
+          de: 'Einen Orb nehmen',
+          fr: 'Prenez un orbe',
+          ja: '雷玉を取る',
+          cn: '吃球',
+          ko: '구슬 줍기',
+        },
       },
     },
     {
       id: 'E5N Stormcloud',
       netRegex: NetRegexes.headMarker({ id: '006E' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: 'Drop cloud outside',
-        de: 'Wolken draußen ablegen',
-        fr: 'Déposez le nuage à l\'extérieur',
-        ko: '바깥으로 구름 유도',
-        cn: '外侧放雷云',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Drop cloud outside',
+          de: 'Wolken draußen ablegen',
+          fr: 'Déposez le nuage à l\'extérieur',
+          ja: '外に雷雲を捨てる',
+          cn: '外侧放雷云',
+          ko: '바깥으로 구름 유도',
+        },
       },
     },
   ],
@@ -240,4 +263,4 @@
       },
     },
   ],
-}];
+};

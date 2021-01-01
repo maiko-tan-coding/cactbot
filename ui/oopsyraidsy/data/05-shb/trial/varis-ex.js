@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.MemoriaMiseraExtreme,
   damageWarn: {
     'VarisEx Alea Iacta Est 1': '4CD2',
@@ -38,4 +38,4 @@
       },
     },
   ],
-}];
+};

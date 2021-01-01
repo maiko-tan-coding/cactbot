@@ -1,5 +1,3 @@
-'use strict';
-
 const fakePlayerNames = [
   'Tini Poutini',
   'Potato Chippy',
@@ -13,7 +11,7 @@ function randomFromArray(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-class FakeNameGenerator {
+export default class FakeNameGenerator {
   constructor() {
     this.fakePlayerNames = [...fakePlayerNames];
     // playerId -> name
@@ -114,7 +112,7 @@ class FakeNameGenerator {
 
   makeUniqueMiqoteName(id) {
     // Turn id into a lowercase string of letters.
-    let randomStr = id.toString(26).split('').map((c) => {
+    const randomStr = id.toString(26).split('').map((c) => {
       // shift [0-9] to [a-j]
       if (c.match(/\d/) !== null)
         return String.fromCharCode(parseInt(c) + 'a'.charCodeAt());
@@ -124,6 +122,3 @@ class FakeNameGenerator {
     return 'X\'' + randomStr + ' Tia';
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = FakeNameGenerator;

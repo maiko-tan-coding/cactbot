@@ -1,6 +1,8 @@
-'use strict';
+import DpsPhaseTracker from './dps_phase_tracker.js';
+import { InitDpsModule, Options } from '../dps_common.js';
+import UserConfig from '../../../resources/user_config.js';
 
-let rows = 10;
+const rows = 10;
 let rdpsMax = 0;
 
 function hideOverlay() {
@@ -12,19 +14,19 @@ function showOverlay() {
 }
 
 function update(dps, tracker) {
-  let encounter = dps.Encounter;
-  let rdps = parseFloat(encounter.encdps);
-  if (isNaN(rdps) || rdps == Infinity)
+  const encounter = dps.Encounter;
+  const rdps = parseFloat(encounter.encdps);
+  if (isNaN(rdps) || rdps === Infinity)
     return;
 
   showOverlay();
 
-  let combatants = dps.Combatant;
-  let template = $('#overlaysource li');
-  let overlay = $('#overlay');
-  let container = overlay.clone();
+  const combatants = dps.Combatant;
+  const template = $('#overlaysource li');
+  const overlay = $('#overlay');
+  const container = overlay.clone();
   // Reserve one row for the phase titles.
-  let rows = Math.floor($(window).height() / template.height()) - 1;
+  const rows = Math.floor($(window).height() / template.height()) - 1;
 
   // todo: animate changes while combat is active?
   // for now, always just fully replace the content
@@ -32,11 +34,11 @@ function update(dps, tracker) {
   container.html('');
 
   // sanity check
-  if (!isNaN(rdps) && rdps != Infinity)
+  if (!isNaN(rdps) && rdps !== Infinity)
     rdpsMax = Math.max(rdpsMax, rdps);
 
 
-  let header = template.clone();
+  const header = template.clone();
   if (encounter.encdps.length <= 7)
     header.find('.dps').text(encounter.encdps);
   else
@@ -49,20 +51,20 @@ function update(dps, tracker) {
 
   container.append(header);
 
-  let limit = Math.max(combatants.length, rows);
-  let names = Object.keys(combatants).slice(0, rows - 1);
+  const limit = Math.max(combatants.length, rows);
+  const names = Object.keys(combatants).slice(0, rows - 1);
   let maxdps = false;
 
-  let dpsOrder = {};
+  const dpsOrder = {};
   for (let i = 0; i < names.length; i++) {
-    let combatant = combatants[names[i]];
-    let row = template.clone();
+    const combatant = combatants[names[i]];
+    const row = template.clone();
 
     if (!maxdps)
       maxdps = parseFloat(combatant.encdps);
 
 
-    if (combatant.name == 'YOU')
+    if (combatant.name === 'YOU')
       row.addClass('you');
 
     dpsOrder[combatant.name] = i;
@@ -94,20 +96,20 @@ function updatePhase(phase, dpsOrder) {
 
 
   if (!phase.element) {
-    let container = $('#phasesource ol').clone();
+    const container = $('#phasesource ol').clone();
     phase.element = container;
     $('#topcontainer').append(container);
     // Map of combatants => elements
     phase.rowMap = {};
   }
 
-  let phasename = phase.element.find('.phasename');
+  const phasename = phase.element.find('.phasename');
   phasename.text(phase.name);
-  let phasetotal = phase.element.find('.phasetotal');
+  const phasetotal = phase.element.find('.phasetotal');
   phasetotal.text(phase.diff.Encounter.ENCDPS);
 
   let maxPhaseDPS = null;
-  for (let name in dpsOrder) {
+  for (const name in dpsOrder) {
     let combatant = phase.diff.Combatant[name];
     if (!combatant) {
       phase.diff.Combatant[name] = combatant = {
@@ -117,7 +119,7 @@ function updatePhase(phase, dpsOrder) {
     let row = phase.rowMap[name];
     if (!row) {
       row = $('#phasenumbersource li').clone();
-      if (name == 'YOU')
+      if (name === 'YOU')
         row.addClass('you');
 
       phase.element.append(row);
@@ -125,7 +127,7 @@ function updatePhase(phase, dpsOrder) {
     }
     row.find('.number').text(combatant.ENCDPS);
 
-    let order = dpsOrder[name];
+    const order = dpsOrder[name];
     row.removeClass('hide');
     row.removeClass('highestdps');
     row.css('order', dpsOrder[name]);
@@ -140,8 +142,8 @@ function updatePhase(phase, dpsOrder) {
 
   // Rows that used to be in dpsOrder but now aren't should be
   // hidden.
-  for (let name in phase.rowMap) {
-    let order = dpsOrder[name];
+  for (const name in phase.rowMap) {
+    const order = dpsOrder[name];
     if (order === undefined)
       phase.rowMap[name].addClass('hide');
   }
@@ -150,8 +152,8 @@ function updatePhase(phase, dpsOrder) {
     maxPhaseDPS.row.addClass('highestdps');
 }
 
-UserConfig.getUserConfigLocation('xephero', Options, function(e) {
-  let tracker = new DpsPhaseTracker(Options);
+UserConfig.getUserConfigLocation('xephero', Options, (e) => {
+  const tracker = new DpsPhaseTracker(Options);
   const onOverlayDataUpdateEvent = (e) => {
     tracker.onOverlayDataUpdate(e.detail);
     update(e.detail, tracker);

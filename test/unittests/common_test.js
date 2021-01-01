@@ -1,8 +1,7 @@
-'use strict';
+import { Util } from '../../resources/common.js';
+import chai from 'chai';
 
-const { Util } = require('../../resources/common.js');
-
-const { assert } = require('chai');
+const { assert } = chai;
 
 // Duplicate values from common.js
 // Expect to update these as patches and expansions change job capabilities
@@ -43,7 +42,7 @@ const jobs = (() => {
   return jobs;
 })();
 
-let tests = {
+const tests = {
   // Check test job values match actual values from common.js and return their expected values
   actionsTest: () => {
     [['Addle', Util.canAddle], ['Cleanse', Util.canCleanse], ['Feint', Util.canFeint], ['Silence', Util.canSilence], ['Sleep', Util.canSleep], ['Stun', Util.canStun]]
@@ -74,7 +73,7 @@ let tests = {
   },
 };
 
-let keys = Object.keys(tests);
+const keys = Object.keys(tests);
 let exitCode = 0;
 for (let i = 0; i < keys.length; ++i) {
   try {

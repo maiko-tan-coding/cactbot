@@ -5,6 +5,8 @@
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
+🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
+
 1. [About](#about)
 1. [Installing](#installing)
 1. [Building From Source](#building-from-source)
@@ -15,7 +17,7 @@
 
 ## About
 
-cactbot is an ACT overlay that provides raiding tools for [Final Fantasy XIV](http://www.finalfantasyxiv.com/).  This project is an overlay plugin for
+cactbot is an ACT overlay that provides raiding tools for [Final Fantasy XIV](http://www.finalfantasyxiv.com/). This project is an overlay plugin for
 [ngld's OverlayPlugin](https://github.com/ngld/OverlayPlugin)
 which itself is a plugin for
 [Advanced Combat Tracker](http://advancedcombattracker.com/).
@@ -84,7 +86,7 @@ and enable it in the list of plugins.
 
 Additionally, you must enable parsing from the network and make sure that ACT is not firewalled.
 Make sure the settings for the FFXIV plugin have the "Include HP for Triggers" button checked.
-This is under `Plugins` ->`FFXIV Settings` -> `Parse Options`.
+This is under `Plugins` ->`FFXIV Settings` -> `Options`.
 
 Alternative FFXIV Plugin Guides:
 
@@ -183,7 +185,7 @@ To install dependencies there are 2 methods: **per script** and **manually**
 ### Dependencies: Script Method
 
 1. `curl` MUST be installed (this is used to download dependencies)
-1. Execute the `./utils/fetch_deps.py` script
+1. Execute the `./util/fetch_deps.py` script
 1. Continue with **Steps to build**
 
 ### Dependencies: Manual Method
@@ -227,12 +229,28 @@ ThirdParty
    |- OverlayPlugin.dll
 ```
 
-### Steps to build
+### Steps to build plugin
 
 1. Open the solution in Visual Studio (tested with Visual Studio 2017).
 1. Build for "Release" and "x64".
 1. The plugin will be built as **bin/x64/Release/CactbotOverlay.dll**.
 1. Add the built plugin directly as an ACT plugin.  In the ACT -> Plugins -> Plugin Listing tab, click the `Browse` button and find the **bin/x64/Release/CactbotOverlay.dll** where this file was built.  Then click `Add/Enable Plugin`.
+
+### npm and webpack
+
+If you are not a cactbot developer
+and are trying to modify cactbot for your own personal triggers,
+you should instead refer to the [customization documentation](docs/CactbotCustomization.md)
+instead of changing your local cactbot files.
+
+To install npm and start Webpack, follow these steps:
+
+1. Install [nodejs and npm](https://nodejs.org/en/download/)
+1. Run `npm install` in the root of the cactbot directory.
+1. Run `npm run build` or `npm start`.
+
+See the [contributing](CONTRIBUTING.md#validating-changes-via-webpack) documentation
+for more details about using Webpack.
 
 ## UI module overview
 
@@ -252,7 +270,12 @@ This module provides a visual timeline of upcoming events in a fight, as well as
 notifications to help increase raid awareness. Text and sound alerts can be based on the fight
 timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers".
 The module is designed to look and feel similar to the
-[BigWigs Bossmods](https://mods.curse.com/addons/wow/big-wigs) addon for World of Warcraft.
+[BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) addon for World of Warcraft.
+
+[This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists
+the currently supported set of content in cactbot.
+Support is continually added over time (patches welcome!)
+but a lot of old content may not be supported yet.
 
 Fight timelines are provided in files designed for the [ACT Timeline](https://github.com/grindingcoil/act_timeline)
 plugin, [documented here](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)
@@ -261,8 +284,7 @@ with [some extensions](docs/TimelineGuide.md).
 There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`.
 Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
 
-Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers
-for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
+Timeline files and triggers for text and sound alerts are found in [ui/raidboss/data](ui/raidboss/data), timeline files with `.txt` extension and trigger files with `.js` extension.
 
 In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the
 text alerts circled in yellow, with an `alert`-level text message visible.
@@ -313,7 +335,7 @@ Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data
 To use this module,
 point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
 
-This module provides health, mana, and tp bars, as well as icons and timer bars for big raid buffs such as
+This module provides health and mana bars, as well as icons and timer bars for big raid buffs such as
 The Balance and Trick Attack. It also features a food buff warning to keep up your food buff when leveling
 or raiding, and a visual pull countdown.
 
@@ -476,8 +498,3 @@ international (English, German, French, Japanese) version,
 the current Chinese version,
 and the current Korean version.
 Some translations are still a work in progress.
-
-Unicode characters are supported throughout, through the use of the helpers in the
-[resources/regexes.js](resources/regexes.js) file. However [timelines](ui/raidboss/data/timelines)
-and log event [triggers](ui/raidboss/data/triggers) may be incorrect if names that appear in the
-ACT log events are different.

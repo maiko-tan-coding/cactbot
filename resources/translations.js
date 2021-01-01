@@ -1,24 +1,8 @@
-'use strict';
+import Regexes from './regexes.js';
+import NetRegexes from './netregexes.js';
 
-let LocaleRegex = {};
-let LocaleNetRegex = {};
-
-// TODO: figure out some non-var way to require files for node, but not break html includes.
-/* eslint-disable no-var */
-var Regexes;
-var NetRegexes;
-/* eslint-enable */
-
-if (typeof module !== 'undefined') {
-  if (module.exports) {
-    module.exports = {
-      LocaleRegex: LocaleRegex,
-      LocaleNetRegex: LocaleNetRegex,
-    };
-  }
-  Regexes = require('./regexes.js');
-  NetRegexes = require('./netregexes.js');
-}
+export const LocaleRegex = {};
+export const LocaleNetRegex = {};
 
 // Fill in LocaleRegex so that things like LocaleRegex.countdownStart.de is a valid regex.
 (() => {
@@ -65,7 +49,7 @@ if (typeof module !== 'undefined') {
     },
     // Recipe name always start with \ue0bb
     // HQ icon is \ue03c
-    // TODO: CN and KO have not launched patch 5.3 yet, so they do not have trial synthesis.
+    // TODO:KO have not launched patch 5.3 yet, so they do not have trial synthesis.
     // Translation will be added once launch.
     craftingStart: {
       en: 'You begin synthesizing (?<count>(an?|\\d+) )?\ue0bb(?<recipe>.*)\\.',
@@ -80,6 +64,7 @@ if (typeof module !== 'undefined') {
       de: 'Du hast mit der Testsynthese von \ue0bb(?<recipe>.*) begonnen\\.',
       fr: 'Vous commencez une synthèse d\'essai pour une? \ue0bb(?<recipe>.*)\\.',
       ja: '(?<player>\\y{Name})は\ue0bb(?<recipe>.*)の製作練習を開始した。',
+      cn: '(?<player>\\y{Name})开始练习制作\ue0bb(?<recipe>.*)。',
     },
     craftingFinish: {
       en: 'You synthesize (?<count>(an?|\\d+) )?\ue0bb(?<recipe>.*)(\ue03c)?\\.',
@@ -94,6 +79,7 @@ if (typeof module !== 'undefined') {
       de: 'Die Testsynthese von \ue0bb(?<recipe>.*) war erfolgreich!',
       fr: 'Votre synthèse d\'essai pour fabriquer \ue0bb(?<recipe>.*) a été couronnée de succès!',
       ja: '(?<player>\\y{Name})は\ue0bb(?<recipe>.*)の製作練習に成功した！',
+      cn: '(?<player>\\y{Name})练习制作\ue0bb(?<recipe>.*)成功了！',
     },
     craftingFail: {
       en: 'Your synthesis fails!',
@@ -108,6 +94,7 @@ if (typeof module !== 'undefined') {
       de: 'Die Testsynthese von \ue0bb(?<recipe>.*) ist fehlgeschlagen\\.{3}',
       fr: 'Votre synthèse d\'essai pour fabriquer \ue0bb(?<recipe>.*) s\'est soldée par un échec\\.{3}',
       ja: '(?<player>\\y{Name})は\ue0bb(?<recipe>.*)の製作練習に失敗した……',
+      cn: '(?<player>\\y{Name})练习制作\ue0bb(?<recipe>.*)失败了……',
     },
     craftingCancel: {
       en: 'You cancel the synthesis\\.',
@@ -122,6 +109,7 @@ if (typeof module !== 'undefined') {
       de: 'Testsynthese abgebrochen\\.',
       fr: 'Vous avez interrompu la synthèse d\'essai\\.',
       ja: '(?<player>\\y{Name})は製作練習を中止した。',
+      cn: '(?<player>\\y{Name})停止了练习。',
     },
   };
 

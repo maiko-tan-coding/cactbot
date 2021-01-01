@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseFuror,
   timelineFile: 'e6n.txt',
   timelineTriggers: [
@@ -33,35 +36,45 @@
       netRegexJa: NetRegexes.startsUsing({ source: ['ガルーダ', 'ラクタパクシャ'], id: ['4BD[DEF]', '4BE[345]'], capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['迦楼罗', '赤翼罗羯坨博叉'], id: ['4BD[DEF]', '4BE[345]'], capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: ['가루다', '락타팍샤'], id: ['4BD[DEF]', '4BE[345]'], capture: false }),
-      infoText: {
-        en: 'Avoid green nails',
-        de: 'Weiche den grünen Nägeln aus',
-        fr: 'Évitez les griffes',
-        cn: '躲避风牙',
-        ko: '초록 발톱 피하기',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Avoid green nails',
+          de: 'Weiche den grünen Nägeln aus',
+          fr: 'Évitez les griffes',
+          ja: '緑の杭に避け',
+          cn: '躲避风牙',
+          ko: '초록 발톱 피하기',
+        },
       },
     },
     {
       id: 'E6N Air Bump',
       netRegex: NetRegexes.headMarker({ id: '00D3' }),
       suppressSeconds: 1,
-      infoText: function(data, matches) {
-        if (data.me == matches.target) {
-          return {
-            en: 'Enumeration on YOU',
-            de: 'Enumeration aud DIR',
-            fr: 'Énumération sur VOUS',
-            cn: '蓝圈分摊点名',
-            ko: '2인 장판 대상자',
-          };
-        }
-        return {
+      infoText: function(data, matches, output) {
+        if (data.me === matches.target)
+          return output.enumerationOnYou();
+
+        return output.enumeration();
+      },
+      outputStrings: {
+        enumerationOnYou: {
+          en: 'Enumeration on YOU',
+          de: 'Enumeration aud DIR',
+          fr: 'Énumération sur VOUS',
+          ja: '自分にエアーバンプ',
+          cn: '蓝圈分摊点名',
+          ko: '2인 장판 대상자',
+        },
+        enumeration: {
           en: 'Enumeration',
           de: 'Enumeration',
           fr: 'Énumération',
+          ja: 'エアーバンプ',
           cn: '蓝圈分摊',
           ko: '2인 장판',
-        };
+        },
       },
     },
     {
@@ -96,25 +109,31 @@
       condition: function(data) {
         return data.handsOfFlame;
       },
-      infoText: function(data, matches) {
-        if (data.me == matches.target) {
-          return {
-            en: 'Charge on YOU',
-            de: 'Ansturm auf DIR',
-            fr: 'Charge sur VOUS',
-            cn: '冲锋点名',
-            ko: '돌진 대상자',
-          };
-        }
-        if (data.role != 'tank' || data.phase == 'both')
+      infoText: function(data, matches, output) {
+        if (data.me === matches.target)
+          return output.chargeOnYou();
+
+        if (data.role !== 'tank' || data.phase === 'both')
           return;
-        return {
+        return output.tankSwap();
+      },
+      outputStrings: {
+        chargeOnYou: {
+          en: 'Charge on YOU',
+          de: 'Ansturm auf DIR',
+          fr: 'Charge sur VOUS',
+          ja: '自分に突進',
+          cn: '冲锋点名',
+          ko: '돌진 대상자',
+        },
+        tankSwap: {
           en: 'Tank Swap',
           de: 'Tank Swap',
           fr: 'Tank Swap',
+          ja: 'タンクスイッチ',
           cn: '换坦克',
           ko: '탱 교대',
-        };
+        },
       },
     },
     {
@@ -145,12 +164,16 @@
       id: 'E6N Hands of Hell',
       netRegex: NetRegexes.headMarker({ id: '0016' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: 'Tether Marker on YOU',
-        de: 'Verbindung auf DIR',
-        fr: 'Marque de lien sur VOUS',
-        cn: '连线点名',
-        ko: '징 대상자',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Tether Marker on YOU',
+          de: 'Verbindung auf DIR',
+          fr: 'Marque de lien sur VOUS',
+          ja: '自分に線マーカー',
+          cn: '连线点名',
+          ko: '징 대상자',
+        },
       },
     },
     {
@@ -165,15 +188,19 @@
       condition: function(data) {
         return !data.seenSpark;
       },
-      alertText: {
-        en: 'Move to Ifrit',
-        de: 'Zu Ifrit bewegen',
-        fr: 'Allez sur Ifrit',
-        cn: '踢球 集合待机',
-        ko: '이프리트로 이동',
-      },
+      alertText: (data, _, output) => output.text(),
       run: function(data) {
         data.seenSpark = true;
+      },
+      outputStrings: {
+        text: {
+          en: 'Move to Ifrit',
+          de: 'Zu Ifrit bewegen',
+          fr: 'Allez sur Ifrit',
+          ja: 'イフリートところへ',
+          cn: '踢球 集合待机',
+          ko: '이프리트로 이동',
+        },
       },
     },
     {
@@ -345,4 +372,4 @@
       },
     },
   ],
-}];
+};

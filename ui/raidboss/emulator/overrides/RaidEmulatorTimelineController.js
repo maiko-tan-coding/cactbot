@@ -1,6 +1,7 @@
-'use strict';
+import { TimelineController } from '../../timeline.js';
+import RaidEmulatorTimeline from './RaidEmulatorTimeline.js';
 
-class RaidEmulatorTimelineController extends TimelineController {
+export default class RaidEmulatorTimelineController extends TimelineController {
   bindTo(emulator) {
     this.emulator = emulator;
     if (this.activeTimeline)
@@ -15,7 +16,7 @@ class RaidEmulatorTimelineController extends TimelineController {
 
     // Get the text from each file in |timelineFiles|.
     for (let i = 0; i < timelineFiles.length; ++i) {
-      let name = timelineFiles[i];
+      const name = timelineFiles[i];
       if (name in this.timelines)
         text = text + '\n' + this.timelines[name];
       else
@@ -46,6 +47,3 @@ class RaidEmulatorTimelineController extends TimelineController {
     });
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = RaidEmulatorTimelineController;

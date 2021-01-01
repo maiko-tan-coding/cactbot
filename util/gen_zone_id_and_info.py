@@ -26,9 +26,27 @@ known_ids = {
 # name_key to territory_id mappings for locations that no longer
 # exist.  This is for things that have been taken out of the
 # game.  This will throw errors if anything conflicts.
-# TODO: if needed we could emit zone_info too.
 synthetic_ids = {
     "TheDiadem521": 901,
+    "TheAkhAfahAmphitheatreUnreal": 930,
+}
+
+synthetic_zone_info = {
+    930: {
+        "contentType": 4,
+        "exVersion": 3,
+        "name": {
+            "cn": "希瓦幻巧战",
+            "de": "Traumprüfung - Shiva",
+            "en": "The Akh Afah Amphitheatre (Unreal)",
+            "fr": "L'Amphithéâtre d'Akh Afah (irréel)",
+            "ja": "幻シヴァ討滅戦",
+        },
+        "offsetX": 0,
+        "offsetY": 0,
+        "sizeFactor": 400,
+        "weatherRate": 46,
+    },
 }
 
 # Notes: use rawexd here instead of exd to get place ids / territory ids
@@ -46,7 +64,16 @@ synthetic_ids = {
 
 
 def make_territory_map(contents):
-    inputs = ["#", 11, "PlaceName", "Name", "WeatherRate", "Map", "TerritoryIntendedUse"]
+    inputs = [
+        "#",
+        11,
+        "PlaceName",
+        "Name",
+        "WeatherRate",
+        "Map",
+        "TerritoryIntendedUse",
+        "ExVersion",
+    ]
     outputs = [
         "territory_id",
         "cfc_id",
@@ -55,6 +82,7 @@ def make_territory_map(contents):
         "weather_rate",
         "map_id",
         "territory_intended_use",
+        "ex_version",
     ]
     return csv_util.make_map(contents, inputs, outputs)
 
@@ -187,26 +215,47 @@ def generate_name_data(territory_map, cfc_map, place_name_map):
     return map, territory_to_cfc_map
 
 
-def generate_zone_info(territory_map, cfc_map, map_map, territory_to_cfc_map, place_name_map):
-
+def generate_zone_info(
+    territory_map, cfc_map_by_lang, map_map, territory_to_cfc_map, place_name_map_by_lang
+):
     map = {}
+
+    for id, info in synthetic_zone_info.items():
+        map[str(id)] = info
+
+    # The first letter of zones starting with articles are not capitalized.
+    def capitalize(str):
+        # can't use built in capitalize() as that lowercases non-first words @_@
+        return str[0].upper() + str[1:]
+
     for territory_id in territory_to_cfc_map:
         output = {}
         map[territory_id] = output
 
         territory = territory_map[territory_id]
         place_id = territory["place_id"]
-        place_name = place_name_map[place_id]["place_name"]
 
         output["weatherRate"] = int(territory["weather_rate"])
+        output["exVersion"] = int(territory["ex_version"])
 
         cfc_id = territory_to_cfc_map[territory_id]
         if cfc_id == None:
-            output["name"] = {"en": place_name}
+            output["name"] = {}
+            for lang in place_name_map_by_lang:
+                place_map = place_name_map_by_lang[lang]
+                if place_id in place_map:
+                    place_name = place_map[place_id]["place_name"]
+                    if place_name:
+                        output["name"][lang] = capitalize(place_name)
         else:
-            cfc = cfc_map[cfc_id]
-            output["name"] = {"en": cfc["name"]}
-            output["contentType"] = int(cfc["content_type_id"])
+            output["name"] = {}
+            for lang in cfc_map_by_lang:
+                cfc_map = cfc_map_by_lang[lang]
+                if cfc_id in cfc_map:
+                    cfc_name = cfc_map[cfc_id]["name"]
+                    if cfc_name:
+                        output["name"][lang] = capitalize(cfc_name)
+            output["contentType"] = int(cfc_map_by_lang["en"][cfc_id]["content_type_id"])
 
         map_id = territory["map_id"]
         if map_id in map_map:
@@ -249,10 +298,33 @@ if __name__ == "__main__":
         name_data,
     )
 
-    # TODO: get one cfc_map / territory_map per language and then we can translate ZoneId.
-    # This would allow for auto-translating the raidboss config per-file.
+    # Build up multiple languages here, for translations.
+    place_name_map_by_lang = {"en": place_name_map}
+    cfc_map_by_lang = {"en": cfc_map}
+
+    # There are only csvs for English, so use Coinach to get these files.
+    coinach_langs = [
+        "de",
+        "fr",
+        "ja",
+    ]
+    for lang in coinach_langs:
+        place_name_map_by_lang[lang] = make_place_name_map(reader.rawexd("PlaceName", lang))
+        cfc_map_by_lang[lang] = make_cfc_map(reader.rawexd("ContentFinderCondition", lang))
+
+    # SaintCoinach can't do Chinese or Korean, unless you have that version, so use csvs.
+    csv_langs = [
+        "cn",
+        "ko",
+    ]
+    for lang in csv_langs:
+        place_name_csv = csv_util.get_raw_csv("PlaceName", lang)
+        place_name_map_by_lang[lang] = make_place_name_map(place_name_csv)
+        cfc_csv = csv_util.get_raw_csv("ContentFinderCondition", lang)
+        cfc_map_by_lang[lang] = make_cfc_map(cfc_csv)
+
     territory_info = generate_zone_info(
-        territory_map, cfc_map, map_map, territory_to_cfc_map, place_name_map
+        territory_map, cfc_map_by_lang, map_map, territory_to_cfc_map, place_name_map_by_lang
     )
     writer.write(
         os.path.join("resources", _ZONE_INFO_OUTPUT_FILE),

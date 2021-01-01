@@ -48,7 +48,6 @@ namespace Cactbot {
 
     private string language_ = null;
     private string pc_locale_ = null;
-    private List<FileSystemWatcher> watchers;
 
     public delegate void ForceReloadHandler(JSEvents.ForceReloadEvent e);
     public event ForceReloadHandler OnForceReload;
@@ -83,6 +82,9 @@ namespace Cactbot {
     public delegate void FateEventHandler(JSEvents.FateEvent e);
     public event FateEventHandler OnFateEvent;
 
+    public delegate void CEEventHandler(JSEvents.CEEvent e);
+    public event CEEventHandler OnCEEvent;
+
     public void Wipe() {
       Advanced_Combat_Tracker.ActGlobals.oFormActMain.EndCombat(false);
       OnPartyWipe(new JSEvents.PartyWipeEvent());
@@ -90,6 +92,10 @@ namespace Cactbot {
 
     public void DoFateEvent(JSEvents.FateEvent e) {
       OnFateEvent(e);
+    }
+
+    public void DoCEEvent(JSEvents.CEEvent e) {
+      OnCEEvent(e);
     }
 
     public CactbotEventSource(RainbowMage.OverlayPlugin.ILogger logger)
@@ -108,6 +114,7 @@ namespace Cactbot {
         "onInCombatChangedEvent",
         "onZoneChangedEvent",
         "onFateEvent",
+        "onCEEvent",
         "onPlayerDied",
         "onPartyWipe",
         "onPlayerChangedEvent",
@@ -120,7 +127,6 @@ namespace Cactbot {
         return null;
       });
       RegisterEventHandler("cactbotLoadUser", FetchUserFiles);
-      RegisterEventHandler("cactbotReadDataFiles", FetchDataFiles);
       RegisterEventHandler("cactbotRequestPlayerUpdate", (msg) => {
         notify_state_.player = null;
         return null;
@@ -135,7 +141,6 @@ namespace Cactbot {
       });
       RegisterEventHandler("cactbotSaveData", (msg) => {
         Config.OverlayData[msg["overlay"].ToString()] = msg["data"];
-        Config.OnUpdateConfig();
         return null;
       });
       RegisterEventHandler("cactbotLoadData", (msg) => {
@@ -276,6 +281,7 @@ namespace Cactbot {
       OnPlayerDied += (e) => DispatchToJS(e);
       OnPartyWipe += (e) => DispatchToJS(e);
       OnFateEvent += (e) => DispatchToJS(e);
+      OnCEEvent += (e) => DispatchToJS(e);
 
       fast_update_timer_.Interval = kFastTimerMilli;
       fast_update_timer_.Start();
@@ -287,19 +293,6 @@ namespace Cactbot {
         LogError("Requires .NET 4.6 or above. Using " + net_version_str);
 
       versions.DoUpdateCheck(Config);
-
-      // Start watching files after the update check.
-      Config.WatchFileChangesChanged += (o, e) => {
-        if (Config.WatchFileChanges) {
-          StartFileWatcher();
-        } else {
-          StopFileWatcher();
-        }
-      };
-
-      if (Config.WatchFileChanges) {
-        StartFileWatcher();
-      }
     }
 
     public override void Stop() {
@@ -329,6 +322,11 @@ namespace Cactbot {
       ev["type"] = e.EventName();
       ev["detail"] = JObject.FromObject(e);
       DispatchEvent(ev);
+    }
+
+    public void ClearFateWatcherDictionaries() {
+      fate_watcher_.RemoveAndClearCEs();
+      fate_watcher_.RemoveAndClearFates();
     }
 
     // Events that we want to update as soon as possible.  Return next time this should be called.
@@ -363,9 +361,6 @@ namespace Cactbot {
       //   thus cause this to happen one to three times depending on their timing. This shouldn't cause any issues but
       //   it's a waste of CPU cycles.
       // * Since this only happens during startup, it's probably not worth fixing though. Not sure.
-      // * Some overlays behave slightly different from the above explanation. Raidboss for example loads data files
-      //   in addition to the listed steps. I think it's even loading them twice since raidboss.js loads the data files
-      //   for gTimelineController and popup-text.js requests them again for its own purposes.
 
       bool game_exists = ffxiv_.FindProcess();
       if (game_exists != notify_state_.game_exists) {
@@ -399,6 +394,7 @@ namespace Cactbot {
       if (notify_state_.zone_name == null || !zone_name.Equals(notify_state_.zone_name)) {
         notify_state_.zone_name = zone_name;
         OnZoneChanged(new JSEvents.ZoneChangedEvent(zone_name));
+        ClearFateWatcherDictionaries();
       }
 
       DateTime now = DateTime.Now;
@@ -420,10 +416,9 @@ namespace Cactbot {
       if (player != null) {
         bool send = false;
         if (!player.Equals(notify_state_.player)) {
-          // Clear the FATE dictionary if we switched characters
-          if (notify_state_.player != null && !player.name.Equals(notify_state_.player.name)) {
-            fate_watcher_.RemoveAndClearFates();
-          }
+          // Clear the FateWatcher dictionaries if we switched characters
+          if (notify_state_.player != null && !player.name.Equals(notify_state_.player.name))
+            ClearFateWatcherDictionaries();
           notify_state_.player = player;
           send = true;
         }
@@ -481,125 +476,73 @@ namespace Cactbot {
       this.Log(LogLevel.Info, format, args);
     }
 
-    private Dictionary<string, string> GetDataFiles(string url) {
-      // Uri is not smart enough to strip the query args here, so we'll do it manually?
-      var idx = url.IndexOf('?');
-      if (idx > 0)
-        url = url.Substring(0, idx);
-
-      // If file is a remote pointer, load that file explicitly so that the manifest
-      // is relative to the pointed to url and not the local file.
-      if (url.StartsWith("file:///")) {
-        var html = File.ReadAllText(new Uri(url).LocalPath);
-        var match = System.Text.RegularExpressions.Regex.Match(html, @"<meta http-equiv=""refresh"" content=""0; url=(.*)?""\/?>");
-        if (match.Groups.Count > 1) {
-          url = match.Groups[1].Value;
-        }
-      }
-
-      var web = new System.Net.WebClient();
-      web.Encoding = System.Text.Encoding.UTF8;
-      System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Ssl3 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
-
-      var data_file_paths = new List<string>();
-      try {
-        var data_dir_manifest = new Uri(new Uri(url), "data/manifest.txt");
-        var manifest_reader = new StringReader(web.DownloadString(data_dir_manifest));
-        for (var line = manifest_reader.ReadLine(); line != null; line = manifest_reader.ReadLine()) {
-          line = line.Trim();
-          if (line.Length > 0)
-            data_file_paths.Add(line);
-        }
-      } catch (System.Net.WebException e) {
-        if (e.Status == System.Net.WebExceptionStatus.ProtocolError &&
-            e.Response is System.Net.HttpWebResponse &&
-            ((System.Net.HttpWebResponse)e.Response).StatusCode == System.Net.HttpStatusCode.NotFound) {
-          // Ignore file not found.
-        } else if (e.InnerException != null &&
-          (e.InnerException is FileNotFoundException || e.InnerException is DirectoryNotFoundException)) {
-          // Ignore file not found.
-        } else if (e.InnerException != null && e.InnerException.InnerException != null &&
-          (e.InnerException.InnerException is FileNotFoundException || e.InnerException.InnerException is DirectoryNotFoundException)) {
-          // Ignore file not found.
-        } else {
-          LogError("Unable to read manifest file: " + e.Message);
-        }
-      } catch (Exception e) {
-        LogError("Unable to read manifest file: " + e.Message);
-      }
-
-      if (data_file_paths.Count > 0) {
-        var file_data = new Dictionary<string, string>();
-        foreach (string data_filename in data_file_paths) {
-          try {
-            var file_path = new Uri(new Uri(url), "data/" + data_filename);
-            file_data[data_filename] = web.DownloadString(file_path);
-          } catch (Exception e) {
-            LogError("Unable to read data file: " + e.Message);
-          }
-        }
-
-        //OnDataFilesRead(new JSEvents.DataFilesRead(file_data));
-        return file_data;
-      }
-
-      return null;
+    private static string GetRelativePath(string top_dir, string filename) {
+      // TODO: .net 5.0 / .net core 2.0 has Path.GetRelativePath.
+      // There's also a win api function we could call, but that's a bit gross.
+      // However, this is an easy case where filename is known to be rooted in top_dir,
+      // so use this hacky solution for now.  Hi, ngld.
+      return filename.Replace(top_dir, "");
     }
 
-    private JObject FetchDataFiles(JObject msg) {
-      var result = GetDataFiles(msg["source"].ToString());
-
-      var container = new JObject();
-      container["files"] = result == null ? null : JObject.FromObject(result);
-
-      var output = new JObject();
-      output["detail"] = container;
-
-      return output;
-    }
-
-    private Dictionary<string, string> GetLocalUserFiles(string config_dir) {
+    private Dictionary<string, string> GetLocalUserFiles(string config_dir, string overlay_name) {
+      // TODO: probably should sanity check overlay_name for no * or ? wildcards as well
+      // as GetInvalidPathChars.
       if (String.IsNullOrEmpty(config_dir))
         return null;
 
-      // TODO: It's not great to have to load every js and css file in the user dir.
-      // But most of the time they'll be short and there won't be many.  JS
-      // could attempt to send an overlay name to C# code (and race with the
-      // document ready event), but that's probably overkill.
       var user_files = new Dictionary<string, string>();
-      string path;
+      string top_dir;
+      string sub_dir = null;
       try {
-        path = new Uri(config_dir).LocalPath;
+        top_dir = new Uri(config_dir).LocalPath;
       } catch (UriFormatException) {
         // This can happen e.g. "http://localhost:8000".  Thanks, Uri constructor.  /o\
         return null;
       }
 
-      // It's important to return null here vs an empty dictionary.  null here
-      // indicates to attempt to load the user overloads indirectly via the path.
-      // This is how remote user directories work.
+      // Returning null here means we failed to find anything meaningful (or error), and so try
+      // again with a different directory.  In the future when this is in OverlayPlugin, we will
+      // probably just abort entirely.
       try {
-        if (!Directory.Exists(path)) {
+        if (!Directory.Exists(top_dir)) {
           return null;
         }
+
+        if (overlay_name != null) {
+          sub_dir = Path.Combine(top_dir, overlay_name);
+          if (!Directory.Exists(sub_dir))
+            sub_dir = null;
+         }
+
       } catch (Exception e) {
         LogError("Error checking directory: {0}", e.ToString());
         return null;
       }
 
+      // Hack for backwards compat with older js that doesn't provide overlay_name,
+      // just in case.  Remove this in any future version and require overlay_name.
+      if (overlay_name == null)
+        overlay_name = "*";
+
       try {
-        var filenames = Directory.EnumerateFiles(path, "*.js").Concat(
-          Directory.EnumerateFiles(path, "*.css"));
+        var filenames = Directory.EnumerateFiles(top_dir, $"{overlay_name}.js").Concat(
+          Directory.EnumerateFiles(top_dir, $"{overlay_name}.css"));
+        if (sub_dir != null) {
+          filenames = filenames.Concat(
+            Directory.EnumerateFiles(sub_dir, "*.js", SearchOption.AllDirectories)).Concat(
+            Directory.EnumerateFiles(sub_dir, "*.css", SearchOption.AllDirectories));
+        }
         foreach (string filename in filenames) {
-          if (filename.Contains("-example."))
-            continue;
-          user_files[Path.GetFileName(filename)] = File.ReadAllText(filename) +
+          user_files[GetRelativePath(top_dir, filename)] = File.ReadAllText(filename) +
             $"\n//# sourceURL={filename}";
         }
 
-        var textFilenames = Directory.EnumerateFiles(path, "*.txt");
+        var textFilenames = Directory.EnumerateFiles(top_dir, "*.txt");
+        if (sub_dir != null) {
+          textFilenames = textFilenames.Concat(Directory.EnumerateFiles(sub_dir, "*.txt", SearchOption.AllDirectories));
+        }
         foreach (string filename in textFilenames) {
-          user_files[Path.GetFileName(filename)] = File.ReadAllText(filename);
+          user_files[GetRelativePath(top_dir, filename)] = File.ReadAllText(filename);
         }
       } catch (Exception e) {
         LogError("User error file exception: {0}", e.ToString());
@@ -608,14 +551,14 @@ namespace Cactbot {
       return user_files;
     }
 
-    private void GetUserConfigDirAndFiles(string source, out string config_dir, out Dictionary<string, string> local_files) {
+    private void GetUserConfigDirAndFiles(string source, string overlay_name, out string config_dir, out Dictionary<string, string> local_files) {
       local_files = null;
       config_dir = null;
 
       if (Config.UserConfigFile != null && Config.UserConfigFile != "") {
         // Explicit user config directory specified.
         config_dir = Config.UserConfigFile;
-        local_files = GetLocalUserFiles(config_dir);
+        local_files = GetLocalUserFiles(config_dir, overlay_name);
       } else {
         if (source != null && source != "") {
           // First try a user directory relative to the html.
@@ -624,7 +567,7 @@ namespace Cactbot {
             // TODO: maybe replace this with the version checker get cactbot root
             var url_dir = Path.GetDirectoryName(new Uri(source).LocalPath);
             config_dir = Path.GetFullPath(url_dir + "\\..\\..\\user\\");
-            local_files = GetLocalUserFiles(config_dir);
+            local_files = GetLocalUserFiles(config_dir, overlay_name);
           } catch (Exception e) {
             LogError("Error checking html rel dir: {0}: {1}", source, e.ToString());
             config_dir = null;
@@ -635,7 +578,7 @@ namespace Cactbot {
           // Second try a user directory relative to the dll.
           try {
             config_dir = Path.GetFullPath((new VersionChecker(this)).GetCactbotDirectory() + "\\user");
-            local_files = GetLocalUserFiles(config_dir);
+            local_files = GetLocalUserFiles(config_dir, overlay_name);
           } catch (Exception e) {
             // Accessing CactbotEventSourceConfig.CactbotDllRelativeUserUri can throw an exception so don't.
             LogError("Error checking dll rel dir: {0}: {1}", config_dir, e.ToString());
@@ -653,7 +596,8 @@ namespace Cactbot {
 
     private JObject FetchUserFiles(JObject msg) {
       Dictionary<string, string> user_files;
-      GetUserConfigDirAndFiles(msg["source"].ToString(), out string config_dir, out user_files);
+      var overlay_name = msg.ContainsKey("overlayName") ? msg["overlayName"].ToString() : null;
+      GetUserConfigDirAndFiles(msg["source"].ToString(), overlay_name, out string config_dir, out user_files);
 
       var result = new JObject();
       result["userLocation"] = config_dir;
@@ -668,60 +612,6 @@ namespace Cactbot {
       var response = new JObject();
       response["detail"] = result;
       return response;
-    }
-
-    private void StartFileWatcher() {
-      watchers = new List<FileSystemWatcher>();
-      var paths = new List<string>();
-      
-      paths.Add((new VersionChecker(this)).GetCactbotDirectory());
-      paths.Add(Config.UserConfigFile);
-
-      foreach (var path in paths) {
-        if (String.IsNullOrEmpty(path))
-          continue;
-
-        var watchDir = "";
-        try {
-          // Get canonical url for paths so that Directory.Exists will work properly.
-          watchDir = Path.GetFullPath(Path.GetDirectoryName(new Uri(path).LocalPath));
-        } catch {
-          continue;
-        }
-
-        if (!Directory.Exists(watchDir))
-          continue;
-
-        var watcher = new FileSystemWatcher()
-        {
-          Path = watchDir,
-          NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
-          IncludeSubdirectories = true,
-        };
-
-        // We only care about file changes. New or renamed files don't matter if we don't have a reference to them
-        // and adding a new reference causes an existing file to change.
-        watcher.Changed += (o, e) => {
-          DispatchEvent(JObject.FromObject(new {
-            type = "onUserFileChanged",
-            file = e.FullPath,
-          }));
-        };
-
-        watcher.EnableRaisingEvents = true;
-        watchers.Add(watcher);
-
-        LogInfo("Started watching {0}", watchDir);
-      }
-    }
-
-    private void StopFileWatcher() {
-      foreach (var watcher in watchers) {
-        watcher.EnableRaisingEvents = false;
-        watcher.Dispose();
-      }
-
-      watchers = null;
     }
 
     struct OverlayPreset : IOverlayPreset {
@@ -760,6 +650,17 @@ namespace Cactbot {
       });
     }
 
+    private void RegisterExternalPreset(string name, string url, int width, int height)
+    {
+        Registry.RegisterOverlayPreset(new OverlayPreset
+        {
+            Name = $"{name}",
+            Url = url,
+            Size = new int[] { width, height },
+            Locked = false,
+        });
+    }
+
     private void RegisterPresets() {
       RegisterPreset("Raidboss", width:1100, height:300, "Raidboss (Combined Alerts & Timeline)", "raidboss");
       RegisterPreset("Raidboss", width:1100, height:300, "Raidboss Alerts Only", "raidboss_alerts_only");
@@ -774,6 +675,8 @@ namespace Cactbot {
       // FIXME: these should be consistently named.
       RegisterDpsPreset("Xephero", "xephero-cactbot", width:600, height:400);
       RegisterDpsPreset("Rdmty", "dps", width:600, height:400);
+      // External Overlays using Cactbot Plugin
+      RegisterExternalPreset("ZeffUI", "https://zeffuro.github.io/ZeffUI/", width: 800, height: 600);
     }
 
     // State that is tracked and sent to JS when it changes.

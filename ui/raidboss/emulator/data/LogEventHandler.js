@@ -1,9 +1,11 @@
-'use strict';
+import EmulatorCommon from '../EmulatorCommon.js';
+import EventBus from '../EventBus.js';
+import { LocaleNetRegex } from '../../../../resources/translations.js';
 
-class LogEventHandler extends EventBus {
+export default class LogEventHandler extends EventBus {
   static doesLineMatch(line, regexes) {
-    for (let i in regexes) {
-      let res = regexes[i].exec(line);
+    for (const i in regexes) {
+      const res = regexes[i].exec(line);
       if (res) {
         if (LocaleNetRegex.areaSeal[i])
           res.groups.language = i;
@@ -71,13 +73,13 @@ class LogEventHandler extends EventBus {
 
   parseLogs(logs) {
     for (let i = 0; i < logs.length; ++i) {
-      let lineObj = logs[i];
+      const lineObj = logs[i];
 
       this.currentFight.push(lineObj);
 
       lineObj.offset = lineObj.timestamp - this.currentFight[0].timestamp;
 
-      let res = LogEventHandler.isMatchEnd(lineObj.networkLine);
+      const res = LogEventHandler.isMatchEnd(lineObj.networkLine);
       if (res) {
         this.endFight();
       } else if (lineObj.zoneName) {
@@ -92,7 +94,7 @@ class LogEventHandler extends EventBus {
     if (this.currentFight.length < 2)
       return;
 
-    let start = new Date(this.currentFight[0].timestamp);
+    const start = new Date(this.currentFight[0].timestamp);
     this.currentZoneName = this.currentZoneName || 'Unknown';
     this.currentZoneId = this.currentZoneId || -1;
 
@@ -107,6 +109,3 @@ Line Count: ${this.currentFight.length}
     this.currentFight = [];
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = LogEventHandler;

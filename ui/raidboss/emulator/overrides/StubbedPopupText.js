@@ -1,25 +1,12 @@
-'use strict';
+import { PopupText } from '../../popup-text.js';
 
-class StubbedPopupText extends PopupText {
-  constructor(options) {
-    super(options);
+export default class StubbedPopupText extends PopupText {
+  constructor(options, timelineLoader, raidbossFileData) {
+    super(options, timelineLoader, raidbossFileData);
   }
 
   // Stubbed, we don't want overlay hooks
   HookOverlays() { }
-
-  // Override, only parse the trigger sets once
-  OnDataFilesRead(e) {
-    if (StubbedPopupText.globalTriggerSets !== null) {
-      this.triggerSets = StubbedPopupText.globalTriggerSets;
-      return;
-    }
-    super.OnDataFilesRead(e);
-    StubbedPopupText.globalTriggerSets = this.triggerSets;
-  }
 }
 
 StubbedPopupText.globalTriggerSets = null;
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = StubbedPopupText;

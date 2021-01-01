@@ -1,8 +1,6 @@
-'use strict';
+import logDefinitions from './netlog_defs.js';
 
-const logDefinitions = require('./netlog_defs.js');
-
-class Splitter {
+export default class Splitter {
   // startLine and stopLine are both inclusive.
   constructor(startLine, stopLine, notifier) {
     this.logTypes = logDefinitions;
@@ -110,7 +108,7 @@ class Splitter {
     } else if (typeof result === 'string') {
       callback(line);
     } else if (typeof result === 'object') {
-      for (let resultLine of result)
+      for (const resultLine of result)
         callback(resultLine);
     }
   }
@@ -123,6 +121,3 @@ class Splitter {
     return this.haveStarted;
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = Splitter;

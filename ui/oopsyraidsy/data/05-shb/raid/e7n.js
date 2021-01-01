@@ -1,24 +1,29 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-let wrongBuff = (str) => {
+const wrongBuff = (str) => {
   return {
     en: str + ' (wrong buff)',
     de: str + ' (falscher Buff)',
     fr: str + ' (mauvais buff)',
+    ja: str + ' (不適切なバフ)',
+    cn: str + ' (Buff错了)',
     ko: str + ' (버프 틀림)',
   };
 };
 
-let noBuff = (str) => {
+const noBuff = (str) => {
   return {
     en: str + ' (no buff)',
     de: str + ' (kein Buff)',
     fr: str + ' (pas de buff)',
+    ja: str + ' (バフ無し)',
+    cn: str + ' (没有Buff)',
     ko: str + '(버프 없음)',
   };
 };
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseIconoclasm,
   damageWarn: {
     'E7N Stygian Sword': '4C55', // Circle ground AoEs after False Twilight
@@ -32,7 +37,7 @@ let noBuff = (str) => {
       id: 'E7N Stygian Stake', // Laser tank buster, outside intermission phase
       damageRegex: '4C33',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -42,7 +47,7 @@ let noBuff = (str) => {
       id: 'E5N Silver Shot', // Spread markers, intermission
       damageRegex: '4E7D',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
@@ -108,4 +113,4 @@ let noBuff = (str) => {
       },
     },
   ],
-}];
+};

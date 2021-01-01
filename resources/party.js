@@ -1,6 +1,6 @@
-'use strict';
+import { Util } from './common.js';
 
-class PartyTracker {
+export default class PartyTracker {
   constructor() {
     this.onPartyChanged({ party: [] });
   }
@@ -103,31 +103,31 @@ class PartyTracker {
   // if named player is not a tank, or there's not exactly two tanks
   // in your immediate party, returns null.
   otherTank(name) {
-    let names = this.tankNames;
-    if (names.length != 2)
+    const names = this.tankNames;
+    if (names.length !== 2)
       return null;
-    if (names[0] == name)
+    if (names[0] === name)
       return names[1];
-    if (names[1] == name)
+    if (names[1] === name)
       return names[0];
     return null;
   }
 
   // see: otherTank, but for healers.
   otherHealer(name) {
-    let names = this.roleToPartyNames['healer'];
-    if (names.length != 2)
+    const names = this.roleToPartyNames['healer'];
+    if (names.length !== 2)
       return null;
-    if (names[0] == name)
+    if (names[0] === name)
       return names[1];
-    if (names[1] == name)
+    if (names[1] === name)
       return names[0];
     return null;
   }
 
   // returns the job name of the specified party member
   jobName(name) {
-    let partyIndex = this.partyNames.indexOf(name);
+    const partyIndex = this.partyNames.indexOf(name);
     if (partyIndex >= 0)
       return Util.jobEnumToJob(this.details[partyIndex].job);
     return null;
@@ -137,6 +137,3 @@ class PartyTracker {
     return this.idToName_[id];
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = PartyTracker;

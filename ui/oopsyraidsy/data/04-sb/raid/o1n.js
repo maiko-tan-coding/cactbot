@@ -1,7 +1,7 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O1N - Deltascape 1.0 Normal
-[{
+export default {
   zoneId: ZoneId.DeltascapeV10,
   damageWarn: {
     'O1N Burn': '23D5', // Fireball explosion circle AoEs
@@ -13,11 +13,11 @@
       id: 'O1N Levinbolt',
       damageRegex: '23DA',
       condition: function(e) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e) {
         return { type: 'warn', blame: e.targetName, text: e.abilityName };
       },
     },
   ],
-}];
+};

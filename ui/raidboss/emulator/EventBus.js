@@ -1,11 +1,9 @@
-'use strict';
-
 /**
  * This is a base class that classes can extend to inherit event bus capabilities.
  * This allows other classes to listen for events with the `on` function.
  * The inheriting class can fire those events with the `dispatch` function.
  */
-class EventBus {
+export default class EventBus {
   constructor() {
     this.listeners = {};
   }
@@ -19,10 +17,10 @@ class EventBus {
    * @return {any} The callbacks registered to the event(s)
    */
   on(event, callback = undefined, scope = undefined) {
-    let events = event.split(' ');
-    let ret = {};
+    const events = event.split(' ');
+    const ret = {};
     scope = scope !== undefined ? scope : window;
-    for (let event of events) {
+    for (const event of events) {
       this.listeners[event] = this.listeners[event] || [];
       if (callback !== undefined)
         this.listeners[event].push({ scope: scope, callback: callback });
@@ -44,13 +42,10 @@ class EventBus {
       return;
 
     for (let i = 0; i < this.listeners[event].length; ++i) {
-      let l = this.listeners[event][i];
-      let res = l.callback.apply(l.scope, eventArguments);
+      const l = this.listeners[event][i];
+      const res = l.callback.apply(l.scope, eventArguments);
       if (Promise.resolve(res) === res)
         await res;
     }
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = EventBus;

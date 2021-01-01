@@ -1,7 +1,8 @@
-'use strict';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // UCU - The Unending Coil Of Bahamut (Ultimate)
-[{
+export default {
   zoneId: ZoneId.TheUnendingCoilOfBahamutUltimate,
   damageFail: {
     'UCU Lunar Dynamo': '26BC',
@@ -17,7 +18,7 @@
         // Instant death uses '36' as its flags, differentiating
         // from the explosion damage you take when somebody else
         // pops one.
-        return data.IsPlayerId(e.targetId) && e.flags == '36';
+        return data.IsPlayerId(e.targetId) && e.flags === '36';
       },
       mistake: function(e) {
         return {
@@ -71,7 +72,7 @@
           text: {
             en: 'hit by lightning',
             de: 'vom Blitz getroffen',
-            fr: 'frappé par la foudre',
+            fr: 'frappé(e) par la foudre',
             ja: 'チェインライトニング',
             cn: '雷光链',
             ko: '번개 맞음',
@@ -141,4 +142,4 @@
       },
     },
   ],
-}];
+};

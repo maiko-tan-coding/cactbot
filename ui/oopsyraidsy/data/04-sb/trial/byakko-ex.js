@@ -1,7 +1,7 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Byakko Extreme
-[{
+export default {
   zoneId: ZoneId.TheJadeStoaExtreme,
   damageWarn: {
     // Popping Unrelenting Anguish bubbles
@@ -43,4 +43,4 @@
       },
     },
   ],
-}];
+};

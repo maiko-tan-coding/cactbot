@@ -1,10 +1,12 @@
-'use strict';
+import '../../resources/common.js';
+import { LocaleRegex } from '../../resources/translations.js';
+import Regexes from '../../resources/regexes.js';
+import UserConfig from '../../resources/user_config.js';
+import ZoneId from '../../resources/zone_id.js';
 
-let Options = {
+const Options = {
   Language: 'en',
 };
-
-'use strict';
 
 // NOTE: do not add more fights to this data structure.
 // These exist for testing pullcounter and for backwards compatibility
@@ -175,9 +177,9 @@ class PullCounter {
     if (this.bossStarted)
       return;
     for (const log of e.detail.logs) {
-      if (log.match(this.resetRegex))
+      if (this.resetRegex.test(log))
         this.ResetPullCounter();
-      if (log.match(this.countdownEngageRegex)) {
+      if (this.countdownEngageRegex.test(log)) {
         if (this.countdownBoss)
           this.OnFightStart(this.countdownBoss);
         else
@@ -185,7 +187,7 @@ class PullCounter {
         return;
       }
       for (const boss of this.bosses) {
-        if (boss.startRegex && log.match(boss.startRegex)) {
+        if (boss.startRegex && boss.startRegex.test(log)) {
           this.OnFightStart(boss);
           return;
         }
@@ -267,7 +269,7 @@ class PullCounter {
       return;
     if (this.bossStarted)
       return;
-    if (this.party.length != 8)
+    if (this.party.length !== 8)
       return;
 
     if (this.bosses.length === 1) {
@@ -294,7 +296,7 @@ class PullCounter {
 
   SetSaveData(e) {
     try {
-      if (e != null && e.data)
+      if (e && e.data)
         this.pullCounts = JSON.parse(e.data);
       else
         this.pullCounts = {};
@@ -305,7 +307,7 @@ class PullCounter {
   }
 }
 
-UserConfig.getUserConfigLocation('pullcounter', Options, function() {
+UserConfig.getUserConfigLocation('pullcounter', Options, () => {
   gPullCounter = new PullCounter(document.getElementById('pullcounttext'));
 
   addOverlayListener('onLogEvent', (e) => gPullCounter.OnLogEvent(e));

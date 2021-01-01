@@ -1,7 +1,7 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // Hades Normal
-[{
+export default {
   zoneId: ZoneId.TheDyingGasp,
   damageWarn: {
     'Hades Bad Faith 1': '414B',
@@ -23,7 +23,7 @@
       id: 'Hades Nether Blast',
       damageRegex: '4163',
       condition: function(e, data) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
@@ -33,7 +33,7 @@
       id: 'Hades Ravenous Assault',
       damageRegex: '4158',
       condition: function(e, data) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
@@ -43,7 +43,7 @@
       id: 'Hades Ancient Darkness',
       damageRegex: '4593',
       condition: function(e, data) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
@@ -53,11 +53,11 @@
       id: 'Hades Dual Strike',
       damageRegex: '4162',
       condition: function(e, data) {
-        return e.type != '15';
+        return e.type !== '15';
       },
       mistake: function(e, data) {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
   ],
-}];
+};

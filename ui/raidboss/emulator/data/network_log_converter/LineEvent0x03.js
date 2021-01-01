@@ -1,7 +1,9 @@
-'use strict';
+import LineEvent from './LineEvent.js';
+import EmulatorCommon from '../../EmulatorCommon.js';
+import { Util } from '../../../../../resources/common.js';
 
 // Added combatant event
-class LineEvent0x03 extends LineEvent {
+export class LineEvent0x03 extends LineEvent {
   constructor(repo, line, parts) {
     super(repo, line, parts);
 
@@ -49,7 +51,7 @@ class LineEvent0x03 extends LineEvent {
       ' Pos: (' + this.parts[17] + ',' + this.parts[18] + ',' + this.parts[19] + ')';
 
     // This last part is guesswork for the area between 9 and 10.
-    let UnknownValue = this.parts[9] +
+    const UnknownValue = this.parts[9] +
       EmulatorCommon.zeroPad(this.parts[10], 8 + Math.max(0, 6 - this.parts[9].length));
 
     if (UnknownValue !== '00000000000000')
@@ -59,11 +61,4 @@ class LineEvent0x03 extends LineEvent {
   }
 }
 
-class LineEvent03 extends LineEvent0x03 {}
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    LineEvent0x03: LineEvent0x03,
-    LineEvent03: LineEvent03,
-  };
-}
+export class LineEvent03 extends LineEvent0x03 {}

@@ -1,7 +1,8 @@
-'use strict';
+import NetRegexes from '../../../../resources/netregexes.js';
+import ZoneId from '../../../../resources/zone_id.js';
 
 // Test mistake triggers.
-[{
+export default {
   zoneId: ZoneId.MiddleLaNoscea,
   triggers: [
     {
@@ -39,8 +40,8 @@
           blame: data.me,
           fullText: {
             en: 'Party Wipe',
-            fr: 'Wipe',
             de: 'Gruppenwipe',
+            fr: 'Party Wipe',
             ja: 'ワイプ',
             cn: '团灭',
             ko: '파티 전멸',
@@ -52,9 +53,9 @@
       id: 'Test Bootshine',
       damageRegex: '35',
       condition: function(e, data) {
-        if (e.attackerName != data.me)
+        if (e.attackerName !== data.me)
           return false;
-        let strikingDummyNames = [
+        const strikingDummyNames = [
           'Striking Dummy',
           'Mannequin d\'entraînement',
           '木人', // Striking Dummy called `木人` in CN as well as JA
@@ -66,7 +67,7 @@
       mistake: function(e, data) {
         data.bootCount = data.bootCount || 0;
         data.bootCount++;
-        let text = e.abilityName + ' (' + data.bootCount + '): ' + e.damageStr;
+        const text = e.abilityName + ' (' + data.bootCount + '): ' + e.damageStr;
         return { type: 'warn', blame: data.me, text: text };
       },
     },
@@ -97,16 +98,16 @@
       collectSeconds: 5,
       mistake: function(events, data) {
         // When collectSeconds is specified, events are passed as an array.
-        let pokes = events.length;
+        const pokes = events.length;
 
         // 1 poke at a time is fine, but more than one inside of
         // collectSeconds is (OBVIOUSLY) a mistake.
         if (pokes <= 1)
           return;
-        let text = {
+        const text = {
           en: 'Too many pokes (' + pokes + ')',
-          fr: 'Trop de touches (' + pokes + ')',
           de: 'Zu viele Piekser (' + pokes + ')',
+          fr: 'Trop de touches (' + pokes + ')',
           ja: 'いっぱいつついた (' + pokes + ')',
           cn: '戳太多下啦 (' + pokes + ')',
           ko: '너무 많이 찌름 (' + pokes + '번)',
@@ -115,4 +116,4 @@
       },
     },
   ],
-}];
+};

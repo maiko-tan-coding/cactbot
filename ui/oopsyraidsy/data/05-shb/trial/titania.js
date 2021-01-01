@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.TheDancingPlague,
   damageWarn: {
     'Titania Wood\'s Embrace': '3D50',
@@ -17,4 +17,4 @@
   shareFail: {
     'Titania Divination Rune': '3D5B',
   },
-}];
+};

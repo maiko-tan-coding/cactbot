@@ -1,9 +1,30 @@
-'use strict';
+import '../../resources/common.js';
+import './raidboss_config.js';
+
+import EmulatedMap from './emulator/ui/EmulatedMap.js';
+import EmulatedPartyInfo from './emulator/ui/EmulatedPartyInfo.js';
+import EmulatorCommon from './emulator/EmulatorCommon.js';
+import Encounter from './emulator/data/Encounter.js';
+import EncounterTab from './emulator/ui/EncounterTab.js';
+import LogEventHandler from './emulator/data/LogEventHandler.js';
+import NetworkLogConverter from './emulator/data/NetworkLogConverter.js';
+import Persistor from './emulator/data/Persistor.js';
+import { PopupTextGenerator } from './popup-text.js';
+import ProgressBar from './emulator/ui/ProgressBar.js';
+import RaidEmulator from './emulator/data/RaidEmulator.js';
+import RaidEmulatorOverlayApiHook from './emulator/overrides/RaidEmulatorOverlayApiHook.js';
+import RaidEmulatorPopupText from './emulator/overrides/RaidEmulatorPopupText.js';
+import RaidEmulatorTimelineController from './emulator/overrides/RaidEmulatorTimelineController.js';
+import RaidEmulatorTimelineUI from './emulator/overrides/RaidEmulatorTimelineUI.js';
+import { TimelineLoader } from './timeline.js';
+import Tooltip from './emulator/ui/Tooltip.js';
+import UserConfig from '../../resources/user_config.js';
+import raidbossFileData from './data/manifest.txt';
 
 // @TODO: Some way to not have this be a global?
 
 // See user/raidboss-example.js for documentation.
-let Options = {
+const Options = {
   // These options are ones that are not auto-defined by raidboss_config.js.
   PlayerNicks: {},
 
@@ -58,7 +79,7 @@ let Options = {
 
     // Listen for the log parser to dispatch a fight
     logEventHandler.on('fight', (day, zoneId, zoneName, lines) => {
-      let enc = new Encounter(day, zoneId, zoneName, lines);
+      const enc = new Encounter(day, zoneId, zoneName, lines);
       // If there's not both a player and an enemy ability, don't persist the encounter
       if (!(enc.firstPlayerAbility > 0 && enc.firstEnemyAbility > 0))
         return;
@@ -114,7 +135,7 @@ let Options = {
         enc.logLines = enc.logLines.slice(enc.firstLineIndex - 1);
 
         // Update precalculated offsets
-        let firstTimestamp = enc.logLines[0].timestamp;
+        const firstTimestamp = enc.logLines[0].timestamp;
         for (let i = 0; i < enc.logLines.length; ++i)
           enc.logLines[i].offset = enc.logLines[i].timestamp - firstTimestamp;
 
@@ -145,46 +166,21 @@ let Options = {
 
     // Wait for the DB to be ready before doing anything that might invoke the DB
     persistor.on('ready', () => {
-      UserConfig.getUserConfigLocation('raidboss', Options, function(e) {
-        // This is the only remaining dependency on ACT itself.
-        // No way to get the text files/manifest other than through ACT.
-        callOverlayHandler({
-          call: 'cactbotReadDataFiles',
-          source: location.href,
-        }).then((e) => {
-          document.querySelector('.websocketConnected').classList.remove('d-none');
-          document.querySelector('.websocketDisconnected').classList.add('d-none');
-
-          // Make sure timeline and alerts know about the data files
-          timelineController.SetDataFiles(e.detail.files);
-          popupText.OnDataFilesRead(e);
-          popupText.ReloadTimelines();
-          // Store off the event for zone changes/etc
-          emulator.dataFilesEvent = e;
-
-          persistor.listEncounters().then((encounters) => {
-            if (encounters.length > 0) {
-              let lastEncounter = window.localStorage.getItem('currentEncounter');
-              if (lastEncounter !== undefined && lastEncounter !== undefined) {
-                lastEncounter = parseInt(lastEncounter);
-                let matchedEncounters = encounters.filter((e) => e.id === lastEncounter);
-                if (matchedEncounters.length)
-                  encounterTab.dispatch('load', lastEncounter);
-              }
-            }
-          });
-        });
+      UserConfig.getUserConfigLocation('raidboss', Options, (e) => {
+        document.querySelector('.websocketConnected').classList.remove('d-none');
+        document.querySelector('.websocketDisconnected').classList.add('d-none');
 
         // Initialize the Raidboss components, bind them to the emulator for event listeners
         timelineUI = new RaidEmulatorTimelineUI(Options);
         timelineUI.bindTo(emulator);
-        timelineController = new RaidEmulatorTimelineController(Options, timelineUI);
+        timelineController =
+            new RaidEmulatorTimelineController(Options, timelineUI, raidbossFileData);
         timelineController.bindTo(emulator);
-        popupText = new RaidEmulatorPopupText(Options);
+        popupText = new RaidEmulatorPopupText(
+            Options, new TimelineLoader(timelineController), raidbossFileData);
         popupText.bindTo(emulator);
 
         timelineController.SetPopupTextInterface(new PopupTextGenerator(popupText));
-        popupText.SetTimelineLoader(new TimelineLoader(timelineController));
 
         emulator.setPopupText(popupText);
 
@@ -193,16 +189,25 @@ let Options = {
 
         // If we don't have any encounters stored, show the intro modal
         persistor.listEncounters().then((encounters) => {
-          if (encounters.length === 0)
+          if (encounters.length === 0) {
             showModal('.introModal');
+          } else {
+            let lastEncounter = window.localStorage.getItem('currentEncounter');
+            if (lastEncounter !== undefined) {
+              lastEncounter = parseInt(lastEncounter);
+              const matchedEncounters = encounters.filter((e) => e.id === lastEncounter);
+              if (matchedEncounters.length)
+                encounterTab.dispatch('load', lastEncounter);
+            }
+          }
         });
 
-        let checkFile = async (file) => {
+        const checkFile = async (file) => {
           if (file.type === 'application/json') {
             // Import a DB file by passing it to Persistor
             // DB files are just json representations of the DB
             file.text().then((txt) => {
-              let DB = JSON.parse(txt);
+              const DB = JSON.parse(txt);
               persistor.importDB(DB).then(() => {
                 encounterTab.refresh();
               });
@@ -212,14 +217,14 @@ let Options = {
             file.text().then((txt) => {
               // Import a network file by passing it to LogEventHandler to convert it
               logConverter.convertFile(txt).then((lines) => {
-                let localLogHandler = new LogEventHandler();
+                const localLogHandler = new LogEventHandler();
                 localLogHandler.currentDate = EmulatorCommon.timeToDateString(lines[0].timestamp);
 
-                let promises = [];
+                const promises = [];
 
                 // Listen for LogEventHandler to dispatch fights and persist them
                 localLogHandler.on('fight', async (day, zoneId, zoneName, lines) => {
-                  let enc = new Encounter(day, zoneId, zoneName, lines);
+                  const enc = new Encounter(day, zoneId, zoneName, lines);
                   if (!(enc.firstPlayerAbility > 0 && enc.firstEnemyAbility > 0))
                     return;
                   emulator.addEncounter(enc);
@@ -237,7 +242,7 @@ let Options = {
           }
         };
 
-        let ignoreEvent = (e) => {
+        const ignoreEvent = (e) => {
           e.preventDefault();
           e.stopPropagation();
         };
@@ -249,22 +254,22 @@ let Options = {
         document.body.addEventListener('drop', async (e) => {
           e.preventDefault();
           e.stopPropagation();
-          let dt = e.dataTransfer;
-          let files = dt.files;
+          const dt = e.dataTransfer;
+          const files = dt.files;
           for (let i = 0; i < files.length; ++i) {
-            let file = files[i];
+            const file = files[i];
             await checkFile(file);
           }
         });
 
-        let $exportButton = document.querySelector('.exportDBButton');
+        const $exportButton = document.querySelector('.exportDBButton');
 
         new Tooltip($exportButton, 'bottom',
             'Export DB is very slow and shows a 0 byte download, but it does work eventually.');
 
         // Auto initialize all collapse elements on the page
         document.querySelectorAll('[data-toggle="collapse"]').forEach((n) => {
-          let target = document.querySelector(n.getAttribute('data-target'));
+          const target = document.querySelector(n.getAttribute('data-target'));
           n.addEventListener('click', () => {
             if (n.getAttribute('aria-expanded') === 'false') {
               n.setAttribute('aria-expanded', 'true');
@@ -281,10 +286,10 @@ let Options = {
           persistor.exportDB().then((obj) => {
             // Convert encounter DB to json, then base64 encode it
             // Encounters can have unicode, can't use btoa for base64 encode
-            let blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
             obj = null;
             // Offer download to user
-            let a = document.createElement('a');
+            const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.setAttribute('download', 'RaidEmulator_DBExport_' + (+new Date()) + '.json');
             a.click();
@@ -296,12 +301,12 @@ let Options = {
           });
         });
 
-        let $fileInput = document.querySelector('.loadFileInput');
+        const $fileInput = document.querySelector('.loadFileInput');
 
         // Handle the `Load Network Log` button when user selects files
         $fileInput.addEventListener('change', async (e) => {
           for (let i = 0; i < e.target.files.length; ++i) {
-            let file = e.target.files[i];
+            const file = e.target.files[i];
             checkFile(file);
           }
         });
@@ -371,9 +376,9 @@ let Options = {
 })();
 
 function showModal(selector) {
-  let modal = document.querySelector(selector);
-  let body = document.body;
-  let backdrop = document.querySelector('.modal-backdrop');
+  const modal = document.querySelector(selector);
+  const body = document.body;
+  const backdrop = document.querySelector('.modal-backdrop');
   body.classList.add('modal-open');
   backdrop.classList.add('show');
   backdrop.classList.remove('hide');
@@ -382,9 +387,9 @@ function showModal(selector) {
 }
 
 function hideModal(selector = '.modal.show') {
-  let modal = document.querySelector(selector);
-  let body = document.body;
-  let backdrop = document.querySelector('.modal-backdrop');
+  const modal = document.querySelector(selector);
+  const body = document.body;
+  const backdrop = document.querySelector('.modal-backdrop');
   body.classList.remove('modal-open');
   backdrop.classList.remove('show');
   backdrop.classList.add('hide');

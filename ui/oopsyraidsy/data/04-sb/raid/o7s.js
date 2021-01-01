@@ -1,7 +1,7 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // O7S - Sigmascape 3.0 Savage
-[{
+export default {
   zoneId: ZoneId.SigmascapeV30Savage,
   damageFail: {
     'O7S Missile': '2782',
@@ -19,4 +19,4 @@
       },
     },
   ],
-}];
+};

@@ -1,9 +1,9 @@
-'use strict';
+import { LocaleRegex } from '../../../resources/translations.js';
 
-let kTestPhaseStart = 'cactbot phase start';
-let kTestPhaseEnd = 'cactbot phase end';
+const kTestPhaseStart = 'cactbot phase start';
+const kTestPhaseEnd = 'cactbot phase end';
 
-class DpsPhaseTracker {
+export default class DpsPhaseTracker {
   constructor(options) {
     // Ordered list of phases.  Each phase is:
     // {
@@ -40,7 +40,7 @@ class DpsPhaseTracker {
   onLogEvent(logs) {
     if (!this.defaultPhase) {
       for (const log of logs) {
-        if (log.match(this.areaSealRegex) || log.includes(kTestPhaseStart)) {
+        if (this.areaSealRegex.test(log) || log.includes(kTestPhaseStart)) {
           this.defaultPhaseIdx++;
           this.defaultPhase = 'B' + this.defaultPhaseIdx;
           this.onFightPhaseStart(this.defaultPhase, this.lastData);
@@ -49,7 +49,7 @@ class DpsPhaseTracker {
       }
     } else {
       for (const log of logs) {
-        if (log.match(this.areaUnsealRegex) || log.includes(kTestPhaseEnd)) {
+        if (this.areaUnsealRegex.test(log) || log.includes(kTestPhaseEnd)) {
           this.onFightPhaseEnd(this.defaultPhase, this.lastData);
           this.defaultPhase = 0;
           return;
@@ -69,11 +69,11 @@ class DpsPhaseTracker {
 
     // Update each open phase with new diffs.
     for (let i = 0; i < this.phases.length; ++i) {
-      let phase = this.phases[i];
+      const phase = this.phases[i];
       if (phase.complete)
         continue;
 
-      let diff = this.diffUpdateInfo(phase.start, dps);
+      const diff = this.diffUpdateInfo(phase.start, dps);
       if (!diff)
         continue;
 
@@ -90,7 +90,7 @@ class DpsPhaseTracker {
   }
 
   inCombatChanged(inCombat) {
-    if (this.inCombat == inCombat)
+    if (this.inCombat === inCombat)
       return;
     this.inCombat = inCombat;
     if (inCombat)
@@ -104,7 +104,7 @@ class DpsPhaseTracker {
 
     // Make sure there's no phase name collision.
     for (let i = 0; i < this.phases.length; ++i) {
-      if (this.phases[i].name == name && !this.phases[i].complete) {
+      if (this.phases[i].name === name && !this.phases[i].complete) {
         console.error('Duplicate phase: ' + name);
         return;
       }
@@ -122,7 +122,7 @@ class DpsPhaseTracker {
   onFightPhaseEnd(name, dps) {
     this.onOverlayDataUpdate(dps);
     for (let i = 0; i < this.phases.length; ++i) {
-      if (this.phases[i].name == name && !this.phases[i].complete) {
+      if (this.phases[i].name === name && !this.phases[i].complete) {
         this.phases[i].complete = true;
         return;
       }
@@ -134,7 +134,7 @@ class DpsPhaseTracker {
     this.defaultPhase = null;
     this.defaultPhaseIdx = 0;
     for (let i = 0; i < this.phases.length; ++i) {
-      let element = this.phases[i].element;
+      const element = this.phases[i].element;
       if (element)
         element.remove();
     }
@@ -160,21 +160,21 @@ class DpsPhaseTracker {
     // This happens where ACT stops providing new updates but log entries
     // or other triggers indicate that phases have started.
     if (phaseStart) {
-      if (phaseStart.Encounter.DURATION == phaseEnd.Encounter.DURATION)
+      if (phaseStart.Encounter.DURATION === phaseEnd.Encounter.DURATION)
         return;
     }
 
-    let diffProps = function(start, end, props, out) {
+    const diffProps = function(start, end, props, out) {
       for (let i = 0; i < props.length; ++i) {
-        let prop = props[i];
+        const prop = props[i];
         out[prop] = end[prop] - start[prop];
       }
     };
-    let copyProps = function(start, props, out) {
+    const copyProps = function(start, props, out) {
       for (let i = 0; i < props.length; ++i)
         out[props[i]] = start[props[i]];
     };
-    let setDPS = function(duration, encDuration, out) {
+    const setDPS = function(duration, encDuration, out) {
       out.dps = (out.damage / duration).toFixed(2);
       out.encdps = (out.damage / encDuration).toFixed(2);
 
@@ -182,7 +182,7 @@ class DpsPhaseTracker {
       out.ENCDPS = Math.floor(out.encdps);
     };
 
-    let encounterDiffProps = [
+    const encounterDiffProps = [
       'DURATION',
       'damage',
       'hits',
@@ -196,11 +196,11 @@ class DpsPhaseTracker {
       'healstaken',
       'deaths',
     ];
-    let combatantCopyProps = [
+    const combatantCopyProps = [
       'name',
       'Job',
     ];
-    let combatantDiffProps = [
+    const combatantDiffProps = [
       'DURATION',
       'damage',
       'hits',
@@ -217,7 +217,7 @@ class DpsPhaseTracker {
       'deaths',
     ];
 
-    let encounter = {};
+    const encounter = {};
     if (phaseStart) {
       diffProps(phaseStart.Encounter, phaseEnd.Encounter, encounterDiffProps, encounter);
       setDPS(encounter.DURATION, encounter.DURATION, encounter);
@@ -228,14 +228,14 @@ class DpsPhaseTracker {
 
     // Deliberately use end, as combatants aren't initally listed before
     // they've done any damage right when the fight starts.
-    let combatant = {};
-    for (let name in phaseEnd.Combatant) {
-      let start = phaseStart ? phaseStart.Combatant[name] : null;
-      let end = phaseEnd.Combatant[name];
+    const combatant = {};
+    for (const name in phaseEnd.Combatant) {
+      const start = phaseStart ? phaseStart.Combatant[name] : null;
+      const end = phaseEnd.Combatant[name];
       if (!end)
         continue;
 
-      let c = {};
+      const c = {};
       copyProps(end, combatantCopyProps, c);
       if (start) {
         diffProps(start, end, combatantDiffProps, c);
@@ -253,6 +253,3 @@ class DpsPhaseTracker {
     };
   }
 }
-
-if (typeof module !== 'undefined' && module.exports)
-  module.exports = DpsPhaseTracker;

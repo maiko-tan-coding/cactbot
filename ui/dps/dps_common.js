@@ -1,6 +1,8 @@
-'use strict';
+import ContentType from '../../resources/content_type.js';
+import { Util } from '../../resources/common.js';
+import ZoneInfo from '../../resources/zone_info.js';
 
-let Options = {
+export const Options = {
   Language: 'en',
   IgnoreContentTypes: [
     ContentType.Pvp,
@@ -14,8 +16,8 @@ let gCurrentJob = null;
 let gCurrentZone = null;
 let gInCombat = false;
 
-const InitDpsModule = function(updateFunc, hideFunc) {
-  addOverlayListener('CombatData', function(e) {
+export const InitDpsModule = function(updateFunc, hideFunc) {
+  addOverlayListener('CombatData', (e) => {
     // DPS numbers in large pvp is not useful and hella noisy.
     if (gIgnoreCurrentZone || gIgnoreCurrentJob)
       return;
@@ -28,16 +30,16 @@ const InitDpsModule = function(updateFunc, hideFunc) {
 
     // Don't bother showing the first "Infinity" dps right as
     // combat starts.
-    let dps = parseFloat(e.Encounter.encdps);
+    const dps = parseFloat(e.Encounter.encdps);
     if (dps <= 0 || dps === Infinity)
       return;
 
     updateFunc({ detail: e });
   });
 
-  addOverlayListener('ChangeZone', function(e) {
-    let newZone = e.zoneName;
-    if (gCurrentZone == newZone)
+  addOverlayListener('ChangeZone', (e) => {
+    const newZone = e.zoneName;
+    if (gCurrentZone === newZone)
       return;
     // Always hide on switching zones.
     hideFunc();
@@ -48,13 +50,13 @@ const InitDpsModule = function(updateFunc, hideFunc) {
     gIgnoreCurrentZone = Options.IgnoreContentTypes.includes(contentType);
   });
 
-  addOverlayListener('onInCombatChangedEvent', function(e) {
+  addOverlayListener('onInCombatChangedEvent', (e) => {
     gInCombat = e.detail.inACTCombat;
   });
 
-  addOverlayListener('onPlayerChangedEvent', function(e) {
-    let job = e.detail.job;
-    if (job == gCurrentJob)
+  addOverlayListener('onPlayerChangedEvent', (e) => {
+    const job = e.detail.job;
+    if (job === gCurrentJob)
       return;
     gCurrentJob = job;
     if (Util.isCombatJob(job)) {
@@ -65,10 +67,3 @@ const InitDpsModule = function(updateFunc, hideFunc) {
     hideFunc();
   });
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    Options: Options,
-    InitDpsModule: InitDpsModule,
-  };
-}

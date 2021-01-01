@@ -1,4 +1,4 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
 // TODO: Scouring Tsunami (3CE0) on somebody other than target
 // TODO: Sweeping Tsunami (3FF5) on somebody other than tanks
@@ -6,7 +6,7 @@
 // TODO: Boiled Alive (4006) is failing puddles???
 // TODO: failing to cleanse Splashing Waters
 // TODO: does getting hit by undersea quake cause an ability?
-[{
+export default {
   zoneId: ZoneId.EdensGateInundationSavage,
   damageWarn: {
     'E3S Monster Wave 1': '3FE5',
@@ -21,4 +21,4 @@
     'E3S Temporary Current 4': '3FED',
     'E3S Spinning Dive': '3FFD',
   },
-}];
+};

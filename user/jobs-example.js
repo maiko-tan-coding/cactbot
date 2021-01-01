@@ -1,5 +1,3 @@
-'use strict';
-
 // Rename this file to `jobs.js` and edit it to change the jobs ui.
 
 // Zones to show food buff warning, when at max level.
@@ -30,7 +28,7 @@ Options.PldLowMPThreshold = 2880;
 // on black mage.
 Options.BlmLowMPThreshold = 2400;
 
-let kRed = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVEhL7c0xEQAgDAAxhHSsf2d4QMJPbLnLnnNnvxIkQRIkQRIkQRIkQRIkQfoczD4cGLQ9QOmZGwAAAABJRU5ErkJggg==';
+const kRed = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVEhL7c0xEQAgDAAxhHSsf2d4QMJPbLnLnnNnvxIkQRIkQRIkQRIkQRIkQfoczD4cGLQ9QOmZGwAAAABJRU5ErkJggg==';
 
 // Remove these /* and */ comment lines to enable the example code below.
 /*

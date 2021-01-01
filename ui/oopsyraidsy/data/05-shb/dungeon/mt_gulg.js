@@ -1,6 +1,6 @@
-'use strict';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.MtGulg,
   damageWarn: {
     'Gulg Immolation': '41AA',
@@ -29,4 +29,4 @@
     'Gulg Right Palm': '37F8',
     'Gulg Left Palm': '37FA',
   },
-}];
+};

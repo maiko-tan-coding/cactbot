@@ -1,6 +1,9 @@
-'use strict';
+import Conditions from '../../../../../resources/conditions.js';
+import NetRegexes from '../../../../../resources/netregexes.js';
+import { Responses } from '../../../../../resources/responses.js';
+import ZoneId from '../../../../../resources/zone_id.js';
 
-[{
+export default {
   zoneId: ZoneId.EdensVerseRefulgence,
   timelineFile: 'e8n.txt',
   timelineTriggers: [
@@ -48,12 +51,16 @@
       condition: function(data) {
         return !data.mirrorsActive;
       },
-      alertText: {
-        en: 'Go Front / Sides',
-        de: 'Gehe nach Vorne/ zu den Seiten',
-        fr: 'Allez devant / sur les côtés',
-        cn: '来 前方 / 两侧',
-        ko: '앞 / 양옆으로',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Go Front / Sides',
+          de: 'Gehe nach Vorne/ zu den Seiten',
+          fr: 'Allez devant / sur les côtés',
+          ja: '前 / 横　へ',
+          cn: '来 前方 / 两侧',
+          ko: '앞 / 양옆으로',
+        },
       },
     },
     {
@@ -90,12 +97,16 @@
       condition: function(data) {
         return data.mirrorsActive;
       },
-      alertText: {
-        en: 'Get behind, then South',
-        de: 'Gehe nach Hinten, danach in den Süden',
-        fr: 'Passez derrière, puis au Sud',
-        cn: '背面 => 南方',
-        ko: '보스 뒤로 => 남쪽으로',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Get behind, then South',
+          de: 'Gehe nach Hinten, danach in den Süden',
+          fr: 'Passez derrière, puis au Sud',
+          ja: '後ろに、そして南へ',
+          cn: '背面 => 南方',
+          ko: '보스 뒤로 => 남쪽으로',
+        },
       },
     },
     {
@@ -109,12 +120,16 @@
       condition: function(data) {
         return data.mirrorsActive;
       },
-      alertText: {
-        en: 'Go Front / Sides, then North',
-        de: 'Gehe nach Vorne, danach in den Norden',
-        fr: 'Allez devant / sur les côtés, puis au Nord',
-        cn: '前/侧面 => 北方',
-        ko: '앞/양옆으로 => 북쪽으로',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Go Front / Sides, then North',
+          de: 'Gehe nach Vorne, danach in den Norden',
+          fr: 'Allez devant / sur les côtés, puis au Nord',
+          ja: '前 / 横、そして北へ',
+          cn: '前/侧面 => 北方',
+          ko: '앞/양옆으로 => 북쪽으로',
+        },
       },
     },
     {
@@ -139,12 +154,16 @@
       netRegexCn: NetRegexes.startsUsing({ source: '冰面镜', id: '4E01', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '얼음 거울', id: '4E01', capture: false }),
       suppressSeconds: 3,
-      infoText: {
-        en: 'Close to mirrors',
-        de: 'Nahe zu den Spiegeln',
-        fr: 'Près des mirroirs',
-        cn: '靠近镜子',
-        ko: '거울 밑으로',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Close to mirrors',
+          de: 'Nahe zu den Spiegeln',
+          fr: 'Près des mirroirs',
+          ja: '鏡に近づく',
+          cn: '靠近镜子',
+          ko: '거울 밑으로',
+        },
       },
     },
     {
@@ -187,12 +206,16 @@
       id: 'E8N Frigid Water',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: Conditions.targetIsYou(),
-      infoText: {
-        en: 'Flare on YOU',
-        de: 'Flare auf DIR',
-        fr: 'Brasier sur VOUS',
-        cn: '核爆点名',
-        ko: '플레어 대상자',
+      infoText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: 'Flare on YOU',
+          de: 'Flare auf DIR',
+          fr: 'Brasier sur VOUS',
+          ja: '自分にフレア',
+          cn: '核爆点名',
+          ko: '플레어 대상자',
+        },
       },
     },
     {
@@ -205,12 +228,16 @@
       id: 'E8N Puddle Chase',
       netRegex: NetRegexes.headMarker({ id: '00C5' }),
       condition: Conditions.targetIsYou(),
-      alertText: {
-        en: '3x puddles on YOU',
-        de: '3x Fläche auf DIR',
-        fr: '3x Zones au sol sur vous',
-        cn: '三次放圈点名',
-        ko: '따라오는 장판 피하기',
+      alertText: (data, _, output) => output.text(),
+      outputStrings: {
+        text: {
+          en: '3x puddles on YOU',
+          de: '3x Fläche auf DIR',
+          fr: '3x Zones au sol sur vous',
+          ja: '自分に３回円範囲',
+          cn: '三次放圈点名',
+          ko: '따라오는 장판 피하기',
+        },
       },
     },
     {
@@ -246,23 +273,29 @@
       netRegex: NetRegexes.headMarker({ id: '0017', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 2,
-      alertText: function(data) {
-        if (data.rampant[data.me]) {
-          return {
-            en: 'Cone on YOU -- avoid towers',
-            de: 'Kegel AoE auf DIR -- Turm vermeiden',
-            fr: 'Cône sur Vous -- évitez les tours',
-            cn: '三角点名 -- 躲开塔',
-            ko: '부채꼴 대상자 - 장판 피하기',
-          };
-        }
-        return {
+      alertText: function(data, _, output) {
+        if (data.rampant[data.me])
+          return output.coneOnYouAvoidTowers();
+
+        return output.standInATower();
+      },
+      outputStrings: {
+        coneOnYouAvoidTowers: {
+          en: 'Cone on YOU -- avoid towers',
+          de: 'Kegel AoE auf DIR -- Turm vermeiden',
+          fr: 'Cône sur Vous -- évitez les tours',
+          ja: '自分に範囲攻撃 (塔に当たらないように)',
+          cn: '三角点名 -- 躲开塔',
+          ko: '부채꼴 대상자 - 장판 피하기',
+        },
+        standInATower: {
           en: 'Stand in a tower',
           de: 'Im Turm stehen',
           fr: 'Tenez-vous dans une tour',
+          ja: '塔を踏む',
           cn: '踩塔',
           ko: '장판 들어가기',
-        };
+        },
       },
     },
     {
@@ -550,4 +583,4 @@
       },
     },
   ],
-}];
+};
