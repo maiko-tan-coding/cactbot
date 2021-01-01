@@ -149,7 +149,7 @@ ACT、 インストールしたばかりの場合は、スタートアップウ�
 ### 依存関係：スクリプトメソッド
 
 1. `curl` インストールする必要があります（これは依存関係をダウンロードするために使用されます）
-1. 実行 `./utils/fetch_deps.py` スクリプトを
+1. Execute the `./util/fetch_deps.py` script
 1. </strong>を構築するための **ステップに進みます</li> </ol>
 
 ### 依存関係：手動による方法
@@ -193,24 +193,36 @@ ACT、 インストールしたばかりの場合は、スタートアップウ�
    | -OverlayPlugin.dll
 ```
 
-### 構築する手順
+### Steps to build plugin
 
 1. Visual Studioでソリューションを開きます（Visual Studio 2017でテスト済み）。
 1. 「リリース」および「x64」用にビルドします。
 1. プラグインは、として構築されます **ビン/ x64の/リリース/ CactbotOverlay.dll**。
 1. ビルドされたプラグインをACTプラグインとして直接追加します。  - ACTで> プラグイン-> プラグインのリスト]タブをクリックします `[参照` ]ボタンをして見つける **ビン/ x64の/リリース/ CactbotOverlay.dll** このファイルが建設されました。  次に、[ `プラグインの追加/有効化`]をクリックします。
 
+### npm and webpack
+
+If you are not a cactbot developer and are trying to modify cactbot for your own personal triggers, you should instead refer to the [customization documentation](docs/CactbotCustomization.md) instead of changing your local cactbot files.
+
+To install npm and start Webpack, follow these steps:
+
+1. Install [nodejs and npm](https://nodejs.org/en/download/)
+1. Run `npm install` in the root of the cactbot directory.
+1. Run `npm run build` or `npm start`.
+
+See the [contributing](CONTRIBUTING.md#validating-changes-via-webpack) documentation for more details about using Webpack.
+
 ## UIモジュールの概要
 
-[ui /](ui/) ディレクトリには、cactbotのuiモジュールが含まれています。 上記の手順に従ってcactbotをインストールした場合、 これはおそらく `%APPDATA%Advanced Combat Tracker \ Plugins \ cactbot-version \ cactbot \ ui \`になります。
+The [ui/](ui/) directory contains cactbot's ui modules. If you installed cactbot following the instructions above, this will most likely be `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`.
 
-各cactbotuiモジュールは、個別のオーバーレイとして追加する必要があります。 セットアップの詳細については、 [オーバーレイモジュールの追加](#adding-overlay-modules) セクションを参照してください。
+Each cactbot ui module should be added as a separate overlay. See the [Adding Overlay Modules](#adding-overlay-modules) section for more details about setup.
 
-### [レイドボス](ui/raidboss) モジュール
+### [raidboss](ui/raidboss) module
 
-このモジュールは、使用するには 点のcactbotを **UI / raidboss / raidboss.html** 又は使用 `Cactbot Raidboss` プリセット。
+To use this module, point cactbot at **ui/raidboss/raidboss.html** or use the `Cactbot Raidboss` preset.
 
-このモジュールは、戦闘での今後のイベントの視覚的なタイムラインと、レイドの認識を高めるのに役立つテキストと音声の 通知を提供します。 テキストと音声によるアラートは、ファイト タイムラインに基づくことも、ACTの「カスタムトリガー」と同様にゲーム内で発生するログメッセージから取得することもできます。 モジュールを見て、に似て感じるように設計されて [大物Bossmods](https://mods.curse.com/addons/wow/big-wigs) World of Warcraftのためのアドオン。
+This module provides a visual timeline of upcoming events in a fight, as well as text and audio notifications to help increase raid awareness. Text and sound alerts can be based on the fight timeline, or come from log messages that occur in the game, similar to ACT's "Custom Triggers". The module is designed to look and feel similar to the [BigWigs Bossmods](https://www.curseforge.com/wow/addons/big-wigs) addon for World of Warcraft.
 
 [This page](https://quisquous.github.io/cactbot/util/coverage/coverage.html) lists the currently supported set of content in cactbot. Support is continually added over time (patches welcome!) but a lot of old content may not be supported yet.
 
@@ -218,13 +230,13 @@ Fight timelines are provided in files designed for the [ACT Timeline](https://gi
 
 There are three levels of text alerts, in order of escalating importance: `info`, `alert`, and `alarm`. Text messages will be in one of these, and more important levels are larger and more eye grabbing colors.  Text-to-speech can be configured if you prefer that over on screen text.
 
-Timeline files are found in [ui/raidboss/data/timelines](ui/raidboss/data/timelines). Triggers for text and sound alerts are found in [ui/raidboss/data/triggers](ui/raidboss/data/triggers).
+Timeline files and triggers for text and sound alerts are found in [ui/raidboss/data](ui/raidboss/data), timeline files with `.txt` extension and trigger files with `.js` extension.
 
 In this screenshot, the raidboss module is highlighted, with the timeline circled in red, and the text alerts circled in yellow, with an `alert`-level text message visible.
 
 ![raidboss screenshot](screenshots/Raidboss.png)
 
-### raidbossエミュレーター
+### raidboss emulator
 
 If you are writing triggers or timelines and want to test them, you can use the raidboss emulator: **ui/raidboss/raidemulator.html**.
 
@@ -232,19 +244,19 @@ This currently can only be loaded in a browser and not as an overlay. This will 
 
 Instructions:
 
-1. ACTを開始します。
-1. -確かWS Serverは、プラグイン経由で開始されていることを確認> OverlayPlugin WSServer -> ストリーム/ローカルオーバーレイ。
-1. 選択 `Cactbot Raidboss（複合アラートおよびタイムライン）` URLジェネレータリストから。
-1. 編集言うのURL `raidemulator.html` の代わりに、 `raidboss.html`。
-1. この編集したURLをコピーしてChromeに貼り付けます。
-1. [ネットワークログ](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) をページにドラッグアンドドロップします。
-1. ゾーンとの出会いを選択し、[OK]をクリックします `ロード出会い`。
+1. Start ACT.
+1. Make sure the WS Server is started via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
+1. Select `Cactbot Raidboss (Combined Alerts and Timelines)` from the URL Generator list.
+1. Edit the url to say `raidemulator.html` instead of `raidboss.html`.
+1. Copy and paste this edited url into Chrome.
+1. Drag and drop a [network log](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) onto the page.
+1. Select the zone and encounter, and then click `Load Encounter`.
 
 If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
 
 ![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
 
-### [oopsyraidsy](ui/oopsyraidsy) モジュール
+### [oopsyraidsy](ui/oopsyraidsy) module
 
 To use this module, point cactbot at **ui/oopsyraidsy/oopsyraidsy.html** or use the `Cactbot OopsyRaidsy` preset.
 
@@ -256,9 +268,9 @@ When mistakes are made that are avoidable, oopsy logs warning (:warning:) and fa
 
 Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data](ui/oopsyraidsy/data) folder.
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![おっと、スクリーンショット](screenshots/promo_oopsy.png)
 
-### [ジョブ](ui/jobs) モジュール
+### [jobs](ui/jobs) module
 
 To use this module, point cactbot at **ui/jobs/jobs.html** or use the `Cactbot Jobs` preset.
 
@@ -274,7 +286,7 @@ In this screenshot, the jobs module is highlighted for the Red Mage job. The hea
 
 ![jobs screenshot](screenshots/Jobs.png)
 
-### [ユーレカ](ui/eureka) モジュール
+### [eureka](ui/eureka) module
 
 To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactbot Eureka` preset.
 
@@ -284,9 +296,9 @@ It currently does not read the tracker information directly.  However, if you cl
 
 If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![eurekaスクリーンショット](screenshots/promo_eureka.png)
 
-### [レーダー](ui/radar) モジュール
+### [radar](ui/radar) module
 
 To use this module, point cactbot at **ui/radar/radar.html** or use the `Cactbot Radar` preset.
 
@@ -296,9 +308,9 @@ There are options to show who pulled the mob, as well as to configure the displa
 
 See the `cactbot/user/radar-example.js` for more options.
 
-![radar screenshot](screenshots/promo_radar.png)
+![レーダーのスクリーンショット](screenshots/promo_radar.png)
 
-### [フィッシャー](ui/fisher) モジュール
+### [fisher](ui/fisher) module
 
 To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactbot Fisher` preset.
 
@@ -312,19 +324,19 @@ Cast times are currently only logged as you fish, so there won't be any data unt
 
 Check [here](docs/FAQ-Troubleshooting.md#fisher-module) for common troubleshooting tips.
 
-### [DPS](ui/dps) メートル
+### [dps](ui/dps) meters
 
 cactbot can be used with any dps meter overlay designed for OverlayPlugin's miniparse addon, with the option to build out more features through cactbot's additional Javascript APIs.  cactbot also auto-stops fights on wipes, so you can configure ACT's fight time to infinity.
 
 The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for miniparse, with the additional ability to do per-phase dps tracking, displayed in additional columns. In the screenshot below the phases are named B1, B2, B3.  These autogenerate from dungeon bosses, but could be used to differentiate raid fight phases.
 
-![xephero screenshot](screenshots/xephero.png)
+![xepheroスクリーンショット](screenshots/xephero.png)
 
 The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
 
 ![rdmty screenshot](screenshots/rdmty.png)
 
-### [プルカウンター](ui/pullcounter) モジュール
+### [pull counter](ui/pullcounter) module
 
 This small module sticks the current pull count for raiding bosses on screen. This is primarily for folks who stream a lot and want to review video footage. Having a number on screen makes it easy to scrub through video and find particular pulls to review.
 
@@ -332,7 +344,7 @@ In most cases, you can reset the count for the current boss/zone by typing `/ech
 
 ![pull counter screenshot](screenshots/pullcounter.png)
 
-### [テスト](ui/test) モジュール
+### [test](ui/test) module
 
 To use this module, point cactbot at **ui/test/test.html** or use the `Cactbot Test` preset.
 
@@ -356,7 +368,7 @@ In particular, if you want to use text to speech for raidboss alerts, you can ch
 
 Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
 
-These options are stored in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file. It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+これらのオプションは「`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`」ファイルに保存されています。 It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
 
 It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
 
