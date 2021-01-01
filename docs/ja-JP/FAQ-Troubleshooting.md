@@ -60,25 +60,25 @@ UIのトリガやピースが仕事をしない場合、「ネットワーク・
 
 `チャットログの非表示（プライバシーのため）` オプションを無効にする必要があります。
 
-- サポートされている言語 韓国語は現在サポートされていません。 パーサー言語を変更した後、ACTを再起動する必要があります。
+You will need to restart ACT after you change parser language.
 
 ## ヘルプを得る場所
 
-- [FFXIVACT不和](https://discord.gg/ahFKcmx) ＃troubleshootingチャンネルで尋ねる
-- オープン [githubの問題を](https://github.com/quisquous/cactbot/issues)
+- ask in the [FFXIV ACT discord](https://discord.gg/ahFKcmx) #troubleshooting channel
+- open a [github issue](https://github.com/quisquous/cactbot/issues)
 
 ## ネットワークログを見つける方法
 
-あなたがトリガーやタイムラインに問題がある場合、 ACTからネットワークログを添付することが有用であることができ ので、 [ネットワークのログ](LogGuide.md#network-log-lines) 再生し、エラーを調べることができます。
+If you are having issues with triggers or timelines, it can be useful to attach a network log from ACT so that the [network logs](LogGuide.md#network-log-lines) can be replayed and investigated for errors.
 
-ネットワークログを見つけるには、ACTの[ **プラグイン** ]タブに移動し、 [ **FFXIV設定** ]ボタンをクリックし、 、[ **]をクリックします。FFXIVログフォルダー**開きます。
+To find your network logs, go to the **Plugins** tab in ACT, click the **FFXIV Settings** button, and then click **Open FFXIV Log Folder**.
 
 ![画像](images/troubleshooting_openlogfolder.png)
 
-これにより、ファイルを含むフォルダウィンドウが開きます。 以下のようなものという名前のファイルを選択 **Network_etc.log**。 ファイルには、FFXIVACTプラグインのバージョンと日付が付けられています。
+This will open up a folder window with files in it. Select a file named something like **Network_etc.log**. The files are named with your FFXIV ACT Plugin version and the date.
 
 ![画像](images/troubleshooting_networklog.png)
 
-これらのファイルは大きいことが多いので、最初に圧縮してください。
+These files are often large, so zip them up first.
 
-これらをgithubの問題に直接添付できます。 または、ファイルホスティングサイトを見つけて、 そこにファイルをアップロードし、 次にリンクを添付します。
+You can attach these to github issues directly. Alternatively, find some file hosting site, upload the files there, and then attach the link.
