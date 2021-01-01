@@ -4,8 +4,13 @@
 
 ## File Structure
 
+Each trigger file is a module that exports a single trigger set.
+
 ```javascript
-[{
+import ZoneId from '../path/to/resources/zone_id.js';
+// Other imports here.
+
+export default {
   zoneId: ZoneId.TheWeaponsRefrainUltimate,
   overrideTimelineFile: false,
   timelineFile: 'filename.txt',
@@ -27,18 +32,10 @@
     { /* ..trigger 2.. */ },
     { /* ..trigger 3.. */ },
   ]
-},
-{
-  zoneRegex: /Eureka Hydatos/,
-  triggers: [
-    { /* ..trigger 1.. */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
-  ]
-}]
+};
 ```
 
-### Elements
+### Trigger Set Properties
 
 **zoneId** A shortened name for the zone to use these triggers in. The set of id names can be found in [zone_id.js](../resources/zone_id.js). Prefer using this over zoneRegex. A trigger set must have one of zoneId or zoneRegex to specify the zone (but not both).
 
@@ -46,7 +43,7 @@
 
 **overrideTimelineFile** An optional boolean value that specifies that the `timelineFile` and `timeline` specified in this trigger set override all timelines previously found. This is a way to replace timelines in user files and is not used inside cactbot itself.
 
-**timelineFile** An optional timeline file to load for this zone. These files live alongside their parent trigger file in the appropriate folder. (As for example `raidboss/data/04-sb/raid/`).
+**timelineFile** An optional timeline file to load for this zone. Timeline files in cactbot should be named the same as the `.js` file they come from, but with a `.txt` extension instead. These files live alongside their parent trigger file in the appropriate folder. (As for example `raidboss/data/04-sb/raid/`).
 
 **timeline** Optional extra lines to include as part of the timeline.
 
@@ -98,7 +95,7 @@ Almost all trigger fields can either return a value or a `function(data, matches
 - `matches` is the matches from the trigger, specifically the `matches.groups` field.
 - `output` is a special object for turning fields in `outputStrings` into strings to return. See the `outputStrings` section below for more info. For triggers that return numbers, e.g. `delaySeconds` or `durationSeconds` and for triggers that don't output anything, e.g. `preRun` or `run`, the output field is largely meaningless.
 
-### Trigger Elements
+### Trigger Properties
 
 **id string** An id string for the trigger. Every built-in trigger in cactbot has a unique id, and it is recommended but not required that user triggers also have them.
 
@@ -232,7 +229,6 @@ Trigger elements are evaluated in this order, and must be listed in this order:
 - alarmText
 - alertText
 - infoText
-- groupTTS
 - tts
 - run
 - outputStrings
