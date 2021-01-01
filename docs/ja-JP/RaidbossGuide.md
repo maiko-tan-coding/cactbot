@@ -4,59 +4,56 @@
 
 ## ファイル構造
 
+Each trigger file is a module that exports a single trigger set.
+
 ```javascript
-[{
-  するzoneid：ZoneId.TheWeaponsRefrainUltimate、
-  overrideTimelineFile：偽、
-  timelineFile： 'ファイル名.txt'、
-  タイムライン： `hideall`、
-  timelineReplace：[
+import ZoneId from '../path/to/resources/zone_id.js';
+// Other imports here.
+
+export default {
+  zoneId: ZoneId.TheWeaponsRefrainUltimate,
+  overrideTimelineFile: false,
+  timelineFile: 'filename.txt',
+  timeline: `hideall`,
+  timelineReplace: [
   {
-     ロケール： 'EN'、
-     のreplaceText： {
+     locale: 'en',
+     replaceText: {
       'regexSearch': 'strReplace',
-     }、
-     replaceSync ： {
+     },
+     replaceSync: {
       'regexSearch': 'strReplace',
-     }、
-   }、
-  ]、
-  resetWhenOutOfCombat：真、
-  トリガ：[
-    {/ * ..trigger 1 .. * /}、
+     },
+   },
+  ],
+  resetWhenOutOfCombat: true,
+  triggers: [
+    { /* ..trigger 1.. * /}、
     {/ * ..トリガー2.。 * /}、
-    {/ * ..トリガー3.。 * /}、
+    {/ * ..トリガー3.。 */ },
   ]
-}、
-{
-  zoneRegex：/ Eureka Hydatos /、
-  トリガー：[
-    {/ * ..トリガー1.。 * /}、
-    {/ * ..トリガー2.。 * /}、
-    {/ * ..トリガー3.。 * /}、
-  ]
-}]
+};
 ```
 
-### 要素
+### Trigger Set Properties
 
-**するzoneid** に、これらのトリガーを使用するゾーンのA短縮名。 ID名のセットはで見つけることができます [zone_id.js](../resources/zone_id.js)。 zoneRegexよりもこれを使用することをお勧めします。 トリガーセットには、ゾーン を指定するためにzoneIdまたはzoneRegexのいずれかが必要です（両方ではありません）。
+**zoneId** A shortened name for the zone to use these triggers in. The set of id names can be found in [zone_id.js](../resources/zone_id.js). Prefer using this over zoneRegex. A trigger set must have one of zoneId or zoneRegex to specify the zone (but not both).
 
-**zoneRegex** ゾーン名（ACTから取得）と一致する正規表現。 正規表現が一致する場合、トリガーはそのゾーンに適用されます。
+**zoneRegex** A regular expression that matches against the zone name (coming from ACT). If the regular expression matches, then the triggers will apply to that zone.
 
-**overrideTimelineFile** を指定しているその任意のブール値 `timelineFile` 及び `タイムライン` すべてのタイムラインが以前に見出され、このトリガ組オーバーライドで指定されました。 これは、ユーザーファイルのタイムラインを置き換える方法であり、cactbot自体の内部では使用されません。
+**overrideTimelineFile** An optional boolean value that specifies that the `timelineFile` and `timeline` specified in this trigger set override all timelines previously found. This is a way to replace timelines in user files and is not used inside cactbot itself.
 
-**timelineFile** このゾーンの負荷にするオプションのタイムラインファイル。 これらのファイルは、適切なフォルダー内の親トリガーファイルと一緒に存在します。 （たとえば、 `raidboss / data / 04-sb / raid /`）。
+**timelineFile** An optional timeline file to load for this zone. Timeline files in cactbot should be named the same as the `.js` file they come from, but with a `.txt` extension instead. These files live alongside their parent trigger file in the appropriate folder. (As for example `raidboss/data/04-sb/raid/`).
 
-**タイムライン** オプションの余分な行は、タイムラインの一部として含めます。
+**timeline** Optional extra lines to include as part of the timeline.
 
-**ロケール** 「KO」、「FR」、例えば「EN」にトリガファイルを制限するためのオプションのロケール。 存在しない場合は、すべてのロケールに適用されます。
+**locale** Optional locale to restrict the trigger file to, e.g. 'en', 'ko', 'fr'. If not present, applies to all locales.
 
-**replaceText** タイムライン能力名で検索および置換するキー：値のペア。 その能力の表示名が変更されたが、全て `hideall`、 `情報テキスト`、 `alerttext`、 `alarmtext`などすべてが元の名前を参照します。 これにより、タイムラインファイルを直接編集しなくても、それらのファイルの翻訳/ローカリゼーションが可能になります。
+**replaceText** Key:value pairs to search and replace in timeline ability names. The display name for that ability is changed, but all `hideall`, `infotext`, `alerttext`, `alarmtext`, etc all refer to the original name. This enables translation/localization of the timeline files without having to edit those files directly.
 
-**replaceSync** タイムラインファイル同期式で検索および置換するキーと値のペア。 ローカライズされた名前が同期正規表現で異なる場合に必要です。
+**replaceSync** Key:value pairs to search and replace in timeline file sync expressions. Necessary if localized names differ in the sync regexes.
 
-**resetWhenOutOfCombat** ブール値、デフォルトはtrue。 trueの場合、ゲームが戦闘から外れると、タイムラインとトリガーが自動的にリセットされます。 それ以外の場合は、手動で `data.StopCombat（）`呼び出す必要があります。
+**resetWhenOutOfCombat** Boolean, defaults to true. If true, timelines and triggers will reset automatically when the game is out of combat. Otherwise it's necessary to manually call `data.StopCombat()`.
 
 ## トリガー構造
 
@@ -92,65 +89,65 @@
 
 ### データ、一致、出力
 
-ほとんどすべてのトリガーフィールドは、値または `関数（データ、一致、出力）`返すことができます。 そのような機能の場合：
+Almost all trigger fields can either return a value or a `function(data, matches, output)`. For such functions:
 
 - `データ` は、すべてのトリガーに渡される一貫性のあるオブジェクトです。 値は 設定でき、次の関数を使用するためにそこにあります。
 - `マッチ` トリガーからマッチ、ある 特異 `matches.groups` フィールド。
 - `出力` のフィールドを回転させるための特別な目的である `outputStrings` リターンを文字列に。 参照してください `outputStringsに` より多くの情報については、以下のセクションを。 トリガリターン番号、例えばそのために `delaySeconds` または `durationSeconds` と の出力は何もないトリガーの、例えば `プレラン` または `の実行`、 出力フィールドは、大部分が無意味です。
 
-### トリガー要素
+### Trigger Properties
 
-**ID列** トリガのアンID文字列。 内蔵のトリガーcactbotにすべては、一意のIDを持っている 、それはお勧めしますが、ユーザートリガーはまた、それらを持っている必要はありません。
+**id string** An id string for the trigger. Every built-in trigger in cactbot has a unique id, and it is recommended but not required that user triggers also have them.
 
-トリガーIDは一意である必要があります。 前のトリガーと同じIDである トリガーが見つかった場合、最初のトリガーは完全にスキップされ 番目のトリガーはそれをオーバーライドしてその場所に配置されます。 これにより、編集用のユーザーオーバーライドへのトリガーのコピーと貼り付けが簡単になります。 IDのないトリガーはオーバーライドできません。
+Trigger ids must be unique. If a trigger is found with the same id as a previous trigger, then the first trigger will be skipped entirely and the second trigger will override it and take its place. This allows easier for copying and pasting of triggers into user overrides for edits. Triggers without ids cannot be overridden.
 
-`Regexes / NetRegexes` の現在の構造では、能力/効果/名前が式の一部として存在する必要はありません。 このため、その情報がどこかにあることが非常に重要です。 推奨される方法は、トリガーID自体、 または説明コメントに効果/能力/ NPC名を一緒に含めることです。 トリガー本体からのコンテキストだけでは必ずしも十分ではありません。 （idと同様に、cactbotリポジトリーを対象としたトリガーのみがこの情報を持っている必要があります。）
+The current structure for `Regexes/NetRegexes` does not require that the ability/effect/whatever name be present as part of the expression. Because of this, it is extremely important that that information is somewhere close by. Recommended practice is either to have the effect/ability/NPC name in the trigger ID itself, or in an explanatory comment alongside. Context solely from the trigger body is not necessarily sufficient! (As with the id, only triggers intended for the cactbot repository must have this information.)
 
-**無効：false** これがtrueの場合、トリガーは完全に無効になり、無視されます。 デフォルトはfalseです。
+**disabled: false** If this is true, the trigger is completely disabled and ignored. Defaults to false.
 
-**netRegex / regex** 正規表現cactbotは、各ログ行 に対して実行され、トリガーがアクティブになるかどうかを判別します。 `netRegex` ネットワークログ株に対するバージョンが一致、 ながら `正規表現` 正規ACTログ株に対するバージョンが一致。
+**netRegex / regex** The regular expression cactbot will run against each log line to determine whether the trigger will activate. The `netRegex` version matches against network log lines, while the `regex` version matches against regular ACT log lines.
 
-ただし、より一般的には、裸の正規表現の代わりに正規表現の置換が使用されます。 で定義されたヘルパー関数 [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) とで [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) それ以外の場合は一致基を介して抽出されるパラメータを取ります。 ここから、機能が自動的にすべき正規表現構築 と照合することを。 当然のことながら、用 `netRegex` 使用 `NetRegexes` ヘルパー とのための `正規表現` 利用 `正規表現` ヘルパー。
+More commonly, however, a regex replacement is used instead of a bare regex. Helper functions defined in [regexes.js](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js) and in [netregexes.js](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.js) take the parameters that would otherwise be extracted via match groups. From here, the functions automatically construct the regex that should be matched against. Unsurprisingly, for `netRegex` use the `NetRegexes` helper and for `regex` use the `Regexes` helper.
 
-**netRegexFr / regexFr** 「FR」ロケールのロケールに基づく正規表現の例。 もし `Options.ParserLanguage == 'FR'`、次いで `regexFr` （存在する場合）よりも優先される `正規表現`。 それ以外の場合は無視されます。  これはフランス語の例にすぎませんが、regexEn、regexKoなど、他のロケールも同じように動作します。 様 `netRegex` 対 `正規表現`、 `netRegexFr` フランス語のネットワークログ株に対するマッチ ながら `regexFr` フレンチでACTログ株に対して一致。
+**netRegexFr / regexFr** Example of a locale-based regular expression for the 'fr' locale. If `Options.ParserLanguage == 'fr'`, then `regexFr` (if it exists) takes precedence over `regex`. Otherwise, it is ignored.  This is only an example for french, but other locales behave the same, e.g. regexEn, regexKo. Like `netRegex` vs `regex`, `netRegexFr` matches against network log lines in French while `regexFr` matches against ACT log lines in French.
 
-ロケール正規表現には、定義された順序がありません。 現在の慣行は、それらを注文することである `デ`、 `、FR`、 `JA`、 `CN`、 `KO`しかし、。 さらに、裸の `正規表現` 要素と同様に、現在の慣行では、代わりに正規表現の置換を使用しています。
+Locale regexes do not have a defined ordering. Current practice is to order them as `de`, `fr`, `ja`, `cn`, `ko`, however. Additionally, as with bare `regex` elements, current practice is to use regex replacements instead.
 
-（理想的には、将来のある時点で、個々のロケール正規表現が不要になる可能性があります。 代わりに、 `timelineReplace` オブジェクトで提供される変換を使用して、これを自動的に行うことができます。 私たちはまだそこにいませんが、いつかは常にあります。）
+(Ideally, at some point in the future, we could get to the point where we don't need individual locale regexes. Instead, we could use the translations provided in the `timelineReplace` object to do this automagically. We're not there yet, but there's always someday.)
 
-**条件：関数（データ一致、出力）** アクティブトリガ機能が戻る場合 `真`。 `true`返さない場合、何も表示/発音/実行されません。 トリガーに複数の関数が存在する場合、これが最優先で実行されます。 （プレ製条件は内で使用可能な「缶詰」 [conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js)。 一般的に言えば、状況に合っている場合は、これらのいずれかを使用するのが最善です。）
+**condition: function(data, matches, output)** Activates the trigger if the function returns `true`. If it does not return `true`, nothing is shown/sounded/run. If multiple functions are present on the trigger, this has first priority to run. (Pre-made "canned" conditions are available within [conditions.js](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js). Generally speaking it's best to use one of these if it fits the situation.)
 
-**preRun：function（data、matches、output）** トリガーがアクティブになると、アクティブ化条件が満たされた後、関数が最初のアクションとして実行されます。
+**preRun: function(data, matches, output)** If the trigger activates, the function will run as the first action after the activation condition is met.
 
-**delaySeconds** 正規表現の一致が検出されてからトリガーがアクティブになるまで待機する時間（秒単位）。 数値または数値を返す `関数（データ、一致、出力）` があります。 この実行後 `プレラン` 及び前 `約束`。
+**delaySeconds** An amount of time, in seconds, to wait from the time the regex match is detected until the trigger activates. May be a number or a `function(data, matches, output)` that returns a number. This runs after `preRun` and before the `promise`.
 
-**promise：function（data、matches、output）** 存在し、promiseを返す関数の場合、 はpromiseが解決するのを待ってからトリガーを続行します。 これはからの遅延後に実行 `delaySeconds`。
+**promise: function(data, matches, output)** If present and a function which returns a promise, will wait for promise to resolve before continuing with trigger. This runs after the delay from `delaySeconds`.
 
-**durationSeconds** トリガーテキストを表示する時間（秒単位）。 数値または数値を返す `関数（データ、一致、出力）` があります。 指定しない場合、デフォルトは3です。
+**durationSeconds** Time, in seconds, to display the trigger text. May be a number or a `function(data, matches, output)` that returns a number. If not specified, defaults to 3.
 
-**suppressSeconds** もう一度、このトリガーを示す前に、秒単位で、待機する時間。 数値または `関数（データ、一致、出力）`ます。 待機時間は、最初の正規表現の一致 の時点から始まり、delaySeconds値の有無による影響を受けません。 この要素を持つトリガーがアクティブに と、 タイムアウト期間が終了するまで、トリガーは再びアクティブになりません。
+**suppressSeconds** Time to wait, in seconds, before showing this trigger again. May be a number or a `function(data, matches, output)`. The time to wait begins at the time of the initial regex match and is unaffected by presence or absence of a delaySeconds value. Once a trigger with this element activates, it will not activate again until after its timeout period is over.
 
-**音** 再生するサウンドファイル、または「情報」、「警告」、「アラーム」または「ロング」の一つ。 サウンドファイルへのパスは、ui / raidboss /ディレクトリからの相対パスです。
+**sound** Sound file to play, or one of 'Info', 'Alert', 'Alarm', or 'Long'. Paths to sound files are relative to the ui/raidboss/ directory.
 
-**soundVolume** 0と1との間の容積は、トリガーに関連付けられている音を再生します。
+**soundVolume** Volume between 0 and 1 to play the sound associated with the trigger.
 
-**応答** すべての単一エントリポイントから情報テキスト/ alertText / alarmText / TTSを返すAの方法。 また、で使用される `リソース/ responses.js`。 応答は、明示的に指定されたテキストまたはtts、 よりも優先度が低いため、オーバーライドできます。 （ `正規表現` および `条件`と同様に、「返信定型文」は [response.js](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)内で利用できます。）
+**response** A way to return infoText/alertText/alarmText/tts all from a single entrypoint. Also used by `resources/responses.js`. Response has less priority than an explicitly specified text or tts, and so can be overridden. (As with `regex` and `condition`, "canned" responses are available within [responses.js](https://github.com/quisquous/cactbot/blob/main/resources/responses.js).)
 
-**alarmText** トリガーがアクティブになると、アラームの重要度を示すテキストポップアップを表示します。 これは、失敗があなたを殺すことが保証されている、 が遭遇を一掃する可能性が高い、 またはそうでなければ正常な完了をはるかに困難にする優先度の高いイベント用です。 （例としては、T2のAllagan Rot、T7のCursed Shriek、O7のUltros'Stoneskinキャストなどがあります。） 文字列または文字列を返す `関数（データ、一致、出力）` があります。
+**alarmText** Displays a text popup with Alarm importance when the trigger activates. This is for high-priority events where failure is guaranteed to kill you, is likely to wipe the encounter, or will otherwise make successful completion much more difficult. (Examples include Allagan Rot in T2, Cursed Shriek in T7, or Ultros' Stoneskin cast in O7s.) 文字列または文字列を返す `関数（データ、一致、出力）` があります。
 
-**alertText** トリガーがアクティブになると、アラートの重要度を示すテキストポップアップを表示します。 これは、あなたを殺す可能性がある中優先度のイベントのためである または負わパーティ全体のダメージ/デバフを。 （たとえば、バスターが入ってくることをメインタンクに警告したり、次のノックバックについてパーティ全体に警告したりします。） 文字列または文字列を返す `関数（データ、一致、出力）` があります。
+**alertText** Displays a text popup with Alert importance when the trigger activates. This is for medium-priority events that might kill you, or inflict party-wide damage/debuffs. (For example, warning the main tank that a buster is incoming, or warning the entire party of an upcoming knockback.) 文字列または文字列を返す `関数（データ、一致、出力）` があります。
 
-**infoText** トリガーがアクティブになると、情報の重要度を示すテキストポップアップが表示されます。 これは、すぐに参加しないと単に迷惑になる優先度の低いイベント用です。 （たとえば、追加スポーンの警告、または入ってくるレイドダメージのヒーラーへの通知。） 文字列または文字列を返す `関数（データ、一致、出力）` があります。
+**infoText** Displays a text popup with Info importance when the trigger activates. This is for low-priority events that will be merely annoying if not attended to immediately. (For example, warning of an add spawn, or informing healers of incoming raid damage.) 文字列または文字列を返す `関数（データ、一致、出力）` があります。
 
-**TTS** コールアウトに使用する選択したTTSオプションの代替テキスト文字列。 これは、テキストポップアップのようにローカライズされたオブジェクトにすることができます。
+**tts** An alternative text string for the chosen TTS option to use for callouts. This can be a localized object just like the text popups.
 
-**run：function（data、matches、ouptut）** トリガーがアクティブになると、トリガーが終了する前の最後のアクションとして関数が実行されます。
+**run: function(data, matches, ouptut)** If the trigger activates, the function will run as the last action before the trigger ends.
 
-**outputStrings** `outputStrings` はオプションの間接参照 ため、cactbotはトリガー文字列をオーバーライドするためのカスタマイズ可能なUIを提供できます。 独自のトリガを作成している場合は、この、使用する必要はありません し、あなただけの出力機能から直接文字列を返すことができます のような `alarmText`、 `alertText`、 `情報テキスト`など
+**outputStrings** `outputStrings` is an optional indirection so that cactbot can provide customizable UI for overriding trigger strings. If you are writing your own triggers, you don't need to use this, and you can just return strings directly from output functions like `alarmText`, `alertText`, `infoText`, etc.
 
-`outputStrings` フィールドマッピング対象である `outputStrings` 並進オブジェクトにキー。 これらの翻訳可能なオブジェクトには、言語ごとに文字列エントリが必要です。 文字列では、 `${param}` 構文を使用して、関数が変数をに渡すことができるようにすることができます。
+The `outputStrings` field is an object mapping `outputStrings` keys to translatable objects. These translatable objects should have a string entry per language. In the string, you can use `${param}` constructions to allow for functions to pass variables in.
 
-ここでは、2つの例であり、 `outputStrings` タンクバスターのためのエントリは：
+Here are two example `outputStrings` entries for a tank buster:
 
 ```javascript
 outputStrings：{
@@ -173,9 +170,9 @@ outputStrings：{
 }、
 ```
 
-`noTarget` 及び `ONTARGET` のための2つのキーで `outputStrings`。
+`noTarget` and `onTarget` are the two keys for the `outputStrings`.
 
-ここで、これらの使用例です `outputStrings`にパラメータを渡す、 `ONTARGET` バージョン：
+Here's an example using these `outputStrings`, passing parameters to the `onTarget` version:
 
 ```javascript
 alarmText：（data、matches、output）=> {
@@ -183,9 +180,9 @@ alarmText：（data、matches、output）=> {
 }、
 ```
 
-呼び出し `output.onTarget（）` 内で検出ストリング `outputStrings.onTarget` 現在の言語のために。 毎 `PARAM` 渡され、それが置き換え `${param}` 値を持つ文字列で。 そして、それがために置き換えた文字列を返す `alarmText` 使用します。
+Calling `output.onTarget()` finds the string in `outputStrings.onTarget` for the current language. For each `param` passed in, it replaces `${param}` in the string with the value. Then it returns the replaced string for `alarmText` to use.
 
-同様に、これはパラメータのない別のトリガーの例です。
+Similarly, this is another trigger example, without any parameters.
 
 ```javascript
 infoText：（data、matches、output）=> {
@@ -193,7 +190,7 @@ infoText：（data、matches、output）=> {
 }、
 ```
 
-使用トリガー `応答` と `outputStrings` わずかに異なっています。 `outputStrings` トリガー自体に設定されるべきではない、 、代わりに `対応` 関数呼び出し返すべき `= {} output.responseOutputStringsと、` ここで、 `{}` outputStringsあなたがトリガから返されるはずであるオブジェクト `outputStrings` フィールド。 これは少し厄介であるが、リターンおよび使用の両方に対応可能 `outputStrings`、 及び保つ [リソース/ responses.js](../resources/responses.js) より、カプセル化を。
+Triggers that use `response` with `outputStrings` are slightly different. `outputStrings` should not be set on the trigger itself, and instead `response` should return a function that calls `output.responseOutputStrings = {};` where `{}` is the outputStrings object you would have returned from the trigger `outputStrings` field. This is a bit awkward, but allows response to both return and use `outputStrings`, and keeps [resources/responses.js](../resources/responses.js) more encapsulated.
 
 例えば：
 
@@ -208,9 +205,9 @@ infoText：（data、matches、output）=> {
 
 ## その他のトリガー情報
 
-関数を返すことができる任意のフィールド（例えば `情報テキスト`、 `alertText`、 `alarmText`、 `TTS`） また、ローカライズされたオブジェクトを返すことができ 、代わりに「出る」復帰の例えば 彼らが返すことができる {en: 'Get Out', fr: 'something french'} 代わりに。 フィールドは、ローカライズされたオブジェクトを返す関数も返すことができます。 現在のロケールがオブジェクトに存在しない場合は、「en」の結果が返されます。
+Any field that can return a function (e.g. `infoText`, `alertText`, `alarmText`, `tts`) can also return a localized object, e.g. instead of returning 'Get Out', they can return {en: 'Get Out', fr: 'something french'} instead. Fields can also return a function that return a localized object as well. If the current locale does not exist in the object, the 'en' result will be returned.
 
-トリガー要素はこの順序で評価され、次の順序でリストする必要があります。
+Trigger elements are evaluated in this order, and must be listed in this order:
 
 - id
 - 無効
@@ -232,16 +229,15 @@ infoText：（data、matches、output）=> {
 - alarmText
 - alertText
 - infoText
-- groupTTS
 - tts
 - 実行
 - outputStrings
 
 ## 正規表現の拡張
 
-正規表現としているお馴染みのあなたがいる場合、 あなたが注意しましょう `\ Y{Name}` および `\ Y{AbilityCode}` 慣れていません。 これらは、便利な ためにcactbotによって提供される拡張機能であり、考えられるすべてのUnicode文字 と一致する必要がないようにするため、またはFFXIVACTプラグインが物事を書き込む方法の詳細を知るためです。
+If you're familiar with regular expressions, you'll note the the `\y{Name}` and `\y{AbilityCode}` are unfamiliar. These are extensions provided by cactbot for convenience to avoid having to match against all possible unicode characters or to know the details of how the FFXIV ACT plugin writes things.
 
-拡張機能のセットは次のとおりです。
+The set of extensions are:
 
 - `\ y{Float}`：浮動小数点数に一致し、ロケール固有のエンコーディングを考慮します。
 - `\ y{Name}`：任意の文字名に一致します（FFXIV ACTプラグインが不明な場合に生成できる空の文字列を含む）。
@@ -252,11 +248,11 @@ infoText：（data、matches、output）=> {
 
 ## 缶詰のヘルパー関数
 
-統一トリガー構築するためには、翻訳の手動負担を軽減、 cactbotは「缶詰」トリガ要素の普及しています。 これらのヘルパーを使用すると、自動テストが大幅に簡単になり 、プルリクエストを確認するときに人間がエラーや不整合をより簡単にキャッチできるようになります。
+In order to unify trigger construction and reduce the manual burden of translation, cactbot makes widespread use of "canned" trigger elements. Use of these helpers makes automated testing significantly easier, and allows humans to catch errors and inconsistencies more easily when reviewing pull requests.
 
-現在、3つの別々の要素は、定義された構造予め作った [、条件](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js)、 [正規表現](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js)、及び [レスポンス](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)。 `条件` 関数は引数を取りません。 ほぼすべて `レスポンス` の機能は、一つのオプション引数、取る `重大度`、 ユーザトリガをアクティブに表示するポップアップテキストのレベルを決定するために使用します。 `正規表現` 関数はいくつかの引数を取ることができます [（`gainsEffect（）` が良い例です）](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176) どのログ行が照合されるかに応じて 、しかし一般的に貢献者は `ソース`、（キャスター/ユーザーの名前一致する能力）の `ID`、（六角能力IDなど `2478`）と正規表現は（マッチをキャプチャするかどうかを`キャプチャ：×`）。 `正規表現` デフォルトでキャプチャを機能しますが、標準的な方法は、トリガー要素がキャプチャを必要としない限り、非キャプチャを指定することです。
+Currently, three separate elements have pre-made structures defined: [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.js), [Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.js), and [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js). `Condition` functions take no arguments. Almost all `Response` functions take one optional argument, `severity`, used to determine what level of popup text to display to the user when the trigger activates. `Regex` functions can take several arguments [(`gainsEffect()` is a good example)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176) depending on which log line is being matched against, but generally a contributor would include the `source`, (name of the caster/user of the ability to match,) the `id`, (the hex ability ID, such as `2478`,) and whether or not the regex should capture the matches (`capture: false`.) `Regex` functions capture by default, but standard practice is to specify non-capturing unless a trigger element requires captures.
 
-これらすべての要素を利用するサンプルトリガー：
+A sample trigger that makes use of all these elements:
 
 ```javascript
 {
@@ -272,7 +268,7 @@ infoText：（data、matches、output）=> {
 }、
 ```
 
-これにより、ロケールの正規表現に一致する必要のある行数が減ることはありませんが、これは次の場合よりもはるかに冗長ではありません。
+While this doesn't reduce the number of lines we need to match the locale regexes, this is far less verbose than:
 
 ```javascript
 {
@@ -297,26 +293,26 @@ infoText：（data、matches、output）=> {
 }、
 ```
 
-裸の正規表現の使用は非推奨です。 *常に* 非常に特定がない限り使用する適切な機能を缶詰 理由はしません。 ベア正規表現を使用しようとすると、プルリクエストが送信されたときにビルドが失敗します。 裸の正規表現が何らかの理由で使用しなければならない場合（たとえば、新しいログ行がACTに追加された、場合、） プル要求を更新する `regexes.jsを` 強く奨励されています。
+Use of bare regexes is deprecated. *Always* use the appropriate canned function unless there is a very specific reason not to. Attempting to use a bare regex will cause a build failure when the pull request is submitted. If a bare regex must be used for whatever reason (if, say, a new log line is added to ACT,) pull requests to update `regexes.js` are strongly encouraged.
 
-（個人的な使用のためだけにトリガーを作成している場合は、自由に好きなことを行うことができます。 この非推奨は、cactbotリポジトリを対象とした作業にのみ適用されます。）
+(Note that if you are writing triggers for just your personal use, you are free to do what you want. This deprecation applies only to work intended for the cactbot repository.)
 
-可能な場合は、缶詰の条件と対応を使用することをお勧めします。Squareの非常に才能のあるファイトデザインチームを考えると 、常に *が* なるとは限りません。
+Use of canned conditions and responses is recommended where possible, although given Square's extremely talented fight design team, it's not always going to *be* possible.
 
 ## タイムライン情報
 
-：トリガーサブフォルダはここで説明したACTタイムラインプラグインによって定義されたフォーマットでタイムラインのテキストファイルが含まれていてもよい <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
+The trigger subfolders may contain timeline text files in the format defined by ACT Timeline plugin, which described in here: <http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin>
 
-各タイムラインファイルCactbot用途所与の相対ディレクトリ参照によってロードされなければならない [TRIGGER-FILE]の.js。 通常、タイムラインファイルのファイル名はトリガーファイルの名前と一致し、特定の遭遇では、ファイル名は少なくともゾーン名と大まかに一致する必要があります。
+Each timeline file Cactbot uses has to be loaded by a relative directory reference from the given [TRIGGER-FILE].js. Typically the filename for the timeline file will match the name of the trigger file, and for specific encounters the filenames should at least loosely match the zone name.
 
-Cactbotは、元の形式にいくつかの拡張機能を実装しています。 これらの拡張子は、ファイル 自体、またはトリガーの `タイムライン` フィールドに表示されます。
+Cactbot implements some extensions to the original format. These extensions can appear in the file itself or in the `timeline` field in the triggers:
 
-**infotext "event name" before 1** イベントが発生する前に、情報優先度のテキストポップアップを画面に表示します。 `イベント名` は、ファイル内の時限イベントと一致し、その名前のイベントが発生する前に表示されます。 デフォルトではイベントの名前が表示されますが、異なる場合は行末に表示するテキストを指定できます。 `before` パラメーターが存在する必要がありますが、イベントの発生と同時にテキストを表示する必要がある場合は0にすることができます。 負の値を使用して、イベント後のテキストを表示できます。
+**infotext "event name" before 1** Show a info-priority text popup on screen before an event will occur. The `event name` matches a timed event in the file and will be shown before each occurrence of events with that name. By default the name of the event will be shown, but you may specify the text to be shown at the end of the line if it should be different. The `before` parameter must be present, but can be 0 if the text should be shown at the same time the event happens. Negative values can be used to show the text after the event.
 
-**イベントが発生する前に、イベント名1Sを示す例情報テキスト** `1前情報テキスト「イベント名を」`
+**Example infotext which shows the event name 1s before the event happens** `infotext "event name" before 1`
 
-**先に示しする異なるテキストを指定する例情報テキスト** `情報テキスト「イベント名」2.3「代替テキスト」の前の`
+**Example infotext which specifies different text to be shown earlier** `infotext "event name" before 2.3 "alternate text"`
 
-**同じパラメータを使用して、実施例アラート優先ポップアップ** `1の前に「イベント名」alerttext` `2.3「代替テキスト」前「イベント名」alerttext`
+**Example alert-priority popups using the same parameters** `alerttext "event name" before 1` `alerttext "event name" before 2.3 "alternate text"`
 
-**同じパラメータを使用して、実施例アラーム優先度のポップアップ** `1の前に「イベント名」alarmtext` `2.3「代替テキスト」前「イベント名」alarmtext`
+**Example alarm-priority popups using the same parameters** `alarmtext "event name" before 1` `alarmtext "event name" before 2.3 "alternate text"`
