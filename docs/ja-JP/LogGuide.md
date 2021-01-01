@@ -735,16 +735,18 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 ### 21：Network6D（アクターコントロールライン）
 
-参照： [ナリディレクトリ更新のドキュメントを](https://nonowazu.github.io/nari/types/event/directorupdate.html)
+See also: [nari director update documentation](https://nonowazu.github.io/nari/types/event/directorupdate.html)
 
-アクターコントロールラインは、いくつかのその他のゾーンコマンド用です。
+To control aspects of the user interface, the game sends packets called Actor Controls. These are broken into 3 types: ActorControl, ActorControlSelf, and ActorControlTarget. If ActorControl is global, then ActorControlSelf / ActorControlTarget affects individual actor(s).
 
-* 音楽を変える
-* ワイプ後にゾーン全体をリセットする
-* ボスの限界ゲージ
-* 残り時間の更新（定期的、およびクリア後）
+Actor control commands are identified by a category, with parameters passed to it as a handler. DirectorUpdate is a category of ActorControlSelf and is used to control the events inside content for an individual player:
 
-構造： `21：TypeAndInstanceContentId：Command（4バイト）：データ（4x 4？ バイト追加データ）`
+* BGM change
+* some cutscenes
+* barrier up/down
+* fade in/out
+
+Structure: `21:TypeAndInstanceContentId:Command (4 bytes):Data (4x 4? byte extra data)`
 
 例：
 
@@ -754,11 +756,11 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 21：80037543：80000004：257：00：00：00
 ```
 
-`TypeAndContentId` は、型列挙型の2バイトです ここで、 `8003` は、インスタンス化されたコンテンツの更新タイプです。 その後、2バイトのコンテンツIDが続きます。 これは、InstanceContentテーブルのIDです。
+`TypeAndContentId` is 2 bytes of a type enum, where `8003` is the update type for instanced content. It's then followed by 2 bytes of a content id. This is the ID from the InstanceContent table.
 
-最も襲撃とprimalsにワイプこれらの日は、この正規表現を介して検出することができる： `21：........:40000010:`。  しかし、これは一部の古い戦いに発生しない、 ようなゾーンのシールがあるコイルターンとして。
+Wipes on most raids and primals these days can be detected via this regex: `21:........:40000010:`.  However, this does not occur on some older fights, such as coil turns where there is a zone seal.
 
-既知のタイプ：
+Known types:
 
 * 初期開始： `21：content：40000001：time：` （時間は秒単位のロックアウト時間です）
 * 再開： `21：content：40000006：time：00：00：00`
@@ -770,17 +772,17 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 * バリアアップ： `21：content：40000012：00：00：00：00` （常にフェードイン後に表示されます）
 * 勝利： `21：zone：40000003：00：00：00：00`
 
-注：cactbotはワイプトリガーとして「フェードイン」を使用し が、 が、テスト後に「フェードアウト」に切り替える必要があります。
+Note: cactbot uses "fade in" as the wipe trigger, but probably should switch to "fade out" after testing.
 
-まだ不明：
+Still unknown:
 
 * `21：zone：40000007：00：00：00：00`
 
 ### 22：NetworkNameToggle
 
-このログメッセージは、特定のエンティティのネームプレートを表示するかどうかを切り替えます。 これは、たとえば、暴徒がいつターゲットにできるかを知るのに役立ちます。
+This log message toggles whether the nameplate for a particular entity is visible or not. This can help you know when a mob is targetable, for example.
 
-構造： `22：[ObjectId]：[ターゲット名]：[ObjectId]：[ターゲット名]：[表示状態]`
+Structure: `22:[ObjectId]:[Target Name]:[ObjectId]:[Target Name]:[Display State]`
 
 例：
 
@@ -791,9 +793,9 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 ### 23：NetworkTether
 
-このログラインは、敵または敵とプレイヤーの間のテザー用です。 これは、ドラゴンサイトやカバーのようなプレイヤー間のスキルテザーには使用されていないようです。 （新竜N / EXでは、敵のプレイヤー同士のテザーを燃やすなどのテザーに使用できます。）
+This log line is for tethers between enemies or enemies and players. This does not appear to be used for player to player skill tethers like dragonsight or cover. (It can be used for enemy-inflicted player to player tethers such as burning chains in Shinryu N/EX.)
 
-構造： `23：[SourceId]：[SourceName]：[TargetId]：[TargetName]：[Unknown1（4バイト）]：[Unknown2（4バイト）]：[タイプ（4バイト）]：[TargetId]：[Unknown3（4バイト）]：[Unknown4 （4バイト）]：`
+Structure: `23:[SourceId]:[SourceName]:[TargetId]:[TargetName]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:[TargetId]:[Unknown3 (4 bytes)]:[Unknown4 (4 bytes)]:`
 
 例：
 
@@ -803,11 +805,11 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 23：40001614：オメガ：10532971：ポテトチッピー：0023：0000：0054：10532971：000F：0000：
 ```
 
-上記の3つの株におけるテザーの種類は、 `000E`、 `0006`、及び `0054` それぞれ。
+The type of tether in the above three lines are `000E`, `0006`, and `0054` respectively.
 
-ように [1B：NetworkTargetIcon（ヘッドマーカー）](#1b-networktargeticon-head-markers)、 種類の戦いを通じて一貫してテザーの特定の視覚スタイルを表します。
+Like [1B: NetworkTargetIcon (Head Markers)](#1b-networktargeticon-head-markers), Type is consistent across fights and represents a particular visual style of tether.
 
-テザーが他の方法で生成される例もいくつかあります。
+There are also a number of examples where tethers are generated in some other way:
 
 * ultima aetheroplasm orbs：NpcSpawnparentActorIdを反対のorbに設定
 * t12 redfire orb：NpcSpawnparentActorIdがターゲットに設定されました
@@ -817,11 +819,11 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 ## 24：LimitBreak
 
-このログ行は、ライトパーティーまたはフルパーティーでの戦闘中にリミットブレイクエネルギーが生成されるサーバーティックごとに記録されます。 （上限にある間は生成は記録されません。） インスタンスの開始時（または単一のインスタンスの場合は遭遇） で0x0000から始まり、制限ブレークが使用されるか、 またはインスタンスの最大制限値に達するまで、0x00DC（10進数で220）ずつカウントアップします。 。 この増加率は一定ですが、 が、他のアクションを実行すると、基本の増加とは関係なく、追加の増分が発生する可能性があります。 （これらの他の増分は、基本レートと同じパケットで発生しますが、別々に発生します。）
+This log line is recorded every server tick where limit break energy is generated while in combat in a light or full party. (Generation is not recorded while at cap.) It starts at 0x0000 at the beginning of the instance (or encounter in the caseof a single-encounter instance,) and counts up by 0x00DC (220 decimal,) until the limit break is used, or the instance's maximum limit value is reached. This rate of increase is constant, but other actions taken can cause extra increments to happen independent of the base increase. (These other increments occur in the same packet as the base rate, but separately.)
 
-各リミットブレイクバーは0x2710（10進数で10,000）単位です。 したがって、記録される可能性のある最大値は0x7530になります。
+Each limit break bar is 0x2710 (10,000 decimal) units. Thus, the maximum possible recorded value would be 0x7530.
 
-構造： `24：リミットブレイク： [Value]`
+Structure: `24:Limit Break: [Value]`
 
 例：
 
@@ -831,11 +833,11 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 ## 25：NetworkActionSync
 
-このログ行は、以前に解決されたアクションをレンダリングするようにクライアントに指示する同期パケットです。 （これは、ゲームのテキストログの1つにあるアニメーションまたはテキストである可能性があります。） ゲーム内でアクションが「実際に発生」した瞬間に放出されたようです 、前に `14/15` ラインが放出され、アクションが「ロックイン」された瞬間に放出されます。 [Ravahnが説明しているように](https://discordapp.com/channels/551474815727304704/551476873717088279/733336512443187231)：
+This log line is a sync packet that tells the client to render an action that has previously resolved. (This can be an animation or text in one of the game text logs.) It seems that it is emitted at the moment an action "actually happens" in-game, while the `14/15` line is emitted before, at the moment the action is "locked in". [As Ravahn explains it](https://discordapp.com/channels/551474815727304704/551476873717088279/733336512443187231):
 
 > 私は呪文を唱える場合は」、私は、[取得します `NetworkAbility`]パケット（ラインタイプ[`14/15`ダメージ量を示す]）、 が、ターゲットが実際に期待されていないが、まだそのダメージを受けます。 [`25` ログ行]には、[`14/15`]行[、] を参照する一意の識別子があり、ダメージがターゲットに有効になることを示します。 [The] FFXIVプラグインは現在これらの行を使用しておらず、FFLogによって使用されています。 そうした場合は役に立ちますが、ACTは複数行の解析を簡単に実行できないため[、] 、多くの回避策を実行する必要があります。」
 
-構造： `25：[Player ObjectId]：[Sequence Number]：[Current HP]：[Max HP]：[Current MP]：[Max MP]：[Current TP]：[Max TP]：[Position X] ：[位置Y]：[位置Z]：[Facing]：[その後のパケットデータ]`
+Structure: `25:[Player ObjectId]:[Sequence Number]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:[packet data thereafter]`
 
 例：
 
@@ -845,9 +847,9 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 ## 26：NetworkStatusEffects
 
-（おそらくおよびPVP）NPC相手のために、このログラインが並んで生成された `NetworkDoT：18` 行。 非妖精同盟国のために、それが一緒に生成される [NetworkBuff：（a）](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove)、 [1E：NetworkBuffRemove](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove)、 および [25：NetworkActionSync](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#25-NetworkActionSync)。
+For NPC opponents (and possibly PvP) this log line is generated alongside `18:NetworkDoT` lines. For non-fairy allies, it is generated alongside [1A: NetworkBuff](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove), [1E: NetworkBuffRemove](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#1e-networkbuffremove), and [25:NetworkActionSync](https://github.com/quisquous/cactbot/blob/main/docs/LogGuide.md#25-NetworkActionSync).
 
-構造： `26：[ターゲットID]：[ターゲット名]：[ジョブレベル]：[現在のHP]：[最大Hp]：[現在のMp]：[最大MP]：[現在のTP]：[最大TP] ：[位置X]：[位置Y]：[位置Z]：[Facing]：<status list; format unknown>`
+Structure: `26:[Target Id]:[Target Name]:[Job Levels]:[Current HP]:[Max Hp]:[Current Mp]:[Max MP]:[Current TP]:[Max TP]:[Position X]:[Position Y]:[Position Z]:[Facing]:<status list; format unknown>`
 
 例：
 
@@ -855,13 +857,13 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 26：12345678：PlayerOne：3C503C1C：24136：24136：9045：10000：4：0：-0.4730835：-158.1598：-23.9：3.110625：03E8：45：0：020130：0：106501CA：0129：4172D113：106501CA：012A ：4168C8B4：106501CA：012B：40919168：106501CA：0232：40E00000：E0000000：
 ```
 
-なお、このラインを機能拡張するために追加されたことを思わ ための `18`、 `1A`、及び `1E` 以前コンテンツまたはプラグインを破壊することなく、ログライン。
+It seems likely that this line was added in order to extend functionality for the `18`, `1A`, and `1E` log lines without breaking previous content or plugins.
 
 ## 27：NetworkUpdateHP
 
-それは完全に、このログ行をトリガーするかが明確ではありません しかし、それはと同等の基本的な情報が含まれている `25` 及び `26`。 それは同盟国と妖精/ペットに適用されます。
+It's not completely clear what triggers this log line, but it contains basic information comparable to `25` and `26`. It applies to allies and fairies/pets.
 
-構造： `27：[ターゲットID]：[ターゲット名]：[現在のHP]：[最大HP]：[現在のMP]：[最大MP]：[現在のTP]：[最大TP]：[位置X] ：[位置Y]：[位置Z]：[Facing]`
+Structure: `27:[Target ID]:[Target Name]:[Current HP]:[Max HP]:[Current MP]:[Max MP]:[Current TP]:[Max TP]:[position X]:[position Y]:[position Z]:[Facing]`
 
 例：
 
@@ -873,13 +875,13 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 行は印刷されますが、データは空白になります。
 
-：ネットワーク・ログ・ラインとして、彼らはしばしば、このような情報を持って `11：02.0268703から07：| 2019-05-21T19 251 00 | ProcessTCPInfo：新しい接続が処理のために検出 [2644]192.168.1.70:49413=：>204.2.229.85： 55021 | 909171c500bed915f8d79fc04d3589fa`
+As network log lines, they often have information like this: `251|2019-05-21T19:11:02.0268703-07:00|ProcessTCPInfo: New connection detected for Process [2644]: 192.168.1.70:49413=>204.2.229.85:55021|909171c500bed915f8d79fc04d3589fa`
 
 ### FC：PacketDump
 
-すべてのネットワークデータをログファイルにダンプする設定がオンの場合、 場合、ACTはすべてのネットワークデータをネットワークログ自体に出力します。 ACTログでは、これらのログ行が印刷されますが、データは空白になります。
+If the setting to dump all network data to logfiles is turned on, then ACT will emit all network data into the network log itself. In the ACT log, these log lines are printed, but with blank data.
 
-これを使用して、ネットワークログファイルをffxivmonにインポートし、パケットデータを検査できます。
+This can be used to import a network log file into ffxivmon and inspect packet data.
 
 ![ネットワークデータのスクリーンショットをダンプ](images/logguide_dumpnetworkdata.png)
 
@@ -887,19 +889,19 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 
 行は印刷されますが、データは空白になります。
 
-ネットワークログの行として、彼らは通常、次のようになります。 `253 | 2019-05-21T19：11：02.0268703から07を：00 | FFXIV PLUGIN VERSION：1.7.2.12、クライアントモード：FFXIV_64 | 845e2929259656c833460402c9263d5c`
+As network log lines, they usually look like this: `253|2019-05-21T19:11:02.0268703-07:00|FFXIV PLUGIN VERSION: 1.7.2.12, CLIENT MODE: FFXIV_64|845e2929259656c833460402c9263d5c`
 
 ### FE：エラー
 
-これらは、何か問題が発生したときにffxivプラグインによって直接発行される行です。
+These are lines emitted directly by the ffxiv plugin when something goes wrong.
 
 ### FF：タイマー
 
-理論的にはメモリ解析を使用する場合に使用されますが、私はそれらを見たことがありません。
+Theoretically used when memory-parsing is used, but I haven't seen them.
 
 ## 将来のネットワークデータサイエンス
 
-ネットワークデータを掘り下げて、現在ログに公開されていない特定のメカニズムがどのように機能するかを理解するのは良いことです。
+It'd be nice for folks to dig into network data to figure out how some specific mechanics work that are currently not exposed in the log.
 
 * Lamebrix Strikebocks（A10SとEureka Pyrosの両方）のボスヘッドマーカー
 * インスタキルの壁にぶつかる
@@ -909,4 +911,4 @@ HoT（時間の経過とともに回復）とDoT（時間の経過による損�
 * コイルなどの古いコンテンツのワイプを検出するにはどうすればよいですか？
 * 追加された戦闘員データで偽のモブと本物のモブを区別して、フィルターで除外する方法。
 
-参照： [ffxivmonにインポートする](#importing-into-ffxivmon)。
+See: [importing into ffxivmon](#importing-into-ffxivmon).
