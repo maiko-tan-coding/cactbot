@@ -4,7 +4,7 @@
 
 [![GitHub工作流程状态（分支）](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHub发行版（最新的SemVer）](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
-🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
+🌎 [**English**] [[简体中文](docs/zh-CN/README.md)] [[한국어](docs/ko-KR/README.md)]
 
 1. [关于](#关于)
 1. [安装](#安装)
