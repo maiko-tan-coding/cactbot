@@ -426,7 +426,7 @@ If you are using VSCode, you can also use the [adjust time feature](https://gith
 
 (Note: they both will not adjust jumps.)
 
-Here's an abbreviated version of the output from running this command:
+下面是通过该脚本调整后的时间轴的一部分：
 
 ```bash
 python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8
@@ -447,15 +447,15 @@ python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.t
 108.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
 ```
 
-Comparing to the original, it looks like this loops fairly perfectly. The first loop is perfect and the second loop is off by a little, as this adjusted loop has 57.6, 74.6, 80.0 but the original is 57.7, 74.7, 80.2.  Close enough.
+相比于原本的时间轴，该循环已经接近完美。 第一个循环非常完美，但第二个则略有一点偏移， 这里调整后的时间为57.6、74.6、80.0， 但原本是57.7、74.7、80.2。  虽然不够完美，但已经很接近了。
 
-In cactbot, there's a configurable window of time for how far ahead to show in the timeline.  By default it is 30 seconds, so you should at least make a loop that goes 30 seconds ahead.
+在cactbot中，有一个配置窗口可以设置显示多久之后的时间轴。  默认是30秒，因此您应额外在循环后方添加至少30秒的后续时间轴。
 
-Here's what a completed version of the first phase loop looks like.
+那么第一阶段的最终版本就完成了。
 
-Note that we've used the times from **timeline_adjust.py** rather than the original times. (You could also use `cactbot-highlight` if you prefer that.) This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
+注意，我们倾向于使用 **timeline_adjust.py** 生成的时间，而不是原本的时间。 (You could also use `cactbot-highlight` if you prefer that.) 这样我们从52.2跳转到24.4的时候，时间差依旧是正确的。  每次 `Gate Of Tartarus` 释放后5.4秒总会出现 `Shield Skewer`。
 
-We'll add the jumps in later.
+之后我们会添加jump。现在它如下所示：
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -476,17 +476,17 @@ We'll add the jumps in later.
 
 ### 添加新的战斗阶段
 
-Now on to the second phase. From observation, it's clear that at 80% the boss does some rp text and then starts doing some different abilities.
+现在开始编写P2的时间轴。 通过观察接下来的日志文件可以发现，boss会在血量降至80%之后喊话并开始使用新的技能。
 
-Unfortunately for us, it looks like the boss starts phase 2 by doing another `Shield Skewer` which it does a lot of in phase 1, so it won't be easy to sync to that.
+不幸的是，boss开启P2的技能是`Shield Skewer`，这一技能在P1被多次使用，这使得通过同步该技能来确认是否进入P2这一方式并不太合理。
 
-**make_timeline.py** has an option to move the first usage of an ability to a particular time. As cactbot usually has a window of 30 seconds ahead, feel free to generously move phases ahead in time.
+**make_timeline.py** 中有一项功能可以把某技能的第一次使用定义至特定的一个时间点。 由于cactbot的时间轴只会显示该时间点向后30秒内的内容，因此您可以在30秒后的任意时间点定义你的分P起点。
 
-Let's move phase 2 to start its first ability at time=200. Since `Shrapnel Shell` starts 4.3 seconds after that, let's adjust the first usage of `Shrapnel Shell` (ability id 474) to time=204.3.
+让我们假定P2第一个技能开始的时间点为200。 `Shrapnel Shell` 发动时间位于第一个技能发动4.3秒后；我们把 `Shrapnel Shell`的初次使用时间点定义为204.3。
 
-Here's the new command line we've built up to: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3`
+下面给出了一个新的命令行： `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3`
 
-This gets us the following output for phase 2, with manually added blank lines to break out the loops.
+执行上述命令行可获得P2时间轴如下所示，我们在文件中手动添加了一些空白行以区分不同的循环阶段：
 
 ```bash
 # manually added in
@@ -514,9 +514,10 @@ This gets us the following output for phase 2, with manually added blank lines t
 266.2 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
 ```
 
-It looks like there's a clear loop here, where every iteration of the loop has 2x `Firebomb` and 2x `Shield Skewer`. The loop time is 34.6.  Time to break out **timeline_adjust.py** again.
+这一段时间轴内存在一个清晰的循环，每次循环内必定有2次 `Firebomb` 和2次 `Shield Skewer</0。
+该循环时长为34.6秒。  是时候再次执行<strong x-id="1">timeline_adjust.py</strong>了。</p>
 
-Running `python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8`, the relevant output is:
+<p spaces-before="0">执行<code>python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8`，输出结果如下：
 
 ```bash
 234.6 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -530,11 +531,11 @@ Running `python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_w
 264.9 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
 ```
 
-This has diverged a fair bit from the original times, with the last Firebomb being 264.9 vs 266.2. If you want to be more precise, this is where you would compare against some other runs.
+这次获得的时间轴与原始时间轴存在较大的误差，最后一次 Firebomb 出现时间为264.9，而原始时间轴中为266.2。 如果你想要获得更加精确的时间轴，那么你需要将脚本执行结果所得时间轴与其他脚本运行结果做对比校核。
 
-However, this is good enough for Cape Westwind, so we will replace the second loop with this output from **timeline_adjust.py**.
+在 Cape Westwind 这个副本中，这点误差将不会造成太大的影响，因此我们将直接使用 **timeline_adjust.py** 运行所得时间轴替换掉原始时间轴中P2部分。
 
-The current state of our timeline is now:
+由此所得的时间轴文件如下所示：
 
 ```bash
 0 "Start"
@@ -580,22 +581,22 @@ The current state of our timeline is now:
 
 ### 下一个战斗阶段
 
-From observation, I know that the next phase starts at 60% and there's two adds.
+通过观察，我们发现下一阶段 (P3) 将于boss血量降至60%开始，同时boss会召唤2只小怪。
 
-From reading the timeline, there's a random "Gate of Tartarus" around the time the adds show up.
+观察时间轴可以发现，小怪出现的时间点附近有一个叫做 "Gate of Tartarus" 的技能。
 
-This is the original timeline, before any phases were adjusted:
+下面是未经调整的原始时间轴文件：
 
 ```bash
 175.8 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
 183.5 "Adds"
 ```
 
-Unfortunately, the boss uses `Gate of Tartarus` in phase 1, so we can't add it using `-p` like we did for phase 2. (Patches welcome to add more options to make this possible?)
+遗憾的是，boss在P1阶段就会使用 `Gate of Tartarus` ，因此我们不能像在P2阶段那样用 `-p` 这个参数来处理。 （欢迎各位发布可以增加相关优化选项的补丁？）
 
-Instead, we can just use **timeline_adjust.py** to just shift the timeline forward automatically. If we adjust the original timeline by 400-175.8=224.2 then we can start phase 3 at t=400.
+为了解决这个问题，我们可以使用 **timeline_adjust.py** 将时间轴向前移动一段时间。 如果我们将原始时间轴整体附加400-175.8=224.2的时间偏移， 则可以从t = 400开始定义P3阶段。
 
-Here's the adjusted output, with the adds manually added back in:
+下面是包含手动添加召唤小怪时间点的调整后的时间轴：
 
 ```bash
 400.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
@@ -629,13 +630,13 @@ Here's the adjusted output, with the adds manually added back in:
 407.7 "Adds"
 ```
 
-Without recorded video, it's not 100% clear from the logs whether the `Shrapnel Shell` is part of phase 3 or phase 4. I know from observation that `Magitek Missiles` is the last phase, so because the Shrapnel Shell breaks the pattern let's assume it starts phase 4. We'll test this later.
+由于没有战斗过程的录像，我们并不能非常肯定 `Shrapnel Shell` 这一技能是属于P3还是P4阶段。 不过通过观察日志文件，我们可以确定 `Magitek Missiles` 这一技能属于最后一个战斗阶段，也即P4。由于这个 Sharpnel Shell 打断了之前的技能循环模式，让我们假设是这个技能开启了P4阶段。 我们会在稍后的内容里对它进行测试。
 
-It looks a bit like there's another loop just like phase 2.
+新阶段的时间轴看上去有点像P2。
 
-One consideration is to see if it's exactly the same as phase 2. You can use **timeline_adjust.py** with an adjustment of 208.7 to move phase 2's `Shield Skewer` on top of phase 3. However, you can see from that output that it's not quite the same. Therefore, we'll need to build phase 3 separately.
+首先来判断一下这一循环是否与P2的循环完全一致。 您可以使用 **timeline_adjust.py** 把P3之前的P2最后一段 `Shield Skewer` 小循环整体偏移+208.7。 遗憾的是，您可以发现偏移后的时间轴与新阶段的小循环并不完全相同。 因此，我们需要构建P3阶段的时间轴。
 
-It's pretty clear that this loop is also a 36.2 second loop. Using **timeline_adjust.py** with a 36.2 adjustment gets this output:
+很明显，P3阶段的小循环也是一个36.2秒的循环。 使用 **timeline_adjust.py** 对时间轴中第一个小循环附加一个36.2秒偏移调整，可以得到如下结果：
 
 ```bash
 445.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -649,13 +650,13 @@ It's pretty clear that this loop is also a 36.2 second loop. Using **timeline_ad
 476.7 "Firebomb" sync /:Rhitahtyn sas Arvina:476:/
 ```
 
-This is really close to the original times, so let's consider that our loop.
+添加偏移后的小循环时间点与原始时间轴中的第二小循环时间点非常接近，因此我们可以认为它就是P3的技能循环。
 
 ### 最终阶段
 
-Finally, we need the phase that starts at 40%. We assumed that the `Shrapnel Shell` started this phase. However, this isn't a unique skill. `Magitek Missiles` is the first unique skill in this phase and that starts 10 seconds after "Shrapnel Shell". Let's start phase 4 at 600 seconds, so we'll adjust the first use of `Magitek Missile` (ability id 478) to be t=610.
+战斗的最后一个阶段将在boss血量降至40%的时候开启。 我们在这里假设由 `Shrapnel Shell` 这一技能开启这一阶段的战斗。 显而易见的是，这个技能并不是这一阶段独有的技能。 `Magitek Missiles` 才是P4独有技能，它的初次使用位于 Shrapnel Shell 这一技能的10秒后。 让我们把P4的开始时间定义在600秒处，把 `Magitek Missile` (技能ID478) 的初次使用时间定为610.
 
-Here's the final command line, including this second phase: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3 478:610`
+下面执行最后一个命令行，包括第二阶段：`python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3 478:610`
 
 ```bash
 # manually added in
@@ -695,7 +696,7 @@ Here's the final command line, including this second phase: `python util/make_ti
 743.3 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
 ```
 
-This sure looks like a 40.2 second loop. Using **timeline_adjust.py**, with a 40.2 second adjustment, we get the following output:
+很明显P4拥有一个40.2秒的小循环。 使用 **timeline_adjust.py** 对时间轴中的第一个小循环附加一个40.2秒的偏移调整，我们可以得到如下结果：
 
 ```bash
 650.2 "Magitek Missiles" sync /:Rhitahtyn sas Arvina:478:/
@@ -707,11 +708,11 @@ This sure looks like a 40.2 second loop. Using **timeline_adjust.py**, with a 40
 689.2 "Winds Of Tartarus" sync /:Rhitahtyn sas Arvina:472:/
 ```
 
-This is a perfect match for the original times, so there's our loop.
+所得结果与原始时间轴的第二小循环完美契合，因此我们可以认定该循环即为P4的技能循环。
 
 ### 样板附注
 
-In general, most timelines should include some boilerplate at the top like this:
+通常来说，大多数时间轴文件都应该在文件抬头给出一些模板，类似下面这样：
 
 ```bash
 # Cape Westwind
@@ -727,15 +728,15 @@ hideall "--sync--"
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
 ```
 
-It's good practice to include the command line you used to generate this so that other people can come back and see what you skipped.
+您最好能给出您用于生成代码所用的命令，以便他人可以追溯您制作代码时所作的前期工作。
 
-`hideall` hides all instances of a line, so that players don't see `--sync--` show up visually, but the timeline itself will still sync to those lines. There can be anything in the text, it is just called `--sync--` for convenience.
+`hideall` 命令可以隐藏某一命令的执行信息，因此玩家不会看到 `--sync--` 的执行信息，但这不意味着时间轴本身没有执行这些同步命令。 hideall 后面的文本内容可以是任意命令名，这里只是以 `--sync--` 作为例子进行说明。
 
-It's good practice to have a Reset line to stop the timeline when there's a wipe. On fights where the entire zone resets (e.g. all of omegascape, a4s, a8s, a12s, t9, t13), `sync / 21:........:40000010:/` is a good sync to use. On fights with zones that seal and unseal, (e.g. a1s,  t1-8) you should use the zone sealing message itself to reset.
+当战斗过程存在转阶段时，最好使用重置时间轴来停止之前的时间轴。 在那些战斗过程中存在场地转换的副本中 (例如欧米茄系列, a4s, a8s, a12s, t9, t13)，`sync / 21:........:40000010:/` 是一个相当好用的同步命令。 在那些进入战斗后会封锁战斗区域的副本 (例如a1s, t1-8)，则应使用区域封锁这条消息来进行时间轴重置。
 
-Finally, to start a fight, you should always include an Engage! sync for countdowns. If the first boss ability is slow to happen, you should also include the first auto so that the timeline starts.
+您的时间轴文件抬头应该设置一句与开始战斗同步的命令以开启战斗同步。 同时保持与战斗倒计时同步。 如果boss的第一个技能在战斗开始后很长一段时候后才会使用，那么您应该把它也加入时间轴文件以保证开启时间轴。
 
-For instances, on o11s, the first two lines are:
+举个栗子，在o11s的时间轴文件中，抬头两行如下所示：
 
 ```bash
 0.0 "--sync--" sync /:Engage!/ window 0,1
@@ -744,7 +745,7 @@ For instances, on o11s, the first two lines are:
 
 ### 定义循环
 
-Here's the phase 1 loop, again. We're going to edit this so that whenever we get to 52.2 seconds it will jump back to 24.4 seconds seamlessly.
+下文再次给出了P1阶段的小循环。 我们将对它进行改写，以便时间轴每次执行至52.2秒时，它会直接跳回24.4秒处。
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -763,13 +764,13 @@ Here's the phase 1 loop, again. We're going to edit this so that whenever we get
 80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
 ```
 
-On the 52.2 line, add the following `window 10,100 jump 24.4`. This means, if you see this ability 10 seconds in the past or 100 seconds in the future, jump to t=24.4. By default, all syncs are `window 5,5` unless otherwise specified, meaning they sync against the ability any time within the last 5 seconds or 5 seconds in the future.
+让我们在52.2这一行上添加一句 `window 10,100 jump 24.4` 。 这一句命令的意思是，如果您在这一行执行前10秒至执行后100秒内看到boss使用该技能，那么时间轴将跳回24.4秒处。 默认情况下，除了一些需要特殊设置同步时间范围的语句，所有的同步语句都应该设置 `window 5,5` ，它表示在该行执行的前后5秒内与该技能进行同步。
 
-The abilities from 57.6 to 80.0 will never be synced against because as soon as the ability at 52.2 is seen, we will want to jump back.  So, we will remove those syncs.
+添加该语句之后的时间轴文件中，57.6至80.0秒范围内的技能将不会被同步，因为当时间轴运行到52.2秒的技能后，它会跳回我们设置的24.4秒处。  因此我们可以把这一部分内容删除。
 
-Finally, because sometimes log lines get dropped or ACT starts mid-combat, it can be good to put large syncs on infrequent or important abilities so that the timeline can sync there.
+最后值得一提的是，由于有时候日志文件中会丢失一些信息，而ACT也可能是在战斗中途才被开启，您最好在那些boss不常用或者非常重要的技能上设置一个较长的同步窗口期，以便即使出现上述情况也能使得时间轴能及时与战斗同步。
 
-This leaves us with this final version of the initial loop.
+当您做完上述编辑后，我们可以得到下面这样的时间轴文件，它就是初始小循环的最终版本。
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -789,13 +790,13 @@ This leaves us with this final version of the initial loop.
 80.0 "Gate Of Tartarus"
 ```
 
-This is done on all the following loops as well.
+您可以对其余几个阶段的小循环执行相同的改写。
 
 ### 珠联璧合
 
-Putting all the loops that we have created together leaves us with the following timeline.
+让我们把已经改写完毕的全部小循环整合到一起，可以得到如下时间轴：
 
-Because there are so many `Shield Skewer` abilities, any loops are on less frequent abilities just to be more careful.
+由于本文举例的时间轴文件中 `Shield Skewer` 这一技能频繁出现，各个小循环重复率较低，在编写时间轴的时候需要更加小心。
 
 ```bash
 # Cape Westwind
@@ -900,13 +901,13 @@ hideall "--sync--"
 
 ### 测试时间轴
 
-cactbot has a testing tool called **util/test_timeline.py** that can test a network log file or an fflogs fight against an existing timeline.
+cactbot有一个名为 **util / test_timeline.py** 的测试工具，可以使用网络日志文件或fflog来测试现有的时间轴文件。
 
-The test tool will tell you when a sync in your timeline is not matched against the fight, and if a future sync is hit, it will let you know that some were skipped over. It will not do the reverse, and tell you about abilities in the fight that have no timeline entries.
+这个测试工具可以告知您时间轴是否存在与战斗无法同步的情况，还能告知您在同步过程中那些未能匹配而被跳过的时间轴内容。 但它不会告诉您时间轴文件中没有包含的却出现在战斗中的技能。
 
-It will also tell you about how far off the sync was, which can help with adjusting timelines to be more accurate.
+它会告知您实际战斗与时间轴的同步偏移有多大，这可以帮助您调整时间轴文件以使其更加准确。
 
-Here's an example. The `-t` parameter here refers to the file name of the timeline you want to test against in the **ui/raidboss/data/timelines** folder, minus the .txt extension. (As with `make_timeline`, you can use the `-lf` parameter to list encounters.)
+这里有一个例子。 这里的 `-t` 参数是用来指代您在 **ui/raidboss/data/timelines** 文件夹下面的想要测试的时间轴文件名称，-t 后的文件名应舍弃文件后缀 .txt。 (与 `make_timeline` 类似，您可以使用 `-lf` 参数来列出全部的时间轴文件。)
 
 ```bash
 $ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
@@ -1004,11 +1005,11 @@ $ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
 623.709: Matched entry: 623.7 Winds Of Tartarus (-0.009s)
 ```
 
-As this timeline was generated against this network log, it's not surprising that most of these timings are very accurate.
+由于此时间轴是针对网络日志生成的，因此大多数时间都非常准确。
 
-The `Missed sync` lines are the ones to look at more closely.
+您应该格外关注 `Missed sync` 所在的行。
 
-These three examples aren't worrisome because they are just the end of the loop and we've skipped forward in time to the next phase. (Patches welcome to figure out how to not warn on this sort of jump.)
+下面给出的三个示例实际上并没有什么影响，因为未匹配的内容出现在某一战斗阶段的结尾处，时间轴已经在循环结束之后跳到了下一个阶段。 (欢迎提供相关补丁以弄清楚如何对这种跳转不发出警告。)
 
 ```text
 48.695: Matched entry: 199.0 --sync-- (+150.305s)
@@ -1025,7 +1026,7 @@ These three examples aren't worrisome because they are just the end of the loop 
     Missed sync: Shrapnel Shell at 449.5 (last seen at 413.195)
 ```
 
-However, this looks like a problem:
+下面这个示例则确实属于时间轴出现了问题：
 
 ```text
 620.783: Matched entry: 610.0 Magitek Missiles (-10.783s)
@@ -1034,23 +1035,23 @@ However, this looks like a problem:
     Missed sync: Winds Of Tartarus at 608.8 (last seen at 619.564)
 ```
 
-It seems pretty likely that we've put the rp text sync in the wrong place. Because we added such a large window on `Magitek Missile` the timeline resynced (thank goodness), but some of the abilities before that were wrong.
+看起来我们似乎把boss喊话时间放在了错误的位置。 所幸我们在 `Magitek Missile` 这个技能上设置了较长的同步窗口期，使得时间轴文件在这个技能处重新同步 (感谢女神保佑)，但是在这个技能之前的那些内容存在错误。
 
-The original timeline is:
+原来的时间轴是这样的：
 
 ```bash
 595.0 "--sync--" sync /00:0044:[^:]*:Your defeat will bring/ window 600,0
 600.0 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
 ```
 
-However, Shrapnel Shell is off by 10.7 seconds, as the tester output mentioned `(last seen at 610.739)`. The fix is to move the rp text sync back in time by that amount. The new time will be 595 - 10.7 = 584.3.
+然而，实际上 Shrapnel Shell 技能使用的时间比时间轴设定的时间点迟了10.7秒，测试结果显示它出现在了610.739处。 解决办法是将boss喊话的文本同步时间往前偏移这一差值。 我们获得的新的喊话同步点为 595-10.7=584.3。
 
 ```bash
 584.3 "--sync--" sync /00:0044:[^:]*:Your defeat will bring/ window 600,0
 600.0 "Shrapnel Shell" sync /:Rhitahtyn sas Arvina:474:/
 ```
 
-Rerunning the tester (most output omitted)
+让我们重新运行一次测试脚本 (下面的结果已省略大部分无关的输出)
 
 ```bash
 $ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
@@ -1067,15 +1068,15 @@ $ python util/test_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.
 610.019: Matched entry: 610.0 Magitek Missiles (-0.019s)
 ```
 
-This is what we want to see. As before, these missed syncs are just from the phase push, but `Shrapnel Shell` is now in the right spot.
+这样的结果才是我们想要的。 前面这些关于丢失同步的报错内容都是由于阶段跳转，而 `Shrapnel Shell` 技能现在出现在了正确的位置。
 
 ### 测试其他时间轴
 
-It's important to test against multiple fight instances to make sure that the timeline is good. Here's an example of running against the **CapeWestwind2.log** file.
+为了保证时间轴的正确运行，您应该尽可能多的进行实战测试。 下面给出了针对 **CapeWestwind2.log** 的测试结果：
 
-If you run `python util/test_timeline.py -f CapeWestwind2.log -s 13:21:00.688 -e 13:29:36.976 -t cape_westwind` yourself, you can spot at least two problems.
+执行 `python util/test_timeline.py -f CapeWestwind2.log -s 13:21:00.688 -e 13:29:36.976 -t cape_westwind` ，可以发现至少2个问题。
 
-One minor problem is that this boss is inconsistent:
+第一个问题属于小毛病，测试结果显示时间轴文件给出的boss技能时间点与实际有偏差：
 
 ```text
 447.329: Matched entry: 445.0 Shield Skewer (-2.329s)
@@ -1084,9 +1085,9 @@ One minor problem is that this boss is inconsistent:
 447.361: Matched entry: 445.0 Shield Skewer (-2.361s)
 ```
 
-This `Shield Skewer` in phase 3 comes at wildly different times. However, the abilities before and after seem to be just fine. Often if there are inconsistencies like this, the best thing to do is make sure there are larger windows around surrounding abilities to make sure that even if one ability is inconsistent the entire timeline doesn't get derailed.
+`Shield Skewer` 这一技能在P3阶段的不同时间点均会出现。 然而，这技能前后的技能时间轴看上去都没什么问题。 一般来说，如果出现了这种个别频繁使用的技能时间不匹配的情况，最好的办法就是确保该技能附近的其他技能拥有一个较长的同步窗口期，以整个时间轴文件不会因为这些偏差导致延迟。
 
-However, one major problem is that there's a missing `Shield Skewer`:
+第二个问题显然更为严重，测试结果显示时间轴文件同步过程中丢失了一个 `Shield Skewer`：
 
 ```text
 403.454: Matched entry: 403.5 Shield Skewer (+0.046s)
@@ -1095,9 +1096,9 @@ However, one major problem is that there's a missing `Shield Skewer`:
 417.748: Matched entry: 417.9 Winds Of Tartarus (+0.152s)
 ```
 
-One timeline has two `Shield Skewer`s and one only has one. And the `Shrapnel Shell` is horribly mistimed here.
+在我们的多次测试结果中有一次时间轴成功同步了2次 `Shield Skewer` ，而另外一次只同步了1次。 `Shrapnel Shell` 在这里丢失1次同步是一个很糟糕的情况。
 
-What to do in this case is subjective. Here are some options:
+该如何处理这一问题就因人而异了。 下面给出了一些参考建议：
 
 * 获取更多的战斗数据，然后针对更为通用的情况调整时间轴文件。
 * 在时间轴这一部分留白。
