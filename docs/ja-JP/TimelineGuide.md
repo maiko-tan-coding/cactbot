@@ -420,9 +420,13 @@ make_timeline.pyスクリプトには、これを行うための2つのオプシ
 
 およそ27.8秒または27.9秒のループがあることはかなり明らかです。 27.8だとしましょう
 
-完璧なループを作るための最良のツールがある **のutil / timeline_adjust.py**。 このスクリプトは、タイムラインファイルをウォークスルーし、正または負の任意の量で調整された同じ タイムラインファイルを出力します。 （注：ジャンプは調整されません。）
+完璧なループを作るための最良のツールがある **のutil / timeline_adjust.py**。 このスクリプトは、タイムラインファイルをウォークスルーし、正または負の任意の量で調整された同じ タイムラインファイルを出力します。
 
-このコマンドを実行したときの出力の簡略版は次のとおりです。
+If you are using VSCode, you can also use the [adjust time feature](https://github.com/MaikoTan/cactbot-highlight#adjust-time) from the [cactbot-highlight](https://marketplace.visualstudio.com/items?itemName=MaikoTan.cactbot-highlight) extension, which offer a simple way to adjust time in one-click.
+
+(Note: they both will not adjust jumps.)
+
+Here's an abbreviated version of the output from running this command:
 
 ```bash
 python util / timeline_adjust.py --file = ui / raidboss / data / timelines / cape_westwind.txt --adjust = 27.8
@@ -443,15 +447,15 @@ python util / timeline_adjust.py --file = ui / raidboss / data / timelines / cap
 108.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
 ```
 
-オリジナルと比較すると、これはかなり完全にループしているように見えます。 最初のループは完全であり、第二のループは、少しではオフになって、 この調整ループは57.6、74.6、80.0を有しているが、元のように 57.7、74.7、80.2です。  十分近い。
+Comparing to the original, it looks like this loops fairly perfectly. The first loop is perfect and the second loop is off by a little, as this adjusted loop has 57.6, 74.6, 80.0 but the original is 57.7, 74.7, 80.2.  Close enough.
 
-cactbotには、タイムラインに をどれだけ先に表示するかを設定できる時間枠があります。  デフォルトでは、それはあなたがする必要がありますので、30秒 、少なくとも先に30秒を行くループを作ります。
+In cactbot, there's a configurable window of time for how far ahead to show in the timeline.  By default it is 30 seconds, so you should at least make a loop that goes 30 seconds ahead.
 
-最初のフェーズループの完成版は次のようになります。
+Here's what a completed version of the first phase loop looks like.
 
-私たちはからの時間を使ってきたことを注意 **timeline_adjust.py** ではなく オリジナルの倍以上。 これは、52.2から24.4にジャンプしたときに、 相対時間のすべてが同じままになるようにするためです。  どちらの場合も `タルタロスのゲート` 発生し、そこだ `シールド串` それの後に5.4秒に。
+Note that we've used the times from **timeline_adjust.py** rather than the original times. (You could also use `cactbot-highlight` if you prefer that.) This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
 
-ジャンプは後で追加します。
+We'll add the jumps in later.
 
 ```bash
 2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
@@ -472,17 +476,17 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 
 ### フェーズの追加
 
-次に、第2フェーズに進みます。 観察から、80％で上司がrp テキストを実行し、次にいくつかの異なる能力を実行し始めることは明らかです。
+Now on to the second phase. From observation, it's clear that at 80% the boss does some rp text and then starts doing some different abilities.
 
-上司がフェーズ2を開始するように残念ながら私たちのために、それが見えます 別の実行して `シールド串` 、それは中の多くありません 1相を、ので、それはそれとの同期には容易ではないだろう。
+Unfortunately for us, it looks like the boss starts phase 2 by doing another `Shield Skewer` which it does a lot of in phase 1, so it won't be easy to sync to that.
 
-**make_timeline.py** は、能力の最初の使用法 を特定の時間に移動するオプションがあります。 cactbotには通常30秒先のウィンドウがあるため、 は時間の経過とともにフェーズを寛大に進めることができます。
+**make_timeline.py** has an option to move the first usage of an ability to a particular time. As cactbot usually has a window of 30 seconds ahead, feel free to generously move phases ahead in time.
 
-フェーズ2に移動して、time = 200で最初の能力を開始しましょう。 `榴散弾` はその後4.3秒で開始するので、 は `榴散弾` （能力ID 474）の最初の使用をtime = 204.3に調整しましょう。
+Let's move phase 2 to start its first ability at time=200. Since `Shrapnel Shell` starts 4.3 seconds after that, let's adjust the first usage of `Shrapnel Shell` (ability id 474) to time=204.3.
 
-これが私たちが構築した新しいコマンドラインです： `python util / make_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e 18：49：22.934 -ii 0A 2CD 2CE 194 14 -p 474： 204.3`
+Here's the new command line we've built up to: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3`
 
-これにより、フェーズ の次の出力が得られ、ループを分割するために手動で空白行が追加されます。
+This gets us the following output for phase 2, with manually added blank lines to break out the loops.
 
 ```bash
 ＃
@@ -510,9 +514,9 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 266.2 "F irebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-明確なループが、ここにありますように見えます ループのすべての反復が2倍有する場合 `Firebomb` と2倍 `シールド串`。 ループ時間は34.6です。  抜け出すための時間 **timeline_adjust.py** 再び。
+It looks like there's a clear loop here, where every iteration of the loop has 2x `Firebomb` and 2x `Shield Skewer`. The loop time is 34.6.  Time to break out **timeline_adjust.py** again.
 
-実行 `パイソンのutil / timeline_adjust.py --file = UI / raidboss /データ/タイムライン/ cape_westwind.txt --adjust = 27.8`、 、関連する出力です。
+Running `python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8`, the relevant output is:
 
 ```bash
 234.6 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
@@ -526,11 +530,11 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 264.9" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-これは、元の時代から、公平なビットを発散しています 最後Firebombは266.2対264.9であることを。 より正確にしたい場合は、 これは他のいくつかの実行と比較する場所です。
+This has diverged a fair bit from the original times, with the last Firebomb being 264.9 vs 266.2. If you want to be more precise, this is where you would compare against some other runs.
 
-しかし、これはケープウエストウインド、のために良い十分です 私たちは、この出力を有する第2のループに置き換えられますので、 から **timeline_adjust.py**。
+However, this is good enough for Cape Westwind, so we will replace the second loop with this output from **timeline_adjust.py**.
 
-タイムラインの現在の状態は次のとおりです。
+The current state of our timeline is now:
 
 ```bash
 0 "Start"
@@ -576,22 +580,22 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 
 ### 次の段階
 
-観察から、次のフェーズは60％で から始まり、2つの追加があることがわかります。
+From observation, I know that the next phase starts at 60% and there's two adds.
 
-タイムラインを読むと、追加が表示される頃にランダムに 「タルタロスの門」があります。
+From reading the timeline, there's a random "Gate of Tartarus" around the time the adds show up.
 
-これは、フェーズが調整される前の元のタイムラインです。
+This is the original timeline, before any phases were adjusted:
 
 ```bash
 175.8 "門タルタロスの"同期/：Rhitahtyn SAS Arvina：473：/
 183.5 "追加"
 ```
 
-残念ながら、上司は使用しています `タルタロスの門` フェーズ1、中 我々が使用してそれを追加することはできませんので、 `-p` 我々はフェーズ2のために行ったように。 （パッチはこれを可能にするためにさらにオプションを追加することを歓迎しますか？）
+Unfortunately, the boss uses `Gate of Tartarus` in phase 1, so we can't add it using `-p` like we did for phase 2. (Patches welcome to add more options to make this possible?)
 
-代わりに、 **timeline_adjust.py** を使用して、タイムラインを自動的に シフトすることができます。 元のタイムラインを400-175.8 = 224.2 調整すると、t = 400でフェーズ3を開始できます。
+Instead, we can just use **timeline_adjust.py** to just shift the timeline forward automatically. If we adjust the original timeline by 400-175.8=224.2 then we can start phase 3 at t=400.
 
-これが調整された出力で、手動で追加 追加されています。
+Here's the adjusted output, with the adds manually added back in:
 
 ```bash
 400.0 "Gate Of Tartarus" sync /：Rhitahtyn sas Arvina：473：/
@@ -625,13 +629,13 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 407.7 "追加"
 ```
 
-録画されたビデオがなければ、 `榴散弾` がフェーズ3の一部であるかフェーズ4の一部であるかは、ログ から100％明確ではありません。 私はという観測から知っている `Magitekミサイル` 最後の段階であり、 シュラプネルシェルパターンのは、仮定しよう壊れるので、そう 、それがフェーズ4を開始します。 これは後でテストします。
+Without recorded video, it's not 100% clear from the logs whether the `Shrapnel Shell` is part of phase 3 or phase 4. I know from observation that `Magitek Missiles` is the last phase, so because the Shrapnel Shell breaks the pattern let's assume it starts phase 4. We'll test this later.
 
-フェーズ2と同じように別のループがあるように見えます。
+It looks a bit like there's another loop just like phase 2.
 
-1つの考慮事項は、フェーズ2とまったく同じかどうかを確認することです。 あなたは使用することができます **timeline_adjust.py** 208.7の調整で フェーズ2の移動する `シールド串` フェーズ3の上に。 ただし、その出力から、まったく同じではないことがわかります。 したがって、フェーズ3を個別に構築する必要があります。
+One consideration is to see if it's exactly the same as phase 2. You can use **timeline_adjust.py** with an adjustment of 208.7 to move phase 2's `Shield Skewer` on top of phase 3. However, you can see from that output that it's not quite the same. Therefore, we'll need to build phase 3 separately.
 
-このループも36.2秒のループであることは明らかです。 **timeline_adjust.py** を36.2調整で使用すると、次の出力が ます。
+It's pretty clear that this loop is also a 36.2 second loop. Using **timeline_adjust.py** with a 36.2 adjustment gets this output:
 
 ```bash
 445.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
@@ -645,13 +649,13 @@ cactbotには、タイムラインに をどれだけ先に表示するかを設
 476.7" Firebomb "sync /：Rhitahtyn sas Arvina：476：/
 ```
 
-これは元の時間に非常に近いので、 をループと考えてみましょう。
+This is really close to the original times, so let's consider that our loop.
 
 ### 最終段階
 
-最後に、40％から始まるフェーズが必要です。 `榴散弾` がこのフェーズを開始したと仮定しました。 ただし、これはユニークなスキルではありません。 `マジテックミサイル` は、このフェーズ 最初のユニークなスキルであり、「榴散弾」の10秒後に開始されます。 フェーズ4を600秒で開始しましょう。そのため、 `Magitekミサイル` （能力ID 478）の最初の使用 t = 610に調整します。
+Finally, we need the phase that starts at 40%. We assumed that the `Shrapnel Shell` started this phase. However, this isn't a unique skill. `Magitek Missiles` is the first unique skill in this phase and that starts 10 seconds after "Shrapnel Shell". Let's start phase 4 at 600 seconds, so we'll adjust the first use of `Magitek Missile` (ability id 478) to be t=610.
 
-ここで、最終的なコマンドラインは、この第2の相を含む、次のとおりです。 `パイソンのutil / make_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e 18：49：22.934 -II 0A 2CD 2CE 194 14 -p 474：204.3 478：610`
+Here's the final command line, including this second phase: `python util/make_timeline.py -f CapeWestwind.log -s 18:42:23.614 -e 18:49:22.934 -ii 0A 2CD 2CE 194 14 -p 474:204.3 478:610`
 
 ```bash
 ＃
@@ -691,7 +695,7 @@ Rhitahtyn SAS Arvina：610.0 "Magitekミサイル"同期/ ：478：/
 743.3 "Windsタルタロスの "同期/：Rhitahtyn sas Arvina：472：/
 ```
 
-これは確かに40.2秒のループのように見えます。 **timeline_adjust.py**を使用し、40.2秒の調整で を使用すると、次の出力が得られます。
+This sure looks like a 40.2 second loop. Using **timeline_adjust.py**, with a 40.2 second adjustment, we get the following output:
 
 ```bash
 650.2 "Magitek Missiles" sync /：Rhitahtyn sas Arvina：478：/
@@ -703,11 +707,11 @@ Rhitahtyn SAS Arvina：610.0 "Magitekミサイル"同期/ ：478：/
 689.2" Winds Of Tartarus "同期/：Rhitahtyn sas Arvina：472：/
 ```
 
-これは元の時代と完全に一致しているので、ループがあります。
+This is a perfect match for the original times, so there's our loop.
 
 ### ボイラープレート接着剤
 
-一般に、ほとんどのタイムラインには、次のように上部に定型文を含める必要があります。
+In general, most timelines should include some boilerplate at the top like this:
 
 ```bash
 ＃ケープウェストウィンド
@@ -723,17 +727,15 @@ hideall "--sync--"
 2.0 "Shield Skewer" sync /：Rhitahtyn sasアルビナ：471：/
 ```
 
-これを生成するために使用したコマンドラインを含めて、他の 人が戻ってきて、スキップしたものを確認できるようにすることをお勧めします。
+It's good practice to include the command line you used to generate this so that other people can come back and see what you skipped.
 
-`hideall` は行のすべてのインスタンスを非表示にするため、プレーヤーには `--sync--` が視覚的に表示されませんが、 タイムライン自体はそれらの行に同期されます。 テキストには何でも含めることができます。便宜上、 `--sync--` と呼び` 。</p>
+`hideall` hides all instances of a line, so that players don't see `--sync--` show up visually, but the timeline itself will still sync to those lines. There can be anything in the text, it is just called `--sync--` for convenience.
 
-<p spaces-before="0">ワイプが発生したときにタイムラインを停止するために、リセットラインを用意することをお勧めします。
-戦いに全体ゾーンをリセット（例えばomegascape、A4S、A8S、a12s、T9、T13の全て）、ここで
-<code>同期/ 21：........:40000010:/` 使用に対する良好な同期があります。 封印および開封するゾーンとの戦闘（例：a1s、t1-8） では、ゾーン封印メッセージ自体を使用してリセットする必要があります。
+It's good practice to have a Reset line to stop the timeline when there's a wipe. On fights where the entire zone resets (e.g. all of omegascape, a4s, a8s, a12s, t9, t13), `sync / 21:........:40000010:/` is a good sync to use. On fights with zones that seal and unseal, (e.g. a1s,  t1-8) you should use the zone sealing message itself to reset.
 
-最後に、戦いを始めるには、常にエンゲージを含める必要があります！ カウントダウンの同期。 最初のボス能力の発生が遅い場合は、タイムラインが開始するように最初の オートも含める必要があります。
+Finally, to start a fight, you should always include an Engage! sync for countdowns. If the first boss ability is slow to happen, you should also include the first auto so that the timeline starts.
 
-たとえば、o11の場合、最初の2行は次のとおりです。
+For instances, on o11s, the first two lines are:
 
 ```bash
 0.0 "--sync--" sync /：Engage！/ window 0,1
@@ -742,7 +744,7 @@ hideall "--sync--"
 
 ### ループをループにする
 
-これがフェーズ1のループです。 これを編集して、52.2秒 に達するたびに、シームレスに24.4秒に戻るようにします。
+Here's the phase 1 loop, again. We're going to edit this so that whenever we get to 52.2 seconds it will jump back to 24.4 seconds seamlessly.
 
 ```bash
 2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
@@ -761,13 +763,13 @@ hideall "--sync--"
 80.0" Gate Of Tartarus "sync /：Rhitahtyn sas Arvina：473：/
 ```
 
-52.2ラインで、次の追加 `ウィンドウ10100ジャンプ24.4`。 つまり、この能力が過去 秒で10秒、または将来100秒である場合は、t = 24.4にジャンプします。 デフォルトでは、すべての同期は `ウィンドウ5,5` 特に指定がない限り、 彼らは最後の中に能力に対して任意の時間を同期する意味 5秒または将来的には5秒。
+On the 52.2 line, add the following `window 10,100 jump 24.4`. This means, if you see this ability 10 seconds in the past or 100 seconds in the future, jump to t=24.4. By default, all syncs are `window 5,5` unless otherwise specified, meaning they sync against the ability any time within the last 5 seconds or 5 seconds in the future.
 
-57.6から80.0までの能力は、 に対して同期されることはありません これは、52.2での能力が見られるとすぐに、 がジャンプバックしたいためです。  したがって、これらの同期を削除します。
+The abilities from 57.6 to 80.0 will never be synced against because as soon as the ability at 52.2 is seen, we will want to jump back.  So, we will remove those syncs.
 
-最後に、ログ行が にドロップされたり、ACTが戦闘の途中で開始されたりすることがあるため、タイムライン がそこで同期できるように、大規模な同期 をまれな機能または重要な機能に配置するとよいでしょう。
+Finally, because sometimes log lines get dropped or ACT starts mid-combat, it can be good to put large syncs on infrequent or important abilities so that the timeline can sync there.
 
-これにより、最初のループのこの最終バージョンが残ります。
+This leaves us with this final version of the initial loop.
 
 ```bash
 2.0 "Shield Skewer" sync /：Rhitahtyn sas Arvina：471：/
@@ -787,13 +789,13 @@ hideall "--sync--"
 タルタロス80.0 『門』
 ```
 
-これは、以下のすべてのループでも実行されます。
+This is done on all the following loops as well.
 
 ### すべてを一緒に入れて
 
-作成したすべてのループをまとめると、次のタイムラインが になります。
+Putting all the loops that we have created together leaves us with the following timeline.
 
-`Shield Skewer` 能力は非常に多いため、 ループは、より注意するために、頻度の低い能力にあります。
+Because there are so many `Shield Skewer` abilities, any loops are on less frequent abilities just to be more careful.
 
 ```bash
 # Cape Westwind
@@ -898,13 +900,13 @@ hideall "--sync--"
 
 ### タイムラインのテスト
 
-cactbotは、テストツールを呼び出した **UTIL / test_timeline.py** 缶という テストネットワークログファイルまたはfflogsは、既存のタイムラインと戦います。
+cactbot has a testing tool called **util/test_timeline.py** that can test a network log file or an fflogs fight against an existing timeline.
 
-テストツールは、タイムラインの同期が戦いと一致しない場合、 を通知し、将来の同期がヒットした場合、一部がスキップされたことを通知します。 それは逆の を行わず、タイムラインエントリのない戦闘の能力について教えてくれます。
+The test tool will tell you when a sync in your timeline is not matched against the fight, and if a future sync is hit, it will let you know that some were skipped over. It will not do the reverse, and tell you about abilities in the fight that have no timeline entries.
 
-それはまたして助けることができる、いかに遠く同期オフをご紹介します 、より正確にタイムラインを調整します。
+It will also tell you about how far off the sync was, which can help with adjusting timelines to be more accurate.
 
-これが例です。 `-t` ここでパラメータを使用すると、反対テストしたいタイムラインのファイル名を参照 で **UI / raidboss /データ/タイムライン** フォルダ、マイナス.txt拡張子。 （ `make_timeline`と同様に、 `-lf` パラメーターを使用してエンカウンターを一覧表示できます。）
+Here's an example. The `-t` parameter here refers to the file name of the timeline you want to test against in the **ui/raidboss/data/timelines** folder, minus the .txt extension. (As with `make_timeline`, you can use the `-lf` parameter to list encounters.)
 
 ```bash
 $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：49：22。
@@ -1002,11 +1004,11 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
 623.709: Matched entry: 623.7 Winds Of Tartarus (-0.009s)
 ```
 
-このタイムラインはこのネットワークログに対して生成されたため、 これらのタイミングのほとんどが非常に正確であることは驚くべきことではありません。
+As this timeline was generated against this network log, it's not surprising that most of these timings are very accurate.
 
-`Missed sync` 行は、より詳細に調べるべき行です。
+The `Missed sync` lines are the ones to look at more closely.
 
-これらの3つの例は、ループ 終わりに過ぎず、次のフェーズに間に合うようにスキップしたため、気になりません。 （パッチは、この種のジャンプについて警告しない方法を理解することを歓迎します。）
+These three examples aren't worrisome because they are just the end of the loop and we've skipped forward in time to the next phase. (Patches welcome to figure out how to not warn on this sort of jump.)
 
 ```text
 48.695：一致したエントリ：199.0 --sync-（+ 150.305s）
@@ -1023,7 +1025,7 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
     見当たらない同期：Shrapnel Shellが449.5（最後に見られたのは413.195）
 ```
 
-ただし、これは問題のように見えます。
+However, this looks like a problem:
 
 ```text
 620.783：一致するエントリ：610.0 Magitekミサイル（-10.783s）
@@ -1032,23 +1034,23 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
     不在同期：608.8でタルタロスの風（最後に見られたのは619.564）
 ```
 
-rpテキスト同期を間違った場所に配置した可能性が高いようです。 `Magitek Missile` にこのような大きなウィンドウを追加したため、タイムライン 再同期されました（よかったです）が、それ以前の機能のいくつかは間違っていました。
+It seems pretty likely that we've put the rp text sync in the wrong place. Because we added such a large window on `Magitek Missile` the timeline resynced (thank goodness), but some of the abilities before that were wrong.
 
-元のタイムラインは次のとおりです。
+The original timeline is:
 
 ```bash
 595.0 "--sync--" sync / 000044：[^：] *：敗北すると/ウィンドウ600,0
 600.0 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
 ```
 
-しかし、シュラプネルシェルは10.7秒、でオフになって テスタ出力は上述のように `（最後610.739で見られる）`。 修正は、rpテキスト同期をその量だけ時間に戻すことです。 新しい時間は595-10.7 = 584.3になります。
+However, Shrapnel Shell is off by 10.7 seconds, as the tester output mentioned `(last seen at 610.739)`. The fix is to move the rp text sync back in time by that amount. The new time will be 595 - 10.7 = 584.3.
 
 ```bash
 584.3 "--sync--" sync / 000044：[^：] *：敗北すると/ウィンドウ600,0
 600.0 "Shrapnel Shell" sync /：Rhitahtyn sas Arvina：474：/
 ```
 
-テスターの再実行（ほとんどの出力は省略）
+Rerunning the tester (most output omitted)
 
 ```bash
 $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：49：22。
@@ -1065,15 +1067,15 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
 610.019：一致したエントリ：610.0 Magitekミサイル（-0.019s）
 ```
 
-これが私たちが見たいものです。 前述のように、これら逃し同期はちょうど相プッシュからです しかし `シュラプネルシェル` 適切な場所になりました。
+This is what we want to see. As before, these missed syncs are just from the phase push, but `Shrapnel Shell` is now in the right spot.
 
 ### 他のタイムラインに対してテストする
 
-複数の戦闘インスタンスに対してテストして、タイムラインが適切であることを確認することが重要です。 ここに対して実行の例です **CapeWestwind2.log** ファイル。
+It's important to test against multiple fight instances to make sure that the timeline is good. Here's an example of running against the **CapeWestwind2.log** file.
 
-`python util / test_timeline.py -f CapeWestwind2.log -s 13：21：00.688 -e 13：29：36.976 -t cape_westwind` 自分で実行すると、少なくとも2つの問題を見つけることができます。
+If you run `python util/test_timeline.py -f CapeWestwind2.log -s 13:21:00.688 -e 13:29:36.976 -t cape_westwind` yourself, you can spot at least two problems.
 
-小さな問題の1つは、このボスに一貫性がないことです。
+One minor problem is that this boss is inconsistent:
 
 ```text
 447.329：一致したエントリ：445.0シールドスキュワー（-2.329s）
@@ -1082,9 +1084,9 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
 447.361：一致したエントリ：445.0シールドスキューワー（-2.361s）
 ```
 
-フェーズ3のこの `シールドスキュワー` は、大きく異なる時期に発生します。 しかし、前後の能力は問題ないようです。 多くの場合、このような矛盾がある場合、 最善の方法は、周囲の能力 周囲に大きなウィンドウがあることを確認して、1つの能力に矛盾がある場合でも、タイムライン全体が脱線しないようにすることです。
+This `Shield Skewer` in phase 3 comes at wildly different times. However, the abilities before and after seem to be just fine. Often if there are inconsistencies like this, the best thing to do is make sure there are larger windows around surrounding abilities to make sure that even if one ability is inconsistent the entire timeline doesn't get derailed.
 
-ただし、大きな問題の1つは、 `シールドスキュワー`欠落していることです。
+However, one major problem is that there's a missing `Shield Skewer`:
 
 ```text
 403.454：一致したエントリ：403.5シールドスキュワー（+ 0.046s）
@@ -1093,9 +1095,9 @@ $ python util / test_timeline.py -f CapeWestwind.log -s 18：42：23.614 -e18：
 417.748：一致したエントリ：417.9 Winds Ofタルタロス（+ 0.152s）
 ```
 
-ワンタイムラインは2持っ `シールド串`秒と1が一つだけあります。 そして、 `榴散弾` はここでひどくタイミングがずれています。
+One timeline has two `Shield Skewer`s and one only has one. And the `Shrapnel Shell` is horribly mistimed here.
 
-この場合の対処方法は主観的です。 ここにいくつかのオプションがあります：
+What to do in this case is subjective. Here are some options:
 
 * より多くのデータを取得し、最も一般的なケースのタイムラインを作成します
 * タイムラインにコメントを残す
