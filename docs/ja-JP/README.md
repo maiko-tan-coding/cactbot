@@ -4,7 +4,7 @@
 
 [![GitHubワークフローステータス（ブランチ）](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHubリリース（最新のSemVer）](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
-🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
+🌎 [**English**] [[简体中文](docs/zh-CN/README.md)] [[한국어](docs/ko-KR/README.md)]
 
 1. [Cactbotについて](#about)
 1. [インストール](#installing)
