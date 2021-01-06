@@ -81,7 +81,7 @@ To hide all instances of an ability, you can use the `hideall` command. Most tim
 
 There are a number of other commands for generating alerts based on timeline entries. These are still supported but are not documented. Instead, alerts based on timelines in cactbot should use [timeline triggers](#timeline-triggers).
 
-### Examples
+### 示例
 
 ```bash
 677.0 "Heavensfall Trio"
@@ -130,7 +130,7 @@ The general goal of filenames is to be consistent with what the community calls 
 
 For filenames, use underscores to separate words. For trials like `nm` (normal mode), `hm` (hard mode), and `ex` (extreme mode), separate with a hyphen. Dungeons with hard in the name can spell out "Hard" as a full word. Articles like `The` can be dropped. Raids are numbered through the tier, e.g. `t1` through `t13` and `a1s` through `a12s`. Savage fights should have an `s` suffix while normal fights have an 'n' suffix. (However, this does not apply to coil raids.)
 
-Examples:
+示例:
 
 * The Grand Cosmos: `grand_cosmos`
 * Titan Extreme: `titan-ex`
@@ -146,7 +146,7 @@ Trigger files in cactbot support adding timeline triggers. Because people may ha
 
 This is done by adding a `timelineTriggers` section to the triggers file.
 
-Examples:
+示例:
 
 * [Orbonne Monastery](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/04-sb/alliance/orbonne_monastery.js)
 * [T9](https://github.com/quisquous/cactbot/blob/main/ui/raidboss/data/02-arr/raid/t9.js)
