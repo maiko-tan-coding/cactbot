@@ -1,67 +1,67 @@
 # 日志行与触发器
 
-This is intended to be a comprehensive guide to log lines for folks who want to write ACT triggers for ff14.
+本指南旨在帮助用户编写 ff14 ACT触发器。
 
-This guide was last updated for:
+本文最后更新时的游戏及解析插件版本：
 
 * [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 4.58
 * [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 1.7.2.13
 
-With updates for:
+适用的游戏及解析插件版本：
 
 * [FF14](https://na.finalfantasyxiv.com/lodestone/special/patchnote_log/) Patch 5.08
 * [FFXIV Plugin](https://github.com/ravahn/FFXIV_ACT_Plugin/releases) 2.0.4.0
 
 <!-- manually generated via https://imthenachoman.github.io/nGitHubTOC/ -->
-## TOC
+## 目录
 
-* [Data Flow](#data-flow)
-  * [Viewing logs after a fight](#viewing-logs-after-a-fight)
-  * [Importing an old fight](#importing-an-old-fight)
-  * [Importing into ffxivmon](#importing-into-ffxivmon)
-* [Glossary of Terms](#glossary-of-terms)
-  * [Network Data](#network-data)
-  * [Network Log Lines](#network-log-lines)
-  * [ACT Log Lines](#act-log-lines)
-  * [Game Log Lines](#game-log-lines)
-  * [Object/Actor/Entity/Mob/Combatant](#objectactorentitymobcombatant)
-  * [Object ID](#object-id)
-  * [Ability ID](#ability-id)
-* [Log Line Overview](#log-line-overview)
-  * [00: LogLine](#00-logline)
-    * [Don't Write Triggers Against Game Log Lines](#dont-write-triggers-against-game-log-lines)
-  * [01: ChangeZone](#01-changezone)
-  * [02: ChangePrimaryPlayer](#02-changeprimaryplayer)
-  * [03: AddCombatant](#03-addcombatant)
-  * [04: RemoveCombatant](#04-removecombatant)
-  * [05: AddBuff](#05-addbuff)
-  * [06: RemoveBuff](#06-removebuff)
-  * [07: FlyingText](#07-flyingtext)
-  * [08: OutgoingAbility](#08-outgoingability)
-  * [0A: IncomingAbility](#0a-incomingability)
-  * [0B: PartyList](#0b-partylist)
-  * [0C: PlayerStats](#0c-playerstats)
-  * [0D: CombatantHP](#0d-combatanthp)
-  * [14: NetworkStartsCasting](#14-networkstartscasting)
-  * [15: NetworkAbility](#15-networkability)
-    * [Ability Flags](#ability-flags)
-    * [Ability Damage](#ability-damage)
-    * [Special Case Shifts](#special-case-shifts)
-    * [Ability Examples](#ability-examples)
-  * [16: NetworkAOEAbility](#16-networkaoeability)
-  * [17: NetworkCancelAbility](#17-networkcancelability)
-  * [18: NetworkDoT](#18-networkdot)
-  * [19: NetworkDeath](#19-networkdeath)
-  * [1A: NetworkBuff](#1a-networkbuff)
-  * [1B: NetworkTargetIcon (Head Markers)](#1b-networktargeticon-head-markers)
-  * [1C: NetworkRaidMarker](#1c-networkraidmarker)
-  * [1D: NetworkTargetMarker](#1d-networktargetmarker)
-  * [1E: NetworkBuffRemove](#1e-networkbuffremove)
-  * [1F: NetworkGauge](#1f-networkgauge)
-  * [20: NetworkWorld](#20-networkworld)
-  * [21: Network6D (Actor Control Lines)](#21-network6d-actor-control-lines)
-  * [22: NetworkNameToggle](#22-networknametoggle)
-  * [23: NetworkTether](#23-networktether)
+* [数据流程](#data-flow)
+  * [在战斗后查看日志](#viewing-logs-after-a-fight)
+  * [导入旧的战斗记录](#importing-an-old-fight)
+  * [导入ffxivmon](#importing-into-ffxivmon)
+* [专业术语](#glossary-of-terms)
+  * [网络数据](#network-data)
+  * [网络日志行](#network-log-lines)
+  * [ACT日志行](#act-log-lines)
+  * [游戏日志行](#game-log-lines)
+  * [对象/角色/成员/怪物/战斗成员?](#objectactorentitymobcombatant)
+  * [对象ID](#object-id)
+  * [技能ID](#ability-id)
+* [日志行概述](#log-line-overview)
+  * [00: 日志行](#00-logline)
+    * [不要针对游戏日志行编写触发器](#dont-write-triggers-against-game-log-lines)
+  * [01: 切换区域](#01-changezone)
+  * [02: 切换主要玩家](#02-changeprimaryplayer)
+  * [03: 添加战斗成员?](#03-addcombatant)
+  * [04: 移除战斗成员?](#04-removecombatant)
+  * [05: 添加Buff](#05-addbuff)
+  * [06: 移除Buff](#06-removebuff)
+  * [07: 浮动文本](#07-flyingtext)
+  * [08: 释放技能](#08-outgoingability)
+  * [0A: 承受技能](#0a-incomingability)
+  * [0B: 小队列表](#0b-partylist)
+  * [0C: 角色状态](#0c-playerstats)
+  * [0D: 战斗成员HP?](#0d-combatanthp)
+  * [14: 网络-开始吟唱](#14-networkstartscasting)
+  * [15: 网络-技能](#15-networkability)
+    * [技能标签](#ability-flags)
+    * [技能伤害](#ability-damage)
+    * [特殊情况下的数据偏移](#special-case-shifts)
+    * [技能范例](#ability-examples)
+  * [16: 网络-AOE技能](#16-networkaoeability)
+  * [17: 网络-取消技能](#17-networkcancelability)
+  * [18: 网络-DoT](#18-networkdot)
+  * [19: 网络-死亡](#19-networkdeath)
+  * [1A: 网络-Buff](#1a-networkbuff)
+  * [1B: 网络-目标图标 (头部标记)?](#1b-networktargeticon-head-markers)
+  * [1C: 网络-场地标记](#1c-networkraidmarker)
+  * [1D: 网络-目标标记](#1d-networktargetmarker)
+  * [1E: 网络-移除Buff](#1e-networkbuffremove)
+  * [1F: 网络-量谱](#1f-networkgauge)
+  * [20: 网络-世界](#20-networkworld)
+  * [21: 网络-6D (角色控制行)](#21-network6d-actor-control-lines)
+  * [22: 网络-名称切换?](#22-networknametoggle)
+  * [23: 网络-连线?](#23-networktether)
   * [24: LimitBreak](#24-limitbreak)
   * [25: NetworkActionSync](#25-NetworkActionSync)
   * [26: NetworkStatusEffects](#26-networkstatuseffects)
@@ -73,7 +73,7 @@ With updates for:
   * [FF: Timer](#ff-timer)
 * [Future Network Data Science](#future-network-data-science)
 
-## Data Flow
+## 数据流程
 
 ![Alt text](https://g.gravizo.com/source/data_flow?https%3A%2F%2Fraw.githubusercontent.com%2Fquisquous%2Fcactbot%2Fmain%2Fdocs%2FLogGuide.md)
 
@@ -83,7 +83,7 @@ With updates for:
 data_flow digraph G { size ="4,4"; ff14 [label="ff14 servers"] ff14 -> ACT [label="network data"] network [label="network log files"] ACT [label="ACT + ffxiv plugin",shape=box,penwidth=3] ACT -> network [label="write to disk"] fflogs network -> fflogs [label="upload"] network -> ffxivmon [label="import"] network -> ACT [label="import"] network -> timeline [label="process"] timeline [label="cactbot make_timeline.py"] plugins [label="triggers, ACT plugins"] ACT -> plugins [label="ACT log lines"] } data_flow </details>
 <!-- markdownlint-enable MD033 -->
 
-### Viewing logs after a fight
+### 在战斗后查看日志
 
 If you have ACT open during a fight, then it will generate logs. These logs will be trimmed to the start and end of combat.
 
@@ -95,7 +95,7 @@ The **All** entry includes all the encounters in a zone and cannot be viewed. Yo
 
 The window that pops up has the text that triggers can be made against. This is usually the best way to search through and find the text that you want to make a trigger for.
 
-### Importing an old fight
+### 导入旧的战斗记录
 
 Sometimes you have to close ACT, but you want to look at old fights. Or, somebody else sends you a log, and you want to make triggers from it.
 
@@ -105,7 +105,7 @@ To do this, click the **Import/Export** tab, click on **Import a Log File**, cli
 
 This will create encounters whose [logs you can view](#viewing-logs-after-a-fight).
 
-### Importing into ffxivmon
+### 导入ffxivmon
 
 If you want to dig into the network data itself, ffxivmon is a great tool.
 
@@ -121,9 +121,9 @@ Now, you can walk through and investigate the network data directly.
 
 ![ffxivmon screenshot](images/logguide_ffxivmon.png)
 
-## Glossary of Terms
+## 专业术语
 
-### Network Data
+### 网络数据
 
 This is the raw packet dump sent from ff14 servers to your computer. This data is processed both by the game itself as well as by the ffxiv plugin to produce network log lines.
 
@@ -131,7 +131,7 @@ This is the raw packet dump sent from ff14 servers to your computer. This data i
 
 Folks writing triggers generally do not have to worry about raw packet data and so this document does not focus very much on this type of data.
 
-### Network Log Lines
+### 网络日志行
 
 These represent the lines that the ffxiv plugin writes to disk in **Network_20191002.log** files in your log directory. These lines are still processed and filtered by the ffxiv plugin, and are (mostly) not raw network data.
 
@@ -155,7 +155,7 @@ The network log lines are used by some tools, such as:
 
 If you [import a network log file into ACT](#importing-an-old-fight), then it you can view the ACT log lines in the fight.
 
-### ACT Log Lines
+### ACT日志行
 
 These are the log lines that come out of the ffxiv plugin at runtime and are exposed to plugins for triggers. These are what the [View Logs](#viewing-logs-after-a-fight) option in ACT shows.
 
@@ -167,17 +167,17 @@ Here is an example:
 [21:16:44.288] 15:10532971:Potato Chippy:9C:Scathe:40001299:Striking Dummy:750003:90D0000:1C:9C8000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0:0:1000:1000:-653.9767:-807.7275:31.99997:26945:28784:6720:15480:1000:1000:-631.5208:-818.5244:31.95173:
 ```
 
-### Game Log Lines
+### 游戏日志行
 
 A game log line is a specific type of ACT log line with type `00`. These log lines also appear directly in your chat windows in game, possibly in the Battle Log tab. Try to [avoid writing triggers](#dont-write-triggers-against-game-log-lines) using these lines.
 
 See: [00: Log Lines](#00-logline) for examples.
 
-### Object/Actor/Entity/Mob/Combatant
+### 对象/角色/成员/怪物/战斗成员?
 
 These are all words used synonymously in this document to refer to an object in the game that can use abilities and has stats. This could be the player, Bahamut, Eos, a Striking Dummy.
 
-### Object ID
+### 对象ID
 
 Object ids are 4 byte identifiers used for all types of objects.
 
@@ -189,7 +189,7 @@ For `NetworkAOEAbility` lines that don't affect anybody, e.g. a Titan landslide 
 
 One thing to note is that in most raids, there are many mobs in the scene with the same name. For example, in t13, there are about twenty Bahamut Prime mobs in the zone, most of which are invisible. You can often differentiate these by HP values (see [AddCombatant](#03-addcombatant) log lines). Often these invisible mobs are used as the damaging actors, which is why in UWU Titan Phase, both Garuda and Titan use Rock Throw to put people in jails.
 
-### Ability ID
+### 技能ID
 
 Although ff14 differentiates between abilities and spells, this document uses these words interchangeably. All actions taken by a player or an enemy are "abilities" and have a unique 4 byte id.
 
@@ -197,7 +197,7 @@ You can use xivapi.com to look up a particular action, as sometimes these are li
 
 This works for both players and enemies, abilities and spells.
 
-## Log Line Overview
+## 日志行概述
 
 Here's an example of a typical log line: `[12:01:48.293] 21:80034E29:40000001:E10:00:00:00`. This log line happens to be the actor control line (type=`0x21`) for commencing Titan Extreme.
 
@@ -205,7 +205,7 @@ Log lines always start with the time in square brackets. This time is formatted 
 
 The rest of the data in the log line needs to be interpreted based on what type it is. See the following sections that describe each log line. The examples in these sections do not include the time prefix for brevity.
 
-### 00: LogLine
+### 00: 日志行
 
 Structure: `00:[Message Type ID]:Message displayed In-Game`
 
@@ -223,7 +223,7 @@ These are what this document calls "game log lines". There is a two byte log typ
 
 (Pull requests welcome!)
 
-#### Don't Write Triggers Against Game Log Lines
+#### 不要针对游戏日志行编写触发器
 
 There are a number of reasons to avoid basing triggers on game log lines:
 
@@ -238,7 +238,7 @@ At the moment, there are some cases where you must use game log lines, such as s
 
 Note: There are examples where `14` "starts using" lines show up after the corresponding `00` "readies" line, but it is on the order of tens of milliseconds and does not consistently show up first. `15` "ability" lines always seem to show up before the `00` "uses" lines.
 
-### 01: ChangeZone
+### 01: 切换区域
 
 This message is sent when first logging in and whenever the zone is changed.
 
@@ -251,7 +251,7 @@ Structure: `01:Changed Zone to [Zone Name].`
 01:Changed Zone to The Unending Coil Of Bahamut (Ultimate).
 ```
 
-### 02: ChangePrimaryPlayer
+### 02: 切换主要玩家
 
 This redundant message follows every [ChangeZone](#01-changezone) message to indicate the name of the player.
 
@@ -264,7 +264,7 @@ Structure: `02:Changed primary player to [Player Name].`
 02:Changed primary player to Tini Poutini.
 ```
 
-### 03: AddCombatant
+### 03: 添加战斗成员?
 
 This message is sent when a new object is added to the scene or becomes close enough to the player that they can view its actions.
 
@@ -298,7 +298,7 @@ This combatant may be invisible and fake.  The real ones have more HP. For examp
 
 In heavy zones (e.g. Eureka), combatants may be culled if there are too many things nearby. Usually other players are culled first, but mobs can be as well. Eureka NMs (and S ranks) solve this by having a flag on them that allows them to be seen via AddCombatant message from anywhere in the zone, which is why it is possible to write triggers for when these pop.
 
-### 04: RemoveCombatant
+### 04: 移除战斗成员?
 
 This message is sent when an object is removed from the scene, either because the player has moved too far away from it, it has died, or the player has changed zones.
 
@@ -311,7 +311,7 @@ Structure: `04:[ObjectId]:Removing combatant [Combatant Name].  Max HP: [Max-HP-
 04:40123462:Removing combatant Frozen Void Dragon.  Max HP: 348652. Pos: (-710.7075,49.39039,-646.7071)
 ```
 
-### 05: AddBuff
+### 05: 添加Buff
 
 This is the memory-parsing equivalent of [1A: NetworkBuff](#1a-networkbuff). Do not write triggers against this as this is only emitted when parsing from memory.
 
@@ -324,7 +324,7 @@ Structure: `05:[Target Name] gains the effect of [Status] from [Source Name]`
 05:Potato Chippy gains the effect of Passage Of Arms from Potato Chippy.
 ```
 
-### 06: RemoveBuff
+### 06: 移除Buff
 
 This is the memory-parsing equivalent of [1E: NetworkBuffRemove](#1e-networkbuffremove). Do not write triggers against this as this is only emitted when parsing from memory.
 
@@ -337,7 +337,7 @@ Structure: `06:[Target Name] loses the effect of [Status] from [Source Name]`
 06:Striking Dummy loses the effect of Circle Of Scorn from Potato Chippy.
 ```
 
-### 07: FlyingText
+### 07: 浮动文本
 
 This is the memory-parsing equivalent of [18: NetworkDoT](#18-networkdot). Do not write triggers against this as this is only emitted when parsing from memory.
 
@@ -349,7 +349,7 @@ Structure: `07:[Type Name] tick on [Source Name] for [Value] damage.`
 07:DoT tick on Striking Dummy for 509 damage.
 ```
 
-### 08: OutgoingAbility
+### 08: 释放技能
 
 This is the memory-parsing equivalent of [14: NetworkStartsCasting](#14-networkstartscasting). Do not write triggers against this as this is only emitted when parsing from memory.
 
@@ -361,7 +361,7 @@ Structure: `08:[Source Name] starts using [Ability Name] on [Target Name].`
 08:Potato Chippy starts using Circle Of Scorn on Striking Dummy.
 ```
 
-### 0A: IncomingAbility
+### 0A: 承受技能
 
 This is the memory-parsing equivalent of [15: NetworkAbility](#15-networkability) and [16: NetworkAOEAbility](#16-networkaoeability). Do not write triggers against this as this is only emitted when parsing from memory.
 
@@ -371,11 +371,11 @@ This is the memory-parsing equivalent of [15: NetworkAbility](#15-networkability
 0A:10532971:Potato Chippy:17:Circle Of Scorn:40001299:Striking Dummy:710003:6850000:ef010f:f80000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0
 ```
 
-### 0B: PartyList
+### 0B: 小队列表
 
 Lines are printed, but with blank data.  :sob:
 
-### 0C: PlayerStats
+### 0C: 角色状态
 
 This message is sent whenever your player's stats change and upon entering a new zone/instance.
 
@@ -389,7 +389,7 @@ Example:
 0C:Player Stats: 23:305:4240:4405:290:275:340:4240:2694:2795:290:275:2473:578:380:0:380
 ```
 
-### 0D: CombatantHP
+### 0D: 战斗成员HP?
 
 If you have the **Include HP for Triggers** setting turned on in the **FFXIV Settings** tab of ACT, then it will emit log lines for every percentage change of every entity.
 
@@ -406,7 +406,7 @@ Structure: `0D:[Target Name] HP at [HP-Value]%.`
 0D:Tini Poutini HP at 98%.
 ```
 
-### 14: NetworkStartsCasting
+### 14: 网络-开始吟唱
 
 For abilities with cast bars, this is the log line that specifies that a player or a monster has started casting an ability. This precedes a log line of type `15`, `16`, or `17` where it uses the ability or is interrupted.
 
@@ -423,7 +423,7 @@ The value after `14` is the 4 byte [ability id](#ability-id).
 
 These are usually (but not always) associated with game log lines that either look like `00:282B:Shinryu readies Earthen Fury.` or `00:302b:The proto-chimera begins casting The Ram's Voice.`
 
-### 15: NetworkAbility
+### 15: 网络-技能
 
 This is an ability that ends up hitting a single target (possibly the caster's self). The reason this is worded as "ends up hitting" is that some AOE abilities may only hit a single target, in which case they still result in type `15`. For example, in ucob, if Firehorn's fireball in nael phase hits the whole group, it will be a `16` type. If one person runs the fireball out and it only hits them, then it is type `15` because there's only one target. If your trigger includes the message type, it is usually best to write your regex as `1[56]` to include both possibilities. Ground AOEs that don't hit anybody are type `16`.
 
@@ -464,7 +464,7 @@ Network ability lines are a combination of raw network data (e.g. the `710003` f
 
 This means that there's a number of caveats going on to handling all the data in these lines.  The raw network data is subject to change over time from ff14 servers.  Also, the data from memory may be slightly stale and out of date
 
-#### Ability Flags
+#### 技能标签
 
 Damage bitmasks:
 
@@ -490,7 +490,7 @@ For example, the flags for successful trick attack are `28710.03`. The `.` here 
 
 If you care about specific ability flags, you likely have to do this research yourself. Please send pull requests to this document so it can be shared!
 
-#### Ability Damage
+#### 技能伤害
 
 Damage bitmasks: 0x1000 = hallowed, no damage 0x4000 = "a lot" of damage
 
@@ -506,7 +506,7 @@ Unless, if there is an 0x00004000 mask, then this implies "a lot" of damage. In 
 
 For example, `424E400F` becomes `0F 42 (4E - OF = 3F)` => `0F 42 3F` => 999999
 
-#### Special Case Shifts
+#### 特殊情况下的数据偏移
 
 It is not clear what this represents, but sometimes the flags is replaced by one (or more) pairs of values.
 
@@ -514,7 +514,7 @@ The most likely case is that if flags is `3F`, then the flags and damage are in 
 
 The other shift is that plenary indulgence lists the number of stacks in the flags as `113`, `213`, or `313` respectively. These are always followed by `4C3`. Therefore, these should also be shifted over two to find the real flags.
 
-#### Ability Examples
+#### 技能范例
 
 1) 18216 damage from Grand Cross Alpha (basic damage) `16:40001333:Neo Exdeath:242B:Grand Cross Alpha:1048638C:Tater Tot:750003:47280000:1C:80242B:0:0:0:0:0:0:0:0:0:0:0:0:36906:41241:5160:5160:880:1000:0.009226365:-7.81128:-1.192093E-07:16043015:17702272:12000:12000:1000:1000:-0.01531982:-19.02808:0:`
 
@@ -528,13 +528,13 @@ The other shift is that plenary indulgence lists the number of stacks in the fla
 
 6) zero damage targetless aoe (E0000000 target) `16:103AAEE4:Potato Chippy:B1:Miasma II:E0000000::0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0::::::::::19400:40287:17649:17633:1000:1000:-0.656189:-3.799561:-5.960464E-08:`
 
-### 16: NetworkAOEAbility
+### 16: 网络-AOE技能
 
 This is an ability usage in game that ends up hitting multiple actors or no actors at all.
 
 See: [15: NetworkAbility](#15-networkability) for a discussion of the difference between `NetworkAbility` and `NetworkAOEAbility`.
 
-### 17: NetworkCancelAbility
+### 17: 网络-取消技能
 
 For abilities with cast bars, this is the log line that specifies that the cast was cancelled either due to movement or an interrupt and it won't go off.
 
@@ -547,7 +547,7 @@ Structure: `17:[Source ID]:[Source Name]:[Ability ID]:[Ability Name]:Cancelled.`
 17:40000FE3:Raiden:3878:Ultimate Zantetsuken:Cancelled:
 ```
 
-### 18: NetworkDoT
+### 18: 网络-DoT
 
 HoT (heal over time) and DoT (damage over time) amounts. These are the aggregated quantities of damage for every hot or dot on that target.
 
@@ -565,7 +565,7 @@ Structure: `18:[Type Name] on [Source Name] for [Value] damage.`
 
 Ground effect dots get listed separately.
 
-### 19: NetworkDeath
+### 19: 网络-死亡
 
 This message corresponds to an actor being defeated and killed.  This usually comes along with a battle log message such as `You defeat the worm's heart.`
 
@@ -578,7 +578,7 @@ Structure: `19:[Target Name] was defeated by [Source Name].`
 19:The Scourge Of Meracydia was defeated by Unknown.
 ```
 
-### 1A: NetworkBuff
+### 1A: 网络-Buff
 
 This message is the "gains effect" message for players and mobs gaining effects whether they are good or bad.
 
@@ -600,7 +600,7 @@ Although game messages differentiate between buffs and debuffs, log message type
 
 You cannot count on the time remaining to be precise. In rare cases, the time will already have counted down a tiny bit. This matters for cases such as ucob Nael phase doom debuffs.
 
-### 1B: NetworkTargetIcon (Head Markers)
+### 1B: 网络-目标图标 (头部标记)?
 
 Structure: `1B:[ObjectId]:[Player Name]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:0000:0000:0000`
 
@@ -672,15 +672,15 @@ Also, this appears to only be true on later fights. Turn 5 fireball and conflag 
 | 00BD        | Purple Spread Circle (giant)      | TItania N/EX                                  | Yes                 |
 | 00BF        | Granite Gaol                      | e4s                                           | N/A                 |
 
-### 1C: NetworkRaidMarker
+### 1C: 网络-场地标记
 
 Unknown?
 
-### 1D: NetworkTargetMarker
+### 1D: 网络-目标标记
 
 Unknown?
 
-### 1E: NetworkBuffRemove
+### 1E: 网络-移除Buff
 
 This is the paired "end" message to the [1A: NetworkBuff](#1a-networkbuff) "begin" message. This message corresponds to the loss of effects (either positive or negative).
 
@@ -694,7 +694,7 @@ Structure: `1E:[ObjectId]:[Target Name] loses the effect of [Status] from [Sourc
 1E:40686258:Ovni loses the effect of Aero II.
 ```
 
-### 1F: NetworkGauge
+### 1F: 网络-量谱
 
 Info about the current player's job gauge.
 
@@ -729,11 +729,11 @@ There are a number of references for job gauge memory:
 
 Unfortunately, network data about other player's gauge is not sent. You are unable to see the abilities of other players, only your own. (This is probably by design to cut down on the amount of network data sent.)
 
-### 20: NetworkWorld
+### 20: 网络-世界
 
 Unused.
 
-### 21: Network6D (Actor Control Lines)
+### 21: 网络-6D (角色控制行)
 
 See also: [nari director update documentation](https://nonowazu.github.io/nari/types/event/directorupdate.html)
 
@@ -778,7 +778,7 @@ Still unknown:
 
 * `21:zone:40000007:00:00:00:00`
 
-### 22: NetworkNameToggle
+### 22: 网络-名称切换?
 
 This log message toggles whether the nameplate for a particular entity is visible or not. This can help you know when a mob is targetable, for example.
 
@@ -791,7 +791,7 @@ Structure: `22:[ObjectId]:[Target Name]:[ObjectId]:[Target Name]:[Display State]
 22:40018065:Twintania:40018065:Twintania:00
 ```
 
-### 23: NetworkTether
+### 23: 网络-连线?
 
 This log line is for tethers between enemies or enemies and players. This does not appear to be used for player to player skill tethers like dragonsight or cover. (It can be used for enemy-inflicted player to player tethers such as burning chains in Shinryu N/EX.)
 
