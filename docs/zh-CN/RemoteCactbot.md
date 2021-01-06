@@ -49,7 +49,7 @@ Now, friends can connect to your ACT remotely. Unfortunately, all of the overlay
 
 In general, you can use the URL Generator at the bottom of the OverlayPlugin tab to generate urls for any presets.
 
-For example:
+示例：
 
 - cactbot raidboss overlay: <https://quisquous.github.io/cactbot/ui/raidboss/raidboss.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
 - rdmty DPS overlay: <https://quisquous.github.io/cactbot/ui/dps/rdmty/dps.html?OVERLAY_WS=wss://a31a5403.ngrok.io/ws>
