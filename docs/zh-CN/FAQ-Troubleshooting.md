@@ -26,7 +26,7 @@ ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactb
 如果您见到错误窗口提示 `Plugin Load Failure` 以及 `The downloaded file did not contain a plugin that could be loaded`， 则可能有多个潜在问题。
 
 - 请确认您是否正确 [安装 OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
-- 从 **Plugins** -> **Plugin Listing** -> **OverlayPlugin.dll** 检查 OverlayPlugin 版本。 若与 [该版本](https://github.com/ngld/OverlayPlugin/releases/latest)不匹配， 则将其移除并重新 [安装ngld版本地OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
+- 从 **Plugins** -> **Plugin Listing** -> **OverlayPlugin.dll** 检查 OverlayPlugin 版本。 若与 [该版本](https://github.com/ngld/OverlayPlugin/releases/latest)不匹配， 则将其移除并重新 [安装ngld版本的OverlayPlugin](https://github.com/quisquous/cactbot#install-ngld-overlayplugin)。
 - 请确认您正在运行的是x64版本的ACT (`Advanced Combat Tracker.exe`) 而非x86 (`ACTx86.exe`)。
 - 最后，在成功安装OverlayPlugin之后必须重新启动ACT。
 
@@ -34,51 +34,51 @@ ngld ([OverlayPlugin](https://github.com/ngld/OverlayPlugin)的开发者，Cactb
 
 ## Cactbot相关问题
 
-If triggers or pieces of the UI do not work, ensure that "Disable Parsing from Network Data" is **not** checked in the FFXIV plugin settings. Network data is required for accurate trigger timing.
+若触发器或某些UI组件不工作,，请确保FFXIV解析插件设置中的“禁止解析网络数据”选项**没有**被勾选。 网络数据是触发器准确触发的前提条件。
 
-If you are using cactbot for dps parsing and you don't get any data, make sure that the `DPS update interval seconds` is set to a number higher than zero in your `OverlayPlugin.dll` -> `MiniParse Event Source` config.  Setting it to 3 is a good default.
+若您使用cactbot进行DPS统计，但您的DPS统计悬浮窗中没有任何数据，请首先确保您将`OverlayPlugin.dll`插件中的`基本设置`选项卡内的`DPS更新间隔`设为了一个0以上的数字。  将其设置为3是一个很好的默认设置。
 
 ## 捕鱼人模块
 
-### I can't see the overlay
+### 我看不到悬浮窗
 
-The overlay is hidden by default until you cast your line at a fishing hole.
+此悬浮窗在一般情况下是隐藏的，直到您在钓场抛竿时自动显示。
 
-### It doesn't show up when fishing
+### 在钓鱼时不显示
 
-If the overlay doesn't register your casting/catches/reeling in your rod there are a few options you need to check:
+如果在一杆中悬浮窗未记录抛竿/咬钩/捕获，则需要检查以下几点：
 
-- **Ingame chat log filter**
+- **游戏中的消息过滤设置**
 
 ![image](images/troubleshooting_chatlogfilter.png)
 
-You need to have at least one chat log set to show `Own Gathering Messages` You can find this option in `Character Configuration` -> `Log Window Settings` -> `Log Filters 1/2/3/4` -> `Announcements`
+您必须至少设置在一个聊天日志中显示`自己的采集信息`。您可以在`角色设置`->`消息窗口设置`->`消息过滤设置`->`通知`中找到这一选项。
 
-- **ACT FFXIV Plugin options**
+- **ACT的FFXIV解析插件内选项**
 
 ![image](images/troubleshooting_hidechatlog.png)
 
-You must have the `Hide Chat Log (for privacy)` option disabled.
+您必须禁用 `隐藏聊天信息（保护隐私）` 选项。
 
-You will need to restart ACT after you change parser language.
+在更改FFXIV解析插件的游戏语言后，您必须重新启动ACT。
 
-## Places To Get Help
+## 获取帮助
 
-- ask in the [FFXIV ACT discord](https://discord.gg/ahFKcmx) #troubleshooting channel
-- open a [github issue](https://github.com/quisquous/cactbot/issues)
+- 在[FFXIV ACT Discord](https://discord.gg/ahFKcmx)的#troubleshooting频道中询问
+- 发起[github issue](https://github.com/quisquous/cactbot/issues)进行询问
 
-## How To Find A Network Log
+## 如何获取网络日志
 
-If you are having issues with triggers or timelines, it can be useful to attach a network log from ACT so that the [network logs](LogGuide.md#network-log-lines) can be replayed and investigated for errors.
+如果您在触发器或时间轴方面遇到问题，ACT所生成的[网络日志](LogGuide.md#network-log-lines)十分有用，它们可以回放并从中检查错误。
 
-To find your network logs, go to the **Plugins** tab in ACT, click the **FFXIV Settings** button, and then click **Open FFXIV Log Folder**.
+如需获取您的网络日志，请转到ACT中的 **Plugins** 标签，打开**FFXIV 解析插件**标签页，然后单击**打开 FFXIV 日志文件夹**。
 
 ![image](images/troubleshooting_openlogfolder.png)
 
-This will open up a folder window with files in it. Select a file named something like **Network_etc.log**. The files are named with your FFXIV ACT Plugin version and the date.
+此行为将打开一个包含文件的文件夹窗口。 您将可以看到名称类似于**Network_XXX_XXX.log**的文件。 这些文件是以您的FFXIV解析插件的版本以及日志生成的日期命名的。
 
 ![image](images/troubleshooting_networklog.png)
 
-These files are often large, so zip them up first.
+这些文件通常都很大，因此请先将它们打包为压缩文件。
 
-You can attach these to github issues directly. Alternatively, find some file hosting site, upload the files there, and then attach the link.
+您可以将它们直接附加到github issue中， 或者上传到网盘中（推荐使用服务器位于国外的网盘，如Google云盘，Dropbox，MEGA网盘等）并在github issue中附加网盘链接。
