@@ -278,17 +278,39 @@ ThirdParty
 
 该模块提供了HP和MP条，以及重要团辅技能的图标和计时条等，如太阳神之衡和攻其不备。 该模块同样提供食物增益效果提示，使您可在迷宫或Raid中保持食物增益。 此外，该模块还提供了可视化的倒计时条。
 
-It has more fleshed out support for some jobs but is *strongly* a Work In Progress for others.
+该模块为某些职业提供了较为完整的支持，但是对另外一些职业的支持仍然*非常*不完善。
 
-* Red Mage: Shows white/black mana, tracks procs for Verstone, Verfire and Impact, and shows the state of the melee combo in progress.
-* Warrior: Shows the beast amount, and tracks the remaining Storm's Eye buff time in gcds.
-* Monk: Shows chakra count, remaining greased lightning time, and tracks monk buffs and debuffs.
+<details>
+<summary>Supported Jobs (Click to expand)</summary>
 
-In this screenshot, the jobs module is highlighted for the Red Mage job. The health and mana bars, as well as Red Mage white/black mana tracking is circled in purple, with the large raid buff tracking pointed to beside it in orange. The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar. The proc tracking is circled below in green.
+|                                                  Job                                                   |                                                                                                Feature                                                                                                 |
+|:------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   <img src="./resources/ffxiv/jobs/pld-large.png" width="30px" /><br> Paladin   |                                                             Shows current Oath amount, and atonement stacks. Also tracks Goring Blade DoT.                                                             |
+|   <img src="./resources/ffxiv/jobs/war-large.png" width="30px" /><br> Warrior   |                                            Shows the beast amount, and tracks the remaining Storm's Eye buff time in gcds, and shows combo time remaining.                                             |
+| <img src="./resources/ffxiv/jobs/drk-large.png" width="30px" /><br> Dark Knight |                                                               Shows the blood amount and darkside time, and shows combo time remaining.                                                                |
+| <img src="./resources/ffxiv/jobs/gnb-large.png" width="30px" /><br> Gunbreaker  |                                         Shows No Mercy duration&cooldown, Bloodfest&Gnashing Fang cooldown, Cartridge amount, and shows combo time remaining.                                          |
+| <img src="./resources/ffxiv/jobs/whm-large.png" width="30px" /><br> White Mage  |                                            Shows Heal&Blood Lily amount, time to next Lily, DoTs remaining time, and shows Assize&Lucid Dreaming cooldown.                                             |
+|   <img src="./resources/ffxiv/jobs/sch-large.png" width="30px" /><br> Scholar   |                                     Shows Aetherflow stacks, Fairy gauge amount/time remaining, DoTs remaining time, and shows Aetherflow&Lucid Dreaming cooldown.                                     |
+| <img src="./resources/ffxiv/jobs/ast-large.png" width="30px" /><br> Astrologian |                                    Shows Seals amount, notify who or whether to play the current card, DoTs remaining time, and shows Draw&Lucid Dreaming cooldown.                                    |
+|    <img src="./resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> Monk     |                                           Shows chakra count, <del>remaining greased lightning time</del> and form time, and tracks monk buffs and debuffs.                                            |
+|   <img src="./resources/ffxiv/jobs/drg-large.png" width="30px" /><br> Dragoon   |                                           Shows blood&eye amount, remaining Disembowel time, jump cooldown, and Lance Charge&Dragon Sight duration/cooldown.                                           |
+|    <img src="./resources/ffxiv/jobs/nin-large.png" width="30px" /><br> Ninja    |                                   Shows Ninki amount, Huton remaining time, Trick Attack duration&cooldown, Bunshin&Mudras cooldown, and shows combo time remaining.                                   |
+|   <img src="./resources/ffxiv/jobs/sam-large.png" width="30px" /><br> Samurai   |                                                                                       ⨉ Not supported currently.                                                                                       |
+|    <img src="./resources/ffxiv/jobs/brd-large.png" width="30px" /><br> Bard     |                Shows songs playing and remaining time, Repertoire stack, Soul Voice amount, StraightShotReady track, DoT remaining time, and a bar that show when your DoTs will tick.                 |
+|  <img src="./resources/ffxiv/jobs/mch-large.png" width="30px" /><br> Machinist  | Shows Heat gauge, Battery gauge, Combo Timer, Drill/Bioblaster&Air Anchor Cooldown, Wild Fire Cooldown&Duration. When Wild Fire is active, there will be a gauge to show how many GCD you have landed. |
+|   <img src="./resources/ffxiv/jobs/dnc-large.png" width="30px" /><br> Dancer    |                                          Shows Combo Timer, Feather Guage, Esprit Guage, Standard Step Cooldown, Technical Step&Flourish Cooldown & Duration.                                          |
+| <img src="./resources/ffxiv/jobs/blm-large.png" width="30px" /><br> Black Mage  |                                Shows DoTs remaining time, firestarter&thundercloud proc duration, time to next xeno, MP ticker, Fire/Ice stack and umbral heart stack.                                 |
+|  <img src="./resources/ffxiv/jobs/smn-large.png" width="30px" /><br> Summoner   |                                 Shows DoTs remaining time, Energy Drain Cooldown, Trance Cooldown, Aetherflow stack, Demi-Summoning time and FurtherRuin Stack Guage.                                  |
+|  <img src="./resources/ffxiv/jobs/rdm-large.png" width="30px" /><br> Red Mage   |                                                     Shows white/black mana, tracks procs for Verstone&Verfire and show cooldown of lucid dreaming.                                                     |
+|  <img src="./resources/ffxiv/jobs/blu-large.png" width="30px" /><br> Blue Mage  |                                                           Shows cooldown of offguard&lucid dreaming, and Song Of Torment DoT remaining time.                                                           |
+
+</details>
+
+In this screenshot, the jobs module is highlighted for the Red Mage job. The health and mana bars, as well as Red Mage white/black mana tracking is circled in purple, with the large raid buff tracking pointed to beside it in orange. <del>The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar.</del> The proc tracking is circled below in green.
 
 ![jobs screenshot](screenshots/Jobs.png)
 
-### [eureka](ui/eureka) module
+### [eureka](ui/eureka) 模块
 
 To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactbot Eureka` preset.
 
@@ -300,7 +322,7 @@ If you do not see the emoji, make sure you have installed [this Windows update](
 
 ![eureka screenshot](screenshots/promo_eureka.png)
 
-### [radar](ui/radar) module
+### [radar](ui/radar) 模块
 
 To use this module, point cactbot at **ui/radar/radar.html** or use the `Cactbot Radar` preset.
 
@@ -312,7 +334,7 @@ See the `cactbot/user/radar-example.js` for more options.
 
 ![radar screenshot](screenshots/promo_radar.png)
 
-### [fisher](ui/fisher) module
+### [fisher](ui/fisher) 模块
 
 To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactbot Fisher` preset.
 
@@ -326,7 +348,7 @@ Cast times are currently only logged as you fish, so there won't be any data unt
 
 Check [here](docs/FAQ-Troubleshooting.md#fisher-module) for common troubleshooting tips.
 
-### [dps](ui/dps) meters
+### [dps](ui/dps) 统计模块
 
 cactbot can be used with any dps meter overlay designed for OverlayPlugin's miniparse addon, with the option to build out more features through cactbot's additional Javascript APIs.  cactbot also auto-stops fights on wipes, so you can configure ACT's fight time to infinity.
 
@@ -338,7 +360,7 @@ The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse
 
 ![rdmty screenshot](screenshots/rdmty.png)
 
-### [pull counter](ui/pullcounter) module
+### [pull counter](ui/pullcounter) 模块
 
 This small module sticks the current pull count for raiding bosses on screen. This is primarily for folks who stream a lot and want to review video footage. Having a number on screen makes it easy to scrub through video and find particular pulls to review.
 
@@ -346,7 +368,7 @@ In most cases, you can reset the count for the current boss/zone by typing `/ech
 
 ![pull counter screenshot](screenshots/pullcounter.png)
 
-### [test](ui/test) module
+### [test](ui/test) 模块
 
 To use this module, point cactbot at **ui/test/test.html** or use the `Cactbot Test` preset.
 
@@ -379,3 +401,13 @@ See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrid
 ## 支持语言
 
 cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
+
+## Licensing, Trademarks, Copyright
+
+cactbot is open source under the [Apache License, Version 2.0](LICENSE).
+
+FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
+
+Final Fantasy art and icons reused non-commercially under the [FINAL FANTASY® XIV Materials Usage License](https://support.na.square-enix.com/rule.php?id=5382).
+
+See the [LICENSE](LICENSE) file for more details about other bundled projects.
