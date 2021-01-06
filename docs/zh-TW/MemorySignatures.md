@@ -6,7 +6,7 @@ Finding these signatures makes it possible to consistently look up game state (e
 
 This guide shows how to use Cheat Engine to find such memory signatures. It's probably helpful if you know some basic assembly language, some programming, and have extreme levels of patience.
 
-## Table of Contents
+## 目錄
 
 * [Installation](#installation)
 * [Finding New Memory Signatures](#finding-new-memory-signatures)
