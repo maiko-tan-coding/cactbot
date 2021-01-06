@@ -1,29 +1,29 @@
-# Timeline Guide
+# 時間軸指南
 
-This is a guide for people who want to write timelines, primarily for cactbot.
+本指南旨在幫助用戶編寫適用於cactbot的時間軸檔案。
 
-![import screenshot](images/timelineguide_timeline.png)
+![import screenshot](../images/timelineguide_timeline.png)
 
-cactbot uses the [raidboss module](https://github.com/quisquous/cactbot#raidboss-module) for triggers and timelines. These are combined together so that you can make triggers that are based on actions or triggers that are based on timelines themselves.
+cactbot在 [raidboss模組](https://github.com/quisquous/cactbot#raidboss-module) 中定義觸發器和時間軸。 這兩者是緊密結合的，因此您既可以基於技能編寫觸發器， 也可以基於時間軸編寫觸發器。
 
-## Table of Contents
+## 目錄
 
-* [History](#history)
-* [Timeline File Syntax](#timeline-file-syntax)
-  * [Comments](#comments)
-  * [Entries](#entries)
-  * [Commands](#commands)
-  * [Examples](#examples)
-  * [Testing](#testing)
-  * [Shasta Kota Guide](#shasta-kota-guide)
-* [Cactbot Style Guide](#cactbot-style-guide)
-* [Timeline Triggers](#timeline-triggers)
-* [Timeline Injection](#timeline-injection)
-* [Timeline Translation](#timeline-translation)
-* [Example Timeline Creation](#example-timeline-creation)
-  * [Run the fight a few times](#run-the-fight-a-few-times)
-  * [Software prerequisites](#software-prerequisites)
-  * [Timeline Skeleton](#timeline-skeleton)
+* [歷史](#history)
+* [時間軸文件語法](#timeline-file-syntax)
+  * [注釋](#comments)
+  * [條目](#entries)
+  * [指令](#commands)
+  * [示例](#examples)
+  * [測試](#testing)
+  * [Shasta Kota的指南](#shasta-kota-guide)
+* [Cactbot樣式指南](#cactbot-style-guide)
+* [基於時間軸的觸發器](#timeline-triggers)
+* [時間軸注入](#timeline-injection)
+* [時間軸翻譯](#timeline-translation)
+* [創建時間軸示例](#example-timeline-creation)
+  * [多次攻略副本](#run-the-fight-a-few-times)
+  * [軟體需求](#software-prerequisites)
+  * [時間軸基礎骨架](#timeline-skeleton)
   * [Generating an initial timeline file](#generating-an-initial-timeline-file)
   * [Building Loops](#building-loops)
   * [Adding Phases](#adding-phases)
@@ -35,7 +35,7 @@ cactbot uses the [raidboss module](https://github.com/quisquous/cactbot#raidboss
   * [Testing Timelines](#testing-timelines)
   * [Test against other timelines](#test-against-other-timelines)
 
-## History
+## 歷史
 
 Back in 2016, Shasta Kota on the Death and Taxes website made this [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) to use with  anoyetta's [ACT timeline plugin](https://github.com/anoyetta/ACT.Hojoring). That plugin is now part of Hojoring.
 
@@ -43,15 +43,15 @@ There's also an older [kaizoban](https://github.com/090/act_timeline/releases) v
 
 cactbot timeline files were originally intended to be backwards compatible with these, and so cactbot-specific extensions are injected later from the triggers file.
 
-## Timeline File Syntax
+## 時間軸文件語法
 
 Each line in a timeline file is considered its own timeline entry. There is no ordering at all. The fact that timeline files are ordered is as a convenience to the reader.
 
-### Comments
+### 注釋
 
 On any line, a hash character `#` signifies a comment. Everything after that on the current line will be ignored.
 
-### Entries
+### 條目
 
 Here is some grammar examples of timeline entries. Every timeline entry begins with the ability time and the ability name.
 
@@ -75,7 +75,7 @@ The ability time and ability name always need to come first, but `window`, `jump
 
 `jump Number` tells the timeline playback to jump to a particular time if the sync is encountered. If you jump to time 0, the timeline will stop playback. This is usually used for phase pushes and loops. There does not need to be a timeline entry for the time you jump to, although it is very common to have one.
 
-### Commands
+### 指令
 
 To hide all instances of an ability, you can use the `hideall` command. Most timelines start with the line `hideall "--sync--"` to hide syncs that are just used to keep the timeline on track but should not be shown to the player.
 
@@ -97,15 +97,15 @@ hideall "--sync--"
 1032.0 "Control Tower" duration 13.5 sync /:Hashmal, Bringer Of Order starts using Control Tower on Hashmal/ window 20,20 # start of cast -> tower fall
 ```
 
-### Testing
+### 測試
 
 In cactbot, running `npm run test` will run **test/check_timelines.js** in node to verify syntax.
 
-### Shasta Kota Guide
+### Shasta Kota的指南
 
 It is also worth reading Shasta Kota's original [guide](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) which is still excellent.
 
-## Cactbot Style Guide
+## Cactbot樣式指南
 
 These are guidelines that cactbot tries to follow for timelines.
 
@@ -140,7 +140,7 @@ Examples:
 * Alexander - The Arm of the Father: `a3n`
 * The Final Coil of Bahamut: `t13`
 
-## Timeline Triggers
+## 基於時間軸的觸發器
 
 Trigger files in cactbot support adding timeline triggers. Because people may have preferences about what triggers they want enabled by default, and because cactbot timeline syntax extensions are not compatible with other timeline plugins, cactbot adds all of its timeline triggers from the timeline file.
 
@@ -160,7 +160,7 @@ The `regex` should not be translated and should be based off of whatever is exac
 
 They support a `beforeSeconds` parameter, that allows you to specify how long before the ability to show the trigger.
 
-## Timeline Injection
+## 時間軸注入
 
 The timeline files themselves are constructed in a way that should be useful for everybody. However, sometimes people want to hide parts of timelines or add other things to timelines.
 
@@ -172,7 +172,7 @@ The test timeline in Summerford Farms that you can start by doing a /countdown o
 
 You can also add timeline entries to your **cactbot/user/raidboss.js** file for personalized timeline entries and triggers.  See: [user/raidboss.js](https://github.com/quisquous/cactbot-user/blob/641488590e3ea499cc3b54cc9f2f2f856dee4ad8/raidboss.js#L28)
 
-## Timeline Translation
+## 時間軸翻譯
 
 To support multiple languages, cactbot trigger files support a `timelineReplace` section. You can see an example in [o12s.js](https://github.com/quisquous/cactbot/blob/ecbb723f097328c7bd0476352e5135bd5f776248/ui/raidboss/data/triggers/o12s.js#L608). This section contains a bunch of regular expressions to replace in syncs, texts, and effects. This has two purposes.
 
@@ -182,11 +182,11 @@ The second purpose is for timelines at runtime. cactbot will use the `replaceSyn
 
 These match only the exact text of the regex within the line, not the entire line. Care is needed to make sure that replacements are not overzealous.
 
-## Example Timeline Creation
+## 創建時間軸示例
 
 Here's an example of using cactbot's tools to make a timeline file for Cape Westwind. This is pretty straightforward and only requires one person to test, so is a good first example.
 
-### Run the fight a few times
+### 多次攻略副本
 
 The first step in making a timeline is generating a few ACT logs.
 
@@ -203,14 +203,14 @@ Good guidelines for getting good logs are:
 1. per phase, run long enough to see the mechanics loop
 1. run several times so you can test it
 
-### Software prerequisites
+### 軟體需求
 
 * [Python 3](https://www.python.org/downloads/release/python-373/)
 * A copy of cactbot's [source code](https://github.com/quisquous/cactbot/archive/main.zip)
 
 You should do a system-wide installation of Python 3 if you can, as this will put Python into your Windows PATH so that you can easily run it from the command line.
 
-### Timeline Skeleton
+### 時間軸基礎骨架
 
 There are three things you need to add a new timeline to cactbot.
 
@@ -420,7 +420,11 @@ Here's what the initial phase looks like, with some extra line breaks for clarit
 
 It's pretty clear that there's a loop of roughly 27.8 or 27.9 seconds. Let's just assume it's 27.8
 
-The best tool for making perfect loops is **util/timeline_adjust.py**. This script will walk through a timeline file and print out the same timeline file, adjusted by any amount, positive or negative. (Note: it will not adjust jumps.)
+The best tool for making perfect loops is **util/timeline_adjust.py**. This script will walk through a timeline file and print out the same timeline file, adjusted by any amount, positive or negative.
+
+If you are using VSCode, you can also use the [adjust time feature](https://github.com/MaikoTan/cactbot-highlight#adjust-time) from the [cactbot-highlight](https://marketplace.visualstudio.com/items?itemName=MaikoTan.cactbot-highlight) extension, which offer a simple way to adjust time in one-click.
+
+(Note: they both will not adjust jumps.)
 
 Here's an abbreviated version of the output from running this command:
 
@@ -449,7 +453,7 @@ In cactbot, there's a configurable window of time for how far ahead to show in t
 
 Here's what a completed version of the first phase loop looks like.
 
-Note that we've used the times from **timeline_adjust.py** rather than the original times. This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
+Note that we've used the times from **timeline_adjust.py** rather than the original times. (You could also use `cactbot-highlight` if you prefer that.) This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
 
 We'll add the jumps in later.
 
