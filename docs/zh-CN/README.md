@@ -2,17 +2,17 @@
 
 <img align="right" src="https://raw.githubusercontent.com/quisquous/cactbot/main/screenshots/cactbot-logo-320x320.png" />
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
+[![GitHub工作流程状态（分支）](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHub发行版（最新的SemVer）](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
 🌎 [**English**] [[한국어](docs/ko-KR/README.md)]
 
-1. [关于](#about)
-1. [安装](#installing)
-1. [从源码构建](#building-from-source)
-1. [UI模块概述](#ui-module-overview)
-1. [疑难解答](#troubleshooting)
-1. [Cactbot自定义](#cactbot-customization)
-1. [支持语言](#supported-languages)
+1. [关于](#关于)
+1. [安装](#安装)
+1. [从源码构建](#从源码构建)
+1. [UI模块概述](#uI模块概述)
+1. [疑难解答](#疑难解答)
+1. [Cactbot自定义](#cactbot自定义教程)
+1. [支持语言](#支持语言)
 
 ## 关于
 
@@ -22,31 +22,31 @@ cactbot提供以下模块：
 
 * raidboss: 内置时间轴和触发器
 
-![timeline screenshot](screenshots/promo_raidboss_timeline.png) ![triggers screenshot](screenshots/promo_raidboss_triggers.png)
+![时间轴屏幕截图](screenshots/promo_raidboss_timeline.png) ![触发器屏幕截图](screenshots/promo_raidboss_triggers.png)
 
 * oopsyraidsy: 错误和死亡报告
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![oopsyraidsy屏幕截图](screenshots/promo_oopsy.png)
 
 * jobs: 用于buff与触发监控的紧凑型职业量谱
 
-![rdm jobs screenshot](screenshots/promo_jobs.png)
+![赤魔职业屏幕截图](screenshots/promo_jobs.png)
 
 * eureka: 优雷卡恶名精英监控地图
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![优雷卡屏幕截图](screenshots/promo_eureka.png)
 
 * fisher: 捕鱼垂钓时间监控
 
-![fisher screenshot](screenshots/promo_fishing.png)
+![捕鱼人屏幕截图](screenshots/promo_fishing.png)
 
 * radar: 通知狩猎怪方向及开怪信息
 
-![radar screenshot](screenshots/promo_radar.png)
+![雷达屏幕截图](screenshots/promo_radar.png)
 
 * dps: 提供更多功能的dps悬浮窗
 
-![xephero screenshot](screenshots/xephero.png)
+![xephero屏幕截图](screenshots/xephero.png)
 
 ### 视频实例
 
@@ -67,7 +67,7 @@ cactbot提供以下模块：
 
 如果您刚刚安装了ACT， 那么你会看到一个启动向导。 否则，您需要通过点击 `Options` ， 然后点击 `Show Startup Wizard` 启动启动向导。
 
-![startup wizard screenshot](screenshots/ffxiv_plugin_show_startup_wizard.png)
+![开始向导屏幕截图](screenshots/ffxiv_plugin_show_startup_wizard.png)
 
 在启动向导中， 选择 `FFXIV Parsing Plugin` ，然后单击 `Download/Enable Plugin` 按钮。 这将下载 `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll`， 并在插件列表中启用它。
 
@@ -270,7 +270,7 @@ ThirdParty
 
 [ui/oopsyraidsy/data](ui/oopsyraidsy/data) 文件夹中为每个副本指定了错误触发器。
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![oopsyraidsy屏幕截图](screenshots/promo_oopsy.png)
 
 ### [jobs](ui/jobs) 模块
 
@@ -306,108 +306,108 @@ ThirdParty
 
 </details>
 
-In this screenshot, the jobs module is highlighted for the Red Mage job. The health and mana bars, as well as Red Mage white/black mana tracking is circled in purple, with the large raid buff tracking pointed to beside it in orange. <del>The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar.</del> The proc tracking is circled below in green.
+在此截图中，以赤魔法师的jobs模块为例。 紫色圆圈圈出的是体力条与魔力条，还有赤魔法师的黑/白魔元监控；橙色箭头指向的是一个大大的团辅监控图标。 <del>The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar.</del> The proc tracking is circled below in green.
 
 ![jobs screenshot](screenshots/Jobs.png)
 
 ### [eureka](ui/eureka) 模块
 
-To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactbot Eureka` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/eureka.html** 或使用 `Cactbot Eureka` 预设。
 
-This module provides automatic tracking of NMs that are popped or have been killed.  It shows gales/night timers and any local tracker link that has been pasted in chat.  Any flags in chat are also temporarily included on the map.
+该模块会自动追踪NM的出现和死亡。  还会显示特殊天气/夜晚计时器以及粘贴到聊天中的优雷卡追踪器链接。  聊天中的所有坐标信息也都会临时显示在地图上。
 
-It currently does not read the tracker information directly.  However, if you click on the left/red "Copy killed NMs" button in the tracker to copy the list of currently dead NMs, you can paste it in game, e.g. `/echo ? NMs on cooldown: Serket (7m) > Julika (24m) > Poly (54m)`
+当前，该模块不会直接读取优雷卡追踪器的信息。  但如果您点击优雷卡追踪器左侧红色的“复制已杀死的NM”按钮来复制当前已死NM的列表，则可以将其粘贴到游戏中，例如`/echo ? 冷却中的NM: 蝎子 (7m) > 魔界花 (24m) > 独眼 (54m)`，以便该模块从此列表自动同步数据。
 
-If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
+如果您看不到表情符号，请确保已安装[此Windows更新](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![优雷卡屏幕截图](screenshots/promo_eureka.png)
 
 ### [radar](ui/radar) 模块
 
-To use this module, point cactbot at **ui/radar/radar.html** or use the `Cactbot Radar` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/radar.html** 或使用 `Cactbot Radar` 预设。
 
-This module lets you know about nearby hunt mobs (S-rank, A-rank, etc). When one pops, it gives you an arrow (based on your character's heading) and a distance to the mob.
+该模块可让您发现附近的狩猎怪（S级，A级等）。 当一个狩猎怪出现时，该模块会显示一个箭头（基于角色面向）指向该狩猎怪并会显示您与该狩猎怪之间的距离。
 
-There are options to show who pulled the mob, as well as to configure the display of the radar. You can also set up custom options for different ranks (e.g. make noises for S rank, but be silent for B ranks), or set up custom triggers for any mob name you would like.
+控制面板中的选项可以设置显示哪位玩家开了狩猎怪，还可以配置radar模块的显示方式。 您还可以为不同等级的狩猎怪设置自定义选项（例如为S级怪发出声音，但对B级怪保持沉默），或为您想监控的任何目标名称添加自定义触发器。
 
-See the `cactbot/user/radar-example.js` for more options.
+有关更多选项，请参见`cactbot/user/radar-example.js`文件。
 
-![radar screenshot](screenshots/promo_radar.png)
+![雷达屏幕截图](screenshots/promo_radar.png)
 
 ### [fisher](ui/fisher) 模块
 
-To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactbot Fisher` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/fisher.html** 或使用 `Cactbot Fisher` 预设。
 
-When you cast your line at a fishing hole, this module keeps track of when you reel in particular fish so that you know what you might be getting when you hook it.
+当您在一个渔场投出鱼线时，该模块会一直追踪您何时钓到了什么鱼，以便您日后知道提钩时将会钓到什么鱼。
 
 ![fishing screenshot](screenshots/promo_fishing.png)
 
-Cast times are currently only logged as you fish, so there won't be any data until you've caught each fish. Green bars represent light tugs, yellow is a medium tug and red bars are legendary/heavy tugs.
+目前该模块仅会记录您的钓鱼记录，因此只有在您钓到了鱼时才会有数据。 绿色的条形代表轻杆，黄色的条形代表中杆，红色的条形代表鱼王杆/重杆。
 
-[See here](https://www.youtube.com/watch?v=GHgWIA-Zhug) for examples of the different tug types.
+有关不同杆种类型的示例，请参见[此处](https://www.youtube.com/watch?v=GHgWIA-Zhug)。
 
-Check [here](docs/FAQ-Troubleshooting.md#fisher-module) for common troubleshooting tips.
+在[此链接](docs/FAQ-Troubleshooting.md#fisher-module)中可以找到fisher模块的常见问题解答。
 
 ### [dps](ui/dps) 统计模块
 
-cactbot can be used with any dps meter overlay designed for OverlayPlugin's miniparse addon, with the option to build out more features through cactbot's additional Javascript APIs.  cactbot also auto-stops fights on wipes, so you can configure ACT's fight time to infinity.
+cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬浮窗共同使用，并可以选择通过cactbot附加的Javascript API扩展更多功能。  cactbot还可以在团灭时自动停止统计，因此您可以将ACT的战斗时间配置为无限。
 
-The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for miniparse, with the additional ability to do per-phase dps tracking, displayed in additional columns. In the screenshot below the phases are named B1, B2, B3.  These autogenerate from dungeon bosses, but could be used to differentiate raid fight phases.
+[xephero](ui/dps/xephero)DPS统计悬浮窗具有在多列显示对副本的每个阶段的DPS数据进行分段的功能。 在下面的截图中，各阶段分别命名为B1、B2、B3。  它们会在4人本的BOSS自动生成，也可以用来区分Raid副本的阶段。
 
-![xephero screenshot](screenshots/xephero.png)
+![xephero屏幕截图](screenshots/xephero.png)
 
-The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
+[rdmty](ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
 
 ![rdmty screenshot](screenshots/rdmty.png)
 
 ### [pull counter](ui/pullcounter) 模块
 
-This small module sticks the current pull count for raiding bosses on screen. This is primarily for folks who stream a lot and want to review video footage. Having a number on screen makes it easy to scrub through video and find particular pulls to review.
+这个小模块可以显示您在高难度副本中当前的重试次数。 此功能是为主播或查看录屏的玩家准备的。 通过这个数字，您可以轻松浏览视频并查找到特定的某场战斗来进行检阅。
 
-In most cases, you can reset the count for the current boss/zone by typing `/echo pullcounter reset`. You can also edit the counts directly in your `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` file.
+您可以通过在游戏聊天窗口中键入`/echo pullcounter reset`来重置当前副本/区域的重试计数。 您也可以直接在`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`文件中修改该计数。
 
 ![pull counter screenshot](screenshots/pullcounter.png)
 
 ### [test](ui/test) 模块
 
-To use this module, point cactbot at **ui/test/test.html** or use the `Cactbot Test` preset.
+要使用该模块，定位到cactbot下面的 **ui/raidboss/test.html** 或使用 `Cactbot Test` 预设。
 
-This module is just an onscreen test of cactbot variables and is not meant to be used while playing. It can be useful to try out to make sure everything is working as expected or to use to help debug overlay issues.
+该模块仅用于cactbot所用变量的可视化测试，并不适合在正常游戏时使用。 该模块可用来测试所有数据的获取是否正常、模块能否按照预期正常工作，或用来调试悬浮窗的错误。
 
 ![test screenshot](screenshots/test.png)
 
 ## 疑难解答
 
-A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
+您可以在[此链接](docs/FAQ-Troubleshooting.md)中查看Cactbot的常见问题解答。
 
 ## Cactbot自定义教程
 
-Most common cactbot configuration can be done via the control panel, inside of ACT.
+大部分的cactbot配置可通过ACT内的cactbot控制面板来完成。
 
 ![config panel](screenshots/config_panel.png)
 
-This can be found by going to Plugins -> OverlayPlugin.dll -> Cactbot Event Source, and then clicking on options there.
+您可以在插件->OverlayPlugin.dll->Cactbot找到Cactbot的控制面板。
 
-In particular, if you want to use text to speech for raidboss alerts, you can change the "Default alert output" to be "TTS Only" or "Text and TTS". You can also change this on a per trigger basis.
+特别是如果您想使用TTS播报RaidBoss模块的警报，您可以将“默认警报提示信息输出方式”选项修改为“只使用TTS”或“文字显示与TTS”。 您还可以对任意触发器进行特殊设置。
 
-Or, if for some reason (???) you don't want the ready check sound alert, you can disable this via the same options panel. Go to Raidboss -> General Triggers -> General -> General Ready Check, and set it to `Disabled` instead of `Defaults`.
+如果您出于某些原因（？？？），不想听到cactbot的准备确认提示音，您也可以在此控制面板中禁用它。 请转到Raidboss -> 通用触发器-> General-> General Ready Check，并将其设置为`禁用`。
 
-此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 It is not recommended to edit this file directly, as it must be [strict json](https://jsonlint.com/) and ACT might fail to load if the file is written incorrectly.
+此处的选项会存储于 `%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json` 文件中。 不建议直接编辑该文件，因为它必须是[标准的JSON](https://jsonlint.com/)，如果该文件被错误地修改，ACT可能无法启动。
 
-It is recommended that you do most of your configuration via this control panel rather than with user files. Files in `cactbot/user/` are more powerful and can override anything from the control panel. However, this can also be confusing when the control panel doesn't adjust something properly that a `cactbot/user/` file is overriding silently.
+强烈建议您通过此控制面板而不是用户文件来完成大部分的配置。 `cactbot/user/` 中的文件功能更加强大并且可以覆盖控制面板中的任何配置。 然而，当控制面板没有正确地调整`cactbot/user/`内的文件正在悄悄覆盖的配置时，也会造成困惑。
 
-See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrides) for more details about user javascript and css files.
+有关自定义javascript和css文件的更多详细信息，请参见[本文档](docs/CactbotCustomization.md#user-folder-config-overrides)。
 
 ## 支持语言
 
-cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
+cactbot已在当前版本的国际服（英语、德语、法语、日语）、国服以及韩服经过测试并可以正常工作。 某些翻译工作仍在进行中。
 
-## Licensing, Trademarks, Copyright
+## 许可、商标与授权
 
-cactbot is open source under the [Apache License, Version 2.0](LICENSE).
+cactbot基于[Apache License, Version 2.0](LICENSE)开放源代码。
 
-FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
+FINAL FANTASY是株式会社史克威尔艾尼克斯控股(株式会社スクウェア・エニックス・ホールディングス，Square Enix Holdings Co., Ltd.)的注册商标。
 
-Final Fantasy art and icons reused non-commercially under the [FINAL FANTASY® XIV Materials Usage License](https://support.na.square-enix.com/rule.php?id=5382).
+《最终幻想》艺术作品和图标基于[FINALFANTASY®XIV素材使用许可](https://support.na.square-enix.com/rule.php?id=5382)，以非商业方式二次使用。
 
-See the [LICENSE](LICENSE) file for more details about other bundled projects.
+有关其他内建项目的详细信息，请参见 [LICENSE](LICENSE) 文件。
