@@ -69,7 +69,7 @@ In this documentation, any reference to "user-defined js file" applies to both o
 
 您可以透過cactbot使用者介面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
 
-If you haven't selected one, it will try to select one based on where you have installed cactbot on disk.
+若您沒有選擇，cactbot會嘗試選擇安裝目錄下的默認資料夾。
 
 建議您選擇cactbot安裝目錄下的 `cactbot/user` 資料夾。 該資料夾通常位於 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot\user`。 有部分示例配置檔案位於 [此資料夾](../../user) 下。
 
@@ -120,7 +120,7 @@ Options.Triggers.push({
 });
 ```
 
-The easiest approach to modify triggers is to copy and paste the block of code above for each trigger. Modify the `zoneId` line to have the zone id for the zone you care about, usually from the top of the cactbot trigger file. [該檔案](../../resources/zone_id.js) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌窗口將會輸出警告信息。 Then, copy the trigger text into this block. Edit as needed. Repeat for all the triggers you want to modify. Reload your raidboss overlay to apply your changes.
+最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [該檔案](../../resources/zone_id.js) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌窗口將會輸出警告信息。 然後複製觸發器文本並粘貼至此， 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
 
 **注意**：此方式會將原觸發器完全移除，因此請在修改時不要刪除任何邏輯。 此外，觸發器均採用JavaScript編寫，因此必須採用標準JavaScript語法。 若您不是程式員，您需要格外注意編輯方法。
 
@@ -128,7 +128,7 @@ The easiest approach to modify triggers is to copy and paste the block of code a
 
 假定您正在攻略巴哈姆特絕境戰(UCOB)， 您的固定隊採用的不是cactbot默認的火1集合吃的打法， 而是先單吃火1。 另外，您 *同時* 還想讓觸發器通過tts播報與文本不同的內容。 比如，您總是忘記出人群，因此您想讓它重復播報數次。
 
-If you only wanted to change the `infoText`, you could do this via [Changing Trigger Text with the cactbot UI](#changing-trigger-text-with-the-cactbot-ui).
+我們推薦閱讀 [觸發器指南](RaidbossGuide. md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中現有的觸發器程式碼。
 
 其中一種調整方式是編輯觸發器的輸出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/cce8bc6b10d2210fa512bd1c8edd39c260cc3df8/ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js#L715-L743) 中找到原本的 fireball #1 觸發器。
 
@@ -237,15 +237,15 @@ Options.Triggers.push([
 
 1) 按您的喜好編輯您自己的時間軸檔案
 
-The steps to override a timeline are:
+時間軸的步驟如下：
 
-1) Copy the timeline text file out of cactbot and into your user folder
+1) 複製原有的時間軸文本檔案內容至您的用戶資料夾
 
     例如，您可以複製
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
     至 `user/the_epic_of_alexander.txt`。
 
-1) Add a section to your user/raidboss.js file to override this.
+1) 在 user/raidboss.js 中添加程式碼
 
     如同我們添加觸發器一樣，您依舊需要定義 `zoneId`、 `overrideTimelineFile: true`，
     以及定義文本檔案名稱的`timelineFile` 属性。
@@ -271,11 +271,11 @@ The steps to override a timeline are:
 
 ## 行為自定義
 
-This section discusses other kinds of customizations you can make to cactbot modules. There are some variables that are not in the config UI and are also not triggers.
+這一文段將討論cactbot的其他方式。 Cactbot中有一些不在使用者介面顯示，也不是觸發器的變量。
 
 每個cactbot模塊都有一個名為 `Options` 的變量，它包含了若干控制選項。 可用的 `Options` 變量會在每個 `ui/<name>/<name>.js` 檔案的頂部列出。
 
-For example in [ui/raidboss/raidboss.js](../ui/raidboss/raidboss.js), you see the `PlayerNicks` option which allows you to give people nicknames when their names are called out
+例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 檔案中， 您可以通過 `PlayerNicks` 選項定義玩家的暱稱。
 
 ```javascript
 Options.PlayerNicks = {
@@ -295,7 +295,7 @@ Options.PlayerNicks = {
 
 確認您的用戶檔案是否正常載入。
 
-If there are errors, they will appear here.
+當運行錯誤時，錯誤信息會顯示在此處。
 
 ### 檢查檔案是否載入
 
@@ -303,7 +303,7 @@ If there are errors, they will appear here.
 
 當raidboss模組的除錯模式啓用時，OverlayPlugin的日誌窗口中會打印更多信息。 每次本地的用戶檔案加載時都會輸出類似於這樣的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
 
-Verify that your user file is loaded at all.
+確認您的用戶檔案是否正常載入。
 
 The order that the filenames are printed is the order in which they are loaded.
 
