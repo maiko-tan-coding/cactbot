@@ -2,9 +2,9 @@
 
 这篇文章将指导您可以让其他人在不运行ACT的情况下可以获得自己的cactbot提示和DPS数字等。 这对于PS4用户和DX9用户来说是一大助力。
 
-The recommended method is to use the port forwarding built into OverlayPlugin. Port forwarding can give personalized triggers to each person connected. This method also will allow others to view dps meters or any other kind of overlay.
+推荐使用OverlayPlugin内置的端口转发实现。 端口转发可以为连接的每个人提供个性化的触发器。 此方式同样支持让他人查看dps数据，甚至是更多的悬浮窗。
 
-Another way is to use the [discord bot plugin](https://github.com/Makar8000/ACT-Discord-Triggers/wiki/First-Time-Setup-Guide). The discord bot will play all of the tts from cactbot that you would hear and play it for the rest of the party. This is less great, because many cactbot triggers are personalized and it is not meant to be a generalized "raid caller" even if it sort of works that way. Currently, cactbot sounds do not play through the plugin.
+另一种方式是使用 [discord bot plugin](https://github.com/Makar8000/ACT-Discord-Triggers/wiki/First-Time-Setup-Guide)。 Discord Bot可以播放cactbot的所有语音提示给其他所有队友。 This is less great, because many cactbot triggers are personalized and it is not meant to be a generalized "raid caller" even if it sort of works that way. Currently, cactbot sounds do not play through the plugin.
 
 This guide will only cover port forwarding. (Patches welcome to explain anything specific for ACT Discord Triggers + cactbot.)
 
