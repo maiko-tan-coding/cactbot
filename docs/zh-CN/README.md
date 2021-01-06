@@ -71,7 +71,7 @@ cactbot提供以下模块：
 
 在启动向导中， 选择 `FFXIV Parsing Plugin` ，然后单击 `Download/Enable Plugin` 按钮。 这将下载 `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll`， 并在插件列表中启用它。
 
-![startup wizard download screenshot](screenshots/ffxiv_plugin_parsing_plugin.png)
+![开始向导下载屏幕截图](screenshots/ffxiv_plugin_parsing_plugin.png)
 
 此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 这是在 `插件列表` ->`FFXIV Settings` -> `Options<code>。</p>
 
@@ -86,13 +86,13 @@ cactbot提供以下模块：
 
 <p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
-![blank plugin listing screenshot](screenshots/get_plugins_blank.png)
+![空白插件列表屏幕截图](screenshots/get_plugins_blank.png)
 
 单击 `Get Plugins` 可以打开ACT插件安装程序。
 
 选择 `悬浮窗插件` ，然后单击 `Download and Enable`按钮。
 
-![overlay plugin selection screenshot](screenshots/get_plugins_overlayplugin.png)
+![悬浮窗插件选择屏幕截图](screenshots/get_plugins_overlayplugin.png)
 
 这会将ngld OverlayPlugin下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\OverlayPlugin` 文件夹中， 并自动在插件列表中启用 `OverlayPlugin.dll`。
 
@@ -104,7 +104,7 @@ cactbot提供以下模块：
 
 选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
-![cactbot selection screenshot](screenshots/get_plugins_cactbot.png)
+![cactbot选择屏幕截图](screenshots/get_plugins_cactbot.png)
 
 这会将cactbot下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot` 文件夹中， 并在插件列表中启用 `CactbotOverlay.dll`。
 
@@ -112,7 +112,7 @@ cactbot提供以下模块：
 
 确认您的插件顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
-![plugin order](screenshots/get_plugins_complete.png)
+![插件顺序](screenshots/get_plugins_complete.png)
 
 最后，重启ACT。
 
@@ -125,11 +125,11 @@ cactbot提供以下模块：
 1. 导航到ACT的 `Plugins` 标签页，然后跳转到其中的 `OverlayPlugin.dll` 标签页。
 1. 单击“新建”按钮，然后在“预设”列表中选择 `Cactbot Raidboss`。
 
-    ![new overlay plugin screenshot](screenshots/overlay_plugin_new.png)
+    ![新建悬浮窗插件屏幕截图](screenshots/overlay_plugin_new.png)
 
 1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 当您在悬浮窗的配置面板中锁定该悬浮窗时，这些测试用UI都将消失。 在您完成了调整悬浮窗大小和位置之后，应该始终保持锁定悬浮窗。
 
-    ![raidboss plugin unlocked](screenshots/overlay_plugin_new_raidboss_unlocked.png)
+    ![raidboss插件解锁状态](screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
 1. 您可以输入任意的名字作为悬浮窗的名称，例如 `raidbossy`。
 1. 单击 `OK` 按钮将其添加为悬浮窗。 则它将会出现在 `Plugns` -> `OverlayPlugin.dll` 标签页的悬浮窗列表中。
@@ -138,7 +138,7 @@ cactbot提供以下模块：
 
 1. 在 `Raidboss` 悬浮窗的 `General` 选项卡中，勾选 `Lock Overlay` 和 `Enable Clickthrough` 复选框。 一旦悬浮窗被锁定，测试用的进度条，文本，红色虚线边框，以及蓝色阴影背景都将会消失。
 
-    ![raidboss plugin config](screenshots/overlay_plugin_new_raidboss_locked.png)
+    ![raidboss插件配置](screenshots/overlay_plugin_new_raidboss_locked.png)
 
 1. 如果要测试raidboss插件，请传送到盛夏农庄，然后在聊天框输入 `/ countdown 5` 并回车。
 
@@ -236,7 +236,7 @@ ThirdParty
 
 在下方的截图中，高亮的是raidboss模块，其中时间轴用红色圆圈圈出， 文本警报用黄色圆圈圈出，可见的是 `警告`等级的文字提示。
 
-![raidboss screenshot](screenshots/Raidboss.png)
+![raidboss屏幕截图](screenshots/Raidboss.png)
 
 ### raidboss模拟器
 
@@ -256,7 +256,7 @@ ThirdParty
 
 如果模拟器无法正常工作，请检查控制台中是否打印了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
 
-![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
+![raidboss模拟器屏幕截图](screenshots/raidboss_emulator.png)
 
 ### [oopsyraidsy](ui/oopsyraidsy) 模块
 
@@ -286,11 +286,11 @@ ThirdParty
 |                                                   职业                                                   |                                                                                                   功能                                                                                                   |
 |:------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |     <img src="../resources/ffxiv/jobs/pld-large.png" width="30px" /><br> 骑士     |                                                                                      显示当前的忠义值和赎罪剑层数。 以及监控沥血剑的DoT。                                                                                      |
-|     <img src="../resources/ffxiv/jobs/war-large.png" width="30px" /><br> 战士     |                                                                                 显示兽魂数量，并以GCD追踪剩余的暴风碎Buff时间，并且显示剩余连击时间。                                                                                 |
+|     <img src="../resources/ffxiv/jobs/war-large.png" width="30px" /><br> 战士     |                                                                          显示兽魂值，并监控剩余的暴风碎Buff时间，给出以GCD为基准的补buff提示，同时显示剩余连击时间。                                                                           |
 |    <img src="../resources/ffxiv/jobs/drk-large.png" width="30px" /><br> 暗黑骑士    |                                                                                        显示暗血值和暗黑剩余时间，并且显示剩余连击时间。                                                                                        |
-|    <img src="../resources/ffxiv/jobs/gnb-large.png" width="30px" /><br> 绝枪战士    |                                                                    显示NM持续时间&冷却时间，Bloodfest&Gnashing Fang冷却时间，Cartridge数量，并显示剩余连击时间。                                                                    |
-| <img src="./resources/ffxiv/jobs/whm-large.png" width="30px" /><br> White Mage  |                                            Shows Heal&Blood Lily amount, time to next Lily, DoTs remaining time, and shows Assize&Lucid Dreaming cooldown.                                             |
-|   <img src="./resources/ffxiv/jobs/sch-large.png" width="30px" /><br> Scholar   |                                     Shows Aetherflow stacks, Fairy gauge amount/time remaining, DoTs remaining time, and shows Aetherflow&Lucid Dreaming cooldown.                                     |
+|    <img src="../resources/ffxiv/jobs/gnb-large.png" width="30px" /><br> 绝枪战士    |                                                                               显示无情的持续时间&冷却时间，血壤&烈牙的冷却时间，晶壤数量，并显示剩余连击时间。                                                                                |
+|    <img src="./resources/ffxiv/jobs/whm-large.png" width="30px" /><br> 白魔法师     |                                                                            显示治疗&血百合数量，距离获得下一朵治疗百合的时间，DoT剩余时间，以及法令&醒梦的冷却时间。                                                                             |
+|     <img src="./resources/ffxiv/jobs/sch-large.png" width="30px" /><br> 学者      |                                     Shows Aetherflow stacks, Fairy gauge amount/time remaining, DoTs remaining time, and shows Aetherflow&Lucid Dreaming cooldown.                                     |
 | <img src="./resources/ffxiv/jobs/ast-large.png" width="30px" /><br> Astrologian |                                    Shows Seals amount, notify who or whether to play the current card, DoTs remaining time, and shows Draw&Lucid Dreaming cooldown.                                    |
 |    <img src="./resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> Monk     |                                           Shows chakra count, <del>remaining greased lightning time</del> and form time, and tracks monk buffs and debuffs.                                            |
 |   <img src="./resources/ffxiv/jobs/drg-large.png" width="30px" /><br> Dragoon   |                                           Shows blood&eye amount, remaining Disembowel time, jump cooldown, and Lance Charge&Dragon Sight duration/cooldown.                                           |
@@ -308,7 +308,7 @@ ThirdParty
 
 在此截图中，以赤魔法师的jobs模块为例。 紫色圆圈圈出的是体力条与魔力条，还有赤魔法师的黑/白魔元监控；橙色箭头指向的是一个大大的团辅监控图标。 <del>The first step of the melee combo has been executed, which is displayed as the yellow box above the health bar.</del> The proc tracking is circled below in green.
 
-![jobs screenshot](screenshots/Jobs.png)
+![jobs屏幕截图](screenshots/Jobs.png)
 
 ### [eureka](ui/eureka) 模块
 
@@ -340,7 +340,7 @@ ThirdParty
 
 当您在一个渔场投出鱼线时，该模块会一直追踪您何时钓到了什么鱼，以便您日后知道提钩时将会钓到什么鱼。
 
-![fishing screenshot](screenshots/promo_fishing.png)
+![捕鱼人屏幕截图](screenshots/promo_fishing.png)
 
 目前该模块仅会记录您的钓鱼记录，因此只有在您钓到了鱼时才会有数据。 绿色的条形代表轻杆，黄色的条形代表中杆，红色的条形代表鱼王杆/重杆。
 
@@ -358,7 +358,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 [rdmty](ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
 
-![rdmty screenshot](screenshots/rdmty.png)
+![rdmty屏幕截图](screenshots/rdmty.png)
 
 ### [pull counter](ui/pullcounter) 模块
 
@@ -366,7 +366,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 您可以通过在游戏聊天窗口中键入`/echo pullcounter reset`来重置当前副本/区域的重试计数。 您也可以直接在`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`文件中修改该计数。
 
-![pull counter screenshot](screenshots/pullcounter.png)
+![开怪计时截图](screenshots/pullcounter.png)
 
 ### [test](ui/test) 模块
 
@@ -374,7 +374,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 该模块仅用于cactbot所用变量的可视化测试，并不适合在正常游戏时使用。 该模块可用来测试所有数据的获取是否正常、模块能否按照预期正常工作，或用来调试悬浮窗的错误。
 
-![test screenshot](screenshots/test.png)
+![test屏幕截图](screenshots/test.png)
 
 ## 疑难解答
 
@@ -384,7 +384,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 大部分的cactbot配置可通过ACT内的cactbot控制面板来完成。
 
-![config panel](screenshots/config_panel.png)
+![配置面板](screenshots/config_panel.png)
 
 您可以在插件->OverlayPlugin.dll->Cactbot找到Cactbot的控制面板。
 
