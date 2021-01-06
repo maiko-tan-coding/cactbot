@@ -1,6 +1,6 @@
 # 时间轴指南
 
-本指南旨在解释时间轴文件，主要基于cactbot的格式。
+本指南旨在帮助用户编写适用于cactbot的时间轴文件。
 
 ![导入屏幕截图](../images/timelineguide_timeline.png)
 
@@ -27,17 +27,17 @@ cactbot在 [raidboss模块](https://github.com/quisquous/cactbot#raidboss-module
   * [生成初始时间轴文件](#生成初始时间轴文件)
   * [构建循环](#构建循环)
   * [添加战斗阶段](#添加战斗阶段)
-  * [下一个阶段](#下一个阶段)
+  * [下一个战斗阶段](#下一个阶段)
   * [最终阶段](#最终阶段)
   * [样板附注](#样板附注)
-  * [循环循环](#循环循环)
+  * [定义循环](#循环循环)
   * [珠联璧合](#珠联璧合)
   * [测试时间轴](#测试时间轴)
   * [测试其他时间轴](#测试其他时间轴)
 
 ## 历史
 
-2016年，Shasta Kota在the Death and Taxes网站上发布了一篇 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin) 讲解如何使用anoyetta的 [ACT timeline 插件](https://github.com/anoyetta/ACT.Hojoring)。 此插件现在已经成为了Hojoring的一部分。
+2016年，Shasta Kota在the Death and Taxes网站上发布了一篇 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)，讲解如何使用anoyetta的 [ACT timeline 插件](https://github.com/anoyetta/ACT.Hojoring)。 此插件现在已经成为了Hojoring的一部分。
 
 在anoyetta之前也有过一个更旧 [kaizoban](https://github.com/090/act_timeline/releases) 版本，有一部分玩家也曾使用过该插件。
 
@@ -105,12 +105,12 @@ hideall "--sync--"
 
 您也可以阅读Shasta Kota的原版 [指南](https://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)， 它至今看来仍然十分优秀。
 
-## Cactbot样式指南
+## Cactbot格式指南
 
-以下是cactbot中对于时间轴的推荐方案：
+以下是cactbot中对于时间轴的编写建议：
 
 * 为所有可能发生的事件添加同步正则
-* 总是添加Engage!(战斗开始！) 的独立条目，但仍然需要添加同步正则，以防玩家没有使用倒计时。
+* 总是添加Engage!(战斗开始！) 的独立条目，同时添加同步正则，以防玩家没有使用倒计时。
 * 若Boss的第一个技能是自动攻击，应把该自动攻击添加为独立条目以启动时间轴。 (需要注意的是，有的Boss的自动攻击的技能名并不是“攻击”)
 * 在顶部的注释中添加用于生成时间轴的命令行参数
 * 添加同步正则时，除非同步NPC台词是唯一的可行方式，否则应当优先考虑技能。
@@ -128,7 +128,7 @@ hideall "--sync--"
 
 通常触发器的文件名应与玩家社区对此副本的称呼一致。 讨伐战一般以Boss名字称呼， raid则通常是带有数字的缩写， 而迷宫挑战通常采用副本区域名称。
 
-文件名中应使用下划线分割单词。 讨伐战中的 `nm` (假神)，`hm` (真神) 与 `ex` (极神)， 则以减号分割。 高难度迷宫挑战的名字中应当写出完整的单词“hard”。 冠词如 `The` 可以省略。 Raid通常会有一定顺序的数字称呼。 例如 `t1` 到 `t13` 以及 `a1s` 到 `a12s` 等。 零式讨伐通常需要加上 `s` 后缀， 而普通难度则采用'n'后缀。 (然而，众所周知巴哈姆特大迷宫里部分层没有零式难度。)
+文件名中应使用下划线分割单词。 讨伐战中的 `nm` (假神)，`hm` (真神) 与 `ex` (极神)， 则以减号分割。 高难度迷宫挑战的名字中应当写出完整的单词“hard”。 冠词如 `The` 可以省略。 Raid通常会有一定顺序的数字称呼。 例如 `t1` 到 `t13` 以及 `a1s` 到 `a12s` 等。 零式讨伐通常需要加上 `s` 后缀， 而普通难度则采用'n'后缀。 (然而，这一规则不适用于巴哈姆特大迷宫，它只有6-9层拥有零式副本。)
 
 示例:
 
@@ -420,9 +420,13 @@ make_timeline.py 脚本支持两个选项以提供此功能。 其一为“忽�
 
 可以看出来，这里的循环长度大约在27.8到27.9之间。 我们假定它是27.8吧。
 
-对于构建循环，我们有个优秀的工具**util/timeline_adjust.py**。 这个脚本可以遍历整个时间轴文件，并以可正可负的一定偏移值调整时间轴， 最后将调整后的时间轴输出。 (注意：该脚本不会调整jump。)
+对于构建循环，我们有个优秀的工具**util/timeline_adjust.py**。 这个脚本可以遍历整个时间轴文件，并以可正可负的一定偏移值调整时间轴， 最后将调整后的时间轴输出。
 
-下面是通过该脚本调整后的时间轴的一部分：
+If you are using VSCode, you can also use the [adjust time feature](https://github.com/MaikoTan/cactbot-highlight#adjust-time) from the [cactbot-highlight](https://marketplace.visualstudio.com/items?itemName=MaikoTan.cactbot-highlight) extension, which offer a simple way to adjust time in one-click.
+
+(Note: they both will not adjust jumps.)
+
+Here's an abbreviated version of the output from running this command:
 
 ```bash
 python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.txt --adjust=27.8
@@ -443,15 +447,15 @@ python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.t
 108.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:473:/
 ```
 
-相比于原本的时间轴，该循环已经接近完美。 第一个循环非常完美，但第二个则略有一点偏移， 这里调整后的时间为57.6、74.6、80.0， 但原本是57.7、74.7、80.2。  虽然不够完美，但已经很接近了。
+Comparing to the original, it looks like this loops fairly perfectly. The first loop is perfect and the second loop is off by a little, as this adjusted loop has 57.6, 74.6, 80.0 but the original is 57.7, 74.7, 80.2.  Close enough.
 
-在cactbot中，有一个配置窗口可以设置显示多久之后的时间轴。  默认是30秒，因此您应额外在循环后方添加至少30秒的后续时间轴。
+In cactbot, there's a configurable window of time for how far ahead to show in the timeline.  By default it is 30 seconds, so you should at least make a loop that goes 30 seconds ahead.
 
-那么第一阶段的最终版本就完成了。
+Here's what a completed version of the first phase loop looks like.
 
-注意，我们倾向于使用 **timeline_adjust.py** 生成的时间，而不是原本的时间。 这样我们从52.2跳转到24.4的时候，时间差依旧是正确的。  每次 `Gate Of Tartarus` 释放后5.4秒总会出现 `Shield Skewer`。
+Note that we've used the times from **timeline_adjust.py** rather than the original times. (You could also use `cactbot-highlight` if you prefer that.) This is so that when we jump from 52.2 to 24.4 that all of the relative times stay the same.  In both cases when `Gate Of Tartarus` occurs, there's a `Shield Skewer` in 5.4 seconds after it.
 
-之后我们会添加jump。现在它如下所示：
+We'll add the jumps in later.
 
 ```bash
 2.0 "Shield Skewer" sync /:Rhitahtyn sas Arvina:471:/
@@ -470,7 +474,7 @@ python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.t
 80.0 "Gate Of Tartarus" sync /:Rhitahtyn sas Arvina:471:/
 ```
 
-### 添加战斗阶段
+### 添加新的战斗阶段
 
 Now on to the second phase. From observation, it's clear that at 80% the boss does some rp text and then starts doing some different abilities.
 
@@ -574,7 +578,7 @@ The current state of our timeline is now:
 # 60%
 ```
 
-### 下一个阶段
+### 下一个战斗阶段
 
 From observation, I know that the next phase starts at 60% and there's two adds.
 
@@ -738,7 +742,7 @@ For instances, on o11s, the first two lines are:
 2.5 "--sync--" sync /:Omega:368:/ window 3,0
 ```
 
-### 循环循环
+### 定义循环
 
 Here's the phase 1 loop, again. We're going to edit this so that whenever we get to 52.2 seconds it will jump back to 24.4 seconds seamlessly.
 
@@ -1095,6 +1099,6 @@ One timeline has two `Shield Skewer`s and one only has one. And the `Shrapnel Sh
 
 What to do in this case is subjective. Here are some options:
 
-* get more data, and make a timeline for the most common case
-* leave a comment in the timeline
-* if this is an important ability (e.g. tankbuster) put a question mark on it so players know it's not guaranteed
+* 获取更多的战斗数据，然后针对更为通用的情况调整时间轴文件。
+* 在时间轴这一部分留白。
+* 如果丢失同步的技能是一个非常重要的技能 (例如 tankbuster)，请在丢失技能的时间轴行上打上问号，以便玩家能够明白这部分时间轴并不准确。
