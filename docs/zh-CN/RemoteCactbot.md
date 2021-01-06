@@ -1,6 +1,6 @@
-# Remote Cactbot
+# 远程Cactbot
 
-This is a guide for allowing others to get their own cactbot callouts and DPS numbers without running ACT themselves. This is ideal for PS4 users who can't use ACT as well as DX9 users.
+这篇文章将指导您可以让其他人在不运行ACT的情况下可以获得自己的cactbot提示和DPS数字等。 这对于PS4用户和DX9用户来说是一大助力。
 
 The recommended method is to use the port forwarding built into OverlayPlugin. Port forwarding can give personalized triggers to each person connected. This method also will allow others to view dps meters or any other kind of overlay.
 
