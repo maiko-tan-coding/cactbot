@@ -43,7 +43,7 @@
 
 比如，您可以將這個文字更改為 `${player} 即將死亡！ `。 或者，也許您不關心誰是目標，那麼您可以將其改為 `死刑` 以使文字更加簡短。 如果您想撤消自己的更改，只需清空文字框即可。
 
-但這個方式有一定的限制。 例如，您無法更改邏輯。 而且在大多數情況下，您無法使 `tts` 的播報與 `alarmText` 不同。 您無法新增更多的引數。 如果您想要對觸發器做出更加複雜的覆蓋操作， 那麼您需要檢視 [Raidboss觸發器自定義](#raidboss觸發器自定義) 小節。
+但這個方式有一定的限制。 例如，您無法更改邏輯。 而且在大多數情況下，您無法使 `tts` 的播報與 `alarmText` 不同。 您無法新增更多的引數。 如果您想要對觸發器做出更加複雜的覆蓋操作， 那麼您需要檢視 [Raidboss觸發器自定義](#overriding-raidboss-triggers) 小節。
 
 ## 使用者資料夾概覽
 
@@ -53,7 +53,7 @@ Cactbot的設計哲學要求任何使用者的自定義配置應當存放於使�
 
 所有的cactbot模組都會從 [user/](../../user/) 資料夾載入使用者設定。 `raidboss` 模組會載入 `user/raidboss.js` 與 `user/raidboss.css`，以及所有`user/raidboss/` 目錄下及其子目錄下的 `.js` 和 `.css` 檔案。 (時間軸`.txt`檔案必須與引用它們的`.js`檔案放在同一個資料夾中。) 這些使用者自定義檔案將在cactbot自身載入完畢後被載入，並可以覆蓋對應的模組的設定。
 
-`oopsyraidsy` 模組會載入 `user/oopsyraidsy.js` 與 `user/oopsyraidsy.css`，以及`user/oopsyraidsy/` 目錄下的所有 `.js` 和 `.css` 檔案。 依此類推，每個模組都支援以此方式（以檔名）載入對應自定義檔案。
+`oopsyraidsy` 模組會載入 `user/oopsyraidsy.js` 與 `user/oopsyraidsy.css`。 依此類推，每個模組都支援以此方式（以檔名）載入對應自定義檔案。
 
 cactbot將按照字母順序優先載入user資料夾中的子資料夾裡的檔案，其次載入子資料夾外的檔案。 這就是為什麼`user/raidboss.js`檔案總是最後被載入並可以覆蓋`user/raidboss/`資料夾中任何檔案中的配置。 例如，`user/alphascape/some_file.js` 先載入， `user/mystatic/some_file.js` 再載入，最後是`user/raidboss.js` 載入。 `.css` 檔案遵循同樣的順序。
 
