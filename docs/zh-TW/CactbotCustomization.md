@@ -4,8 +4,8 @@
 
 - [使用cactbot使用者介面](#使用cactbot使用者介面)
 - [透過cactbot使用者介面改變觸發器文本](#透過cactbot使用者介面改變觸發器文本)
-- [用戶資料夾概況](#用戶資料夾概況)
-- [設置您自己的用戶資料夾](#設置您自己的用戶資料夾)
+- [使用者資料夾概況](#使用者資料夾概況)
+- [設置您自己的使用者資料夾](#設置您自己的使用者資料夾)
 - [樣式自定義](#樣式自定義)
 - [Raidboss觸發器自定義](#raidboss觸發器自定義)
   - [例1：改變輸出文本](#例1改變輸出文本)
@@ -13,7 +13,7 @@
   - [例3：添加自定義觸發器](#例3添加自定義觸發器)
 - [Raidboss時間軸自定義](#raidboss時間軸自定義)
 - [行為自定義](#行為自定義)
-- [用戶檔案的除錯](#用戶檔案的除錯)
+- [使用者檔案的除錯](#使用者檔案的除錯)
   - [檢查OverlayPlugin的錯誤日誌](#檢查OverlayPlugin的錯誤日誌)
   - [檢查檔案是否載入](#檢查檔案是否載入)
   - [檢查檔案是否有錯誤](#檢查檔案是否有錯誤)
@@ -45,15 +45,15 @@
 
 但這個方式有一定的限制。 例如，您無法更改邏輯。 而且在大多數情況下，您無法使 `tts` 的播報與 `alarmText` 不同。 您無法添加更多的參數。 如果您想要對觸發器做出更加複雜的覆蓋操作， 那麼您需要查看 [Raidboss觸發器自定義](#raidboss觸發器自定義) 小節。
 
-## 用戶資料夾概況
+## 使用者資料夾概況
 
-若cactbot使用者介面不存在您所需的選項，您可能需要考慮以用戶檔案覆蓋的方式進行自定義。 您需要編寫JavaScript程式碼和CSS樣式，這意味著您可能需要掌握一點點編程知識。
+若cactbot使用者介面不存在您所需的選項，您可能需要考慮以使用者檔案覆蓋的方式進行自定義。 您需要編寫JavaScript程式碼和CSS樣式，這意味著您可能需要掌握一點點編程知識。
 
-Cactbot的設計哲學要求任何用戶的自定義配置應當存放於用戶資料夾的檔案中。 同時這也能防止您所做的更改在今後cactbot的更新中被覆蓋失效。 不僅如此，以後您將無法通過直接修改cactbot的檔案應用您的更改，除非您了解如何編譯您自己的項目。
+Cactbot的設計哲學要求任何使用者的自定義配置應當存放於使用者資料夾的檔案中。 同時這也能防止您所做的更改在今後cactbot的更新中被覆蓋失效。 另外，目前您無法通過直接修改cactbot的檔案應用您的更改，除非您瞭解如何構建您自己的專案。
 
-所有的cactbot模組都會從 [user/](../../user/) 資料夾載入用戶設置。 `raidboss` 模組會載入 `user/raidboss.js` 與 `user/raidboss.css`。 (Timeline `.txt` files must be directly in the same folder as the `.js` that refers to them.) These user-defined files are included after cactbot's files and can override its settings.
+所有的cactbot模組都會從 [user/](../../user/) 資料夾載入使用者設定。 `raidboss` 模組會載入 `user/raidboss.js` 與 `user/raidboss.css`。 (時間軸`.txt`檔案必須與引用它們的`.js`檔案放在同一個資料夾中。) 這些使用者自定義檔案將在cactbot自身載入完畢後被載入，並可以覆蓋對應的模組的設定。
 
-`oopsyraidsy` 模組會載入 `user/oopsyraidsy.js` 與 `user/oopsyraidsy.css`。 And so on, for each module by name.
+`oopsyraidsy` 模組會載入 `user/oopsyraidsy.js` 與 `user/oopsyraidsy.css`，以及`user/oopsyraidsy/` 目錄下的所有 `.js` 和 `.css` 檔案。 And so on, for each module by name.
 
 cactbot loads files in subdirectories (alphabetically) before loading files in outer directories. This is so that `user/raidboss.js` will always be loaded last and can override anything that is set inside a file inside of `user/raidboss/`. For example, `user/alphascape/some_file.js` will load before `user/mystatic/some_file.js`, which will both load before `user/raidboss.js`. The same ordering applies to `.css` files.
 
@@ -65,9 +65,9 @@ In this documentation, any reference to "user-defined js file" applies to both o
 
 在修改了這些檔案之後，單擊ACT中OverlayPlugin外掛設置中的“重載懸浮窗”按鈕，即可應用更改。
 
-## 設置您自己的用戶資料夾
+## 設置您自己的使用者資料夾
 
-您可以透過cactbot使用者介面設置用戶資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot用戶文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
+您可以透過cactbot使用者介面設置使用者資料夾： ACT -> Plugins -> OverlayPlugin.dll -> Cactbot -> cactbot使用者文件夾。 單擊 `選擇文件夾` 按鈕，選擇硬碟上的一個資料夾。
 
 若您沒有選擇，cactbot會嘗試選擇安裝目錄下的默認資料夾。
 
@@ -88,7 +88,7 @@ In this documentation, any reference to "user-defined js file" applies to both o
 }
 ```
 
-簡單地說，您可以認為cactbot會將用戶檔案中的CSS規則添加至內置CSS檔案的末尾。 也就是說，您需要注意 [CSS優先級規則](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)， 例如添加 `!important` 讓您的規則可以強制覆蓋。 另一方面，您可能需要重置某些屬性為默認的 `auto` 值。
+簡單地說，您可以認為cactbot會將使用者檔案中的CSS規則添加至內置CSS檔案的末尾。 也就是說，您需要注意 [CSS優先級規則](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)， 例如添加 `!important` 讓您的規則可以強制覆蓋。 另一方面，您可能需要重置某些屬性為默認的 `auto` 值。
 
 我們推薦使用 [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) 以除錯CSS問題。 您可以通過 ACT -> Plugins -> OverlayPlugin.dll -> 您的懸浮窗名字 -> 啟動Debug工具 以開啟DevTools。
 
@@ -100,7 +100,7 @@ In this documentation, any reference to "user-defined js file" applies to both o
 
 您可以通過 `cactbot/user/raidboss.js` 檔案自定義觸發器行為。 您可以修改輸出文本、適用職業、文本顯示的時間等等。
 
-在 `cactbot/user/raidboss.js` 檔案中， `Options.Triggers` 是一個存放了觸發器集合的列表。 您可以通過此變量添加新觸發器，或修改已有的觸發器。 若用戶檔案中存在與現有觸發器 (cactbot官方提供的) 相同id的觸發器，則會將後者其覆蓋。
+在 `cactbot/user/raidboss.js` 檔案中， `Options.Triggers` 是一個存放了觸發器集合的列表。 您可以通過此變量添加新觸發器，或修改已有的觸發器。 若使用者檔案中存在與現有觸發器 (cactbot官方提供的) 相同id的觸發器，則會將後者其覆蓋。
 
 在您修改觸發器前，我們推薦閱讀 [觸發器指南](RaidbossGuide.md) 以了解各觸發器的諸多屬性的含義。
 
@@ -207,7 +207,7 @@ Options.Triggers.push([{
 
 自定義時間軸的步驟如下：
 
-1) 複製原有的時間軸文本檔案內容至您的用戶資料夾
+1) 複製原有的時間軸文本檔案內容至您的使用者資料夾
 
 ```javascript
 Options.Triggers.push([
@@ -239,7 +239,7 @@ Options.Triggers.push([
 
 時間軸的步驟如下：
 
-1) 複製原有的時間軸文本檔案內容至您的用戶資料夾
+1) 複製原有的時間軸文本檔案內容至您的使用者資料夾
 
     例如，您可以複製
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
@@ -287,13 +287,13 @@ Options.PlayerNicks = {
 };
 ```
 
-**警告**：用戶資料夾中的檔案會靜默覆蓋cactbot使用者介面的同名選項。 該行為可能會造成一些困惑，因此您應當直接通過使用者介面設置這些變量， 僅當使用者介面不提供設置方法時採用此方式覆蓋默認行為。
+**警告**：使用者資料夾中的檔案會靜默覆蓋cactbot使用者介面的同名選項。 該行為可能會造成一些困惑，因此您應當直接通過使用者介面設置這些變量， 僅當使用者介面不提供設置方法時採用此方式覆蓋默認行為。
 
-## 用戶檔案的除錯
+## 使用者檔案的除錯
 
 ### 檢查OverlayPlugin的錯誤日誌
 
-確認您的用戶檔案是否正常載入。
+確認您的使用者檔案是否正常載入。
 
 當運行錯誤時，錯誤信息會顯示在此處。
 
@@ -301,15 +301,15 @@ Options.PlayerNicks = {
 
 首先，您需要開啓raidboss模組的除錯模式。 打開cactbot使用者介面，啓用 `顯示開發者選項` ，然後重新加載懸浮窗。 然後，勾選raidboss模組下的 `啓用除錯模式`，再次重載懸浮窗。
 
-當raidboss模組的除錯模式啓用時，OverlayPlugin的日誌窗口中會打印更多信息。 每次本地的用戶檔案加載時都會輸出類似於這樣的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
+當raidboss模組的除錯模式啓用時，OverlayPlugin的日誌窗口中會打印更多信息。 每次本地的使用者檔案加載時都會輸出類似於這樣的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
 
-確認您的用戶檔案是否正常載入。
+確認您的使用者檔案是否正常載入。
 
 The order that the filenames are printed is the order in which they are loaded.
 
 ### 檢查檔案是否有錯誤
 
-用戶檔案採用JavaScript編寫，若程式碼語法本身有錯誤，日誌窗口會輸出錯誤，您的用戶檔案也會被跳過而不會被加載。 在檔案載入時檢查OverlayPlugin的錯誤日誌。
+使用者檔案採用JavaScript編寫，若程式碼語法本身有錯誤，日誌窗口會輸出錯誤，您的使用者檔案也會被跳過而不會被加載。 在檔案載入時檢查OverlayPlugin的錯誤日誌。
 
 此處有一個例子：
 
