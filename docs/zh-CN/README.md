@@ -86,13 +86,13 @@ cactbot提供以下模块：
 
 <p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
-![空白插件列表屏幕截图](../../screenshots/get_plugins_blank.png)
+![空白插件列表屏幕截图](screenshots/get_plugins_blank.png)
 
 单击 `Get Plugins` 可以打开ACT插件安装程序。
 
 选择 `悬浮窗插件` ，然后单击 `Download and Enable`按钮。
 
-![悬浮窗插件选择屏幕截图](../../screenshots/get_plugins_overlayplugin.png)
+![悬浮窗插件选择屏幕截图](screenshots/get_plugins_overlayplugin.png)
 
 这会将ngld OverlayPlugin下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\OverlayPlugin` 文件夹中， 并自动在插件列表中启用 `OverlayPlugin.dll`。
 
@@ -104,7 +104,7 @@ cactbot提供以下模块：
 
 选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
-![cactbot选择屏幕截图](../../screenshots/get_plugins_cactbot.png)
+![cactbot选择屏幕截图](screenshots/get_plugins_cactbot.png)
 
 这会将cactbot下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot` 文件夹中， 并在插件列表中启用 `CactbotOverlay.dll`。
 
@@ -112,7 +112,7 @@ cactbot提供以下模块：
 
 确认您的插件加载顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
-![插件顺序](../../screenshots/get_plugins_complete.png)
+![插件顺序](screenshots/get_plugins_complete.png)
 
 最后，重启ACT。
 
@@ -125,7 +125,7 @@ cactbot提供以下模块：
 1. 导航到ACT的 `Plugins` 标签页，然后跳转到其中的 `OverlayPlugin.dll` 标签页。
 1. 单击“新建”按钮，然后在“预设”列表中选择 `Cactbot Raidboss`。
 
-    ![新建悬浮窗插件屏幕截图](../../screenshots/overlay_plugin_new.png)
+    ![新建悬浮窗插件屏幕截图](screenshots/overlay_plugin_new.png)
 
 1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 当您在悬浮窗的配置面板中锁定该悬浮窗时，这些测试用UI都将消失。 在您完成了调整悬浮窗大小和位置之后，应该始终保持锁定悬浮窗。
 
@@ -254,7 +254,7 @@ ThirdParty
 1. 拖放一个 [网络日志](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) 文件到该页面中。
 1. 选择区域和战斗记录，然后单击 `Load Encounter`。
 
-如果模拟器无法正常工作，请检查控制台中是否打印了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
+如果模拟器无法正常工作，请检查控制台中是否显示了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
 
 ![raidboss模拟器屏幕截图](screenshots/raidboss_emulator.png)
 
@@ -320,7 +320,7 @@ ThirdParty
 
 如果您看不到表情符号，请确保已安装[此Windows更新](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
 
-![优雷卡屏幕截图](../../screenshots/promo_eureka.png)
+![优雷卡屏幕截图](screenshots/promo_eureka.png)
 
 ### [radar](ui/radar) 模块
 
@@ -332,7 +332,7 @@ ThirdParty
 
 有关更多选项，请参见`cactbot/user/radar-example.js`文件。
 
-![雷达屏幕截图](../../screenshots/promo_radar.png)
+![雷达屏幕截图](screenshots/promo_radar.png)
 
 ### [fisher](ui/fisher) 模块
 
