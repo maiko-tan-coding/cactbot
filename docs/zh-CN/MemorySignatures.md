@@ -35,41 +35,41 @@
 
 然后，打开Cheat Engine。 点击 **文件**，选择 **打开进程**，然后选择最终幻想14的进程。
 
-The top bar should say **ffxiv_dx11.exe** at this point.
+此时，顶部栏显示的应当是 **ffxiv_dx11.exe**。
 
-![cheat engine connected screenshot](images/cheatengine_connected.png)
+![cheat engine connected screenshot](../../images/cheatengine_connected.png)
 
 ### 初始内存搜索
 
-Let's say we're looking for your character's job gauge in memory. For simplicity, say we're a warrior and we're just looking for beast gauge. Because so many values in memory are zero, let's start with a different initial value.
+假设我们正在寻找您的角色在内存中的职业量谱。 为了简单起见，假设我们现在是一名战士，而我们正在寻找量谱中的兽魂值。 由于内存中存在许多零值，我们从一个非零值开始会简单一些。
 
-Switch to warrior in game, and then hit a striking dummy until your beast gauge is 80.
+在游戏中切换到战士职业，然后打几下木人，直到让你的兽魂值达到80。
 
-Switch back to Cheat Engine.
+切换到Cheat Engine。
 
-![cheat engine initial scan screenshot](images/cheatengine_initialscan.png)
+![cheat engine initial scan screenshot](../../images/cheatengine_initialscan.png)
 
-Put in a value (not hex) of 80. The scan type should be `Exact Value` with a `Value Type` of byte. At this point, we don't know how many bytes beast gauge takes in memory. It would be nice if it took four bytes, because there'd be a lot fewer options to sift through. However, we can't make that assumption yet. We're also looking for memory that is writable and not executable.
+输入80的值（不要勾选十六进制）。 扫描类型应为 `精确值` ，数值类型应为 `4字节`。 此时，我们还不知道兽魂值占用了多少字节。 如果是4个字节最好了，因为要进行筛选的选项要少得多。 但是，我们目前还不能做这个假设。 我们也要寻找可写但不可执行的内存。
 
-Then, click **First Scan**.
+然后，单击 **首次扫描**。
 
-This will likely give you millions of memory locations with value 80. A great start!
+这可能会为您提供一大堆值为80的内存地址。 但这是一个好的开端！
 
-![cheat engine found screenshot](images/cheatengine_found.png)
+![cheat engine found screenshot](../../images/cheatengine_found.png)
 
-This is a live view into all of these memory locations. They turn red when they have changed. Some of these are flickering values that are changing even without doing something in game. You can always mash **Next Scan** a few times to repeat the scan and eliminate them.
+这是所有这些内存地址的实时视图。 一旦值被更改就会变为红色。 其中一些值在不停地闪烁，即使我们完全没有在游戏中做任何事情，它们也在不断变化。 您可以多次使用 **再次扫描** 以重复扫描并舍弃这些值。
 
 ### 再次扫描
 
-In game, use a fell cleave to get back to 30 beast gauge.
+在游戏中使用裂石飞环使兽魂降低到30。
 
-Go back to Cheat Engine. Change the **Value** to 30. Click **Next Scan**. This should greatly cut down on the number of memory locations.
+切换到Cheat Engine。 将 **数值** 更改为30。 单击 **再次扫描**。 这将大大减少内存地址的数量。
 
-Repeat this process of changing the value in game and then re-scanning for the new value until you have a small number of addresses.
+重复此过程，改变游戏中的兽魂值，然后重新扫描新的值，直到地址的数量降低到只有几个为止。
 
-![cheat engine post scan screenshot](images/cheatengine_postscan.png)
+![cheat engine post scan screenshot](../../images/cheatengine_postscan.png)
 
-The black addresses are heap addresses. The green addresses are [static addresses](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88). In general, you're looking for static addresses because it's easier to find code that refers to them and they are permanent.
+其中，黑色的地址是堆地址。 而绿色的地址是 [静态地址](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88)。 In general, you're looking for static addresses because it's easier to find code that refers to them and they are permanent.
 
 Keep scanning until you have a single green (static) address.
 
