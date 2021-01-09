@@ -86,13 +86,13 @@ cactbot提供以下模块：
 
 <p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
-![空白插件列表屏幕截图](screenshots/get_plugins_blank.png)
+![空白插件列表屏幕截图](../../screenshots/get_plugins_blank.png)
 
 单击 `Get Plugins` 可以打开ACT插件安装程序。
 
 选择 `悬浮窗插件` ，然后单击 `Download and Enable`按钮。
 
-![悬浮窗插件选择屏幕截图](screenshots/get_plugins_overlayplugin.png)
+![悬浮窗插件选择屏幕截图](../../screenshots/get_plugins_overlayplugin.png)
 
 这会将ngld OverlayPlugin下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\OverlayPlugin` 文件夹中， 并自动在插件列表中启用 `OverlayPlugin.dll`。
 
@@ -104,7 +104,7 @@ cactbot提供以下模块：
 
 选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
-![cactbot选择屏幕截图](screenshots/get_plugins_cactbot.png)
+![cactbot选择屏幕截图](../../screenshots/get_plugins_cactbot.png)
 
 这会将cactbot下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot` 文件夹中， 并在插件列表中启用 `CactbotOverlay.dll`。
 
@@ -112,7 +112,7 @@ cactbot提供以下模块：
 
 确认您的插件顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
-![插件顺序](screenshots/get_plugins_complete.png)
+![插件顺序](../../screenshots/get_plugins_complete.png)
 
 最后，重启ACT。
 
@@ -125,7 +125,7 @@ cactbot提供以下模块：
 1. 导航到ACT的 `Plugins` 标签页，然后跳转到其中的 `OverlayPlugin.dll` 标签页。
 1. 单击“新建”按钮，然后在“预设”列表中选择 `Cactbot Raidboss`。
 
-    ![新建悬浮窗插件屏幕截图](screenshots/overlay_plugin_new.png)
+    ![新建悬浮窗插件屏幕截图](../../screenshots/overlay_plugin_new.png)
 
 1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 当您在悬浮窗的配置面板中锁定该悬浮窗时，这些测试用UI都将消失。 在您完成了调整悬浮窗大小和位置之后，应该始终保持锁定悬浮窗。
 
@@ -283,32 +283,32 @@ ThirdParty
 <details>
 <summary>支持的职业 (点击展开)</summary>
 
-|                                                职业                                                |                                       功能                                        |
-|:------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
-|  <img src="../resources/ffxiv/jobs/pld-large.png" width="30px" /><br> 骑士  |                          显示当前的忠义值和赎罪剑层数。 以及监控沥血剑的DoT。                           |
-|  <img src="../resources/ffxiv/jobs/war-large.png" width="30px" /><br> 战士  |               显示兽魂值，并监控剩余的暴风碎Buff时间，给出以GCD为基准的补buff提示，同时显示剩余连击时间。               |
-| <img src="../resources/ffxiv/jobs/drk-large.png" width="30px" /><br> 暗黑骑士 |                            显示暗血值和暗黑剩余时间，并且显示剩余连击时间。                             |
-| <img src="../resources/ffxiv/jobs/gnb-large.png" width="30px" /><br> 绝枪战士 |                    显示无情的持续时间&冷却时间，血壤&烈牙的冷却时间，晶壤数量，并显示剩余连击时间。                    |
-| <img src="./resources/ffxiv/jobs/whm-large.png" width="30px" /><br> 白魔法师  |                 显示治疗&血百合数量，距离获得下一朵治疗百合的时间，DoT剩余时间，以及法令&醒梦的冷却时间。                 |
-|  <img src="./resources/ffxiv/jobs/sch-large.png" width="30px" /><br> 学者   |                 显示以太超流的层数、异想以太量/炽天使剩余时间、DoT剩余时间，并显示以太超流&醒梦的冷却。                  |
-| <img src="./resources/ffxiv/jobs/ast-large.png" width="30px" /><br> 占星术士  |                 显示已有的印记数量，标注是否应该发当前卡/应该发给谁，DoT剩余时间和抽卡&醒梦的冷却时间。                  |
-|  <img src="./resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> 武僧   | 显示斗气档数，<del>剩余的疾风迅雷Buff时间</del>(5.4疾风迅雷将被删除)，身形持续时间，并监控连击效果提高、双掌打buff和破碎拳DoT时间。 |
-|  <img src="./resources/ffxiv/jobs/drg-large.png" width="30px" /><br> 龙骑士  |               显示龙血时间&龙眼数，开膛枪buff剩余时间，跳跃的冷却时间，以及猛枪&巨龙视线的持续时间和冷却时间。               |
-|  <img src="./resources/ffxiv/jobs/nin-large.png" width="30px" /><br> 忍者   |                显示忍气量，风遁剩余时间，攻其不备持续时间&冷却时间，分身之术&结印的冷却，并显示连击剩余时间。                 |
-|  <img src="./resources/ffxiv/jobs/sam-large.png" width="30px" /><br> 武士   |                                    ⨉ 目前暂不支持                                     |
-| <img src="./resources/ffxiv/jobs/brd-large.png" width="30px" /><br> 吟游诗人  |        显示当前歌谣及其持续时间，诗心档数，灵魂之声量，直线射击预备buff监控，DoT持续时间，以及显示你的DoT造成伤害时机的计时条。        |
-|  <img src="./resources/ffxiv/jobs/mch-large.png" width="30px" /><br> 机工士  |    显示热量计、电能计、连击计时器、钻头/毒菌冲击&空气锚的冷却时间，野火的冷却时间&持续时间。 当野火发动时，将显示你已在野火中打出的GCD数目。     |
-|  <img src="./resources/ffxiv/jobs/dnc-large.png" width="30px" /><br> 舞者   |                   显示连击计时器、幻扇量谱、伶俐量谱、标准舞步冷却、技巧舞步&百花争艳的冷却&持续时间。                   |
-| <img src="./resources/ffxiv/jobs/blm-large.png" width="30px" /><br> 黑魔法师  |           显示DoT剩余时间，火苗&雷雨触发的剩余时间，获得下一个通晓的剩余时间，魔力恢复时间点监控，冰火档数以及灵极心档数。            |
-|  <img src="./resources/ffxiv/jobs/smn-large.png" width="30px" /><br> 召唤师  |           显示DoT剩余时间。能量吸收冷却时间，龙神/不死鸟附体冷却时间，以太超流档数，亚灵神召唤的剩余时间以及毁绝预备的档数。           |
-| <img src="./resources/ffxiv/jobs/rdm-large.png" width="30px" /><br> 赤魔法师  |                        显示黑白魔元量，监控赤飞石&赤火焰预备触发，以及显示醒梦的冷却。                         |
-| <img src="./resources/ffxiv/jobs/blu-large.png" width="30px" /><br> 青魔法师  |                         显示防御解除&醒梦的冷却时间，以及苦闷之歌DoT的剩余时间。                          |
+|                                                 职业                                                  |                                       功能                                        |
+|:---------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+|  <img src="../../resources/ffxiv/jobs/pld-large.png" width="30px" /><br> 骑士  |                          显示当前的忠义值和赎罪剑层数。 以及监控沥血剑的DoT。                           |
+|  <img src="../../resources/ffxiv/jobs/war-large.png" width="30px" /><br> 战士  |               显示兽魂值，并监控剩余的暴风碎Buff时间，给出以GCD为基准的补buff提示，同时显示剩余连击时间。               |
+| <img src="../../resources/ffxiv/jobs/drk-large.png" width="30px" /><br> 暗黑骑士 |                            显示暗血值和暗黑剩余时间，并且显示剩余连击时间。                             |
+| <img src="../../resources/ffxiv/jobs/gnb-large.png" width="30px" /><br> 绝枪战士 |                    显示无情的持续时间&冷却时间，血壤&烈牙的冷却时间，晶壤数量，并显示剩余连击时间。                    |
+| <img src="../../resources/ffxiv/jobs/whm-large.png" width="30px" /><br> 白魔法师 |                 显示治疗&血百合数量，距离获得下一朵治疗百合的时间，DoT剩余时间，以及法令&醒梦的冷却时间。                 |
+|  <img src="../../resources/ffxiv/jobs/sch-large.png" width="30px" /><br> 学者  |                 显示以太超流的层数、异想以太量/炽天使剩余时间、DoT剩余时间，并显示以太超流&醒梦的冷却。                  |
+| <img src="../../resources/ffxiv/jobs/ast-large.png" width="30px" /><br> 占星术士 |                 显示已有的印记数量，标注是否应该发当前卡/应该发给谁，DoT剩余时间和抽卡&醒梦的冷却时间。                  |
+|  <img src="../../resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> 武僧  | 显示斗气档数，<del>剩余的疾风迅雷Buff时间</del>(5.4疾风迅雷将被删除)，身形持续时间，并监控连击效果提高、双掌打buff和破碎拳DoT时间。 |
+| <img src="../../resources/ffxiv/jobs/drg-large.png" width="30px" /><br> 龙骑士  |               显示龙血时间&龙眼数，开膛枪buff剩余时间，跳跃的冷却时间，以及猛枪&巨龙视线的持续时间和冷却时间。               |
+|  <img src="../../resources/ffxiv/jobs/nin-large.png" width="30px" /><br> 忍者  |                显示忍气量，风遁剩余时间，攻其不备持续时间&冷却时间，分身之术&结印的冷却，并显示连击剩余时间。                 |
+|  <img src="../../resources/ffxiv/jobs/sam-large.png" width="30px" /><br> 武士  |                                    ⨉ 目前暂不支持                                     |
+| <img src="../../resources/ffxiv/jobs/brd-large.png" width="30px" /><br> 吟游诗人 |        显示当前歌谣及其持续时间，诗心档数，灵魂之声量，直线射击预备buff监控，DoT持续时间，以及显示你的DoT造成伤害时机的计时条。        |
+| <img src="../../resources/ffxiv/jobs/mch-large.png" width="30px" /><br> 机工士  |    显示热量计、电能计、连击计时器、钻头/毒菌冲击&空气锚的冷却时间，野火的冷却时间&持续时间。 当野火发动时，将显示你已在野火中打出的GCD数目。     |
+|  <img src="../../resources/ffxiv/jobs/dnc-large.png" width="30px" /><br> 舞者  |                   显示连击计时器、幻扇量谱、伶俐量谱、标准舞步冷却、技巧舞步&百花争艳的冷却&持续时间。                   |
+| <img src="../../resources/ffxiv/jobs/blm-large.png" width="30px" /><br> 黑魔法师 |           显示DoT剩余时间，火苗&雷云触发的剩余时间，获得下一个通晓的剩余时间，魔力恢复时间点监控，冰火档数以及灵极心档数。            |
+| <img src="../../resources/ffxiv/jobs/smn-large.png" width="30px" /><br> 召唤师  |           显示DoT剩余时间。能量吸收冷却时间，龙神/不死鸟附体冷却时间，以太超流档数，亚灵神召唤的剩余时间以及毁绝预备的档数。           |
+| <img src="../../resources/ffxiv/jobs/rdm-large.png" width="30px" /><br> 赤魔法师 |                        显示黑白魔元量，监控赤飞石&赤火焰预备触发，以及显示醒梦的冷却。                         |
+| <img src="../../resources/ffxiv/jobs/blu-large.png" width="30px" /><br> 青魔法师 |                         显示防御解除&醒梦的冷却时间，以及苦闷之歌DoT的剩余时间。                          |
 
 </details>
 
 在此截图中，以赤魔法师的jobs模块为例。 紫色圆圈圈出的是体力条与魔力条，还有赤魔法师的黑/白魔元监控；橙色箭头指向的是一个大大的团辅监控图标。 <del>赤魔近战连击监控功能已被移除，略。</del> 绿色圈出的是触发监控。
 
-![jobs屏幕截图](screenshots/Jobs.png)
+![jobs屏幕截图](../../screenshots/Jobs.png)
 
 ### [eureka](ui/eureka) 模块
 
@@ -320,7 +320,7 @@ ThirdParty
 
 如果您看不到表情符号，请确保已安装[此Windows更新](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
 
-![优雷卡屏幕截图](screenshots/promo_eureka.png)
+![优雷卡屏幕截图](../../screenshots/promo_eureka.png)
 
 ### [radar](ui/radar) 模块
 
@@ -332,7 +332,7 @@ ThirdParty
 
 有关更多选项，请参见`cactbot/user/radar-example.js`文件。
 
-![雷达屏幕截图](screenshots/promo_radar.png)
+![雷达屏幕截图](../../screenshots/promo_radar.png)
 
 ### [fisher](ui/fisher) 模块
 
@@ -340,7 +340,7 @@ ThirdParty
 
 当您在一个渔场投出鱼线时，该模块会一直追踪您何时钓到了什么鱼，以便您日后知道提钩时将会钓到什么鱼。
 
-![捕鱼人屏幕截图](screenshots/promo_fishing.png)
+![捕鱼人屏幕截图](../../screenshots/promo_fishing.png)
 
 目前该模块仅会记录您的钓鱼记录，因此只有在您钓到了鱼时才会有数据。 绿色的条形代表轻杆，黄色的条形代表中杆，红色的条形代表鱼王杆/重杆。
 
@@ -354,7 +354,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 [xephero](ui/dps/xephero)DPS统计悬浮窗具有在多列显示对副本的每个阶段的DPS数据进行分段的功能。 在下面的截图中，各阶段分别命名为B1、B2、B3。  它们会在4人本的BOSS自动生成，也可以用来区分Raid副本的阶段。
 
-![xephero屏幕截图](screenshots/xephero.png)
+![xephero屏幕截图](../../screenshots/xephero.png)
 
 [rdmty](ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
 
