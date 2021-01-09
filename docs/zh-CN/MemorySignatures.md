@@ -69,23 +69,23 @@
 
 ![cheat engine post scan screenshot](../../images/cheatengine_postscan.png)
 
-其中，黑色的地址是堆地址。 而绿色的地址是 [静态地址](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88)。 In general, you're looking for static addresses because it's easier to find code that refers to them and they are permanent.
+其中，黑色的地址是堆地址。 而绿色的地址是 [静态地址](https://medium.com/@nickteixeira/stack-vs-heap-whats-the-difference-and-why-should-i-care-5abc78da1a88)。 在一般情况下，你应当使用静态地址。 因为引用它的代码更容易寻找，并且这些地址通常是永久性的。
 
-Keep scanning until you have a single green (static) address.
+继续扫描，直到找到唯一的绿色的静态地址。
 
-Right click on the address, and select **Add selected addresses to the address list**. This will put the address in the list at the bottom. In this case, our static address is `14116E128`.
+右键单击地址，然后选择 **将选中的地址添加到地址列表**。 地址会出现在底部的列表。 在我们的例子里，这个静态地址是 `14116E128`。
 
-![cheat engine address list screenshot](images/cheatengine_addresslist.png)
+![cheat engine address list screenshot](../../images/cheatengine_addresslist.png)
 
-If you are following along with this example, the static address you have will not match. Moreover, it will be different each time you restart the game. This is because Windows has [address space layout randomization](https://en.wikipedia.org/wiki/Address_space_layout_randomization) enabled, largely to make it harder to do the exact sort of thing we are doing now.
+如果您正在按照此示例进行操作，则您所得到的静态地址很可能与此不同。 不仅如此，每次在您重新启动游戏时，这个地址都会变化。 这是因为Windows启用了 [地址空间布局随机化](https://en.wikipedia.org/wiki/Address_space_layout_randomization) ，很大程度上使得难以进行我们现在正在做的事情。
 
-This is also why we need to find a code signature. If the executable and DLL addresses weren't randomized, the static addresses would be the same from run to run.
+这也是我们需要找到内存签名的原因。 如果可执行文件和DLL地址布局没有随机化，则静态地址在每次运行时都是一致的。
 
 ### 浏览内存
 
-From the address list, right click on the address that was just added and select **Browse This Memory Region*.
+在地址列表中，右键单击我们刚刚添加的地址，然后选择**浏览相关内存区域**。
 
-That will bring up the Memory Viewer window. This has a disassembly view at the top and a memory viewer at the bottom. Confusingly, these are separate views and are *not* synced together even though they are in the same window. They will sync to whatever the last address you have selected **Disassemble This Memory Region** or **Browse This Memory Region** on respectively.
+这将会打开“内存浏览器”窗口。 此窗口的顶部是反汇编视图，底部是内存浏览器。 但是令人困惑的是，即使位于同一窗口中，这些视图的功能是互不干扰的，也 *不会* 同步。 They will sync to whatever the last address you have selected **Disassemble This Memory Region** or **Browse This Memory Region** on respectively.
 
 ![cheat engine browse memory screenshot](images/cheatengine_browsememory.png)
 
