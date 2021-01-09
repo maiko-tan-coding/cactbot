@@ -73,7 +73,7 @@ cactbot提供以下模块：
 
 ![开始向导下载屏幕截图](screenshots/ffxiv_plugin_parsing_plugin.png)
 
-此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 这是在 `插件列表` ->`FFXIV Settings` -> `Options<code>。</p>
+此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 此选项在 `插件列表` ->`FFXIV Settings` -> `Options<code>中。</p>
 
 <p spaces-before="0">其他FFXIV插件指南：</p>
 
@@ -100,7 +100,7 @@ cactbot提供以下模块：
 
 ### 安装cactbot
 
-其次，点开 `Plugins` 标签， 再点开 `Plugin Listing` 标签， 然后选择 `Get Plugins`。
+再次，点开 `Plugins` 标签， 再点开 `Plugin Listing` 标签， 然后选择 `Get Plugins`。
 
 选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
@@ -110,7 +110,7 @@ cactbot提供以下模块：
 
 **注意**： 由于ACT和cactbot对于zip格式处理的差异性， 它可能会生成一个形如 `cactbot-0.15.2` 的文件夹， 这里的版本号是根据你下载cactbot时的最早版本决定的。 该文件夹的名称无关紧要，并且很美观。
 
-确认您的插件顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
+确认您的插件加载顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
 ![插件顺序](../../screenshots/get_plugins_complete.png)
 
@@ -132,11 +132,11 @@ cactbot提供以下模块：
     ![raidboss插件解锁状态](screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
 1. 您可以输入任意的名字作为悬浮窗的名称，例如 `raidbossy`。
-1. 单击 `OK` 按钮将其添加为悬浮窗。 则它将会出现在 `Plugns` -> `OverlayPlugin.dll` 标签页的悬浮窗列表中。
+1. 单击 `确定` 按钮将其添加为悬浮窗。 则它将会出现在 `Plugns` -> `OverlayPlugin.dll` 标签页的悬浮窗列表中。
 
 1. 将悬浮窗拖放到所需的位置。
 
-1. 在 `Raidboss` 悬浮窗的 `General` 选项卡中，勾选 `Lock Overlay` 和 `Enable Clickthrough` 复选框。 一旦悬浮窗被锁定，测试用的进度条，文本，红色虚线边框，以及蓝色阴影背景都将会消失。
+1. 在 `Raidboss` 悬浮窗的 `通用` 选项卡中，勾选 `锁定悬浮窗` 和 `鼠标穿透` 复选框。 一旦悬浮窗被锁定，测试用的进度条，文本，红色虚线边框，以及蓝色阴影背景都将会消失。
 
     ![raidboss插件配置](screenshots/overlay_plugin_new_raidboss_locked.png)
 
@@ -197,7 +197,7 @@ ThirdParty
 
 ### 构建插件的步骤
 
-1. 在Visual Studio中打开解决方案（Visual Studio 2017测试通过）。
+1. 在Visual Studio中打开解决方案（已在Visual Studio 2017测试通过）。
 1. 采用“Release”和“ x64”的配置开始构建。
 1. 该插件将构建到 **bin/x64/Release/CactbotOverlay.dll**。
 1. 将构建好的插件添加到ACT。  在ACT-> Plugins -> Plugin Listing 标签页中，单击 `Browse` 按钮，然后导航至构建完成的 **bin/x64/Release/CactbotOverlay.dll** 文件。  然后单击 `Add/Enable Plugin` 按钮。
