@@ -1,10 +1,10 @@
-# Guide to Memory Signatures and Cheat Engine
+# 内存签名与CE指南
 
-Memory signatures are unique binary strings that can be used to find memory locations in an executable.
+内存签名是一种独一无二的二进制字符串，用于在程序运行中寻找其特定位置的内存地址。
 
-Finding these signatures makes it possible to consistently look up game state (e.g. am I in combat, what is my job gauge, how much enmity do I have) even when the game refuses to give you an API for this.
+找到这些签名后，即便游戏本身拒绝提供任何API，你也可以通过签名获取游戏状态。 (例如：是否处于战斗中，职业量谱的各种数值，仇恨数值的具体量等等)
 
-This guide shows how to use Cheat Engine to find such memory signatures. It's probably helpful if you know some basic assembly language, some programming, and have extreme levels of patience.
+这一篇指南旨在介绍如何使用CE(Cheat Engine)查找此类内存签名。 It's probably helpful if you know some basic assembly language, some programming, and have extreme levels of patience.
 
 ## 目录
 
