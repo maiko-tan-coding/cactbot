@@ -4,42 +4,42 @@
 
 找到这些签名后，即便游戏本身拒绝提供任何API，你也可以通过签名获取游戏状态。 (例如：是否处于战斗中，职业量谱的各种数值，仇恨数值的具体量等等)
 
-这一篇指南旨在介绍如何使用CE(Cheat Engine)查找此类内存签名。 It's probably helpful if you know some basic assembly language, some programming, and have extreme levels of patience.
+这一篇指南旨在介绍如何使用CE(Cheat Engine)查找此类内存签名。 如果您了解一些基本的汇编语言或编程经验，并且有水滴石穿的耐心，那么这篇文章可能对您有一定的帮助。
 
 ## 目录
 
-* [Installation](#installation)
-* [Finding New Memory Signatures](#finding-new-memory-signatures)
-  * [Connect Cheat Engine to the Game](#connect-cheat-engine-to-the-game)
-  * [Initial Memory Search](#initial-memory-search)
-  * [Repeated Scans](#repeated-scans)
-  * [Browsing Memory](#browsing-memory)
-  * [Approach 1: Finding Writers](#approach-1-finding-writers)
-  * [Approach 2: Tracing](#approach-2-tracing)
-  * [Approach 3: Finding Readers](#approach-3-finding-readers)
-  * [Assembly Code and Pointers](#assembly-code-and-pointers)
-  * [Extracting a Signature From Assembly](#extracting-a-signature-from-assembly)
-* [Scan For Existing Memory Signatures](#scan-for-existing-memory-signatures)
+* [安装](#installation)
+* [查找新的内存签名](#finding-new-memory-signatures)
+  * [连接CE到游戏中](#connect-cheat-engine-to-the-game)
+  * [初始内存搜索](#initial-memory-search)
+  * [再次扫描](#repeated-scans)
+  * [浏览内存](#browsing-memory)
+  * [方法1：找出写内存的代码](#approach-1-finding-writers)
+  * [方法2：跟踪](#approach-2-tracing)
+  * [方法3：找出读内存的代码](#approach-3-finding-readers)
+  * [汇编代码和指针](#assembly-code-and-pointers)
+  * [从汇编代码中提取签名](#extracting-a-signature-from-assembly)
+* [扫描现有的内存签名](#scan-for-existing-memory-signatures)
 
-## Installation
+## 安装
 
-Install the [latest version of Cheat Engine](https://github.com/cheat-engine/cheat-engine/releases/latest). The installer tries to tack some additional garbage on, so be sure to turn this off and don't blindly click next. Sorry.  It's gross.
+安装最新版本的 [Cheat Engine](https://github.com/cheat-engine/cheat-engine/releases/latest)。 安装程序带了一些流氓软件，因此请确保不要勾选它们，不要盲目地一直“下一步”。 抱歉，  真的很流氓。
 
-## Finding New Memory Signatures
+## 查找新的内存签名
 
-![cheat engine screenshot](images/cheatengine_initial.png)
+![cheat engine screenshot](../../images/cheatengine_initial.png)
 
-### Connect Cheat Engine to the Game
+### 连接CE到游戏中
 
-Start Final Fantasy XIV up and log in.
+启动最终幻想14并登录。
 
-Then, open up Cheat Engine. Click on **File**, select **Open Process**, and then pick Final Fantasy XIV.
+然后，打开Cheat Engine。 点击 **文件**，选择 **打开进程**，然后选择最终幻想14的进程。
 
 The top bar should say **ffxiv_dx11.exe** at this point.
 
 ![cheat engine connected screenshot](images/cheatengine_connected.png)
 
-### Initial Memory Search
+### 初始内存搜索
 
 Let's say we're looking for your character's job gauge in memory. For simplicity, say we're a warrior and we're just looking for beast gauge. Because so many values in memory are zero, let's start with a different initial value.
 
@@ -59,7 +59,7 @@ This will likely give you millions of memory locations with value 80. A great st
 
 This is a live view into all of these memory locations. They turn red when they have changed. Some of these are flickering values that are changing even without doing something in game. You can always mash **Next Scan** a few times to repeat the scan and eliminate them.
 
-### Repeated Scans
+### 再次扫描
 
 In game, use a fell cleave to get back to 30 beast gauge.
 
@@ -81,7 +81,7 @@ If you are following along with this example, the static address you have will n
 
 This is also why we need to find a code signature. If the executable and DLL addresses weren't randomized, the static addresses would be the same from run to run.
 
-### Browsing Memory
+### 浏览内存
 
 From the address list, right click on the address that was just added and select **Browse This Memory Region*.
 
@@ -95,7 +95,7 @@ Browsing memory can let you see what else is around it. This is especially usefu
 
 For job data, there's really not much interesting in nearby memory.
 
-### Approach 1: Finding Writers
+### 方法1：找出写内存的代码
 
 Now, we need to find some code that refers to this. The easiest way to do this is to find what modifies this value.
 
@@ -119,7 +119,7 @@ The line that is changing the value is `mov [rcx+08], al`. I don't really know a
 
 We have a couple of different options here. One option here is to [do a trace to find calling code](#approach-2-tracing). The second option is to [consider what reads the address](#approach-3-finding-readers) and not just write. A third option (not explored in this guide) is to find some other code path that modifies the value, and see if that code path has an easier signature. (For example, changing jobs likely modifies the value in a different way?)
 
-### Approach 2: Tracing
+### 方法2：跟踪
 
 If pure disassembly doesn't yield enough contextual information, Cheat Engine has "break and trace" functionality. Go back to the [browsing memory](#browsing-memory) view. This functionality is not available from the address list directly.
 
@@ -139,7 +139,7 @@ Double clicking on `mov rdx, [rsp+50]` brings us to the code that called the cod
 
 The `call` right before that line is the `call` into the code we were looking at. So, we would need to figure out what set `rcx`. It looks like that's set from `r9`. `r9` is set indirectly from a pointer in `r14`. This is getting complicated. It's possible to keep going back in the assembly to find some code, but maybe there's an easier approach.
 
-### Approach 3: Finding Readers
+### 方法3：找出读内存的代码
 
 Instead of finding code that modifies the value, we could also find code that reads the value.
 
@@ -157,7 +157,7 @@ Looking at the disassembly in the window, the second one looks like a much more 
 
 Perfect! This looks a bit simpler than the code we saw in tracing.
 
-### Assembly Code and Pointers
+### 汇编代码和指针
 
 Because we are looking for a static address, this address will never change once the program has started. The goal is to find some stable set of assembly code that surrounds the address we're looking for. We can then search for this code in memory to get back the address, no matter where it is that particular run.
 
@@ -182,7 +182,7 @@ You can manually add `14116E118` to the memory region or just find it relative t
 
 In the above screenshot, the small circle is the beast gauge values at `14116E128` and the longer circle is the pointer at `14116E118` that is being used to load `rcx`. This memory browsing confirms the comment earlier, that the memory at `14116E118` contains the pointer `000000014116E120`. (As always, little endian means reversing the bytes.)
 
-### Extracting a Signature From Assembly
+### 从汇编代码中提取签名
 
 So, now we have some assembly code that contains a pointer to a pointer to the beast gauge. We need to pick out some bytes from the assembly code to serve as the signature.
 
@@ -220,7 +220,7 @@ Because `14116E118` points 8 bytes forward to `14116E120`, we could just also ma
 
 Foof.
 
-## Scan For Existing Memory Signatures
+## 扫描现有的内存签名
 
 If you have an existing memory signature, you can also use Cheat Engine to find it in memory.
 
