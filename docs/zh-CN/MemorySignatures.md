@@ -85,39 +85,39 @@
 
 在地址列表中，右键单击我们刚刚添加的地址，然后选择**浏览相关内存区域**。
 
-这将会打开“内存浏览器”窗口。 此窗口的顶部是反汇编视图，底部是内存浏览器。 但是令人困惑的是，即使位于同一窗口中，这些视图的功能是互不干扰的，也 *不会* 同步。 They will sync to whatever the last address you have selected **Disassemble This Memory Region** or **Browse This Memory Region** on respectively.
+这将会打开“内存浏览器”窗口。 此窗口的顶部是反汇编视图，底部是内存浏览器。 但是令人困惑的是，即使位于同一窗口中，这些视图的功能是互不干扰的，也 *不会* 同步。 它们在您使用 **反汇编此内存区域** 或 **浏览相关内存区域** 时跳转到您选择的最后一个地址。
 
-![cheat engine browse memory screenshot](images/cheatengine_browsememory.png)
+![cheat engine browse memory screenshot](../../images/cheatengine_browsememory.png)
 
-However, you can see that in the top left of this screenshot is the hex value `1E`, which is [30 in decimal](https://www.google.com/search?q=0x1e+in+decimal).
+但是，您应当可以看到，这个屏幕截图的左上部的数值是十六进制的 `1E`，也就是 [十进制的30](https://www.google.com/search?q=0x1e+in+decimal)。
 
-Browsing memory can let you see what else is around it. This is especially useful for things like entity or player data.
+浏览内存使您看到周围的其他内容。 这对于诸如实体或玩家的数据等尤其有用。
 
-For job data, there's really not much interesting in nearby memory.
+对于职业数据，附近的内存确实没有什么有趣的。
 
 ### 方法1：找出写内存的代码
 
-Now, we need to find some code that refers to this. The easiest way to do this is to find what modifies this value.
+现在，我们需要找到一些与此地址相关的代码。 最简单的方式是找到修改此值的代码。
 
-Right click on the address in the address list, and select **Find out what writes to this address**. This will ask you to attach the debugger, say yes. A new window will pop up.
+右键单击地址列表中的地址，然后选择 **找出是什么改写了这个地址**。 它会提示您附加调试器，单击“是”。 将会弹出一个新窗口。
 
-Go back to FFXIV, and modify the beast gauge. In this case, we'll hit infuriate to go from 30 to 80.
+返回到FF14，并改变兽魂的值。 在这种情况下，我们打出咆哮，让兽魂从30涨到80。
 
-Go back to Cheat Engine, and the new debugger window should have some information.
+返回到Cheat Engine，调试窗口应出现一些新的信息。
 
-![cheat engine debugger screenshot](images/cheatengine_debugger.png)
+![cheat engine debugger screenshot](../../images/cheatengine_debugger.png)
 
-This is the assembly that wrote to the beast gauge memory location.
+这是写入到兽魂内存地址的汇编代码。
 
-If you want, you can click on the **Show disassembler** to see the surrounding code.
+需要的话，您可以单击 **显示反汇编器** 以查看周围的代码。
 
-![cheat engine disassembly screenshot](images/cheatengine_disassembly.png)
+![cheat engine disassembly screenshot](../../images/cheatengine_disassembly.png)
 
-Unfortunately, in this case, this is a two instruction function call.
+不幸的是，在这个例子中，是两个操作数的函数调用。
 
-The line that is changing the value is `mov [rcx+08], al`. I don't really know assembly language, but google tells me that `al` is the last 8 bits of the `eax` register which was set on the previous `movzx eax, byte ptr [rdx+01]` line. Given that this is the line that is writing memory, `[rcx+08]` is the pointer we care about, but we need to find the calling code that set `rcx`. This code is likely somewhere very different in the executable.
+更改值的一行汇编是 `mov [rcx + 08], al`。 我不是很了解汇编语言，但是谷歌告诉我 `al` 是 `eax` 寄存器的后8位，该寄存器的值是在前面的 `movzx eax, byte ptr [rdx+01]` 一行上设置的。 很明显这是写入内存的一行汇编，即 `[rcx + 08]` 是我们关心的指针，但我们需要先找到设置 `rcx`的值的代码。 这个寄存器的值在运行时会被设置多次。
 
-We have a couple of different options here. One option here is to [do a trace to find calling code](#approach-2-tracing). The second option is to [consider what reads the address](#approach-3-finding-readers) and not just write. A third option (not explored in this guide) is to find some other code path that modifies the value, and see if that code path has an easier signature. (For example, changing jobs likely modifies the value in a different way?)
+我们在这里有两个不同的选择。 一个方式是 [进行跟踪以找到调用代码](#approach-2-tracing)。 第二种方式是 [考虑有什么读取了该地址](#approach-3-finding-readers) 而不仅仅看写入。 第三个方式（本指南中未探讨）是找到其他一些修改了值的代码栈，看看这个代码栈是否有更简单的签名。 （例如，切换职业会通过其他方式修改其值吗？）
 
 ### 方法2：跟踪
 
