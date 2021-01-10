@@ -22,31 +22,31 @@ cactbot提供以下模块：
 
 * raidboss: 内置时间轴和触发器
 
-![时间轴屏幕截图](screenshots/promo_raidboss_timeline.png) ![触发器屏幕截图](screenshots/promo_raidboss_triggers.png)
+![时间轴屏幕截图](../../screenshots/promo_raidboss_timeline.png) ![触发器屏幕截图](../../screenshots/promo_raidboss_triggers.png)
 
 * oopsyraidsy: 错误和死亡报告
 
-![oopsyraidsy屏幕截图](screenshots/promo_oopsy.png)
+![oopsyraidsy屏幕截图](../../screenshots/promo_oopsy.png)
 
 * jobs: 用于buff与触发监控的紧凑型职业量谱
 
-![赤魔职业屏幕截图](screenshots/promo_jobs.png)
+![赤魔职业屏幕截图](../../screenshots/promo_jobs.png)
 
 * eureka: 优雷卡恶名精英监控地图
 
-![优雷卡屏幕截图](screenshots/promo_eureka.png)
+![优雷卡屏幕截图](../../screenshots/promo_eureka.png)
 
 * fisher: 捕鱼垂钓时间监控
 
-![捕鱼人屏幕截图](screenshots/promo_fishing.png)
+![捕鱼人屏幕截图](../../screenshots/promo_fishing.png)
 
 * radar: 通知狩猎怪方向及开怪信息
 
-![雷达屏幕截图](screenshots/promo_radar.png)
+![雷达屏幕截图](../../screenshots/promo_radar.png)
 
 * dps: 提供更多功能的dps悬浮窗
 
-![xephero屏幕截图](screenshots/xephero.png)
+![xephero屏幕截图](../../screenshots/xephero.png)
 
 ### 视频实例
 
@@ -67,11 +67,11 @@ cactbot提供以下模块：
 
 如果您刚刚安装了ACT， 那么你会看到一个启动向导。 否则，您需要通过点击 `Options` ， 然后点击 `Show Startup Wizard` 启动启动向导。
 
-![开始向导屏幕截图](screenshots/ffxiv_plugin_show_startup_wizard.png)
+![开始向导屏幕截图](../../screenshots/ffxiv_plugin_show_startup_wizard.png)
 
 在启动向导中， 选择 `FFXIV Parsing Plugin` ，然后单击 `Download/Enable Plugin` 按钮。 这将下载 `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll`， 并在插件列表中启用它。
 
-![开始向导下载屏幕截图](screenshots/ffxiv_plugin_parsing_plugin.png)
+![开始向导下载屏幕截图](../../screenshots/ffxiv_plugin_parsing_plugin.png)
 
 此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 此选项在 `插件列表` ->`FFXIV Settings` -> `Options<code>中。</p>
 
@@ -86,13 +86,13 @@ cactbot提供以下模块：
 
 <p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
-![空白插件列表屏幕截图](screenshots/get_plugins_blank.png)
+![空白插件列表屏幕截图](../../screenshots/get_plugins_blank.png)
 
 单击 `Get Plugins` 可以打开ACT插件安装程序。
 
 选择 `悬浮窗插件` ，然后单击 `Download and Enable`按钮。
 
-![悬浮窗插件选择屏幕截图](screenshots/get_plugins_overlayplugin.png)
+![悬浮窗插件选择屏幕截图](../../screenshots/get_plugins_overlayplugin.png)
 
 这会将ngld OverlayPlugin下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\OverlayPlugin` 文件夹中， 并自动在插件列表中启用 `OverlayPlugin.dll`。
 
@@ -104,7 +104,7 @@ cactbot提供以下模块：
 
 选择 `Cactbot` ，然后单击 `Download and Enable` 按钮。
 
-![cactbot选择屏幕截图](screenshots/get_plugins_cactbot.png)
+![cactbot选择屏幕截图](../../screenshots/get_plugins_cactbot.png)
 
 这会将cactbot下载到 `%APPDATA%\Advanced Combat Tracker\Plugins\cactbot-version\cactbot` 文件夹中， 并在插件列表中启用 `CactbotOverlay.dll`。
 
@@ -112,7 +112,7 @@ cactbot提供以下模块：
 
 确认您的插件加载顺序正确。 正确的顺序应该是：FFXIV解析插件，OverlayPlugin，cactbot。 如果您按照上述说明进行操作，顺序应当如下所示：
 
-![插件顺序](screenshots/get_plugins_complete.png)
+![插件顺序](../../screenshots/get_plugins_complete.png)
 
 最后，重启ACT。
 
@@ -125,11 +125,11 @@ cactbot提供以下模块：
 1. 导航到ACT的 `Plugins` 标签页，然后跳转到其中的 `OverlayPlugin.dll` 标签页。
 1. 单击“新建”按钮，然后在“预设”列表中选择 `Cactbot Raidboss`。
 
-    ![新建悬浮窗插件屏幕截图](screenshots/overlay_plugin_new.png)
+    ![新建悬浮窗插件屏幕截图](../../screenshots/overlay_plugin_new.png)
 
 1. 此时，您应该能看到屏幕上会出现测试用UI。 这是cactbot提供的默认测试用UI， 一个较大的虚线红色边框，以及蓝色的背景， 可以帮助你在屏幕上调整悬浮窗的位置大小等。 当您在悬浮窗的配置面板中锁定该悬浮窗时，这些测试用UI都将消失。 在您完成了调整悬浮窗大小和位置之后，应该始终保持锁定悬浮窗。
 
-    ![raidboss插件解锁状态](screenshots/overlay_plugin_new_raidboss_unlocked.png)
+    ![raidboss插件解锁状态](../../screenshots/overlay_plugin_new_raidboss_unlocked.png)
 
 1. 您可以输入任意的名字作为悬浮窗的名称，例如 `raidbossy`。
 1. 单击 `确定` 按钮将其添加为悬浮窗。 则它将会出现在 `Plugns` -> `OverlayPlugin.dll` 标签页的悬浮窗列表中。
@@ -138,7 +138,7 @@ cactbot提供以下模块：
 
 1. 在 `Raidboss` 悬浮窗的 `通用` 选项卡中，勾选 `锁定悬浮窗` 和 `鼠标穿透` 复选框。 一旦悬浮窗被锁定，测试用的进度条，文本，红色虚线边框，以及蓝色阴影背景都将会消失。
 
-    ![raidboss插件配置](screenshots/overlay_plugin_new_raidboss_locked.png)
+    ![raidboss插件配置](../../screenshots/overlay_plugin_new_raidboss_locked.png)
 
 1. 如果要测试raidboss插件，请传送到盛夏农庄，然后在聊天框输入 `/ countdown 5` 并回车。
 
@@ -236,7 +236,7 @@ ThirdParty
 
 在下方的截图中，高亮的是raidboss模块，其中时间轴用红色圆圈圈出， 文本警报用黄色圆圈圈出，可见的是 `警告`等级的文字提示。
 
-![raidboss屏幕截图](screenshots/Raidboss.png)
+![raidboss屏幕截图](../../screenshots/Raidboss.png)
 
 ### raidboss模拟器
 
@@ -256,7 +256,7 @@ ThirdParty
 
 如果模拟器无法正常工作，请检查控制台中是否显示了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
 
-![raidboss模拟器屏幕截图](screenshots/raidboss_emulator.png)
+![raidboss模拟器屏幕截图](../../screenshots/raidboss_emulator.png)
 
 ### [oopsyraidsy](ui/oopsyraidsy) 模块
 
@@ -270,7 +270,7 @@ ThirdParty
 
 [ui/oopsyraidsy/data](ui/oopsyraidsy/data) 文件夹中为每个副本指定了错误触发器。
 
-![oopsyraidsy屏幕截图](screenshots/promo_oopsy.png)
+![oopsyraidsy屏幕截图](../../screenshots/promo_oopsy.png)
 
 ### [jobs](ui/jobs) 模块
 
@@ -320,7 +320,7 @@ ThirdParty
 
 如果您看不到表情符号，请确保已安装[此Windows更新](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser)。
 
-![优雷卡屏幕截图](screenshots/promo_eureka.png)
+![优雷卡屏幕截图](../../screenshots/promo_eureka.png)
 
 ### [radar](ui/radar) 模块
 
@@ -332,7 +332,7 @@ ThirdParty
 
 有关更多选项，请参见`cactbot/user/radar-example.js`文件。
 
-![雷达屏幕截图](screenshots/promo_radar.png)
+![雷达屏幕截图](../../screenshots/promo_radar.png)
 
 ### [fisher](ui/fisher) 模块
 
@@ -358,7 +358,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 [rdmty](ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
 
-![rdmty屏幕截图](screenshots/rdmty.png)
+![rdmty屏幕截图](../../screenshots/rdmty.png)
 
 ### [pull counter](ui/pullcounter) 模块
 
@@ -366,7 +366,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 您可以通过在游戏聊天窗口中键入`/echo pullcounter reset`来重置当前副本/区域的重试计数。 您也可以直接在`%APPDATA%\Advanced Combat Tracker\Config\RainbowMage.OverlayPlugin.config.json`文件中修改该计数。
 
-![开怪计时截图](screenshots/pullcounter.png)
+![开怪计时截图](../../screenshots/pullcounter.png)
 
 ### [test](ui/test) 模块
 
@@ -374,7 +374,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 该模块仅用于cactbot所用变量的可视化测试，并不适合在正常游戏时使用。 该模块可用来测试所有数据的获取是否正常、模块能否按照预期正常工作，或用来调试悬浮窗的错误。
 
-![test屏幕截图](screenshots/test.png)
+![test屏幕截图](../../screenshots/test.png)
 
 ## 疑难解答
 
@@ -384,7 +384,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 大部分的cactbot配置可通过ACT内的cactbot控制面板来完成。
 
-![配置面板](screenshots/config_panel.png)
+![配置面板](../../screenshots/config_panel.png)
 
 您可以在插件->OverlayPlugin.dll->Cactbot找到Cactbot的控制面板。
 
