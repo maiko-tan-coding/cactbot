@@ -73,18 +73,16 @@ cactbot提供以下模块：
 
 ![开始向导下载屏幕截图](../../screenshots/ffxiv_plugin_parsing_plugin.png)
 
-此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 此选项在 `插件列表` ->`FFXIV Settings` -> `Options<code>中。</p>
+此外，您必须启用网络解析方式，并确保为ACT开启防火墙准入。 请确保FFXIV解析插件的设置中已勾选“包含HP用于触发器”按钮。 此选项在 `插件列表` ->`FFXIV Settings` -> `Options`中。
 
-<p spaces-before="0">其他FFXIV插件指南：</p>
+其他FFXIV插件指南：
 
-<ul>
-<li><a href="https://www.fflogs.com/help/start/">fflogs video guide</a></li>
-<li><a href="https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin">TomRichter guide</a></li>
-</ul>
+* [fflogs video guide](https://www.fflogs.com/help/start/)
+* [TomRichter guide](https://gist.github.com/TomRichter/e044a3dff5c50024cf514ffb20a201a9#installing-act--ffxiv-plugin)
 
-<h3 spaces-before="0">安装ngld OverlayPlugin</h3>
+### 安装ngld OverlayPlugin
 
-<p spaces-before="0">此时，如果选择 <code>插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
+此时，如果选择 `插件` 标签，然后切换至 `插件列表`， 您的插件列表中应当如下所示：
 
 ![空白插件列表屏幕截图](../../screenshots/get_plugins_blank.png)
 
@@ -204,7 +202,7 @@ ThirdParty
 
 ### npm 和 webpack
 
-如果您不是cactbot开发人员，并且尝试修改cactbot，添加自己的个人触发器。 您不应直接修改本地的cactbot文件，而应该参考 [自定义文档](docs/zh-CN/CactbotCustomization.md)进行自定义。
+如果您不是cactbot开发人员，并且尝试修改cactbot，添加自己的个人触发器。 您不应直接修改本地的cactbot文件，而应该参考 [自定义文档](./CactbotCustomization.md) 进行自定义。
 
 安装npm并启动Webpack，请按照下列步骤操作：
 
@@ -218,9 +216,9 @@ ThirdParty
 
 [ui/](ui/) 文件夹中包含cactbot的所有ui模块。 如果您按照上述说明安装了cactbot， 则很有可能是 `%APPDATA%Advanced Combat Tracker\Plugins\cactbot-version\cactbot\ui\`。
 
-每个cactbot ui模块都应当作为单独的悬浮窗添加。 有关配置的更多信息，请参见“ [添加悬浮窗模块](#adding-overlay-modules) 部分。
+每个cactbot ui模块都应当作为单独的悬浮窗添加。 有关配置的更多信息，请参见“ [添加悬浮窗模块](#添加悬浮窗模块) 部分。
 
-### [raidboss](ui/raidboss) 模块
+### [raidboss](../../ui/raidboss) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/raidboss.html** 或使用 `Cactbot Raidboss` 预设。
 
@@ -228,11 +226,11 @@ ThirdParty
 
 [此页面](https://quisquous.github.io/cactbot/util/coverage/coverage.html) 列出了当前cactbot中支持的副本。 我们会持续添加更多支持 (随时欢迎贡献代码！) 尽管目前大部分旧副本仍未支持。
 
-战斗时间轴原本是设计为用于 [ACT时间轴](https://github.com/grindingcoil/act_timeline)插件的文件， 具有 [特殊的扩展名](docs/TimelineGuide.md)， 这里是该插件的 [文档](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)。
+战斗时间轴原本是设计为用于 [ACT时间轴](https://github.com/grindingcoil/act_timeline)插件的文件， 具有 [特殊的扩展名](./TimelineGuide.md)， 这里是该插件的 [文档](http://dtguilds.enjin.com/forum/m/37032836/viewthread/26353492-act-timeline-plugin)。
 
 这里有三个等级的警报提示，重要性从低到高分别为： `info(信息)`、 `alert(警告)` 和 `alarm(警报)`。 文本信息只会有这三种等级，等级越高，越重要，则文字会越大，颜色也会越醒目。  如果你更喜欢文本到语音(TTS)，你也可以配置这个提示方式。
 
-在[ui/raidboss/data](ui/raidboss/data)文件夹下存在定义了文本显示和声音提示的时间轴和触发器等， 时间轴文件拥有 `.txt` 扩展名，而触发器文件则为 `.js` 扩展名。
+在[ui/raidboss/data](../../ui/raidboss/data)文件夹下存在定义了文本显示和声音提示的时间轴和触发器等， 时间轴文件拥有 `.txt` 扩展名，而触发器文件则为 `.js` 扩展名。
 
 在下方的截图中，高亮的是raidboss模块，其中时间轴用红色圆圈圈出， 文本警报用黄色圆圈圈出，可见的是 `警告`等级的文字提示。
 
@@ -251,14 +249,14 @@ ThirdParty
 1. 从URL列表中选择 `Cactbot Raidboss (Combined Alerts and Timelines)`。
 1. 编辑网址，将 `raidboss.html` 替换为 `raidemulator.html`。
 1. 将修改后的网址复制并粘贴到Chrome中。
-1. 拖放一个 [网络日志](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) 文件到该页面中。
+1. 拖放一个 [网络日志](./FAQ-Troubleshooting.md#how-to-find-a-network-log) 文件到该页面中。
 1. 选择区域和战斗记录，然后单击 `Load Encounter`。
 
 如果模拟器无法正常工作，请检查控制台中是否显示了错误日志。 该页面在通过websocket连接到ACT之前，任何按钮都无法工作。
 
 ![raidboss模拟器屏幕截图](../../screenshots/raidboss_emulator.png)
 
-### [oopsyraidsy](ui/oopsyraidsy) 模块
+### [oopsyraidsy](../../ui/oopsyraidsy) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/oopsyraidsy.html** 或使用 `Cactbot OopsyRaidsy` 预设。
 
@@ -268,11 +266,11 @@ ThirdParty
 
 当错误本身可以避免时，oopsy会将其记录为警告（:warning:）和失败（:no_entry_sign:）消息，并说明出现了什么问题。
 
-[ui/oopsyraidsy/data](ui/oopsyraidsy/data) 文件夹中为每个副本指定了错误触发器。
+[ui/oopsyraidsy/data](../../ui/oopsyraidsy/data) 文件夹中为每个副本指定了错误触发器。
 
 ![oopsyraidsy屏幕截图](../../screenshots/promo_oopsy.png)
 
-### [jobs](ui/jobs) 模块
+### [jobs](../../ui/jobs) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/jobs.html** 或使用 `Cactbot Jobs` 预设。
 
@@ -310,7 +308,7 @@ ThirdParty
 
 ![jobs屏幕截图](../../screenshots/Jobs.png)
 
-### [eureka](ui/eureka) 模块
+### [eureka](../../ui/eureka) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/eureka.html** 或使用 `Cactbot Eureka` 预设。
 
@@ -322,7 +320,7 @@ ThirdParty
 
 ![优雷卡屏幕截图](../../screenshots/promo_eureka.png)
 
-### [radar](ui/radar) 模块
+### [radar](../../ui/radar) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/radar.html** 或使用 `Cactbot Radar` 预设。
 
@@ -334,7 +332,7 @@ ThirdParty
 
 ![雷达屏幕截图](../../screenshots/promo_radar.png)
 
-### [fisher](ui/fisher) 模块
+### [fisher](../../ui/fisher) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/fisher.html** 或使用 `Cactbot Fisher` 预设。
 
@@ -346,21 +344,21 @@ ThirdParty
 
 有关不同杆种类型的示例，请参见[此处](https://www.youtube.com/watch?v=GHgWIA-Zhug)。
 
-在[此链接](docs/FAQ-Troubleshooting.md#fisher-module)中可以找到fisher模块的常见问题解答。
+在[此链接](./FAQ-Troubleshooting.md#fisher-module)中可以找到fisher模块的常见问题解答。
 
-### [dps](ui/dps) 统计模块
+### [dps](../../ui/dps) 统计模块
 
 cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬浮窗共同使用，并可以选择通过cactbot附加的Javascript API扩展更多功能。  cactbot还可以在团灭时自动停止统计，因此您可以将ACT的战斗时间配置为无限。
 
-[xephero](ui/dps/xephero)DPS统计悬浮窗具有在多列显示对副本的每个阶段的DPS数据进行分段的功能。 在下面的截图中，各阶段分别命名为B1、B2、B3。  它们会在4人本的BOSS自动生成，也可以用来区分Raid副本的阶段。
+[xephero](../../ui/dps/xephero)DPS统计悬浮窗具有在多列显示对副本的每个阶段的DPS数据进行分段的功能。 在下面的截图中，各阶段分别命名为B1、B2、B3。  它们会在4人本的BOSS自动生成，也可以用来区分Raid副本的阶段。
 
 ![xephero屏幕截图](../../screenshots/xephero.png)
 
-[rdmty](ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
+[rdmty](../../ui/dps/rdmty)DPS统计悬浮窗为4.X职业进行了适配更新，并为了匹配[fflogs](http://fflogs.com)进行了重新着色。
 
 ![rdmty屏幕截图](../../screenshots/rdmty.png)
 
-### [pull counter](ui/pullcounter) 模块
+### [pull counter](../../ui/pullcounter) 模块
 
 这个小模块可以显示您在高难度副本中当前的重试次数。 此功能是为主播或查看录屏的玩家准备的。 通过这个数字，您可以轻松浏览视频并查找到特定的某场战斗来进行检阅。
 
@@ -368,7 +366,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 ![开怪计时截图](../../screenshots/pullcounter.png)
 
-### [test](ui/test) 模块
+### [test](../../ui/test) 模块
 
 要使用该模块，定位到cactbot下面的 **ui/raidboss/test.html** 或使用 `Cactbot Test` 预设。
 
@@ -378,7 +376,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 ## 疑难解答
 
-您可以在[此链接](docs/FAQ-Troubleshooting.md)中查看Cactbot的常见问题解答。
+您可以在[此链接](./FAQ-Troubleshooting.md)中查看Cactbot的常见问题解答。
 
 ## Cactbot自定义教程
 
@@ -396,7 +394,7 @@ cactbot可以与为OverlayPlugin的数据统计功能设计的任何DPS统计悬
 
 强烈建议您通过此控制面板而不是用户文件来完成大部分的配置。 `cactbot/user/` 中的文件功能更加强大并且可以覆盖控制面板中的任何配置。 然而，当控制面板没有正确地调整`cactbot/user/`内的文件正在悄悄覆盖的配置时，也会造成困惑。
 
-有关自定义javascript和css文件的更多详细信息，请参见[本文档](docs/CactbotCustomization.md#user-folder-config-overrides)。
+有关自定义javascript和css文件的更多详细信息，请参见[本文档](CactbotCustomization.md#user-folder-config-overrides)。
 
 ## 支持语言
 
@@ -404,10 +402,10 @@ cactbot已在当前版本的国际服（英语、德语、法语、日语）、�
 
 ## 许可、商标与授权
 
-cactbot基于[Apache License, Version 2.0](LICENSE)开放源代码。
+cactbot基于[Apache License, Version 2.0](../../LICENSE)开放源代码。
 
 FINAL FANTASY是株式会社史克威尔艾尼克斯控股(株式会社スクウェア・エニックス・ホールディングス，Square Enix Holdings Co., Ltd.)的注册商标。
 
 《最终幻想》艺术作品和图标基于[FINALFANTASY®XIV素材使用许可](https://support.na.square-enix.com/rule.php?id=5382)，以非商业方式二次使用。
 
-有关其他内建项目的详细信息，请参见 [LICENSE](LICENSE) 文件。
+有关其他内建项目的详细信息，请参见 [LICENSE](../../LICENSE) 文件。
