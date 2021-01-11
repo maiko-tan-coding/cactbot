@@ -60,18 +60,18 @@
   * [1F: 网络-量谱](#1f-networkgauge)
   * [20: 网络-世界](#20-networkworld)
   * [21: 网络-6D (角色控制行)](#21-network6d-actor-control-lines)
-  * [22: 网络-名称切换?](#22-networknametoggle)
-  * [23: 网络-连线?](#23-networktether)
-  * [24: LimitBreak](#24-limitbreak)
-  * [25: NetworkActionSync](#25-NetworkActionSync)
+  * [22: 网络-可见性切换](#22-networknametoggle)
+  * [23: 网络-连线](#23-networktether)
+  * [24: 极限技](#24-limitbreak)
+  * [25: 动作同步？](#25-NetworkActionSync)
   * [26: NetworkStatusEffects](#26-networkstatuseffects)
-  * [27: NetworkUpdateHP](#27-networkupdatehp)
-  * [FB: Debug](#fb-debug)
-  * [FC: PacketDump](#fc-packetdump)
-  * [FD: Version](#fd-version)
-  * [FE: Error](#fe-error)
-  * [FF: Timer](#ff-timer)
-* [Future Network Data Science](#future-network-data-science)
+  * [27: 网络-HP更新](#27-networkupdatehp)
+  * [FB: 调试](#fb-debug)
+  * [FC: 数据包转储](#fc-packetdump)
+  * [FD: 版本](#fd-version)
+  * [FE: 错误](#fe-error)
+  * [FF: 计时器](#ff-timer)
+* [网络数据科学的未来](#future-network-data-science)
 
 ## 数据流程
 
@@ -85,39 +85,39 @@ data_flow digraph G { size ="4,4"; ff14 [label="ff14 servers"] ff14 -> ACT [labe
 
 ### 在战斗后查看日志
 
-If you have ACT open during a fight, then it will generate logs. These logs will be trimmed to the start and end of combat.
+如果你在战斗中打开了ACT，那么它将生成日志。 这些日志将根据每场战斗的开始与结束进行分段。
 
-To see the logs, click on the **Main** tab, expand the zone you care about, right click on the encounter you want, then select **View Logs**.
+如果你想要查看某场战斗日志，请单击 **首页** 选项卡，展开对应的战斗区域日志，右键你想要查看的那场战斗记录，然后选择 **View Logs** 。
 
 ![view logs screenshot](images/logguide_viewlogs.png)
 
-The **All** entry includes all the encounters in a zone and cannot be viewed. You must view individual encounters.
+**All** 所代表的战斗记录涵括了该战斗区域的所有战斗记录，且无法被单独查看。 你只能查看独立的某一场战斗的日志。
 
-The window that pops up has the text that triggers can be made against. This is usually the best way to search through and find the text that you want to make a trigger for.
+点击 View Logs 后弹出的窗口将会显示可被触发器识别使用的日志行内容。 我们通常会使用这种办法来搜索编写触发器所需要的触发条件。
 
 ### 导入旧的战斗记录
 
-Sometimes you have to close ACT, but you want to look at old fights. Or, somebody else sends you a log, and you want to make triggers from it.
+当你想要查看已有的战斗日志时， 又或者你想要利用其他人发给你的日志文件制作触发器。
 
-To do this, click the **Import/Export** tab, click on **Import a Log File**, click on **Select File...** select the **Network_date.log** log file, and finally click the **YOU** button.
+为了读取已有的战斗日志，你需要单击 **导入/导出** 选项卡，然后依次点击 **导入日志文件**， **选择文件...**，选择名称格式为 **Network_date.log** 的日志文件，最后在读取截面中设置战斗日志中 YOU 的指代，你也可以直接选择 **YOU** 来指代你自己。
 
 ![导入屏幕截图](images/logguide_import.png)
 
-This will create encounters whose [logs you can view](#viewing-logs-after-a-fight).
+这将在首页的选项卡下生成 [可见的战斗日志](#viewing-logs-after-a-fight)。
 
 ### 导入ffxivmon
 
-If you want to dig into the network data itself, ffxivmon is a great tool.
+如果你想深入研究网络数据本身，ffxivmon是一个很好的工具。
 
-To create a log file suitable for ffxivmon, first turn on the **(DEBUG) Dump all Network Data to logfile** setting in ACT.
+若要创建适合ffxivmon的日志文件，请先打开ACT中的 **(DEBUG) Dump all Network Data to logfile** 设置。
 
 ![dump network data screenshot](images/logguide_dumpnetworkdata.png)
 
-Then, run an encounter in game with ACT running. Once you're done, import that network log file into ffxivmon.
+然后，在运行ACT的情况下在游戏中进行一场战斗。 完成后，将该网络日志文件导入ffxivmon。
 
 ![ffxivmon import screenshot](images/logguide_ffxivmon_import.png)
 
-Now, you can walk through and investigate the network data directly.
+现在你可以浏览并直接调查网络数据。
 
 ![ffxivmon screenshot](images/logguide_ffxivmon.png)
 
@@ -125,17 +125,17 @@ Now, you can walk through and investigate the network data directly.
 
 ### 网络数据
 
-This is the raw packet dump sent from ff14 servers to your computer. This data is processed both by the game itself as well as by the ffxiv plugin to produce network log lines.
+网络数据是从ff14服务器发送到计算机的原始数据包转储。 游戏本身以及ffxiv解析插件都会处理此数据，以产生 网络日志行。
 
 ![network data screenshot](images/logguide_networkdata.png)
 
-Folks writing triggers generally do not have to worry about raw packet data and so this document does not focus very much on this type of data.
+我们通常不会根据原始数据包编写触发器通常， 因此本文档不会过多地关注此类数据。
 
 ### 网络日志行
 
-These represent the lines that the ffxiv plugin writes to disk in **Network_20191002.log** files in your log directory. These lines are still processed and filtered by the ffxiv plugin, and are (mostly) not raw network data.
+网络日志行指的是ffxiv解析插件写入存储于你的日志文件夹下的 **Network_20191002.log** 的日志行。 这些行仍由ffxiv解析插件 处理和过滤，并且 (大部分) 不是原始网络数据。
 
-Here are some example network log lines:
+下面给出了一些网络日志行的范例：
 
 ```log
 21|2019-05-31T21:14:56.8980000-07:00|10532971|Tini Poutini|DF9|Fire IV|40002F21|Zombie Brobinyak|150003|3B9D4002|1C|DF98000|0|0|0|0|0|0|0|0|0|0|0|0|104815|348652|12000|12000|1000|1000|-767.7882|156.939|-672.0446|26285|28784|13920|15480|1000|1000|-771.8156|157.1111|-671.3281||8eaa0245ad01981b69fc1af04ea8f9a1
@@ -778,7 +778,7 @@ Still unknown:
 
 * `21:zone:40000007:00:00:00:00`
 
-### 22: 网络-名称切换?
+### 22: 网络-可见性切换
 
 This log message toggles whether the nameplate for a particular entity is visible or not. This can help you know when a mob is targetable, for example.
 
@@ -791,7 +791,7 @@ Structure: `22:[ObjectId]:[Target Name]:[ObjectId]:[Target Name]:[Display State]
 22:40018065:Twintania:40018065:Twintania:00
 ```
 
-### 23: 网络-连线?
+### 23: 网络-连线
 
 This log line is for tethers between enemies or enemies and players. This does not appear to be used for player to player skill tethers like dragonsight or cover. (It can be used for enemy-inflicted player to player tethers such as burning chains in Shinryu N/EX.)
 
@@ -817,7 +817,7 @@ There are also a number of examples where tethers are generated in some other wa
 * Suzaku Extreme birbs: who knows
 * player to player tethers (dragonsight, cover, fairy tether)
 
-## 24: LimitBreak
+## 24: 极限技
 
 This log line is recorded every server tick where limit break energy is generated while in combat in a light or full party. (Generation is not recorded while at cap.) It starts at 0x0000 at the beginning of the instance (or encounter in the caseof a single-encounter instance,) and counts up by 0x00DC (220 decimal,) until the limit break is used, or the instance's maximum limit value is reached. This rate of increase is constant, but other actions taken can cause extra increments to happen independent of the base increase. (These other increments occur in the same packet as the base rate, but separately.)
 
@@ -831,7 +831,7 @@ Structure: `24:Limit Break: [Value]`
 24:Limit Break: 7530
 ```
 
-## 25: NetworkActionSync
+## 25: 动作同步？
 
 This log line is a sync packet that tells the client to render an action that has previously resolved. (This can be an animation or text in one of the game text logs.) It seems that it is emitted at the moment an action "actually happens" in-game, while the `14/15` line is emitted before, at the moment the action is "locked in". [As Ravahn explains it](https://discordapp.com/channels/551474815727304704/551476873717088279/733336512443187231):
 
@@ -859,7 +859,7 @@ Structure: `26:[Target Id]:[Target Name]:[Job Levels]:[Current HP]:[Max Hp]:[Cur
 
 It seems likely that this line was added in order to extend functionality for the `18`, `1A`, and `1E` log lines without breaking previous content or plugins.
 
-## 27: NetworkUpdateHP
+## 27: 网络-HP更新
 
 It's not completely clear what triggers this log line, but it contains basic information comparable to `25` and `26`. It applies to allies and fairies/pets.
 
@@ -871,13 +871,13 @@ Structure: `27:[Target ID]:[Target Name]:[Current HP]:[Max HP]:[Current MP]:[Max
 27:12345678:Eos:22851:22851:10000:10000:0:0:12.13086:-169.9398:-23.90031:-2.310888:
 ```
 
-### FB: Debug
+### FB: 调试
 
 Lines are printed, but with blank data.
 
 As network log lines, they often have information like this: `251|2019-05-21T19:11:02.0268703-07:00|ProcessTCPInfo: New connection detected for Process [2644]: 192.168.1.70:49413=>204.2.229.85:55021|909171c500bed915f8d79fc04d3589fa`
 
-### FC: PacketDump
+### FC: 数据包转储
 
 If the setting to dump all network data to logfiles is turned on, then ACT will emit all network data into the network log itself. In the ACT log, these log lines are printed, but with blank data.
 
@@ -885,21 +885,21 @@ This can be used to import a network log file into ffxivmon and inspect packet d
 
 ![dump network data screenshot](images/logguide_dumpnetworkdata.png)
 
-### FD: Version
+### FD: 版本
 
 Lines are printed, but with blank data.
 
 As network log lines, they usually look like this: `253|2019-05-21T19:11:02.0268703-07:00|FFXIV PLUGIN VERSION: 1.7.2.12, CLIENT MODE: FFXIV_64|845e2929259656c833460402c9263d5c`
 
-### FE: Error
+### FE: 错误
 
 These are lines emitted directly by the ffxiv plugin when something goes wrong.
 
-### FF: Timer
+### FF: 计时器
 
 Theoretically used when memory-parsing is used, but I haven't seen them.
 
-## Future Network Data Science
+## 网络数据科学的未来
 
 It'd be nice for folks to dig into network data to figure out how some specific mechanics work that are currently not exposed in the log.
 
