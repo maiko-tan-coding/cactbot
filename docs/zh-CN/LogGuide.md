@@ -32,7 +32,7 @@
     * [不要针对游戏日志行编写触发器](#dont-write-triggers-against-game-log-lines)
   * [01: 切换区域](#01-changezone)
   * [02: 切换主要玩家](#02-changeprimaryplayer)
-  * [03: 添加战斗成员?](#03-addcombatant)
+  * [03: 添加战斗实体](#03-addcombatant)
   * [04: 移除战斗成员?](#04-removecombatant)
   * [05: 添加Buff](#05-addbuff)
   * [06: 移除Buff](#06-removebuff)
@@ -264,7 +264,7 @@ Structure: `02:Changed primary player to [Player Name].`
 02:Changed primary player to Tini Poutini.
 ```
 
-### 03: 添加战斗成员?
+### 03: 添加战斗实体
 
 This message is sent when a new object is added to the scene or becomes close enough to the player that they can view its actions.
 
