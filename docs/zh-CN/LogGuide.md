@@ -33,7 +33,7 @@
   * [01: 切换区域](#01-changezone)
   * [02: 切换主要玩家](#02-changeprimaryplayer)
   * [03: 添加战斗实体](#03-addcombatant)
-  * [04: 移除战斗成员?](#04-removecombatant)
+  * [04: 移除战斗实体](#04-removecombatant)
   * [05: 添加Buff](#05-addbuff)
   * [06: 移除Buff](#06-removebuff)
   * [07: 浮动文本](#07-flyingtext)
@@ -41,7 +41,7 @@
   * [0A: 承受技能](#0a-incomingability)
   * [0B: 小队列表](#0b-partylist)
   * [0C: 角色状态](#0c-playerstats)
-  * [0D: 战斗成员HP?](#0d-combatanthp)
+  * [0D: 战斗实体HP](#0d-combatanthp)
   * [14: 网络-开始吟唱](#14-networkstartscasting)
   * [15: 网络-技能](#15-networkability)
     * [技能标签](#ability-flags)
@@ -53,9 +53,9 @@
   * [18: 网络-DoT](#18-networkdot)
   * [19: 网络-死亡](#19-networkdeath)
   * [1A: 网络-Buff](#1a-networkbuff)
-  * [1B: 网络-目标图标 (头部标记)?](#1b-networktargeticon-head-markers)
+  * [1B: 网络-点名标记 (角色头顶标记)](#1b-networktargeticon-head-markers)
   * [1C: 网络-场地标记](#1c-networkraidmarker)
-  * [1D: 网络-目标标记](#1d-networktargetmarker)
+  * [1D: 网络-点名标记](#1d-networktargetmarker)
   * [1E: 网络-移除Buff](#1e-networkbuffremove)
   * [1F: 网络-量谱](#1f-networkgauge)
   * [20: 网络-世界](#20-networkworld)
@@ -298,7 +298,7 @@ This combatant may be invisible and fake.  The real ones have more HP. For examp
 
 In heavy zones (e.g. Eureka), combatants may be culled if there are too many things nearby. Usually other players are culled first, but mobs can be as well. Eureka NMs (and S ranks) solve this by having a flag on them that allows them to be seen via AddCombatant message from anywhere in the zone, which is why it is possible to write triggers for when these pop.
 
-### 04: 移除战斗成员?
+### 04: 移除战斗实体
 
 This message is sent when an object is removed from the scene, either because the player has moved too far away from it, it has died, or the player has changed zones.
 
@@ -389,7 +389,7 @@ Example:
 0C:Player Stats: 23:305:4240:4405:290:275:340:4240:2694:2795:290:275:2473:578:380:0:380
 ```
 
-### 0D: 战斗成员HP?
+### 0D: 战斗实体HP
 
 If you have the **Include HP for Triggers** setting turned on in the **FFXIV Settings** tab of ACT, then it will emit log lines for every percentage change of every entity.
 
@@ -600,7 +600,7 @@ Although game messages differentiate between buffs and debuffs, log message type
 
 You cannot count on the time remaining to be precise. In rare cases, the time will already have counted down a tiny bit. This matters for cases such as ucob Nael phase doom debuffs.
 
-### 1B: 网络-目标图标 (头部标记)?
+### 1B: 网络-点名标记 (角色头顶标记)
 
 Structure: `1B:[ObjectId]:[Player Name]:[Unknown1 (4 bytes)]:[Unknown2 (4 bytes)]:[Type (4 bytes)]:0000:0000:0000`
 
@@ -676,7 +676,7 @@ Also, this appears to only be true on later fights. Turn 5 fireball and conflag 
 
 Unknown?
 
-### 1D: 网络-目标标记
+### 1D: 网络-点名标记
 
 Unknown?
 
