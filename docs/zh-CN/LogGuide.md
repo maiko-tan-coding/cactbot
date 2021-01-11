@@ -143,25 +143,25 @@ data_flow digraph G { size ="4,4"; ff14 [label="ff14 servers"] ff14 -> ACT [labe
 20|2019-05-31T20:02:41.4660000-07:00|105E3321|Tater Tot|2C9D|Peculiar Light|105E3321|Tater Tot||c375d8a2d1cf48efceccb136584ed250
 ```
 
-Data on network log lines is separated by vertical braces, i.e. `|`. Network log lines also contain the hash of that line at the end. The log line type itself is in decimal, e.g. aoe abilities are on lines that begin with `22|`. The equivalent [ACT log line](#act-log-lines) would be written as the hex type `0x16`, i.e. `NetworkAOEAbility`.
+网络日志行上的数据由垂直分隔符（即|）分隔。 网络日志行的末尾也包含该行的哈希值，用以避免伪造。 网络日志行每行开始使用一个十进制的两位数来表示该行类别，例如：`22|` 开头的日志行表示AOE技能。 相对应的 [ACT日志行](#act-log-lines) 则在每行开头使用十六进制来表示类别，AOE技能为 `0x16`，也即 `NetworkAOEAbility`。
 
-The ffxiv plugin does not write the ACT log lines that plugins interact with to disk.
+ffxiv解析插件不会将与插件 交互的ACT日志行写入磁盘存储文件。
 
-The network log lines are used by some tools, such as:
+网络日志行可以被应用于下面的工具：
 
 * fflogs uploader
 * ffxivmon
 * cactbot make_timeline utility
 
-If you [import a network log file into ACT](#importing-an-old-fight), then it you can view the ACT log lines in the fight.
+如果你 [把网络日志文件导入ACT](#importing-an-old-fight)， 那么就可以查看对应的ACT日志行。
 
 ### ACT日志行
 
-These are the log lines that come out of the ffxiv plugin at runtime and are exposed to plugins for triggers. These are what the [View Logs](#viewing-logs-after-a-fight) option in ACT shows.
+ACT日志行是指ACT运行时ffxiv解析插件产生的日志文件，它同时也被传输给触发器。 [View Logs](#viewing-logs-after-a-fight) 给出的日志行文件就属于ACT日志行。
 
-Data in ACT log lines is separated by colons, i.e. `:`. The log line type is in hex.
+ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制。
 
-Here is an example:
+下面是一个ACT日志行的范例：
 
 ```log
 [21:16:44.288] 15:10532971:Potato Chippy:9C:Scathe:40001299:Striking Dummy:750003:90D0000:1C:9C8000:0:0:0:0:0:0:0:0:0:0:0:0:2778:2778:0:0:1000:1000:-653.9767:-807.7275:31.99997:26945:28784:6720:15480:1000:1000:-631.5208:-818.5244:31.95173:
