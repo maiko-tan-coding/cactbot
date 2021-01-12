@@ -175,15 +175,15 @@ ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制
 
 ### 对象/角色/成员/怪物/战斗实体
 
-These are all words used synonymously in this document to refer to an object in the game that can use abilities and has stats. This could be the player, Bahamut, Eos, a Striking Dummy.
+这些名词在本文中用于指代那些游戏中可以使用技能并拥有属性的各类对象。 这些对象可能是某个玩家，巴哈姆特，某只宝石兽，或者一个木人。
 
 ### 对象ID
 
-Object ids are 4 byte identifiers used for all types of objects.
+对象ID是用来表达各种类型对象的一组4字节的字符串。
 
-Player ids always start with the byte `10`, e.g. `1069C23F` or `10532971`.
+玩家ID通常是以 `10` 为开头，例如 `1069C23F` 或者 `10532971`。
 
-Enemy and pet ids always start with the byte `40`, e.g. `4000A848` or `4000A962`.
+敌人或者宠物的ID通常以 `40` 开头，例如 `4000A848` 或者 `4000A962`。
 
 For `NetworkAOEAbility` lines that don't affect anybody, e.g. a Titan landslide that somehow nobody stands in, this is represented as hitting the id `E0000000` (and a blank name).
 
