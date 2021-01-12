@@ -24,7 +24,7 @@
   * [网络日志行](#network-log-lines)
   * [ACT日志行](#act-log-lines)
   * [游戏日志行](#game-log-lines)
-  * [对象/角色/成员/怪物/战斗成员?](#objectactorentitymobcombatant)
+  * [Object/Actor/Entity/Mob/Combatant](#objectactorentitymobcombatant)
   * [对象ID](#object-id)
   * [技能ID](#ability-id)
 * [日志行概述](#log-line-overview)
@@ -169,11 +169,11 @@ ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制
 
 ### 游戏日志行
 
-游戏日志行是一种特殊的ACT日志行，它的类型为 `00`。 这些日志行也直接显示在游戏的聊天窗口中，默认情况下它可能显示在“战斗”选项卡中。 Try to [avoid writing triggers](#dont-write-triggers-against-game-log-lines) using these lines.
+游戏日志行是一种特殊的ACT日志行，它的类型为 `00`。 这些日志行也直接显示在游戏的聊天窗口中，默认情况下它可能显示在“战斗”选项卡中。 建议 [避免使用这类日志行来编写触发器](#dont-write-triggers-against-game-log-lines)。
 
-See: [00: Log Lines](#00-logline) for examples.
+范例详见： [00: 日志行](#00-logline)。
 
-### 对象/角色/成员/怪物/战斗成员?
+### 对象/角色/成员/怪物/战斗实体
 
 These are all words used synonymously in this document to refer to an object in the game that can use abilities and has stats. This could be the player, Bahamut, Eos, a Striking Dummy.
 
