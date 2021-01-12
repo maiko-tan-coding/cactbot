@@ -169,7 +169,7 @@ ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制
 
 ### 游戏日志行
 
-A game log line is a specific type of ACT log line with type `00`. These log lines also appear directly in your chat windows in game, possibly in the Battle Log tab. Try to [avoid writing triggers](#dont-write-triggers-against-game-log-lines) using these lines.
+游戏日志行是一种特殊的ACT日志行，它的类型为 `00`。 These log lines also appear directly in your chat windows in game, possibly in the Battle Log tab. Try to [avoid writing triggers](#dont-write-triggers-against-game-log-lines) using these lines.
 
 See: [00: Log Lines](#00-logline) for examples.
 
