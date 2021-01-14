@@ -4,23 +4,23 @@
 
 该目录下的每个文件都应当是有效的JavaScript，并且应当在 **manifest.txt** 中罗列。
 
-Each file should look something like this:
+每个文件应如下所示：
 
 ```javascript
 [{
   zoneId: ZoneId.TheUnendingCoilOfBahamutUltimate,
   triggers: [
-    { /* ..trigger 1.. */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
+    { /* ..触发器1.. */ },
+    { /* ..触发器2.. */ },
+    { /* ..触发器3.. */ },
   ]
 },
 {
   zoneId: ZoneId.TheFinalCoilOfBahamutTurn4,
   triggers: [
-    { /* ..trigger 1.. */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
+    { /* ..触发器1.. */ },
+    { /* ..触发器2.. */ },
+    { /* ..触发器3.. */ },
   ]
 }]
 ```
