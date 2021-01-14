@@ -1,8 +1,8 @@
-# Oopsy Raidsy Trigger Format
+# Oopsy Raidsy 触发器格式
 
-## Oopsy File Format
+## Oopsy 文件格式
 
-Each file in this directory should be valid JavaScript and should be listed in **manifest.txt**.
+该目录下的每个文件都应当是有效的JavaScript，并且应当在 **manifest.txt** 中罗列。
 
 Each file should look something like this:
 
