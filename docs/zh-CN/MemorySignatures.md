@@ -121,7 +121,7 @@
 
 ### 方法2：跟踪
 
-If pure disassembly doesn't yield enough contextual information, Cheat Engine has "break and trace" functionality. Go back to the [browsing memory](#browsing-memory) view. This functionality is not available from the address list directly.
+若仅仅依靠反汇编无法得知足够的上下文信息，则应当考虑CE的“断点跟踪”功能。 Go back to the [browsing memory](#browsing-memory) view. This functionality is not available from the address list directly.
 
 Right click on that `1E` byte you care about. Select **Data Breakpoint** and then **Break and trace**. All the default options are fine. Since we are still looking for a writer, we will keep **Break on Write** selected. Click **Ok**.
 
