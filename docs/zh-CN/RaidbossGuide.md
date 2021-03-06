@@ -37,9 +37,9 @@ export default {
 
 ### 触发器集合属性
 
-**zoneId** 区域名缩写，用于规定触发器的适用范围。 这些区域名缩写可以在 [zone_id.js](../resources/zone_id.js) 文件中找到。 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex(但二者不能并存)。
+**zoneId** 区域名缩写，用于指定触发器的适用区域。 [zone_id.js](../../resources/zone_id.js) 文件中列出了当前版本所有的区域名缩写。 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex之一(但二者不能并存)。
 
-**zoneRegex** 用于匹配区域名称的正则表达式(匹配ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
+**zoneRegex** 正则表达式，用于匹配区域名称(ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
 **overrideTimelineFile** 可选属性，布尔值。 该值设定为true时，任何先前被读取的同区域的触发器文件将被该触发器集合中指定的 `timelineFile` 和 `timeline` 属性覆盖。 此属性仅用于用户文件，cactbot本身不使用该值。
 
