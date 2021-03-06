@@ -191,32 +191,32 @@ ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制
 
 ### 技能ID
 
-尽管FF14中对能力技和魔法战技做了明确区分规定，但本文档中会互换使用这些词汇。 All actions taken by a player or an enemy are "abilities" and have a unique 4 byte id.
+尽管FF14中对能力技和魔法战技做了明确区分规定，但本文档中会互换使用这些词汇。 玩家或敌人执行的所有动作均称为“技能”，技能拥有唯一的4字节ID。
 
-You can use xivapi.com to look up a particular action, as sometimes these are listed as "Unknown" from the ffxiv plugin if it hasn't updated yet. For example, Fire IV has the ability id 0xDF9 = 3577, so this link will give you more information about it: <https://xivapi.com/action/3577?columns=ID,Name,Description,ClassJobCategory.Name>
+您可以使用 xivapi.com 查找某个特定的技能，因为有时当解析插件还未更新的时候会将一些技能标为“Unknown”。 例如，炽炎的技能ID是0xDF9 (十进制为3577)，则您可以通过该链接得知更多信息： <https://xivapi.com/action/3577?columns=ID,Name,Description,ClassJobCategory.Name>
 
-This works for both players and enemies, abilities and spells.
+这适用于所有的能力技和战技魔法等，也不论其来源于玩家还是敌人。
 
 ## 日志行概述
 
-Here's an example of a typical log line: `[12:01:48.293] 21:80034E29:40000001:E10:00:00:00`. This log line happens to be the actor control line (type=`0x21`) for commencing Titan Extreme.
+这是一个典型的日志行的示例： `[12:01:48.293] 21:80034E29:40000001:E10:00:00:00`。 此日志行明显为角色控制行 (因为 type=`0x21`)，同时是进入极泰坦的副本时输出的日志行。
 
-Log lines always start with the time in square brackets. This time is formatted to be in your local time zone. The time is followed with a hex value (in this case 0x21) that indicates the type of the log line it is. These types are internal to the ffxiv plugin and represent its conversion of network data and memory data into discrete events.
+日志行的开头是方括号包裹的时间。 该时间是您所处时区的时间。 时间之后跟随的参数是一个十六进制值 (此示例中为0x21)，指示了日志行的类型。 日志行类型在解析插件内部被广泛使用，解析插件读取网络数据和内存数据，并通过标注不同的类型ID将其分为不同的类型。
 
-The rest of the data in the log line needs to be interpreted based on what type it is. See the following sections that describe each log line. The examples in these sections do not include the time prefix for brevity.
+后续的数据则应当基于此类型进行解释。 请参阅以下各个章节，我们对不同的日志行做了详细的记录。 但为了简洁，我们所列举的例子均不包含时间前缀。
 
 ### 00: 日志行
 
-Structure: `00:[Message Type ID]:Message displayed In-Game`
+结构： `00:[消息类型ID]:游戏内显示的信息`
 
 示例:
 
 ```log
-00:0839:The Right Hand of Bahamut is no longer sealed!
-00:0840:The Final Coil of Bahamut - Turn 2 completion time: 8:37.
+00:0839:巴哈姆特的右手的封锁解除了……
+00:0840:“巴哈姆特大迷宫 真源之章2”完成时间: 8:37
 00:0b3a:You are defeated by the oppressor 0.5.
-00:302b:The gravity node uses Forked Lightning.
-00:322a:The attack misses.
+00:302b:重力系统使用了“叉形闪电”。
+00:322a:失误！
 ```
 
 These are what this document calls "game log lines". There is a two byte log type and then a string. Because these are not often used for triggers (other than `0839` messages), the full set of LogTypes is not well-documented.
