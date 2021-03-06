@@ -24,7 +24,7 @@
   * [网络日志行](#network-log-lines)
   * [ACT日志行](#act-log-lines)
   * [游戏日志行](#game-log-lines)
-  * [Object/Actor/Entity/Mob/Combatant](#objectactorentitymobcombatant)
+  * [对象/角色/成员/怪物/战斗实体](#objectactorentitymobcombatant)
   * [对象ID](#object-id)
   * [技能ID](#ability-id)
 * [日志行概述](#log-line-overview)
