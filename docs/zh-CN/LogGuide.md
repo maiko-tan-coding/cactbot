@@ -185,13 +185,13 @@ ACT日志行上的数据由冒号（即:）分隔。 日志行采用十六进制
 
 敌人或者宠物的ID通常以 `40` 开头，例如 `4000A848` 或者 `4000A962`。
 
-For `NetworkAOEAbility` lines that don't affect anybody, e.g. a Titan landslide that somehow nobody stands in, this is represented as hitting the id `E0000000` (and a blank name).
+假如 `NetworkAOEAbility` 日志行没有击中任何人，比如没有人站在泰坦的地裂之中时，目标id会显示为 `E0000000` (同时目标名字为空)。
 
-One thing to note is that in most raids, there are many mobs in the scene with the same name. For example, in t13, there are about twenty Bahamut Prime mobs in the zone, most of which are invisible. You can often differentiate these by HP values (see [AddCombatant](#03-addcombatant) log lines). Often these invisible mobs are used as the damaging actors, which is why in UWU Titan Phase, both Garuda and Titan use Rock Throw to put people in jails.
+需要注意的是，在大部分副本里，同一个场景中会出现很多名字相同的怪物实体。 例如在T13中，区域中有大约20个至尊巴哈姆特，大部分是不可见的。 通常您可以通过它们的HP数值区分可见与否 (更多请查看 [AddCombatant](#03-addcombatant) 日志行)。 这些不可见的怪物通常是副本内造成实际伤害的“角色”，这也是为何在绝巴哈中，迦楼罗和泰坦都会使用花岗岩牢狱将玩家囚禁。
 
 ### 技能ID
 
-Although ff14 differentiates between abilities and spells, this document uses these words interchangeably. All actions taken by a player or an enemy are "abilities" and have a unique 4 byte id.
+尽管FF14中对能力技和魔法战技做了明确区分规定，但本文档中会互换使用这些词汇。 All actions taken by a player or an enemy are "abilities" and have a unique 4 byte id.
 
 You can use xivapi.com to look up a particular action, as sometimes these are listed as "Unknown" from the ffxiv plugin if it hasn't updated yet. For example, Fire IV has the ability id 0xDF9 = 3577, so this link will give you more information about it: <https://xivapi.com/action/3577?columns=ID,Name,Description,ClassJobCategory.Name>
 
