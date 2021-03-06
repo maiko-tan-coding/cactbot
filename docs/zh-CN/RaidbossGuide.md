@@ -4,13 +4,13 @@
 
 ## 文件结构
 
-每个触发器文件都是一个JS软件包，并导出单个触发器集合。
+每个触发器文件都是一个JS模块，该模块导出一个触发器集合。
 
 ```javascript
 import ZoneId from '../path/to/resources/zone_id.js';
 // 导入其他引用
 
-[{
+export default {
   zoneId: ZoneId.TheWeaponsRefrainUltimate,
   overrideTimelineFile: false,
   timelineFile: 'filename.txt',
@@ -28,21 +28,9 @@ import ZoneId from '../path/to/resources/zone_id.js';
   ],
   resetWhenOutOfCombat: true,
   triggers: [
-    { /* ..trigger 1.. */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
-  ]
-},
-{
-  zoneRegex: /Eureka Hydatos/,
-  triggers: [
-    { /* ..trigger 1.. */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
-  ]
-}] */ },
-    { /* ..trigger 2.. */ },
-    { /* ..trigger 3.. */ },
+    { /* ..触发器1.. */ },
+    { /* ..触发器2.. */ },
+    { /* ..触发器3.. */ },
   ]
 };
 ```
