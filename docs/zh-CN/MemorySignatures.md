@@ -123,43 +123,43 @@
 
 若仅仅依靠反汇编无法得知足够的上下文信息，则应当考虑CE的“断点跟踪”功能。 返回到[浏览内存](#browsing-memory)的视图。 此功能无法直接在地址列表中使用。
 
-右键单击 `1E` 字节值。 Select **Data Breakpoint** and then **Break and trace**. All the default options are fine. Since we are still looking for a writer, we will keep **Break on Write** selected. Click **Ok**.
+右键单击 `1E` 字节值。 选择 **数据断点**，然后点击 **中断和跟踪** 按钮。 选项都保持默认就可以了。 由于我们还在寻找写入此区域的代码，因此需要勾选 **写入时中断**。 点击 **确认**。
 
-This brings you to a Tracer window. Go back to Final Fantasy, and do something to modify your beast gauge. The game will probably hiccup as Cheat Engine tries to record callstacks. Go back to the Tracer window.
+这将会打开跟踪窗口。 返回到FF14，并改变兽魂的值。 由于Cheat Engine会尝试记录函数调用栈，此时游戏很可能会很卡。 切换回跟踪窗口。
 
 ![cheat engine tracing screenshot](images/cheatengine_tracing.png)
 
-You can double click on the lines in the Tracer to have the Memory Viewer disassembly window jump to that location.
+双击跟踪窗口中的汇编代码会让内存浏览器的反汇编窗口跳转到该位置。
 
-In this case, expanding the arrow and double clicking the `ret` return assembly instruction goes back to exactly what we were looking at before in the disassembly window.
+此时，我们可以点击三角箭头令其展开，并双击 `ret` (类似return) 汇编指令，让我们得以直通此前我们在反汇编窗口中看到的代码。
 
-Double clicking on `mov rdx, [rsp+50]` brings us to the code that called the code we were looking at before.
+双击 `mov rdx, [rsp+50]` 则会导航至我们此前看的代码所调用的代码。
 
 ![cheat engine tracing 2 screenshot](images/cheatengine_tracing2.png)
 
-The `call` right before that line is the `call` into the code we were looking at. So, we would need to figure out what set `rcx`. It looks like that's set from `r9`. `r9` is set indirectly from a pointer in `r14`. This is getting complicated. It's possible to keep going back in the assembly to find some code, but maybe there's an easier approach.
+这里的 `call` 正是我们正在寻找的 `call` 调用。 于是，接下来就是找到写入 `rcx` 的代码了。 可以看出来应该是通过 `r9` 赋值的。 而 `r9` 的值来自于存储于 `r14` 的指针。 这似乎有点复杂了。 尽管我们可以不停地检视汇编代码以找到对应的代码，但也许有更好的方式。
 
 ### 方法3：找出读内存的代码
 
-Instead of finding code that modifies the value, we could also find code that reads the value.
+寻找写入值的代码是一种方式，而另一种方式则是寻找读取值的代码。
 
-Right click on the address in the address list, and select **Find out what accesses this address**.
+右键选择地址列表中的内存地址，然后点击 **找出是什么访问了这个地址** 。
 
-Unlike writing, the code is likely constantly accessing this address. You will need to hit the **Stop** button to stop collecting locations.
+与改写不同的是，这个地址似乎被某段代码定期访问。 因此您需要在收集了足够的位置信息后按下 **停止** 按钮。
 
 ![cheat engine debugger 2 screenshot](images/cheatengine_debugger2.png)
 
-In this case, there are two places in code that are accessing this memory. One is hit very frequently (3000 times) and the other infrequently (152).
+在这个例子中，有两处代码访问了这块内存。 其中一个访问了3000余次之多，而另一个相对来说没有如此频繁，仅有152次。
 
-Looking at the disassembly in the window, the second one looks like a much more substantial function, so let's disassemble that one.
+通过检视反汇编的代码，我们可以发现第二行代码像是个更加翔实的函数，我们从这一个开始吧。
 
 ![cheat engine disassembly 2 screenshot](images/cheatengine_disassembly2.png)
 
-Perfect! This looks a bit simpler than the code we saw in tracing.
+太好了！ 这可比上一节的代码简单多了。
 
 ### 汇编代码和指针
 
-Because we are looking for a static address, this address will never change once the program has started. The goal is to find some stable set of assembly code that surrounds the address we're looking for. We can then search for this code in memory to get back the address, no matter where it is that particular run.
+由于我们寻找的是静态地址，在程序启动后就不会改变了。 我们的目标是找到包含了我们需要的地址的一些稳定的汇编代码。 We can then search for this code in memory to get back the address, no matter where it is that particular run.
 
 Reading this assembly code, the reading code is `movzx ebx, byte ptr [rcx+08]`. In English, this looks at the memory location 8 bytes after what is in the `rcx` register, takes the byte found there, and moves it into the `ebx` register. (The movzx part means that it [zero extends](https://www.felixcloutier.com/x86/movzx) this value, which is not very relevant to what we're doing.)
 
