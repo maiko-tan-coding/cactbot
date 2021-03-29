@@ -159,9 +159,9 @@
 
 ### 汇编代码和指针
 
-由于我们寻找的是静态地址，在程序启动后就不会改变了。 我们的目标是找到包含了我们需要的地址的一些稳定的汇编代码。 We can then search for this code in memory to get back the address, no matter where it is that particular run.
+由于我们寻找的是静态地址，在程序启动后就不会改变了。 我们的目标是找到包含了我们需要的地址的一些稳定的汇编代码。 于是，不管我们在哪里启动程序，我们都可以通过搜索这段内存代码找到该地址。
 
-Reading this assembly code, the reading code is `movzx ebx, byte ptr [rcx+08]`. In English, this looks at the memory location 8 bytes after what is in the `rcx` register, takes the byte found there, and moves it into the `ebx` register. (The movzx part means that it [zero extends](https://www.felixcloutier.com/x86/movzx) this value, which is not very relevant to what we're doing.)
+汇编代码中读取兽魂值的代码为 `movzx ebx, byte ptr [rcx+08]`。 用自然语言描述则是这样：它先读取 `rcx` 寄存器中存储的指针，向后移动8个字节，然后将该指针所指的地址中的值存储到 `ebx` 寄存器中。 (movzx 操作会对该值进行 [补0(zero extends)](https://www.felixcloutier.com/x86/movzx) 操作，尽管这不是我们所关心的。)
 
 Since it's looking at `rcx`, we need to look backwards in the assembly code until we find the line that sets `rcx`. You can see that `rcx` gets set on the `mov rcx,[ffxiv_dx11.exe+1AAE118]` line. This means that `rcx` is set from whatever is stored in memory at that location.
 
