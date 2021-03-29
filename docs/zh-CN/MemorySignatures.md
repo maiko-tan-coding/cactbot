@@ -121,9 +121,9 @@
 
 ### 方法2：跟踪
 
-若仅仅依靠反汇编无法得知足够的上下文信息，则应当考虑CE的“断点跟踪”功能。 Go back to the [browsing memory](#browsing-memory) view. This functionality is not available from the address list directly.
+若仅仅依靠反汇编无法得知足够的上下文信息，则应当考虑CE的“断点跟踪”功能。 返回到[浏览内存](#browsing-memory)的视图。 此功能无法直接在地址列表中使用。
 
-Right click on that `1E` byte you care about. Select **Data Breakpoint** and then **Break and trace**. All the default options are fine. Since we are still looking for a writer, we will keep **Break on Write** selected. Click **Ok**.
+右键单击 `1E` 字节值。 Select **Data Breakpoint** and then **Break and trace**. All the default options are fine. Since we are still looking for a writer, we will keep **Break on Write** selected. Click **Ok**.
 
 This brings you to a Tracer window. Go back to Final Fantasy, and do something to modify your beast gauge. The game will probably hiccup as Cheat Engine tries to record callstacks. Go back to the Tracer window.
 
