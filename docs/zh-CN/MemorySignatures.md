@@ -163,7 +163,7 @@
 
 汇编代码中读取兽魂值的代码为 `movzx ebx, byte ptr [rcx+08]`。 用自然语言描述则是这样：它先读取 `rcx` 寄存器中存储的指针，向后移动8个字节，然后将该指针所指的地址中的值存储到 `ebx` 寄存器中。 (movzx 操作会对该值进行 [零扩展(zero extends)](https://www.felixcloutier.com/x86/movzx) 操作，尽管这不是我们所关心的。)
 
-Since it's looking at `rcx`, we need to look backwards in the assembly code until we find the line that sets `rcx`. You can see that `rcx` gets set on the `mov rcx,[ffxiv_dx11.exe+1AAE118]` line. This means that `rcx` is set from whatever is stored in memory at that location.
+那么，我们现在就需要从 `rcx` 这个寄存器开始，向后搜寻赋值到 `rcx` 寄存器的代码行。 很快，您就能找到这一行： `mov rcx,[ffxiv_dx11.exe+1AAE118]`，设置了 `rcx` 的值。 这说明 `rcx` 的值来源于该内存地址所存储的值。
 
 ```assembly
 48 8B 0D 23C14201     - mov rcx,[ffxiv_dx11.exe+1AAE118] { (14116E120) }
@@ -172,7 +172,7 @@ Since it's looking at `rcx`, we need to look backwards in the assembly code unti
 48 8B 05 67C14201     - mov rax,[ffxiv_dx11.exe+1AAE168] { (21) }
 ```
 
-In particular, the `23C14201` value is what we are looking for. Here's a brief digression on RIP relative addressing modes. RIP relative addressing means that offsets are relative to the instruction pointer. The `RIP` register is the instruction pointer register and contains the address of the instruction immediately following this instruction. You can find out what this address is by double clicking on the next line (the `text rcx,rcx` line). In my case, it says the address is `13FD41FF5`. Because we are on a [little endian](https://en.wikipedia.org/wiki/Endianness) system, the `23C14201` hex is the 4 byte integer `01 42 C1 23` (bytes reversed). If you [add](https://www.google.com/search?q=0x0142C123+%2B+0x13FD41FF5) 0x0142C123 + 0x13FD41FF5, you get 0x14116E118. Cheat Engine will also calculate this number for you if you just double click on the instruction itself. For instance, double clicking on the `mov rcx` line yields the text `mov rcx,[14116E118]`. So, you don't have to do this math at all, but it's good to know how it works.
+换句话说，此处的 `23C14201` 的值就是我们要寻找的内存地址。 在此我简要介绍一下RIP相对寻址。 RIP relative addressing means that offsets are relative to the instruction pointer. The `RIP` register is the instruction pointer register and contains the address of the instruction immediately following this instruction. You can find out what this address is by double clicking on the next line (the `text rcx,rcx` line). In my case, it says the address is `13FD41FF5`. Because we are on a [little endian](https://en.wikipedia.org/wiki/Endianness) system, the `23C14201` hex is the 4 byte integer `01 42 C1 23` (bytes reversed). If you [add](https://www.google.com/search?q=0x0142C123+%2B+0x13FD41FF5) 0x0142C123 + 0x13FD41FF5, you get 0x14116E118. Cheat Engine will also calculate this number for you if you just double click on the instruction itself. For instance, double clicking on the `mov rcx` line yields the text `mov rcx,[14116E118]`. So, you don't have to do this math at all, but it's good to know how it works.
 
 In the comment from Cheat Engine, that `mov rcx` line has the value `14116E120`. This means that the memory address at `14116E118` has the value `14116E120`. The memory address we found earlier when scanning was `14116E128`. So it makes sense that `14116E120 + 08` is the value we want, as the reading code adds 8 bytes to its address.
 
