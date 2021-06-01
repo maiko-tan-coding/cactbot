@@ -1,0 +1,4 @@
+import { Lang } from '../types/global';
+export declare const LocaleRegex: Record<"countdownStart" | "countdownEngage" | "countdownCancel" | "areaSeal" | "areaUnseal" | "craftingStart" | "trialCraftingStart" | "craftingFinish" | "trialCraftingFinish" | "craftingFail" | "trialCraftingFail" | "craftingCancel" | "trialCraftingCancel", Record<Lang, RegExp>>;
+export declare const LocaleNetRegex: Record<"countdownStart" | "countdownEngage" | "countdownCancel" | "areaSeal" | "areaUnseal" | "craftingStart" | "trialCraftingStart" | "craftingFinish" | "trialCraftingFinish" | "craftingFail" | "trialCraftingFail" | "craftingCancel" | "trialCraftingCancel", Record<Lang, RegExp>>;
+//# sourceMappingURL=translations.d.ts.map
