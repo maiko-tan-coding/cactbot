@@ -41,15 +41,15 @@ export default {
 
 **zoneRegex** 正则表达式，用于匹配区域名称(ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
-For players in CN/KR, zone names can be Chinese/Korean, though other players always see English. Your Regex should cover them. The current zone name can be found on title or main UI of ACT.
+国服/韩服的区域名会显示为中文/韩文，而国际服中则一直都是英文。 您的正则表达式应当包含正确的区域名。 当前的区域名会显示在ACT的主界面或标题栏上。
 
 **overrideTimelineFile** 可选属性，布尔值。该值设定为true时，任何先前被读取的同区域的触发器文件将被该触发器集合中指定的 `timelineFile` 和 `timeline` 属性覆盖。 此属性仅用于用户文件，cactbot本身不使用该值。
 
 **timelineFile** 可选属性，指定当前区域对应的时间轴文件。 cactbot中的时间轴文件应与对应的`.js` 文件相同，并使用 `.txt` 扩展名。 这些文件与触发器文件存放在同一文件夹中。 (例如 `raidboss/data/04-sb/raid/`)
 
-**timeline** 可选属性，时间轴的补充行。 The value may be a string or an array of strings, or a `function(data)` that returns string or an array of strings, or an array contains different kinds of items above.
+**timeline** 可选属性，时间轴的补充行。 该值可以是字符串或字符串数组， 或是一个返回字符串或字符串数组的函数 `function(data)`， 也可以是包含上述所有类型的数组。
 
-There is a complete example that uses the **timeline** property in [test.js](../ui/raidboss/data/00-misc/test.js).
+在[test.js](../ui/raidboss/data/00-misc/test.js)中有一个使用**timeline**属性的完整例子。
 
 **locale** 可选属性，限定触发器仅在特定语言的客户端上生效。如 'en'、'ko'、'fr'。 若该属性未设置，则应用于所有语言。
 
