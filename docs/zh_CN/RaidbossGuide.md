@@ -146,7 +146,7 @@ export default {
 
 **tts** 字符串，用于输出TTS的另一种方式。 该值可以是包含本地化字符串的对象，与触发器文本类似。
 
-**run: function(data, matches, output)** If the trigger activates, the function will run as the last action before the trigger ends.
+**run: function(data, matches, output)** 触发器元素按以下顺序载入，定义元素时也应该按该顺序排序。
 
 **outputStrings** `outputStrings` 可选的间接引用，这是cactbot为支持在配置UI上可以修改文字的功能而添加的属性。 如果你正在撰写自己的触发器，你不需要遵循此规则，你可以直接从输出函数返回字符串： `alarmText`， `alertText`， `infoText`等。
 
@@ -255,7 +255,7 @@ response: (data, matches, output) => {
 
 为统一触发器构造，以及减轻翻译时的手动负担， cactbot的触发器元素广泛运用了高阶函数。 诸如此类的工具函数使自动化测试更为简单， 并让人们在审查拉取更改时更容易捕获错误及不一致。
 
-Currently, three separate elements have pre-made structures defined: [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.ts), [Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.ts), [NetRegex](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.ts), and [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js). `Condition` 函数不接受参数。 几乎所有的 `Response` 函数都接受 `severity`参数， 用于定义触发器被激活时输出的警报文本的等级。 `Regex`(`NetRegex`) functions can take several arguments [(`gainsEffect()` is a good example)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176) depending on which log line is being matched against, but generally a contributor would include the `source`, (name of the caster/user of the ability to match,) the `id`, (the hex ability ID, such as `2478`,) and whether or not the regex should capture the matches (`capture: false`.) `Regex`(`NetRegex`) functions capture by default, but standard practice is to specify non-capturing unless a trigger element requires captures.
+目前我们对于元素的独立预定义结构有以下几种： [Condition](https://github.com/quisquous/cactbot/blob/main/resources/conditions.ts)、[Regex](https://github.com/quisquous/cactbot/blob/main/resources/regexes.ts)、[NetRegex](https://github.com/quisquous/cactbot/blob/main/resources/netregexes.ts)、以及 [Response](https://github.com/quisquous/cactbot/blob/main/resources/responses.js)。 `Condition` 函数不接受参数。 几乎所有的 `Response` 函数都接受 `severity`参数， 用于定义触发器被激活时输出的警报文本的等级。 `Regex`(`NetRegex`) 函数根据匹配的日志行，接受若干参数 [(例如 `gainsEffect()`)](https://github.com/quisquous/cactbot/blob/dcdf3ee4cd1b6d5bdfb9a8052cc9e4c9b10844d8/resources/regexes.js#L176)， 不管哪种日志行一般都接受 `source` 属性 (技能的咏唱者/释放者的名称)， `id` 属性 (十六进制的技能ID，例如 `2478`)， 以及正则表达式匹配时是否启用捕获组 (`capture: false`)。 `Regex`(`NetRegex`) 函数默认开启捕获组，但按惯例应当仅对依赖捕获数据的触发器开启捕获。
 
 以下是使用了这三种元素的示例触发器：
 
@@ -298,7 +298,7 @@ Currently, three separate elements have pre-made structures defined: [Condition]
 },
 ```
 
-使用正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 在提交拉取请求时使用正则表达式字面量会导致构建失败。 If a bare regex must be used for whatever reason (if, say, a new log line is added to ACT,) pull requests to update `regexes.ts` are strongly encouraged.
+使用正则表达式字面量的方式已被废弃。 *请务必*使用上述的高阶函数生成对应的正则表达式，除非您有特别的原因必须要这样做。 在提交拉取请求时使用正则表达式字面量会导致构建失败。 当的确存在特定的需求，不得不使用正则表达式字面量时 (例如ACT新增了其他类型的日志行)， 我们强烈推荐开启一个拉取请求，直接更新 `regexes.ts` 文件。
 
 (当然，若您正在撰写仅用于您个人的触发器，您可以随意发挥。 此处的警告仅针对想为cactbot项目提交贡献的人们。)
 
@@ -306,7 +306,7 @@ Currently, three separate elements have pre-made structures defined: [Condition]
 
 ## Outputs
 
-In order to reduce duplications across trigger sets, cactbot has a set of locale strings that includes text repeatedly used by triggers. When writing triggers, prefer using `Outputs` if possible to avoid duplication.
+为避免在不同的触发器中重复定义与翻译相同或类似的提示语句，cactbot内置了一个可被触发器引用的字符串集合，包含了许多经常使用的本地化字符串。 在编写触发器时，应当优先考虑引用在`Outputs`中出现的语句。
 
 A simple example using `outputStrings` and `Outputs` as below:
 
