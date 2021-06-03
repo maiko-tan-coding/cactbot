@@ -235,7 +235,7 @@ Cactbot默认并不包含这些配置，这个功能更适合用户自行配置�
 
 (3) 更新manifest文件。
 
-Update **ui/raidboss/data/raidboss_manifest.txt** with both the name of the new triggers file and the new timeline file.
+在 **ui/raidboss/data/raidboss_manifest.txt** 文件中添加您所新建的触发器文件与时间轴文件的路径。
 
 (4) 重载raidboss悬浮窗
 
@@ -422,9 +422,9 @@ make_timeline.py 脚本支持两个选项以提供此功能。 其一为“忽�
 
 对于构建循环，我们有个优秀的工具**util/timeline_adjust.py**。 这个脚本可以遍历整个时间轴文件，并以可正可负的一定偏移值调整时间轴， 最后将调整后的时间轴输出。
 
-If you are using VSCode, you can also use the [adjust time feature](https://github.com/MaikoTan/cactbot-highlight#adjust-time) from the [cactbot-highlight](https://marketplace.visualstudio.com/items?itemName=MaikoTan.cactbot-highlight) extension, which offer a simple way to adjust time in one-click.
+若您在使用VSCode，您还可以使用 [cactbot-highlight](https://marketplace.visualstudio.com/items?itemName=MaikoTan.cactbot-highlight) 插件中的 [adjust time 功能](https://github.com/MaikoTan/cactbot-highlight#adjust-time)，非常方便简单，一键即可调整时间。
 
-(Note: they both will not adjust jumps.)
+(注意：不管哪种方式都不会调整jump。)
 
 下面是通过该脚本调整后的时间轴的一部分：
 
@@ -453,7 +453,7 @@ python util/timeline_adjust.py --file=ui/raidboss/data/timelines/cape_westwind.t
 
 那么第一阶段的最终版本就完成了。
 
-注意，我们倾向于使用 **timeline_adjust.py** 生成的时间，而不是原本的时间。 (You could also use `cactbot-highlight` if you prefer that.) 这样我们从52.2跳转到24.4的时候，时间差依旧是正确的。  每次 `Gate Of Tartarus` 释放后5.4秒总会出现 `Shield Skewer`。
+注意，我们倾向于使用 **timeline_adjust.py** 生成的时间，而不是原本的时间。 (您也可以使用 `cactbot-highlight` 插件。) 这样我们从52.2跳转到24.4的时候，时间差依旧是正确的。  每次 `Gate Of Tartarus` 释放后5.4秒总会出现 `Shield Skewer`。
 
 之后我们会添加jump。现在它如下所示：
 
