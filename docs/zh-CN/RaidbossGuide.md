@@ -8,7 +8,7 @@
 
 ```javascript
 import ZoneId from '../path/to/resources/zone_id';
-// Other imports here.
+// 导入其他引用
 
 export default {
   zoneId: ZoneId.TheWeaponsRefrainUltimate,
@@ -148,7 +148,7 @@ export default {
 
 **soundVolume** 从0到1的音量数值，触发器激活时播放的音量大小。
 
-**response** 用于返回 infoText/alertText/alarmText/tts 的快捷方法。 Also used by `resources/responses.ts`. Response 的优先级比直接指定的文字或TTS低，因此可以被覆盖。 (如同 `regex` 和 `condition` 一样，[responses.ts](https://github.com/quisquous/cactbot/blob/main/resources/responses.ts) 中定义了一些便于使用的高阶函数。 )
+**response** 用于返回 infoText/alertText/alarmText/tts 的快捷方法。 这些函数定义于 `resources/responses.ts`。 Response 的优先级比直接指定的文字或TTS低，因此可以被覆盖。 (如同 `regex` 和 `condition` 一样，[responses.ts](https://github.com/quisquous/cactbot/blob/main/resources/responses.ts) 中定义了一些便于使用的高阶函数。 )
 
 **alarmText** 当触发器激活时显示“警报”级别的文本。 该属性一般用于高危事件，如处理失败必死无疑的机制、会导致团灭的机制，或处理失败会导致通关变得更加困难的机制等。 (例如T2的亚拉戈病毒，T7的诅咒之嚎，或是O7s里奥尔特罗斯先生的石肤等。 ) 其值可以是字符串或返回字符串的 `function(data, matches)`。
 
@@ -207,7 +207,7 @@ infoText: (data, matches, output) => {
 },
 ```
 
-使用 `response` 的触发器和使用 `outputStrings` 的触发器略有不同。 在触发器本身不应当设置 `outputStrings` 字段，而是在 `response` 返回的函数中设置 `output.responseOutputStrings = {};`。 其中 `{}` 是原本应当在 `outputStrings` 字段返回的对象。 This is a bit awkward, but allows response to both return and use `outputStrings`, and keeps [resources/responses.ts](../resources/responses.ts) more encapsulated.
+使用 `response` 的触发器和使用 `outputStrings` 的触发器略有不同。 在触发器本身不应当设置 `outputStrings` 字段，而是在 `response` 返回的函数中设置 `output.responseOutputStrings = {};`。 其中 `{}` 是原本应当在 `outputStrings` 字段返回的对象。 这种方式看起来有些笨拙，但这样让response不仅可以直接使用，也可以使用 `outputStrings`，并保持 [resources/responses.ts](../resources/responses.ts) 的耦合更加紧密。
 
 比如：
 
@@ -320,7 +320,7 @@ response: (data, matches, output) => {
 
 为避免在不同的触发器中重复定义与翻译相同或类似的提示语句，cactbot内置了一个可被触发器引用的字符串集合，包含了许多经常使用的本地化字符串。 在编写触发器时，应当优先考虑引用在`Outputs`中出现的语句。
 
-A simple example using `outputStrings` and `Outputs` as below:
+这是使用了 `outputStrings` 和 `Outputs` 的示例：
 
 ```javascript
 {
