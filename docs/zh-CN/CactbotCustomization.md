@@ -100,9 +100,11 @@ cactbot将按照字母顺序优先加载user文件夹中的子文件夹里的文
 
 您可以通过用户自定义js文件(例如 `user/raidboss.js` 或 `user/raidboss/` 目录下的任意`.js` 文件)自定义触发器行为。 您可以修改输出文本、适用职业、文本显示的时间等等。
 
-在您的raidboss模块用户自定义js文件中， `Options.Triggers` 是一个存放了触发器集合的列表。 您可以通过此变量添加新触发器，或修改已有的触发器。 若用户文件中存在与现有触发器 (cactbot官方提供的) 相同id的触发器，则会将后者其覆盖。
+You can see readable JavaScript versions of all of the cactbot triggers in this branch: <https://github.com/quisquous/cactbot/tree/triggers> This is the preferred reference to use for viewing, copying, and pasting. Triggers in the main branch or shipped in a cactbot release are often in unreadable bundles or are TypeScript which is not supported in user folders.
 
-在您修改触发器前，我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解各触发器的诸多属性的含义。
+在您的raidboss模块用户自定义js文件中， `Options.Triggers` 是一个存放了触发器集合的列表。 您可以通过此变量添加新触发器，或修改已有的触发器。 若用户文件中存在与现有触发器 (cactbot官方提供的) 相同id的触发器，则会将其覆盖。
+
+在您修改触发器前，我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解各触发器诸多字段的含义。
 
 一般来说，你需要将形如以下的代码块加入到你的用户自定义js文件(例如 `user/raidboss.js`)中：
 
@@ -120,15 +122,15 @@ Options.Triggers.push({
 });
 ```
 
-最简单的定制触发器方式是直接复制上面那一大块代码粘贴到此文件再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.ts) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 然后复制触发器文本并粘贴至此， 按您的喜好进行修改。 当你改完所有你想改的触发器后， 重载raidboss悬浮窗以应用更改。
+最简单的方式是直接复制对应的触发器代码并粘贴到此文件再进行修改。 您可以修改 `zoneId` 一行为您想要触发器响应的区域id，这一行通常位于cactbot触发器文件的顶部。 [该文件](../../resources/zone_id.ts) 列出了所有可用的区域id。 若您定义了错误的id，OverlayPlugin的日志窗口将会输出警告信息。 Then, [copy the trigger text](https://github.com/quisquous/cactbot/tree/triggers) into this block. 按您的喜好进行修改。 对您想修改的所有触发器均重复此步骤。 重新加载raidboss悬浮窗以应用更改。
 
 **注意**：此方式会将原触发器完全移除，因此请在修改时不要删除任何逻辑。 此外，触发器均采用JavaScript编写，因此必须采用标准JavaScript语法。 若您不是程序员，您需要格外注意编辑方法。
 
 ### 例1：改变输出文本
 
-假定您正在攻略巴哈姆特绝境战(UCOB)， 您的固定队采用的不是cactbot默认的火1集合吃的打法， 而是先单吃火1。 另外，您 *同时* 还想让触发器通过tts播报与文本不同的内容， 比如，您总是忘记出人群，因此您想让它重复播报数次。
+假定您正在攻略巴哈姆特绝境战(UCOB)， 您的固定队采用的不是cactbot默认的火1集合吃的打法， 而是先单吃火1。 另外，您 *同时* 还想让触发器通过tts播报与文本不同的内容。 比如，您总是忘记出人群，因此您想让它重复播报数次。
 
-若您只是想修改 `信息文本`，你可以 [通过cactbot配置界面改变触发器文本](#changing-trigger-text-with-the-cactbot-ui) 实现。
+我们推荐阅读 [触发器指南](RaidbossGuide.md) 以了解如何撰写cactbot的触发器， 当然您也可以直接看 [ui/raidboss/data](../../ui/raidboss/data) 中现有的触发器代码。
 
 其中一种调整方式是编辑触发器的输出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/triggers/04-sb/ultimate/unending_coil_ultimate.js#:~:text=UCU%20Nael%20Fireball%201) 中找到原本的 fireball #1 触发器。
 
@@ -201,11 +203,11 @@ Options.Triggers.push({
 });
 ```
 
-当然，您也可以直接删除整个 `condition` 函数， 这是因为没有condition的触发器在匹配到正则时永远会运行。
+当然，您也可以直接删除整个 `condition` 函数， 这是因为没有condition的触发器在匹配到正则时永远会运行
 
 ### 例3：添加自定义触发器
 
-您也可以用同样的办法添加您的自定义触发器。
+您也可以添加您的自定义触发器。
 
 这是一个示例触发器，当您中了“Forked Lightning”效果时，会在1秒后显示“Get out!!!”。
 
@@ -216,7 +218,7 @@ Options.Triggers.push([
     triggers: [
       {
         // 这是一个自定义的id，因此不会覆盖任何现有的触发器。
-        id: 'Personal Forked Lightning',
+      id: 'Personal Forked Lightning',
         regex: Regexes.gainsEffect({ effect: 'Forked Lightning' }),
         condition: (data, matches) => { return matches.target === data.me; },
         delaySeconds: 1,
@@ -235,7 +237,7 @@ Options.Triggers.push([
 
 ## Raidboss时间轴自定义
 
-自定义时间轴与 [自定义触发器](#overriding-raidboss-triggers) 差不多。
+自定义时间轴与 [自定义触发器](#overriding-raidboss-triggers) 的方法差不多。
 
 自定义时间轴的步骤如下：
 
@@ -258,8 +260,9 @@ Options.Triggers.push([
     });
     ```
 
-    （假设您已经做完了第一步，并且该文本文件的名称为 `user/the_epic_of_alexander.txt` ）
 
+    （假设您已经做完了第一步，并且该文本文件的名称为 `user/the_epic_of_alexander.txt` ）
+    
     设置 `overrideTimelineFile: true` 是为了告诉cactbot将内置的时间轴完全替换为您添加的文件。
 
 1) 按您的喜好编辑您自己的时间轴文件
@@ -270,9 +273,9 @@ Options.Triggers.push([
 
 ## 行为自定义
 
-这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不是触发器的变量。
+这一文段将讨论自定义cactbot的其他方式。 Cactbot中有一些不在配置界面显示，也不可在触发器中访问的变量。
 
-每个cactbot模块都有一个名为 `Options` 的变量，它包含了若干控制选项。 可用的 `Options` 变量会在每个 `ui/<name>/<name>.js` 文件的顶部列出。
+每个cactbot模块都有一个名为 `Options` 的变量，它包含了若干控制选项。 每一个 `ui/<name>/<name>.js` 文件的顶部都会修改并注释 `Options` 的各个变量。
 
 例如在 [ui/raidboss/raidboss.js](../../ui/raidboss/raidboss.js) 文件中， 您可以通过 `PlayerNicks` 选项定义玩家的昵称。
 
@@ -290,21 +293,35 @@ Options.PlayerNicks = {
 
 ## 用户文件的调试
 
+User files are `eval`'d in JavaScript, and thus cannot `import` in the same way that built-in trigger files do. User javascript files have access to the following globals:
+
+- [Conditions](../resources/conditions.ts)
+- [ContentType](../resources/content_type.ts)
+- [NetRegexes](../resources/netregexes.ts)
+- [Regexes](../resources/regexes.ts)
+- [Responses](../resources/responses.ts)
+- [Outputs](../resources/outputs.ts)
+- [Util](../resources/util.ts)
+- [ZoneId](../resources/zone_id.ts)
+- [ZoneInfo](../resources/zone_info.ts)
+
+## 用户文件的调试
+
 ### 检查OverlayPlugin的错误日志
 
-您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位于该窗口的底部的OverlayPlugin日志窗口，它是一个自动滚动的文本窗口。
+您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到OverlayPlugin的日志窗口， 位于该窗口的底部，为一自动滚动的文本窗口。
 
 当运行错误时，错误信息会显示在此处。
 
 ### 检查文件是否加载
 
-首先，您需要开启raidboss模块的调试模式。 打开cactbot配置窗口，启用 `显示开发者选项` ，然后重新加载悬浮窗。 然后，勾选raidboss模块下的 `启用调试模式`，再次重载悬浮窗。
+首先，开启raidboss模块的调试模式。 打开cactbot配置窗口，启用 `显示开发者选项` ，然后重新加载悬浮窗。 然后，勾选raidboss模块下的 `启用调试模式`，再次重载悬浮窗。
 
 当raidboss模块的调试模式启用时，OverlayPlugin的日志窗口中会打印更多信息。 每次本地的用户文件加载时都会输出类似于这样的信息： `[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js`
 
 确认您的用户文件是否正常加载。
 
-文件名的打印顺序就是它们的加载顺序。
+此处有一个例子：
 
 ### 检查文件是否有错误
 
