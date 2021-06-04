@@ -122,7 +122,7 @@ Options.Triggers.push({
 });
 ```
 
-最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [該檔案](../../resources/zone_id.js) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌窗口將會輸出警告信息。 Then, [copy the trigger text](https://github.com/quisquous/cactbot/tree/triggers) into this block. 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
+最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [This file](../resources/zone_id.ts) has a list of all the zone ids. 若您定義了錯誤的id，OverlayPlugin的日誌窗口將會輸出警告信息。 Then, [copy the trigger text](https://github.com/quisquous/cactbot/tree/triggers) into this block. 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
 
 **注意**：此方式會將原觸發器完全移除，因此請在修改時不要刪除任何邏輯。 此外，觸發器均採用JavaScript編寫，因此必須採用標準JavaScript語法。 若您不是程式員，您需要格外注意編輯方法。
 
@@ -292,14 +292,14 @@ Options.PlayerNicks = {
 User files are `eval`'d in JavaScript, and thus cannot `import` in the same way that built-in trigger files do. User javascript files have access to the following globals:
 
 - [Conditions](../resources/conditions.ts)
-- [ContentType](../resources/content_type.js)
+- [ContentType](../resources/content_type.ts)
 - [NetRegexes](../resources/netregexes.ts)
 - [Regexes](../resources/regexes.ts)
-- [Responses](../resources/responses.js)
+- [Responses](../resources/responses.ts)
 - [Outputs](../resources/outputs.ts)
 - [Util](../resources/util.ts)
-- [ZoneId](../resources/zone_id.js)
-- [ZoneInfo](../resources/zone_info.js)
+- [ZoneId](../resources/zone_id.ts)
+- [ZoneInfo](../resources/zone_info.ts)
 
 ## 使用者檔案的除錯
 
@@ -326,8 +326,8 @@ User files are `eval`'d in JavaScript, and thus cannot `import` in the same way 
 此處有一個例子：
 
 ```log
-[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.js, Line: 83)
-[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: *** ERROR IN USER FILE *** (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.js, Line: 95)
+[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: local user file: C:\Users\tinipoutini\cactbot\user\raidboss.js (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.ts, Line: 83)
+[10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: *** ERROR IN USER FILE *** (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.ts, Line: 95)
 [10/19/2020 6:18:27 PM] Info: raidbossy: BrowserConsole: SyntaxError: Unexpected token :
-    at loadUser (file:///C:/Users/tinipoutini/cactbot/resources/user_config.js:92:28) (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.js, Line: 96)
+    at loadUser (file:///C:/Users/tinipoutini/cactbot/resources/user_config.ts:92:28) (Source: file:///C:/Users/tinipoutini/cactbot/resources/user_config.ts, Line: 96)
 ```
