@@ -5,8 +5,8 @@
 Each file is a module that exports a single trigger set, and should be listed in **oopsy_manifest.txt**.
 
 ```javascript
-import ZoneId from '../path/to/resources/zone_id.js';
-// 导入其他引用
+import ZoneId from '../path/to/resources/zone_id';
+// Other imports here.
 
 export default {
   zoneId: ZoneId.TheUnendingCoilOfBahamutUltimate,
@@ -44,7 +44,7 @@ export default {
 
 ### 触发器集合属性
 
-**zoneId**: A shortened name for the zone to use these triggers in. [zone_id.js](../../resources/zone_id.js) 文件中列出了当前版本所有的区域名缩写。 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex之一(但二者不能并存)。
+**zoneId**: A shortened name for the zone to use these triggers in. The set of id names can be found in [zone_id.ts](../resources/zone_id.ts). 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex之一(但二者不能并存)。
 
 **zoneRegex**: A regular expression that matches against the zone name (coming from ACT). 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
