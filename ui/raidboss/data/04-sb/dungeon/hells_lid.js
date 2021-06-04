@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.HellsLid,
@@ -12,7 +12,7 @@ export default {
       regex: /Stone Cudgel/,
       beforeSeconds: 4,
       suppressSeconds: 10,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from club/shield',
@@ -105,7 +105,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27D4', source: '玄武', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '27D4', source: '玄武', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27D4', source: '현무', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid water orb',

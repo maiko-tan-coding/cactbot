@@ -1,5 +1,5 @@
-import { TimelineController } from '../../timeline.js';
-import RaidEmulatorTimeline from './RaidEmulatorTimeline.js';
+import { TimelineController } from '../../timeline';
+import RaidEmulatorTimeline from './RaidEmulatorTimeline';
 
 export default class RaidEmulatorTimelineController extends TimelineController {
   bindTo(emulator) {
@@ -43,7 +43,13 @@ export default class RaidEmulatorTimelineController extends TimelineController {
     e.detail.logs.forEach((line) => {
       this.activeTimeline.emulatedTimeOffset = line.offset;
       this.ui.emulatedTimeOffset = line.offset;
-      this.activeTimeline.OnLogLine(line.properCaseConvertedLine || line.convertedLine);
+      this.activeTimeline.OnLogLine(
+          line.properCaseConvertedLine || line.convertedLine,
+          line.timestamp);
+      // Only call _OnUpdateTimer if we have a timebase from the previous call to OnLogLine
+      // This avoids spamming the console with a ton of messages
+      if (this.activeTimeline.timebase)
+        this.activeTimeline._OnUpdateTimer(line.timestamp);
     });
   }
 }

@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Lakshmi Extreme
 export default {
@@ -9,75 +10,65 @@ export default {
   timelineFile: 'lakshmi-ex.txt',
   timelineTriggers: [
     {
-      id: 'Lakshmi Path of Light',
+      id: 'LakshmiEx Path of Light',
       regex: /Path of Light/,
       beforeSeconds: 5,
-      condition: function(data) {
-        return data.role === 'tank';
-      },
+      condition: (data) => data.role === 'tank',
       response: Responses.tankCleave(),
     },
   ],
   triggers: [
     {
-      id: 'Lakshmi Chanchala Gain',
+      id: 'LakshmiEx Chanchala Gain',
       netRegex: NetRegexes.startsUsing({ id: '2148', source: 'Lakshmi', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '2148', source: 'Lakshmi', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '2148', source: 'Lakshmi', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '2148', source: 'ラクシュミ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2148', source: '吉祥天女', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2148', source: '락슈미', capture: false }),
-      run: function(data) {
-        data.chanchala = true;
-      },
+      run: (data) => data.chanchala = true,
     },
     {
-      id: 'Lakshmi Chanchala Lose',
+      id: 'LakshmiEx Chanchala Lose',
       netRegex: NetRegexes.losesEffect({ target: 'Lakshmi', effectId: '582', capture: false }),
       netRegexDe: NetRegexes.losesEffect({ target: 'Lakshmi', effectId: '582', capture: false }),
       netRegexFr: NetRegexes.losesEffect({ target: 'Lakshmi', effectId: '582', capture: false }),
       netRegexJa: NetRegexes.losesEffect({ target: 'ラクシュミ', effectId: '582', capture: false }),
       netRegexCn: NetRegexes.losesEffect({ target: '吉祥天女', effectId: '582', capture: false }),
       netRegexKo: NetRegexes.losesEffect({ target: '락슈미', effectId: '582', capture: false }),
-      run: function(data) {
-        data.chanchala = false;
-      },
+      run: (data) => data.chanchala = false,
     },
     {
-      id: 'Lakshmi Pull of Light Tank',
+      id: 'LakshmiEx Pull of Light Tank',
       netRegex: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexDe: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexFr: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexJa: NetRegexes.startsUsing({ id: '215E', source: 'ラクシュミ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '215E', source: '吉祥天女' }),
       netRegexKo: NetRegexes.startsUsing({ id: '215E', source: '락슈미' }),
-      condition: function(data, matches) {
-        return data.role === 'tank';
-      },
+      condition: (data) => data.role === 'tank',
       response: Responses.tankBuster('info'),
     },
     {
-      id: 'Lakshmi Pull of Light Unexpected',
+      id: 'LakshmiEx Pull of Light Unexpected',
       netRegex: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexDe: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexFr: NetRegexes.startsUsing({ id: '215E', source: 'Lakshmi' }),
       netRegexJa: NetRegexes.startsUsing({ id: '215E', source: 'ラクシュミ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '215E', source: '吉祥天女' }),
       netRegexKo: NetRegexes.startsUsing({ id: '215E', source: '락슈미' }),
-      condition: function(data, matches) {
-        return data.role !== 'tank' && data.role !== 'healer';
-      },
+      condition: (data) => data.role !== 'tank' && data.role !== 'healer',
       response: Responses.tankBuster('alarm'),
     },
     {
-      id: 'Lakshmi Divine Denial',
+      id: 'LakshmiEx Divine Denial',
       netRegex: NetRegexes.startsUsing({ id: '2149', source: 'Lakshmi', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '2149', source: 'Lakshmi', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '2149', source: 'Lakshmi', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '2149', source: 'ラクシュミ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2149', source: '吉祥天女', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2149', source: '락슈미', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Vrill + Knockback',
@@ -90,14 +81,14 @@ export default {
       },
     },
     {
-      id: 'Lakshmi Divine Desire',
+      id: 'LakshmiEx Divine Desire',
       netRegex: NetRegexes.startsUsing({ id: '214B', source: 'Lakshmi', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '214B', source: 'Lakshmi', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '214B', source: 'Lakshmi', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '214B', source: 'ラクシュミ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '214B', source: '吉祥天女', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '214B', source: '락슈미', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Vrill + Be Outside',
@@ -110,14 +101,14 @@ export default {
       },
     },
     {
-      id: 'Lakshmi Divine Doubt',
+      id: 'LakshmiEx Divine Doubt',
       netRegex: NetRegexes.startsUsing({ id: '214A', source: 'Lakshmi', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '214A', source: 'Lakshmi', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '214A', source: 'Lakshmi', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '214A', source: 'ラクシュミ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '214A', source: '吉祥天女', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '214A', source: '락슈미', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Vrill + Pair Up',
@@ -130,9 +121,9 @@ export default {
       },
     },
     { // Stack marker
-      id: 'Lakshmi Pall of Light',
+      id: 'LakshmiEx Pall of Light',
       netRegex: NetRegexes.headMarker({ id: '003E' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (!data.chanchala)
           return;
 
@@ -141,7 +132,7 @@ export default {
 
         return output.vrillStack();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (data.chanchala)
           return;
 
@@ -151,14 +142,7 @@ export default {
         return output.stack();
       },
       outputStrings: {
-        stackOnYou: {
-          en: 'Stack on YOU',
-          de: 'Stack auf DIR',
-          fr: 'Package sur VOUS',
-          ja: '自分に頭割り',
-          cn: '分摊点名',
-          ko: '쉐어징 대상자',
-        },
+        stackOnYou: Outputs.stackOnYou,
         stack: {
           en: 'Stack',
           de: 'Stack',
@@ -186,7 +170,7 @@ export default {
       },
     },
     {
-      id: 'Lakshmi Stotram',
+      id: 'LakshmiEx Stotram',
       netRegex: NetRegexes.startsUsing({ id: '2147', source: 'Lakshmi', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '2147', source: 'Lakshmi', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '2147', source: 'Lakshmi', capture: false }),
@@ -194,7 +178,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2147', source: '吉祥天女', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2147', source: '락슈미', capture: false }),
       condition: (data) => data.chancala,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Vrill for AOE',
@@ -208,10 +192,10 @@ export default {
     },
     {
       // Offtank cleave
-      id: 'Lakshmi Path of Light Marker',
+      id: 'LakshmiEx Path of Light Marker',
       netRegex: NetRegexes.headMarker({ id: '000E' }),
       condition: Conditions.targetIsYou(),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.chanchala)
           return output.vrillCleaveOnYou();
 
@@ -238,10 +222,10 @@ export default {
     },
     {
       // Cross aoe
-      id: 'Lakshmi Hand of Grace',
+      id: 'LakshmiEx Hand of Grace',
       netRegex: NetRegexes.headMarker({ id: '006B' }),
       condition: Conditions.targetIsYou(),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.chanchala)
           return output.vrillCrossMarker();
 
@@ -268,10 +252,10 @@ export default {
     },
     {
       // Flower marker (healers)
-      id: 'Lakshmi Hand of Beauty',
+      id: 'LakshmiEx Hand of Beauty',
       netRegex: NetRegexes.headMarker({ id: '006D' }),
       condition: Conditions.targetIsYou(),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.chanchala)
           return output.vrillFlowerMarker();
 
@@ -298,16 +282,16 @@ export default {
     },
     {
       // Red marker during add phase
-      id: 'Lakshmi Water III',
+      id: 'LakshmiEx Water III',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move Away',
           de: 'Weg da',
           fr: 'Éloignez-vous',
-          ja: '離れ',
+          ja: '離れる',
           cn: '远离大锤落点',
           ko: '피하기',
         },
@@ -322,6 +306,8 @@ export default {
         'Lakshmi': 'Lakshmi',
       },
       'replaceText': {
+        '--chanchala end--': '--Chanchala endet--',
+        '\\(mid\\)': '(Mitte)',
         '/dance': '/tanz',
         'Adds Appear': 'Adds erscheinen',
         'Alluring Arm': 'Anziehender Arm',
@@ -347,14 +333,13 @@ export default {
         'Lakshmi': 'Lakshmi',
       },
       'replaceText': {
-        '--Chanchala over--': '--Chanchala terminé--',
+        '--chanchala end--': '--fin de chanchala--',
         '/dance': '/danse',
         '\\(mid\\)': '(milieu)',
-        '\\(out\\)': '(extérieur)',
         'Adds Appear': 'Apparition d\'adds',
         'Alluring Arm': 'Bras séduisants',
         'Blissful Spear': 'Épieu béatifiant',
-        'Chanchala': 'Chanchala',
+        '(?<! )Chanchala(?! )': 'Chanchala',
         'Divine Denial': 'Refus divin',
         'Divine Desire': 'Désir divin',
         'Divine Doubt': 'Doute divin',
@@ -377,7 +362,6 @@ export default {
       'replaceText': {
         '/dance': '/dance',
         '\\(mid\\)': '(中央)',
-        '\\(out\\)': '(外)',
         'Adds Appear': '雑魚',
         'Alluring Arm': '魅惑の腕',
         'Blissful Spear': '聖なる槍',
@@ -443,7 +427,6 @@ export default {
         'The Pall Of Light': '빛의 폭포',
         'The Path Of Light': '빛의 파동',
         'The Pull Of Light': '빛의 급류',
-        'over': '끝',
       },
     },
   ],

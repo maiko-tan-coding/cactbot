@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.EdensGateSepulture,
@@ -26,10 +26,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '40F8', source: 'タイタン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '40F8', source: '泰坦', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '40F8', source: '타이탄', capture: false }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'healer',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'aoe + dot',
@@ -49,9 +47,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '40F9', source: 'タイタン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '40F9', source: '泰坦' }),
       netRegexKo: NetRegexes.startsUsing({ id: '40F9', source: '타이탄' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -62,7 +58,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '40FA', source: 'タイタン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '40FA', source: '泰坦', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '40FA', source: '타이탄', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand In Front',
@@ -84,7 +80,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '40F2', source: '거대 바위', capture: false }),
       delaySeconds: 6,
       suppressSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide Behind Boulder',
@@ -114,7 +110,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4102', source: 'タイタン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4102', source: '泰坦', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4102', source: '타이탄', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand On Flank',

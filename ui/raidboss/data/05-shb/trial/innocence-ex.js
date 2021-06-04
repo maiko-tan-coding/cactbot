@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Innocence Extreme
 export default {
@@ -16,7 +17,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEF', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEF', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEF', source: '이노센스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.starbirthCount = data.starbirthCount || 0;
         data.starbirthCount++;
         data.starbirthActive = true;
@@ -32,7 +33,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '3EDC', source: '이노센스', capture: false }),
       // 3 seconds cast time + 7 seconds until next sword.
       delaySeconds: 7,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Swords!',
@@ -52,7 +53,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEF', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEF', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEF', source: '이노센스', capture: false }),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.starbirthCount === 1)
           return output.starbirthCorner();
         else if (data.starbirthCount === 2 || data.starbirthCount === 5)
@@ -138,20 +139,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EC9', source: 'フォーギヴン・ヴェナリー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EC9', source: '得到宽恕的情欲', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EC9', source: '면죄된 정욕', capture: false }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
+      condition: (data) => data.role === 'healer',
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Tank Busters',
-          de: 'Tank Buster',
-          fr: 'Tank buster',
-          ja: 'タンクバスター',
-          cn: '死刑',
-          ko: '탱버',
-        },
+        text: Outputs.tankBusters,
       },
     },
     {
@@ -173,7 +165,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEE', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEE', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEE', source: '이노센스', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.starbirthActive)
           return output.avoidChargeAndOrbs();
 
@@ -206,11 +198,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEF', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEF', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEF', source: '이노센스', capture: false }),
-      condition: function(data) {
-        return data.starbirthCount === 1;
-      },
+      condition: (data) => data.starbirthCount === 1,
       delaySeconds: 6,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get to Safe Corner',
@@ -230,10 +220,8 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '42B0', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '42B0', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '42B0', source: '이노센스', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Grab East/West Venery Adds',
@@ -253,11 +241,11 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '38FC', source: 'イノセンス' }),
       netRegexCn: NetRegexes.ability({ id: '38FC', source: '无瑕灵君' }),
       netRegexKo: NetRegexes.ability({ id: '38FC', source: '이노센스' }),
-      preRun: function(data) {
+      preRun: (data) => {
         data.lightPillar = data.lightPillar || 0;
         data.lightPillar++;
       },
-      alarmText: function(data, matches, output) {
+      alarmText: (data, matches, output) => {
         if (matches.target !== data.me)
           return;
 
@@ -266,7 +254,7 @@ export default {
 
         return output.avoidOrbsWithLine();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (matches.target === data.me)
           return;
         return output.lineStack();
@@ -306,11 +294,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3F3E', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3F3E', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3F3E', source: '이노센스', capture: false }),
-      condition: function(data) {
-        return data.lightPillar === 3;
-      },
+      condition: (data) => data.lightPillar === 3,
       delaySeconds: 6.5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get to Safe Corner',
@@ -326,7 +312,7 @@ export default {
       id: 'InnoEx Winged Reprobation Tether',
       netRegex: NetRegexes.headMarker({ id: '00AC' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tether on YOU',
@@ -342,7 +328,7 @@ export default {
       id: 'InnoEx Winged Drop Of Light',
       netRegex: NetRegexes.headMarker({ id: '008A' }),
       condition: Conditions.targetIsYou(),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.starbirthActive)
           return output.circleAvoidOrbs();
 
@@ -376,7 +362,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3EE[456]', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EE[456]', source: '이노센스', capture: false }),
       suppressSeconds: 15,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Swords then Ray',
@@ -396,9 +382,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEA', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEA', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEA', source: '이노센스', capture: false }),
-      run: function(data) {
-        delete data.starbirthActive;
-      },
+      run: (data) => delete data.starbirthActive,
     },
     {
       id: 'InnoEx Starbirth End 2',
@@ -408,9 +392,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EEE', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EEE', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EEE', source: '이노센스', capture: false }),
-      run: function(data) {
-        delete data.starbirthActive;
-      },
+      run: (data) => delete data.starbirthActive,
     },
     {
       id: 'InnoEx Soul And Body Left',
@@ -421,12 +403,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3ED7', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3ED7', source: '이노센스', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rotate Left',
           de: 'Links rum rotieren',
-          fr: 'Tournez à gauche',
+          fr: 'Tournez vers la gauche',
           ja: '時針回り',
           cn: '向左旋转',
           ko: '왼쪽으로 도세요',
@@ -442,12 +424,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3ED9', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3ED9', source: '이노센스', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rotate Right',
           de: 'Rechts rum rotieren',
-          fr: 'Tournez à droite',
+          fr: 'Tournez vers la droite',
           ja: '逆時針回り',
           cn: '向右旋转',
           ko: '오른쪽으로 도세요',
@@ -463,12 +445,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3ED3', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3ED3', source: '이노센스', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rotate Left',
           de: 'Links rum rotieren',
-          fr: 'Tournez à gauche',
+          fr: 'Tournez vers la gauche',
           ja: '時針回り',
           cn: '向左旋转',
           ko: '왼쪽으로 도세요',
@@ -484,12 +466,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3ED5', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3ED5', source: '이노센스', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rotate Right',
           de: 'Rechts rum rotieren',
-          fr: 'Tournez à droite',
+          fr: 'Tournez vers la droite',
           ja: '逆時針回り',
           cn: '向右旋转',
           ko: '오른쪽으로 도세요',
@@ -508,6 +490,14 @@ export default {
         'Forgiven Shame': 'Geläuterte Schande',
       },
       'replaceText': {
+        'Tethers': 'Verbindungen',
+        'Rotate': 'Rotieren',
+        'Trident': 'Dreizack',
+        'Charge': 'Ansturm',
+        'Corner': 'Ecke',
+        'Explode': 'Explosion',
+        'Avoid': 'ausweichen',
+        'Final(?!angriff)': ' Finale',
         'Soul And Body': 'Seele und Körper',
         'Shadowreaver': 'Schattenplünderer',
         'Scold\'s Bridle': 'Schandmal',
@@ -525,11 +515,7 @@ export default {
         'Forgiven venery': 'Geläuterte Wollust',
         'Drop Of Light': 'Lichtabfall',
         'Winged Rep': 'Schwinge des Urteils',
-        'Starbirth Corner': 'Sternengeburt Ecke',
-        'Starbirth Explode': 'Sternengeburt Explosion',
-        'Starbirth Charge': 'Sternengeburt Charge',
-        'Starbirth Avoid': 'vermeide Sternengeburt',
-        'Starbirth Final': 'Finale Sternengeburt',
+        'Starbirth': 'Sternengeburt',
       },
     },
     {

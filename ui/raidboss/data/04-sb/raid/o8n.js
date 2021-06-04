@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O8N - Sigmascape 4.0 Normal
 export default {
@@ -57,7 +57,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '292B', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '292B', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '292B', source: '신들의 상', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look At Statue',
@@ -77,13 +77,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '292C', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '292C', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '292C', source: '신들의 상', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look Away From Statue',
           de: 'Von Statue wegschauen',
           fr: 'Ne regardez pas la statue',
-          ja: '神々の像を見ないで',
+          ja: '神々の像を見ない',
           cn: '背对神像',
           ko: '시선 피하기',
         },
@@ -103,7 +103,7 @@ export default {
       id: 'O8N Flagrant Fire Single',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'fire on YOU',
@@ -128,7 +128,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '291D', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '291D', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'True Thunder',
@@ -149,13 +149,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '291B', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '291B', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fake Thunder',
           de: 'Falscher Blitz',
           fr: 'Fausse foudre',
-          ja: 'にせサンダガ',
+          ja: '偽サンダガ',
           cn: '假雷',
           ko: '거짓 선더가',
         },
@@ -170,7 +170,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2916', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2916', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fake Ice: Get out',
@@ -191,7 +191,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2919', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2919', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'True Ice: Get in',
@@ -212,7 +212,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2914', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2914', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fake Ice: Get in',
@@ -233,7 +233,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2918', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2918', source: '케프카', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'True Ice: Get out',

@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.SohmAlHard,
@@ -11,9 +11,7 @@ export default {
       id: 'Sohm Al Hard Wild Horn',
       regex: /Wild Horn/,
       beforeSeconds: 4,
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
   ],
@@ -42,13 +40,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '1C32', source: 'スポアサック', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '1C32', source: '포자 주머니', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from large pod',
           de: 'Weg vom großen Pod',
           fr: 'Éloignez-vous des spores',
-          ja: 'スポアサックに離れ',
+          ja: 'スポアサックから離れる',
           cn: '远离大孢囊',
           ko: '큰 포자 주머니에게서 떨어지기',
         },
@@ -58,12 +56,8 @@ export default {
       // The actual effect being checked here is Heavy.
       id: 'Sohm Al Hard Excretion',
       netRegex: NetRegexes.gainsEffect({ effectId: '0E' }),
-      condition: function(data) {
-        return data.CanCleanse();
-      },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.target) });
-      },
+      condition: (data) => data.CanCleanse(),
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',
@@ -168,7 +162,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '1C3E', source: '熔岩蝎' }),
       netRegexKo: NetRegexes.startsUsing({ id: '1C3E', source: '용암 전갈' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop puddle outside',
@@ -188,9 +182,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['1C40', '1C48'], source: ['ラーヴァ・スコーピオン', 'テイル・スコーピオン'] }),
       netRegexCn: NetRegexes.startsUsing({ id: ['1C40', '1C48'], source: ['熔岩蝎', '尖尾蝎'] }),
       netRegexKo: NetRegexes.startsUsing({ id: ['1C40', '1C48'], source: ['용암 전갈', '꼬리 전갈'] }),
-      condition: function(data, matches) {
-        return data.me === matches.target || data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data, matches) => data.me === matches.target || data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -209,12 +201,18 @@ export default {
       'locale': 'de',
       'replaceSync': {
         'The Wound': 'Wunde',
+        'The Scorpion\'s Tail': 'Schwanzskorpion',
         'The Lava Tube': 'Lavagrotte',
         'The Leightonward': 'Hortigolem',
         'Small Spore Sac': 'klein(?:e|er|es|en) Sporensack',
+        '(?<!Small )Spore Sac': 'Sporensack',
         'Lava Scorpion': 'Lavaskorpion',
       },
       'replaceText': {
+        '\\(Back\\)': '(Hinten)',
+        '\\(Front\\)': '(Vorne)',
+        '\\(Readies\\)': '(Vorbereitung)',
+        '\\(Ring\\)': '(Ring)',
         'Wild Horn': 'Wildes Horn',
         'Spore Sac': 'Sporensack',
         'Realm Shaker': 'Erderschütterer',
@@ -235,6 +233,8 @@ export default {
         'The Leightonward': 'Chortocyon',
         'Small Spore Sac': 'petit sac de spores',
         'Lava Scorpion': 'scorpion de lave',
+        'The Scorpion\'s Tail': 'queue du scorpion',
+        '(?<!Small )Spore Sac': 'Sac de spores',
       },
       'replaceText': {
         '\\(Back\\)': '(Derrière)',
@@ -242,7 +242,7 @@ export default {
         '\\(Readies\\)': '(Préparation)',
         '\\(Ring\\)': '(Anneau)',
         'Wild Horn': 'Corne sauvage',
-        'Spore Sac': 'Sac de spores',
+        '(?<!Small )Spore Sac': 'Sac de spores',
         'Realm Shaker': 'Secousse tellurique',
         'Molten Silk': 'Soie en fusion',
         'Inflammable Fumes': 'Gaz inflammable',
@@ -261,6 +261,8 @@ export default {
         'The Leightonward': 'レイトンワード',
         'Small Spore Sac': 'スモール・スポアサック',
         'Lava Scorpion': 'ラーヴァ・スコーピオン',
+        'The Scorpion\'s Tail': 'テイル・スコーピオン',
+        '(?<!Small )Spore Sac': 'スポアサック',
       },
       'replaceText': {
         '\\(Adds x2\\)': '(2つ 雑魚)',
@@ -289,8 +291,16 @@ export default {
         'The Leightonward': '莱顿瓦德',
         'Small Spore Sac': '小型孢囊',
         'Lava Scorpion': '熔岩蝎',
+        'The Scorpion\'s Tail': '尖尾蝎',
+        '(?<!Small )Spore Sac': '孢囊',
       },
       'replaceText': {
+        '\\(Adds x2\\)': '(小怪x2)',
+        '\\(Adds x4\\)': '(小怪x4)',
+        '\\(Back\\)': '(后)',
+        '\\(Front\\)': '(前)',
+        '\\(Readies\\)': '(准备)',
+        '\\(Ring\\)': '(月环)',
         'Wild Horn': '野性利角',
         'Spore Sac': '孢囊',
         'Realm Shaker': '震撼领域',
@@ -311,6 +321,8 @@ export default {
         'The Leightonward': '레이튼워드',
         'Small Spore Sac': '작은 포자 주머니',
         'Lava Scorpion': '용암 전갈',
+        'The Scorpion\'s Tail': '꼬리 전갈',
+        '(?<!Small )Spore Sac': '포자 주머니',
       },
       'replaceText': {
         'Wild Horn': '사나운 뿔',

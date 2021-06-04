@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../resources/netregexes.js';
-import ZoneId from '../../../../resources/zone_id.js';
+import NetRegexes from '../../../../resources/netregexes';
+import ZoneId from '../../../../resources/zone_id';
 
 const caresAboutTankStuff = (data) => {
   return data.role === 'tank' || data.role === 'healer' || data.job === 'BLU';
@@ -12,14 +12,12 @@ export default {
     {
       id: 'General Provoke',
       netRegex: NetRegexes.ability({ id: '1D6D' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Provoke: ${player}',
@@ -34,13 +32,15 @@ export default {
     {
       id: 'General Frog Legs',
       netRegex: NetRegexes.ability({ id: '4783' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
       suppressSeconds: 0.5,
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
+        if (matches.targetId === 'E0000000')
+          return output.noTarget({ player: data.ShortName(matches.source) });
         return output.text({ player: data.ShortName(matches.source) });
       },
       outputStrings: {
@@ -52,19 +52,24 @@ export default {
           cn: '挑衅: ${player}',
           ko: '도발: ${player}',
         },
+        noTarget: {
+          en: 'Provoke: ${player} (missed)',
+          de: 'Herausforderung: ${player} (verfehlt)',
+          fr: 'Provocation: ${player} (manquée)',
+          ja: '挑発: ${player} (タゲなし)',
+          cn: '挑衅: ${player} (无目标)',
+        },
       },
     },
     {
       id: 'General Shirk',
       netRegex: NetRegexes.ability({ id: '1D71' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Shirk: ${player}',
@@ -79,14 +84,12 @@ export default {
     {
       id: 'General Holmgang',
       netRegex: NetRegexes.ability({ id: '2B' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Holmgang: ${player}',
@@ -101,14 +104,12 @@ export default {
     {
       id: 'General Hallowed',
       netRegex: NetRegexes.ability({ id: '1E' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Hallowed: ${player}',
@@ -123,14 +124,12 @@ export default {
     {
       id: 'General Superbolide',
       netRegex: NetRegexes.ability({ id: '3F18' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Bolide: ${player}',
@@ -145,14 +144,12 @@ export default {
     {
       id: 'General Living',
       netRegex: NetRegexes.ability({ id: 'E36' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Living: ${player}',
@@ -167,14 +164,12 @@ export default {
     {
       id: 'General Walking',
       netRegex: NetRegexes.gainsEffect({ effectId: '32B' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.source) });
-      },
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
       outputStrings: {
         text: {
           en: 'Walking: ${player}',

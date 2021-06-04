@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.DohnMheg,
@@ -11,9 +11,7 @@ export default {
       id: 'Dohn Mheg Rake',
       regex: /Rake/,
       beforeSeconds: 5,
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.miniBuster(),
     },
   ],
@@ -27,9 +25,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DAA', source: 'ドォーヌ・フーア' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DAA', source: '禁园水妖' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DAA', source: '도느 푸아' }),
-      condition: function(data) {
-        return data.CanSilence();
-      },
+      condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
     {
@@ -41,9 +37,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DAB', source: 'ドォーヌ・バスケット' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DAB', source: '禁园篮筐' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DAB', source: '도느 바구니' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
+      condition: (data) => data.CanStun(),
       response: Responses.stun('info'),
     },
     {
@@ -55,9 +49,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DAF', source: 'ドォーヌ・エーディンモス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DAF', source: '禁园爱蒂恩蛾' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DAF', source: '도느 에다인나방' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
+      condition: (data) => data.CanStun(),
       response: Responses.stun('info'),
     },
     {
@@ -69,9 +61,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DB5', source: 'ドォーヌ・ケルピー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DB5', source: '禁园凯尔派' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DB5', source: '도느 켈피' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
+      condition: (data) => data.CanStun(),
       response: Responses.stun('info'),
     },
     {
@@ -82,9 +72,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2299', source: '美眼のインク＝ゾン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '2299', source: '美眼 因克·佐恩' }),
       netRegexKo: NetRegexes.startsUsing({ id: '2299', source: '눈이 예쁜 잉크 돈' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -122,9 +110,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '35A4', source: '楽聖のインク＝ゾン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '35A4', source: '乐圣 因克·佐恩' }),
       netRegexKo: NetRegexes.startsUsing({ id: '35A4', source: '대음악가 잉크 돈' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -171,6 +157,10 @@ export default {
         'Painted Sapling': 'Griaules Sämling',
         'Aenc Thon, Lord of the Lengthsome Gait': 'Aenc Thon (?:der|die|das) Langbeinig(?:e|er|es|en)',
         'Shade of Fear': 'Schatten der Angst',
+        'Dohnfast Fuath': 'Dohn-Fuath',
+        'Dohnfast Basket': 'Dohn-Blumenkorb',
+        'Dohnfast Etainmoth': 'Dohn-Edianmotte',
+        'Dohnfast Kelpie': 'Dohn-Kelpie',
       },
       'replaceText': {
         'Swinge': 'Brutaler Odem',
@@ -207,6 +197,10 @@ export default {
         'Teag Gye': 'la Teag Gye',
         'The Atelier': 'Repos de Griaule',
         'The throne room': 'la salle du trésor',
+        'Dohnfast Fuath': 'Fuath de Dohn Mheg',
+        'Dohnfast Basket': 'panier de Dohn Mheg',
+        'Dohnfast Etainmoth': 'noctuétain de Dohn Mheg',
+        'Dohnfast Kelpie': 'kelpie de Dohn Mheg',
       },
       'replaceText': {
         'Bile Bombardment': 'Bombardement bilieux',
@@ -243,6 +237,10 @@ export default {
         'Teag Gye': '微睡みの泉',
         'The Atelier': 'グリオールの寝床',
         'The throne room': '王冠の間',
+        'Dohnfast Fuath': 'ドォーヌ・フーア',
+        'Dohnfast Basket': 'ドォーヌ・バスケット',
+        'Dohnfast Etainmoth': 'ドォーヌ・エーディンモス',
+        'Dohnfast Kelpie': 'ドォーヌ・ケルピー',
       },
       'replaceText': {
         'Bile Bombardment': '蟲毒飛散',
@@ -279,6 +277,10 @@ export default {
         'Painted Sapling': '그리올 묘목',
         'Aenc Thon, Lord of the Lengthsome Gait': '대음악가 잉크 돈',
         'Shade of Fear': '공포의 환영',
+        'Dohnfast Fuath': '禁园水妖',
+        'Dohnfast Basket': '禁园篮筐',
+        'Dohnfast Etainmoth': '禁园爱蒂恩蛾',
+        'Dohnfast Kelpie': '禁园凯尔派',
       },
       'replaceText': {
         'Swinge': '징벌',
@@ -315,6 +317,10 @@ export default {
         'Painted Sapling': '格里奥勒花苗',
         'Aenc Thon, Lord of the Lengthsome Gait': '乐圣 因克·佐恩',
         'Shade of Fear': '恐怖幻影',
+        'Dohnfast Fuath': '禁园水妖',
+        'Dohnfast Basket': '禁园篮筐',
+        'Dohnfast Etainmoth': '禁园爱蒂恩蛾',
+        'Dohnfast Kelpie': '禁园凯尔派',
       },
       'replaceText': {
         'Swinge': '重击',

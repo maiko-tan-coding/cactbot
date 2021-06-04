@@ -1,12 +1,12 @@
-import EmulatorCommon from '../EmulatorCommon.js';
-import EventBus from '../EventBus.js';
-import { PopupTextGenerator } from '../../popup-text.js';
-import RaidEmulatorTimelineController from '../overrides/RaidEmulatorTimelineController.js';
-import RaidEmulatorTimelineUI from '../overrides/RaidEmulatorTimelineUI.js';
-import PopupTextAnalysis from '../data/PopupTextAnalysis.js';
-import { TimelineLoader } from '../../timeline.js';
-import { Util } from '../../../../resources/common.js';
-import raidbossFileData from '../../data/manifest.txt';
+import EmulatorCommon from '../EmulatorCommon';
+import EventBus from '../EventBus';
+import { PopupTextGenerator } from '../../popup-text';
+import RaidEmulatorTimelineController from '../overrides/RaidEmulatorTimelineController';
+import RaidEmulatorTimelineUI from '../overrides/RaidEmulatorTimelineUI';
+import PopupTextAnalysis from '../data/PopupTextAnalysis';
+import { TimelineLoader } from '../../timeline';
+import Util from '../../../../resources/util';
+import raidbossFileData from '../../data/raidboss_manifest.txt';
 
 export default class AnalyzedEncounter extends EventBus {
   constructor(options, encounter, emulator) {
@@ -20,12 +20,25 @@ export default class AnalyzedEncounter extends EventBus {
 
   selectPerspective(ID) {
     const partyMember = this.encounter.combatantTracker.combatants[ID];
+    this.popupText.partyTracker.onPartyChanged({
+      party: this.encounter.combatantTracker.partyMembers.map((ID) => {
+        return {
+          name: this.encounter.combatantTracker.combatants[ID].name,
+          job: Util.jobToJobEnum(this.encounter.combatantTracker.combatants[ID].job),
+          inParty: true,
+        };
+      }),
+    });
     this.popupText.OnPlayerChange({
       detail: {
         name: partyMember.name,
         job: partyMember.job,
         currentHP: partyMember.getState(this.encounter.logLines[0].timestamp).HP,
       },
+    });
+    this.popupText.OnChangeZone({
+      zoneName: this.encounter.encounterZoneName,
+      zoneID: parseInt(this.encounter.encounterZoneId, 16),
     });
   }
 
@@ -39,6 +52,7 @@ export default class AnalyzedEncounter extends EventBus {
   }
 
   async analyzeFor(ID) {
+    let currentLogIndex = 0;
     const partyMember = this.encounter.combatantTracker.combatants[ID];
 
     if (!partyMember.job) {
@@ -52,8 +66,10 @@ export default class AnalyzedEncounter extends EventBus {
     const timelineUI = new RaidEmulatorTimelineUI(this.options);
     const timelineController =
         new RaidEmulatorTimelineController(this.options, timelineUI, raidbossFileData);
+    timelineController.bindTo(this.emulator);
     const popupText = new PopupTextAnalysis(
         this.popupText.options, new TimelineLoader(timelineController), raidbossFileData);
+    timelineUI.popupText = popupText;
 
     timelineController.SetPopupTextInterface(new PopupTextGenerator(popupText));
 
@@ -78,6 +94,34 @@ export default class AnalyzedEncounter extends EventBus {
       zoneID: parseInt(this.encounter.encounterZoneId, 16),
     });
 
+    timelineController.activeTimeline.SetTrigger(async (trigger, matches) => {
+      // Some async magic here, force waiting for the entirety of
+      // the trigger execution before continuing
+      const delayPromise = new Promise((res) => {
+        popupText.delayResolver = res;
+      });
+      const promisePromise = new Promise((res) => {
+        popupText.promiseResolver = res;
+      });
+      const runPromise = new Promise((res) => {
+        popupText.runResolver = res;
+      });
+
+      const currentLine = this.encounter.logLines[currentLogIndex];
+
+      popupText.OnTrigger(trigger, matches, currentLine.timestamp);
+
+      await delayPromise;
+      await promisePromise;
+      const triggerHelper = await runPromise;
+
+      triggerHelper.resolver.status.finalData = EmulatorCommon.cloneData(popupText.data);
+
+      popupText.callback(
+          currentLine,
+          triggerHelper, triggerHelper.resolver.status);
+    });
+
     popupText.callback = (log, triggerHelper, currentTriggerStatus, finalData) => {
       this.perspectives[ID].triggers.push({
         triggerHelper: triggerHelper,
@@ -87,6 +131,7 @@ export default class AnalyzedEncounter extends EventBus {
           (currentTriggerStatus.delay * 1000),
       });
     };
+    popupText.triggerResolvers = [];
 
     this.perspectives[ID] = {
       initialData: EmulatorCommon.cloneData(popupText.data, []),
@@ -94,7 +139,10 @@ export default class AnalyzedEncounter extends EventBus {
       finalData: popupText.data,
     };
 
-    for (const log of this.encounter.logLines) {
+    for (; currentLogIndex < this.encounter.logLines.length; ++currentLogIndex) {
+      const log = this.encounter.logLines[currentLogIndex];
+      await this.dispatch('analyzeLine', log);
+
       if (this.encounter.combatantTracker.combatants[ID].hasState(log.timestamp)) {
         popupText.OnPlayerChange({
           detail: {
@@ -113,6 +161,8 @@ export default class AnalyzedEncounter extends EventBus {
 
       await popupText.OnLog(event);
       await popupText.OnNetLog(event);
+      timelineController.OnLogEvent(event);
     }
+    timelineUI.stop();
   }
 }

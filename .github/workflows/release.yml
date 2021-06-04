@@ -43,9 +43,17 @@ jobs:
       - name: Build Cactbot Plugin
         run: |
           dotnet build plugin/Cactbot.sln /p:Configuration=Release /p:Platform=x64
+
+      - name: Cache Dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
       - name: Install Node Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          npm install
+          npm ci --ignore-scripts
       - name: Build JavaScript UI Module Bundles
         run: |
           npm run build

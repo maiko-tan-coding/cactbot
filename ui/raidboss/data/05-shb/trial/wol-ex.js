@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Shared between imbued and quintuplecast.
 const sharedOutputStrings = {
@@ -42,14 +43,7 @@ const sharedOutputStrings = {
 // Only for imbued.
 const imbuedOutputStrings = {
   ...sharedOutputStrings,
-  swordIn: {
-    en: 'In',
-    de: 'Rein',
-    fr: 'Intérieur',
-    ja: '中へ',
-    cn: '月环',
-    ko: '안으로',
-  },
+  swordIn: Outputs.in,
   swordOut: {
     en: 'Out',
     de: 'Raus',
@@ -82,7 +76,7 @@ export default {
       regex: /Limit Break/,
       // 2 extra seconds over the cast.
       beforeSeconds: 8,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         const num = data.limitBreak;
         delete data.limitBreak;
 
@@ -131,17 +125,16 @@ export default {
       netRegexFr: NetRegexes.ability({ source: 'Guerrier De La Lumière Primordial', id: '4F09', capture: false }),
       netRegexJa: NetRegexes.ability({ source: 'ウォーリア・オブ・ライト', id: '4F09', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '光之战士', id: '4F09', capture: false }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
+      netRegexKo: NetRegexes.ability({ source: '빛의 전사', id: '4F09', capture: false }),
+      condition: (data) => data.role === 'healer',
       suppressSeconds: 5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Heal All to Full',
           de: 'Alle vollheilen',
           fr: 'Soignez tout le monde complètement',
-          ja: '全員HPを満タンさせ！',
+          ja: '全員のHPを満タンに！',
           cn: '奶满全队',
           ko: '전원 체력 풀피로',
         },
@@ -154,7 +147,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F43', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F43', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F43', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F43', capture: false }),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bait Confiteor',
@@ -173,7 +167,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F3[456]' }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F3[456]' }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F3[456]' }),
-      run: function(data, matches) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F3[456]' }),
+      run: (data, matches) => {
         if (matches.id === '4F34')
           data.limitBreak = 1;
         if (matches.id === '4F35')
@@ -189,7 +184,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F2C', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F2C', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F2C', capture: false }),
-      infoText: (data, _, output) => output.stone(),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F2C', capture: false }),
+      infoText: (_data, _matches, output) => output.stone(),
       outputStrings: {
         stone: imbuedOutputStrings.stone,
       },
@@ -201,7 +197,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF3', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF3', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF3', capture: false }),
-      run: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF3', capture: false }),
+      run: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('fire');
       },
@@ -213,7 +210,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF4', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF4', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF4', capture: false }),
-      run: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF4', capture: false }),
+      run: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('blizzard');
       },
@@ -225,7 +223,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF5', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF5', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF5', capture: false }),
-      run: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF5', capture: false }),
+      run: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('holy');
       },
@@ -237,7 +236,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF6', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF6', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF6', capture: false }),
-      run: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF6', capture: false }),
+      run: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('stone');
       },
@@ -249,11 +249,12 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F4A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F4A', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F4A', capture: false }),
-      preRun: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F4A', capture: false }),
+      preRun: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('swordIn');
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         const strings = data.imbued.map((key) => output[key]());
         const msg = strings.join(' + ');
         delete data.imbued;
@@ -268,11 +269,12 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F49', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F49', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F49', capture: false }),
-      preRun: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F49', capture: false }),
+      preRun: (data) => {
         data.imbued = data.imbued || [];
         data.imbued.push('swordOut');
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         const strings = data.imbued.map((key) => output[key]());
         const msg = strings.join(' + ');
         delete data.imbued;
@@ -287,6 +289,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F0A' }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F0A' }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F0A' }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F0A' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBusterSwap(),
     },
@@ -297,14 +300,15 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F41', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F41', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F41', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F41', capture: false }),
       delaySeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Wyrm Dash',
           de: 'Wyrm-Ansturm ausweichen',
           fr: 'Évitez la charge du Wyrm',
-          ja: '竜を避け',
+          ja: '竜を避ける',
           cn: '躲避巴哈冲锋',
           ko: '용 돌진 피하기',
         },
@@ -323,6 +327,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F0B', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F0B', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F0B', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F0B', capture: false }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
     },
@@ -333,9 +338,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '5151', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '5151', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '5151', capture: false }),
-      run: function(data) {
-        data.isAddPhase = true;
-      },
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '5151', capture: false }),
+      run: (data) => data.isAddPhase = true,
     },
     {
       id: 'WOLEx Fatal Cleave / Blade Of Shadow',
@@ -345,18 +349,12 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: ['Berserker Spectral', 'Chevalier Noir Spectral'], id: '515[47]', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: ['幻光の狂戦士', '幻光の暗黒騎士'], id: '515[47]', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['幻光狂战士', '幻光暗黑骑士'], id: '515[47]', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: ['환상빛의 전사', '환상빛의 암흑기사'], id: '515[47]', capture: false }),
       condition: Conditions.caresAboutPhysical(),
       suppressSeconds: 2,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Tank Busters',
-          de: 'Tankbuster',
-          fr: 'Tank buster',
-          ja: 'タンクバスター',
-          cn: '坦克死刑',
-          ko: '탱버',
-        },
+        text: Outputs.tankBusters,
       },
     },
     {
@@ -366,9 +364,10 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: ['Berserker Spectral', 'Chevalier Noir Spectral'], id: '515[68]', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: ['幻光の狂戦士', '幻光の暗黒騎士'], id: '515[68]', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['幻光狂战士', '幻光暗黑骑士'], id: '515[68]', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: ['환상빛의 전사', '환상빛의 암흑기사'], id: '515[68]', capture: false }),
       condition: (data) => data.CanSilence(),
       suppressSeconds: 2,
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Interrupt',
@@ -384,7 +383,7 @@ export default {
       id: 'WOLEx Adds Deluge of Death Marker',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: (data, matches) => !data.ultimateSeen && data.me === matches.target,
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Flare on YOU',
@@ -403,9 +402,10 @@ export default {
       netRegexFr: NetRegexes.tether({ source: 'Egi Spectral', id: '0054' }),
       netRegexJa: NetRegexes.tether({ source: '幻光の召喚獣', id: '0054' }),
       netRegexCn: NetRegexes.tether({ source: '幻光召唤兽', id: '0054' }),
+      netRegexKo: NetRegexes.tether({ source: '환상빛의 소환수', id: '0054' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 4,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Point Tether Out',
@@ -424,13 +424,14 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '5152', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '5152', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '5152', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '5152', capture: false }),
       // This is still 1 second before this cast goes off, giving ~7 seconds before LB is needed.
       delaySeconds: 4,
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.text();
       },
-      run: function(data) {
+      run: (data) => {
         data.isAddPhase = false;
         data.ultimateSeen = true;
       },
@@ -453,9 +454,10 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Mage Noir Spectral', id: '4F3D', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '幻光の黒魔道士', id: '4F3D', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '幻光黑魔法师', id: '4F3D', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '환상빛의 흑마도사', id: '4F3D', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Black Mage + White Mage',
@@ -475,9 +477,10 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF[34]', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF[34]', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF[34]', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF[34]', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Summoner + Warrior',
@@ -498,9 +501,10 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4F43', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4F43', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4F43', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4F43', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dark Knight + Bard',
@@ -520,12 +524,11 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF[56]', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF[56]', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF[56]', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF[56]', capture: false }),
       condition: (data) => data.ultimateSeen && !data.calledSpectral,
       preRun: (data) => data.calledSpectral = true,
-      alertText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.ninja = true;
-      },
+      alertText: (_data, _matches, output) => output.text(),
+      run: (data) => data.ninja = true,
       outputStrings: {
         text: {
           en: 'Ninja',
@@ -545,9 +548,8 @@ export default {
       netRegexFr: NetRegexes.ability({ source: 'Guerrier De La Lumière Primordial', id: '4F45', capture: false }),
       netRegexJa: NetRegexes.ability({ source: 'ウォーリア・オブ・ライト', id: '4F45', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '光之战士', id: '4F45', capture: false }),
-      run: function(data) {
-        data.calledSpectral = false;
-      },
+      netRegexKo: NetRegexes.ability({ source: '빛의 전사', id: '4F45', capture: false }),
+      run: (data) => data.calledSpectral = false,
     },
     {
       // Katon: San and Absolute Holy share markers
@@ -557,10 +559,9 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: ['Guerrier De La Lumière Primordial', 'Ninja Spectral'], id: '4EFD', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: ['ウォーリア・オブ・ライト', '幻光の忍者'], id: '4EFD', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['光之战士', '幻光忍者'], id: '4EFD', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: ['빛의 전사', '환상빛의 닌자'], id: '4EFD', capture: false }),
       delaySeconds: 30,
-      run: function(data) {
-        delete data.ninja;
-      },
+      run: (data) => delete data.ninja,
     },
     {
       id: 'WOLEx Suiton: San',
@@ -571,6 +572,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: ['Guerrier De La Lumière Primordial', 'Ninja Spectral'], id: '4EFD', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: ['ウォーリア・オブ・ライト', '幻光の忍者'], id: '4EFD', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: ['光之战士', '幻光忍者'], id: '4EFD', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: ['빛의 전사', '환상빛의 닌자'], id: '4EFD', capture: false }),
       delaySeconds: 7,
       response: Responses.knockback(),
     },
@@ -585,7 +587,7 @@ export default {
       id: 'WOLEx Perfect Decimation',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Warrior Cleave on YOU',
@@ -601,7 +603,7 @@ export default {
       id: 'WOLEx Brimstone Earth',
       netRegex: NetRegexes.headMarker({ id: '0067' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
@@ -617,10 +619,8 @@ export default {
       id: 'WOLEx Deluge of Death Marker',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: (data, matches) => data.ultimateSeen && data.me === matches.target,
-      alarmText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.deluge = true;
-      },
+      alarmText: (_data, _matches, output) => output.text(),
+      run: (data) => data.deluge = true,
       outputStrings: {
         text: {
           en: 'Flare on YOU',
@@ -646,6 +646,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF1', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF1', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF1', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF1', capture: false }),
       response: Responses.getOut(),
     },
     {
@@ -655,6 +656,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EF2', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EF2', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EF2', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EF2', capture: false }),
       response: Responses.getIn(),
     },
     {
@@ -664,7 +666,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ source: 'Guerrier De La Lumière Primordial', id: '4EEF', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'ウォーリア・オブ・ライト', id: '4EEF', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '光之战士', id: '4EEF', capture: false }),
-      run: function(data) {
+      netRegexKo: NetRegexes.startsUsing({ source: '빛의 전사', id: '4EEF', capture: false }),
+      run: (data) => {
         data.quintuplecasting = true;
         data.quintuplecasts = [];
       },
@@ -676,8 +679,9 @@ export default {
       netRegexFr: NetRegexes.ability({ source: 'Guerrier De La Lumière Primordial', id: '4EEF', capture: false }),
       netRegexJa: NetRegexes.ability({ source: 'ウォーリア・オブ・ライト', id: '4EEF', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '光之战士', id: '4EEF', capture: false }),
+      netRegexKo: NetRegexes.ability({ source: '빛의 전사', id: '4EEF', capture: false }),
       durationSeconds: 18.5,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         const strings = data.quintuplecasts.map((key) => output[key]());
         const msg = strings.join(' > ');
         return msg;
@@ -692,8 +696,9 @@ export default {
       netRegexFr: NetRegexes.ability({ source: 'Guerrier De La Lumière Primordial', id: ['4EEF', '4EF0'], capture: false }),
       netRegexJa: NetRegexes.ability({ source: 'ウォーリア・オブ・ライト', id: ['4EEF', '4EF0'], capture: false }),
       netRegexCn: NetRegexes.ability({ source: '光之战士', id: ['4EEF', '4EF0'], capture: false }),
+      netRegexKo: NetRegexes.ability({ source: '빛의 전사', id: ['4EEF', '4EF0'], capture: false }),
       durationSeconds: 3,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         const next = data.quintuplecasts.shift();
         // The last cast of 4EF0 will not have a next mechanic to call.
         if (next)
@@ -707,10 +712,8 @@ export default {
       condition: (data) => data.quintuplecasting,
       durationSeconds: 2,
       suppressSeconds: 5,
-      infoText: (data, _, output) => `(${output.blizzard().toLowerCase()})`,
-      run: function(data) {
-        data.quintuplecasts.push('blizzard');
-      },
+      infoText: (_data, _matches, output) => `(${output.blizzard().toLowerCase()})`,
+      run: (data) => data.quintuplecasts.push('blizzard'),
       outputStrings: {
         blizzard: quintupleOutputStrings.blizzard,
       },
@@ -721,10 +724,8 @@ export default {
       condition: (data) => data.quintuplecasting,
       durationSeconds: 2,
       suppressSeconds: 5,
-      infoText: (data, _, output) => `(${output.holy().toLowerCase()})`,
-      run: function(data) {
-        data.quintuplecasts.push('holy');
-      },
+      infoText: (_data, _matches, output) => `(${output.holy().toLowerCase()})`,
+      run: (data) => data.quintuplecasts.push('holy'),
       outputStrings: {
         holy: quintupleOutputStrings.holy,
       },
@@ -735,10 +736,8 @@ export default {
       condition: (data) => data.quintuplecasting,
       durationSeconds: 2,
       suppressSeconds: 5,
-      infoText: (data, _, output) => `(${output.stone().toLowerCase()})`,
-      run: function(data) {
-        data.quintuplecasts.push('stone');
-      },
+      infoText: (_data, _matches, output) => `(${output.stone().toLowerCase()})`,
+      run: (data) => data.quintuplecasts.push('stone'),
       outputStrings: {
         stone: quintupleOutputStrings.stone,
       },
@@ -749,10 +748,8 @@ export default {
       condition: (data) => data.quintuplecasting,
       durationSeconds: 2,
       suppressSeconds: 5,
-      infoText: (data, _, output) => `(${output.fire().toLowerCase()})`,
-      run: function(data) {
-        data.quintuplecasts.push('fire');
-      },
+      infoText: (_data, _matches, output) => `(${output.fire().toLowerCase()})`,
+      run: (data) => data.quintuplecasts.push('fire'),
       outputStrings: {
         fire: quintupleOutputStrings.fire,
       },
@@ -763,10 +760,8 @@ export default {
       condition: (data) => data.quintuplecasting,
       durationSeconds: 2,
       suppressSeconds: 5,
-      infoText: (data, _, output) => `(${output.flash().toLowerCase()})`,
-      run: function(data) {
-        data.quintuplecasts.push('flash');
-      },
+      infoText: (_data, _matches, output) => `(${output.flash().toLowerCase()})`,
+      run: (data) => data.quintuplecasts.push('flash'),
       outputStrings: {
         flash: quintupleOutputStrings.flash,
       },
@@ -987,9 +982,9 @@ export default {
         'DRK/BRD': '黑骑／诗人',
         'Elddragon Dive': '远古龙炎冲',
         'Fatal Cleave': '夺命飞环',
-        '(?<!(/|Imbued ))Fire/Ice': '火/冰',
+        '(?<! )Fire/Ice': '火/冰',
         'Flare Breath': '核爆吐息',
-        '(?<!(Absolute|Imbued) )Holy': '神圣',
+        '(?<! )Holy': '神圣',
         'Imbued Coruscance': '魔法剑技·光明利剑',
         'Imbued Fire/Ice': '魔法剑(火／冰)',
         'Imbued Holy': '魔法剣 (光)',
@@ -1009,7 +1004,7 @@ export default {
         'SMN/WAR': '召唤／战士',
         'Solemn Confiteor': '庄严悔罪',
         'Specter Of Light': '幻光召唤',
-        '(?<!(Absolute|Imbued) )Stone(?! Earth)': '飞石',
+        '(?<! )Stone(?! Earth)': '飞石',
         'Suiton\\: San': '叁式水遁之术',
         'Summon(?! Wyrm)': '召唤',
         'Summon Wyrm': '真龙召唤',
@@ -1023,20 +1018,66 @@ export default {
     },
     {
       'locale': 'ko',
-      'missingTranslations': true,
       'replaceSync': {
         'Warrior Of Light': '빛의 전사',
+        'Spectral Bard': '환상빛의 음유시인',
+        'Spectral Black Mage': '환상빛의 흑마도사',
+        'Spectral Dark Knight': '환상빛의 암흑기사',
+        'Spectral Egi': '환상빛의 소환수',
+        'Spectral Ninja': '환상빛의 닌자',
+        'Spectral Summoner': '환상빛의 소환사',
+        'Spectral Warrior': '환상빛의 전사',
+        'Spectral White Mage': '환상빛의 백마도사',
+        'Wyrm Of Light': '빛의 비룡',
       },
       'replaceText': {
+        'Absolute Flash': '앱솔루트 플래시',
+        'Absolute Holy': '앱솔루트 홀리',
+        'Absolute Stone III': '앱솔루트 스톤가',
+        'Berserk': '광폭화',
+        'Blade Of Shadow': '칠흑의 마검',
         'BLM/WHM': '흑마／백마',
+        'Brimstone Earth': '유황 지대',
         '(?<!\\w)Cast(?= )': '시전',
+        'Cauterize': '인두질',
+        'Coruscant Saber': '빛나는 도검',
+        'Deep Darkside': '진 암흑',
+        'Deluge Of Death': '죽음의 화살 폭우',
         'DRK/BRD': '암기／음유',
+        'Elddragon Dive': '고룡 강타',
+        'Fatal Cleave': '치명적인 참수',
+        '(?<! )Fire/Ice': '파이가/블리자가',
+        'Flare Breath': '타오르는 숨결',
+        '(?<! )Holy': '홀리',
+        'Imbued Coruscance': '마법검: 빛나는 도검',
+        'Imbued Fire/Ice': '마법검 파이가/블리자가',
+        'Imbued Holy': '마법검 홀리',
+        'Imbued Ice/Fire': '마법검 블리자가/파이가',
+        'Imbued Stone': '마법검 스톤',
+        'Katon\\: San': '화둔술 3',
         '(?<! )Limit(?! Break)': '리미트',
         'Limit Break': '리미트 브레이크',
         'Meteor Impact': '운석 낙하',
         '(?<= )NIN': '닌자',
+        'Perfect Decimation': '완전 섬멸',
+        'Quintuplecast': '오연속 마법',
+        'Radiant Braver': '빛나는 브레이버',
+        'Radiant Desperado': '빛나는 무법자',
+        'Radiant Meteor': '빛나는 메테오',
+        'Shining Wave': '찬란한 파동',
         'SMN/WAR': '소환사／전사',
+        'Solemn Confiteor': '엄숙한 기도',
+        'Specter Of Light': '환상빛 소환',
+        '(?<! )Stone(?! Earth)': '스톤',
+        'Suiton\\: San': '수둔술 3',
         'Summon(?! Wyrm)': '소환',
+        'Summon Wyrm': '비룡 소환',
+        'Sword Of Light': '빛의 검',
+        'Terror Unleashed': '공포 촉발',
+        'The Bitter End': '파국',
+        'To The Limit': '리미트 축적',
+        'Twincast': '합동 시전',
+        'Ultimate Crossover': '궁극의 협력기',
       },
     },
   ],

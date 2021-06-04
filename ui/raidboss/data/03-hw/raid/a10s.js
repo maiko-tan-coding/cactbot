@@ -1,20 +1,14 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Notes:
 // Ignoring Gobsway Rumblerocks (1AA0) aoe trigger, as it is small and frequent.
 
 const chargeOutputStrings = {
-  getIn: {
-    en: 'In',
-    de: 'Rein',
-    fr: 'Intérieur',
-    ja: '中へ',
-    cn: '靠近',
-    ko: '안으로',
-  },
+  getIn: Outputs.in,
   getOut: {
     en: 'Out',
     de: 'Raus',
@@ -23,22 +17,8 @@ const chargeOutputStrings = {
     cn: '远离',
     ko: '밖으로',
   },
-  spread: {
-    en: 'Spread',
-    de: 'Verteilen',
-    fr: 'Dispersez-vous',
-    ja: '散開',
-    cn: '分散',
-    ko: '산개',
-  },
-  stackMarker: {
-    en: 'Stack',
-    de: 'Sammeln',
-    fr: 'Packez-vous',
-    ja: '頭割り',
-    cn: '分摊',
-    ko: '쉐어뎀',
-  },
+  spread: Outputs.spread,
+  stackMarker: Outputs.stackMarker,
 };
 
 export default {
@@ -58,7 +38,7 @@ export default {
       regex: /Gobbie Adds/,
       beforeSeconds: 0,
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hit Adds With Weight Trap',
@@ -80,7 +60,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB2', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB2', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Floor Spikes',
@@ -100,7 +80,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB1', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB1', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB1', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Frost Lasers',
@@ -120,7 +100,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB0', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB0', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB0', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Ceiling Weight',
@@ -141,7 +121,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AB[89AB]' }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AB[89AB]' }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AB[89AB]' }),
-      preRun: function(data, matches) {
+      preRun: (data, matches) => {
         data.charges = data.charges || [];
         data.charges.push({
           '1AB8': 'getIn',
@@ -150,7 +130,7 @@ export default {
           '1ABB': 'stackMarker',
         }[matches.id]);
       },
-      response: function(data, _, output) {
+      response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = chargeOutputStrings;
 
@@ -168,7 +148,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1A9[789]', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A9[789]', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A9[789]', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.charges)
           data.charges.shift();
       },
@@ -182,7 +162,7 @@ export default {
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A9[ABCE]', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A9[ABCE]', capture: false }),
       suppressSeconds: 0.5,
-      response: function(data, _, output) {
+      response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = chargeOutputStrings;
 
@@ -201,7 +181,7 @@ export default {
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A9[789]', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A9[789]', capture: false }),
       delaySeconds: 10,
-      run: function(data) {
+      run: (data) => {
         // Cleanup just in case.
         delete data.charges;
       },
@@ -225,12 +205,12 @@ export default {
       netRegexJa: NetRegexes.tether({ source: '傭兵のレイムプリクス', id: '0039' }),
       netRegexCn: NetRegexes.tether({ source: '佣兵雷姆普里克斯', id: '0039' }),
       netRegexKo: NetRegexes.tether({ source: '용병 레임브릭스', id: '0039' }),
-      alarmText: function(data, matches, output) {
+      alarmText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
         return output.tankSwapGetAway();
       },
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return;
         if (data.role === 'tank')
@@ -240,14 +220,7 @@ export default {
           return output.shieldPlayer({ player: data.ShortName(matches.target) });
       },
       outputStrings: {
-        tankSwap: {
-          en: 'Tank Swap!',
-          de: 'Tankwechsel!',
-          fr: 'Tank swap !',
-          ja: 'タンクスイッチ!',
-          cn: '换T！',
-          ko: '탱 교대',
-        },
+        tankSwap: Outputs.tankSwap,
         shieldPlayer: {
           en: 'Shield ${player}',
           de: 'Schild ${player}',
@@ -260,7 +233,7 @@ export default {
           en: 'Tank Swap, Get Away',
           de: 'Tankwechsel, geh weg',
           fr: 'Tank swap, éloignez-vous',
-          ja: 'タンクスイッチ、離れ',
+          ja: 'タンクスイッチ、離れる',
           cn: '换T并且远离',
           ko: '탱 교대, 멀리가기',
         },
@@ -284,7 +257,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1AA9', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1AA9', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AA9', capture: false }),
-      run: function(data) {
+      run: (data) => {
         // This comes out 0.1s before every '0029' prey marker.
         data.seenBrighteyes = true;
       },
@@ -299,15 +272,13 @@ export default {
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1AA9', capture: false }),
       delaySeconds: 20,
       suppressSeconds: 20,
-      run: function(data) {
-        delete data.seenBrighteyes;
-      },
+      run: (data) => delete data.seenBrighteyes,
     },
     {
       id: 'A10S Brighteyes Prey Marker',
       netRegex: NetRegexes.headMarker({ id: '0029' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Prey on YOU',
@@ -322,12 +293,12 @@ export default {
     {
       id: 'A10S Brighteyes Prey Marker Pass',
       netRegex: NetRegexes.headMarker({ id: '0029' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         // Only need to pass on the first one.
         return data.me === matches.target && !data.seenBrighteyes;
       },
       delaySeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Pass Prey',
@@ -347,7 +318,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: '傭兵のレイムプリクス', id: '1A92', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '佣兵雷姆普里克斯', id: '1A92', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '용병 레임브릭스', id: '1A92', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hit Floor Trap',
@@ -377,7 +348,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '傭兵のレイムプリクス', id: '1A8F', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '佣兵雷姆普里克斯', id: '1A8F', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '용병 레임브릭스', id: '1A8F', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hit Boss With Ice',
@@ -403,13 +374,13 @@ export default {
       },
       'replaceText': {
         '(?!--)mechanic': 'Mechanik',
-        '--in--': '--Rein--',
-        '--out--': '--Raus--',
         '--in/out--': '--Rein/Raus--',
         '--out/in--': '--Raus/Rein--',
         '--spread/stack--': '--Verteilen/Sammeln--',
         '--stack/spread--': '--Sammeln/Verteilen--',
-        'Brighteyes': 'Zielheften Auge',
+        '\\(Stack/Spread\\)': '(Sammeln/Verteilen)',
+        'Brighteyes(?! Markers)': 'Zielheften Auge',
+        'Brighteyes Markers': 'Zielheften Auge Markierungen',
         'Clone Add': 'Klon Add',
         'Discharge': 'Abfeuern',
         'Double Charge': 'Doppelaufladung',
@@ -433,7 +404,7 @@ export default {
         'Stoneskin': 'Steinhaut',
         'Triple Charge': 'Dreifachaufladung',
         'Weight Trap': 'Gewichts-Falle',
-        'Leghops\\?/Charge \\(In\\)\\?': 'Gob am Berg?/Aufladung (Rein)?',
+        'Leghops\\?/Charge': 'Gob am Berg?/Aufladung',
       },
     },
     {
@@ -448,9 +419,7 @@ export default {
       },
       'replaceText': {
         '(?!--)mechanic': 'Mécanique',
-        '--in--': '--intérieur--',
         '--in/out--': '--intérieur/extérieur--',
-        '--out--': '--extérieur--',
         '--out/in--': '--extérieur/intérieur--',
         '--spread/stack--': '--dispersion/package--',
         '--stack/spread--': '--package/dispersion--',
@@ -475,7 +444,7 @@ export default {
         'Illuminati Hand Cannon': 'Main-canon indigo',
         'Impact': 'Impact',
         'Laceration': 'Lacération',
-        'Leghops\\?/Charge \\(In\\)\\?': 'Mortelle ?/Charge (intérieur) ?',
+        'Leghops\\?/Charge': 'Mortelle ?/Charge',
         'Single Charge': 'Rechargement simple',
         'Steam Roller': 'Compression',
         'Stoneskin': 'Cuirasse',
@@ -495,13 +464,12 @@ export default {
       },
       'replaceText': {
         '(?!--)mechanic': 'ギミック',
-        '--in--': '--中--',
         '--in/out--': '--中/外--',
-        '--out--': '--外--',
         '--out/in--': '--外/中--',
         '--spread/stack--': '--散開/集合--',
         '--stack/spread--': '--集合/散開--',
         '\\(Stack/Spread\\)': '(集合/散開)',
+        '\\)\\?': ') ?',
         'Brighteyes Markers': '狙い目マーキング',
         'Brighteyes(?! Markers)': '狙い目',
         'Clone Add': '雑魚: ミラージュ',
@@ -522,7 +490,7 @@ export default {
         'Illuminati Hand Cannon': 'イルミナティ・ハンドカノン',
         'Impact': '衝撃',
         'Laceration': '斬撃',
-        'Leghops\\?/Charge \\(In\\)\\?': 'ゴブ流後の先?/充填 (中) ?',
+        'Leghops\\?/Charge': 'ゴブ流後の先?/充填',
         'Single Charge': '単発充填',
         'Steam Roller': 'ローラープレス',
         'Stoneskin': 'ストンスキン',
@@ -542,12 +510,11 @@ export default {
       },
       'replaceText': {
         '(?!--)mechanic': '机制',
-        '--in--': '--内--',
-        '--out--': '--外--',
         '--in/out--': '--内/外--',
         '--out/in--': '--外/内--',
         '--spread/stack--': '--分散/集合--',
         '--stack/spread--': '--集合/分散--',
+        '\\)\\?': ') ?',
         'Brighteyes': '目标',
         'Clone Add': '分身出现',
         'Discharge': '枪击',
@@ -572,7 +539,7 @@ export default {
         'Stoneskin': '石肤',
         'Triple Charge': '三连填充',
         'Weight Trap': '铁球陷阱',
-        'Leghops\\?/Charge \\(In\\)\\?': '哥布流后之先?/冲锋（内）?',
+        'Leghops\\?/Charge': '哥布流后之先?/冲锋',
       },
     },
     {
@@ -587,8 +554,6 @@ export default {
       },
       'replaceText': {
         '(?!--)mechanic': '기믹',
-        '--in--': '--안--',
-        '--out--': '--밖--',
         '--in/out--': '--안/밖--',
         '--out/in--': '--밖/안--',
         '--spread/stack--': '--산개/쉐어--',
@@ -618,7 +583,7 @@ export default {
         'Stoneskin': '스톤스킨',
         'Triple Charge': '3연속 충전',
         'Weight Trap': '철퇴 함정',
-        'Leghops\\?/Charge \\(In\\)\\?': '되받아치기?/충전 (안)?',
+        'Leghops\\?/Charge': '되받아치기?/충전',
       },
     },
   ],

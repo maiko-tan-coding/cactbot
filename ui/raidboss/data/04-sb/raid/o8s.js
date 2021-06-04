@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 const strings = {
   typeAndDir: {
@@ -12,14 +13,7 @@ const strings = {
     cn: '${type}: ${dir}',
     ko: '${type}: ${dir}',
   },
-  spread: {
-    en: 'Spread',
-    de: 'verteilen',
-    fr: 'Eloignez-vous',
-    ja: '散開',
-    cn: '散开',
-    ko: '산개',
-  },
+  spread: Outputs.spread,
   stack: {
     en: 'Stack',
     de: 'Stacken',
@@ -102,13 +96,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28E4', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28E4', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28E4', source: '신들의 상', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look Away From Statue',
           de: 'Von Statue wegschauen',
           fr: 'Ne regardez pas la statue',
-          ja: '塔を見ないで！',
+          ja: '塔を見ない！',
           cn: '背对神像',
           ko: '시선 피하기',
         },
@@ -142,13 +136,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28E3', source: '神々の像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28E3', source: '众神之像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28E3', source: '신들의 상', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look At Statue',
           de: 'Statue anschauen',
           fr: 'Regardez la statue',
-          ja: '像を見て！',
+          ja: '像を見る！',
           cn: '面对神像',
           ko: '시선 바라보기',
         },
@@ -162,7 +156,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28F1', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28F1', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28F1', source: '케프카', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Past: Stack and Stay',
@@ -182,13 +176,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28EE', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28EE', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28EE', source: '케프카', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Future: Stack and Through',
           de: 'Zukunft: Sammeln und Durchlaufen',
           fr: 'Futur : Stack et traversez',
-          ja: '未来: シェア後ボス通り抜ける',
+          ja: '未来: 頭割り後ボスを通り抜ける',
           cn: '分摊穿boss',
           ko: '미래: 맞고 통과해가기',
         },
@@ -203,16 +197,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28F[78]', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28F[78]', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28F[78]', source: '케프카', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Past: Bait, then through',
           de: 'Vergangenheit : Anlocken und Durchlaufen',
           fr: 'Passé : Attirez, puis traversez',
-          ja: '過去: 飛んできたら反対向ける',
+          ja: '過去: 飛んできたら反対に向ける',
           cn: '诱导然后穿boss',
           ko: '과거: 맞고, 이동',
         },
@@ -227,10 +219,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28F[45]', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28F[45]', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28F[45]', source: '케프카', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Future: Bait, then stay',
@@ -261,11 +251,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2900', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2900', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2900', source: '케프카', capture: false }),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.wingsBeNearFar();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.role !== 'tank')
           return output.maxMeleeAvoidTanks();
       },
@@ -274,7 +264,7 @@ export default {
           en: 'Max Melee: Avoid Tanks',
           de: 'Max Nahkampf: Weg von den Tanks',
           fr: 'Max Mêlée : éloignez-vous des Tanks',
-          ja: '近接最大レンジ タンクから離れ',
+          ja: '近接最大レンジ タンクから離れる',
           cn: '最远距离',
           ko: '칼끝딜: 탱커 피하기',
         },
@@ -296,7 +286,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28F[EF]', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28F[EF]', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28F[EF]', source: '케프카', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Single Wing',
@@ -316,13 +306,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2910', source: 'ケフカ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '2910', source: '凯夫卡' }),
       netRegexKo: NetRegexes.startsUsing({ id: '2910', source: '케프카' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (matches.target !== data.me)
           return;
 
         return output.embraceOnYou();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (matches.target === data.me)
           return;
 
@@ -368,7 +358,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '28E5', source: '众神之像' }),
       netRegexKo: NetRegexes.startsUsing({ id: '28E5', source: '신들의 상' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Confusion: Go Outside',
@@ -389,7 +379,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '28E6', source: '众神之像' }),
       netRegexKo: NetRegexes.startsUsing({ id: '28E6', source: '신들의 상' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Sleep: Go Inside',
@@ -402,6 +392,29 @@ export default {
       },
     },
     {
+      // Precedes fake abilities
+      id: 'O8S Jester\'s Antics',
+      netRegex: NetRegexes.gainsEffect({ effectId: '5CE', capture: false }),
+      suppressSeconds: 1, // Every Kefka entity gains this at once.
+      run: (data) => data.antics = true,
+    },
+    {
+      // Precedes real abilities
+      id: 'O8S Jester\'s Truths',
+      netRegex: NetRegexes.gainsEffect({ effectId: '5CF', capture: false }),
+      suppressSeconds: 1, // Every Kefka entity gains this at once.
+      run: (data) => data.truths = true,
+    },
+    {
+      id: 'O8S Jester Cleanup',
+      netRegex: NetRegexes.losesEffect({ effectId: ['5CE', '5CF'], capture: false }),
+      suppressSeconds: 1,
+      run: (data) => {
+        delete data.antics;
+        delete data.truths;
+      },
+    },
+    {
       id: 'O8S Mana Charge',
       netRegex: NetRegexes.startsUsing({ id: '28D1', source: 'Kefka', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '28D1', source: 'Kefka', capture: false }),
@@ -409,7 +422,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28D1', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28D1', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28D1', source: '케프카', capture: false }),
-      run: function(data) {
+      run: (data) => {
         delete data.lastFire;
         delete data.lastThunder;
         delete data.lastIceDir;
@@ -424,7 +437,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '28D2', source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '28D2', source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '28D2', source: '케프카', capture: false }),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.lastFire)
           return output[data.lastFire]();
 
@@ -454,24 +467,37 @@ export default {
       },
     },
     {
-      // From ACT log lines, there's not any way to know the fire type as it's used.
-      // The ability id is always 14:28CE:Kefka starts using Flagrant Fire on Kefka.
-      // However, you can remind forgetful people during mana release and figure out
-      // the type based on the damage it does.
+      // This may be real or fake. We're just storing this briefly
+      // so we can use it to call the first fire correctly.
+      // 007F is the spread marker, 0080 is the stack marker
+      id: 'O8S Fire Head Marker',
+      netRegex: NetRegexes.headMarker({ id: ['007F', '0080'] }),
+      suppressSeconds: 2,
+      run: (data, matches) => data.fireMarker = matches.id === '007F' ? 'spread' : 'stack',
+    },
+    {
+      // Kefka doesn't directly use the Fire abilities. Rather, he casts 28CE on himself,
+      // then instantly casts either the real or fake Fire on resolution.
       //
       // 28CE: ability id on use
       // 28CF: damage from mana charge
       // 2B32: damage from mana release
       id: 'O8S Fire Spread',
-      netRegex: NetRegexes.ability({ id: '28CF', source: 'Kefka', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '28CF', source: 'Kefka', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '28CF', source: 'Kefka', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '28CF', source: 'ケフカ', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '28CF', source: '凯夫卡', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '28CF', source: '케프카', capture: false }),
-      suppressSeconds: 40,
-      run: function(data) {
+      netRegex: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '28CE', source: 'ケフカ', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '28CE', source: '凯夫卡', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '28CE', source: '케프카', capture: false }),
+      condition: (data) => {
+        const isTrueSpread = data.truths && data.fireMarker === 'spread';
+        const isFakeStack = data.antics && data.fireMarker === 'stack';
+        return isTrueSpread || isFakeStack;
+      },
+      response: Responses.spread(),
+      run: (data) => {
         data.lastFire = 'spread';
+        delete data.fireMarker;
       },
     },
     {
@@ -479,15 +505,21 @@ export default {
       // 28D0: damage from mana charge
       // 2B33: damage from mana release
       id: 'O8S Fire Stack',
-      netRegex: NetRegexes.ability({ id: '28D0', source: 'Kefka', capture: false }),
-      netRegexDe: NetRegexes.ability({ id: '28D0', source: 'Kefka', capture: false }),
-      netRegexFr: NetRegexes.ability({ id: '28D0', source: 'Kefka', capture: false }),
-      netRegexJa: NetRegexes.ability({ id: '28D0', source: 'ケフカ', capture: false }),
-      netRegexCn: NetRegexes.ability({ id: '28D0', source: '凯夫卡', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '28D0', source: '케프카', capture: false }),
-      suppressSeconds: 40,
-      run: function(data) {
+      netRegex: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexFr: NetRegexes.startsUsing({ id: '28CE', source: 'Kefka', capture: false }),
+      netRegexJa: NetRegexes.startsUsing({ id: '28CE', source: 'ケフカ', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '28CE', source: '凯夫卡', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '28CE', source: '케프카', capture: false }),
+      condition: (data) => {
+        const isFakeSpread = data.antics && data.fireMarker === 'spread';
+        const isTrueStack = data.truths && data.fireMarker === 'stack';
+        return isFakeSpread || isTrueStack;
+      },
+      response: Responses.getTogether(),
+      run: (data) => {
         data.lastFire = 'stack';
+        delete data.fireMarker;
       },
     },
     {
@@ -501,11 +533,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28CD', '2B31'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28CD', '2B31'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28CD', '2B31'], source: '케프카', capture: false }),
-      preRun: (data) => {
-        data.lastThunder = 'trueThunder';
-      },
+      preRun: (data) => data.lastThunder = 'trueThunder',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: strings.trueThunder,
       },
@@ -521,11 +551,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28CC', '2B30'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28CC', '2B30'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28CC', '2B30'], source: '케프카', capture: false }),
-      preRun: (data) => {
-        data.lastThunder = 'fakeThunder';
-      },
+      preRun: (data) => data.lastThunder = 'fakeThunder',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: strings.fakeThunder,
       },
@@ -541,12 +569,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28C5', '2B2B'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28C5', '2B2B'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28C5', '2B2B'], source: '케프카', capture: false }),
-      preRun: function(data) {
-        data.lastIceDir = 'getOut';
-      },
+      preRun: (data) => data.lastIceDir = 'getOut',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text({ type: output.type(), dir: output.dir() }),
-      tts: (data, _, output) => output.dir(),
+      infoText: (_data, _matches, output) => {
+        return output.text({ type: output.type(), dir: output.dir() });
+      },
+      tts: (_data, _matches, output) => output.dir(),
       outputStrings: {
         text: strings.typeAndDir,
         type: strings.fakeIce,
@@ -564,12 +592,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28C9', '2B2E'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28C9', '2B2E'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28C9', '2B2E'], source: '케프카', capture: false }),
-      preRun: function(data) {
-        data.lastIceDir = 'getIn';
-      },
+      preRun: (data) => data.lastIceDir = 'getIn',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text({ type: output.type(), dir: output.dir() }),
-      tts: (data, _, output) => output.dir(),
+      infoText: (_data, _matches, output) => {
+        return output.text({ type: output.type(), dir: output.dir() });
+      },
+      tts: (_data, _matches, output) => output.dir(),
       outputStrings: {
         text: strings.typeAndDir,
         type: strings.trueIce,
@@ -587,12 +615,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28C4', '2B2A'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28C4', '2B2A'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28C4', '2B2A'], source: '케프카', capture: false }),
-      preRun: function(data) {
-        data.lastIceDir = 'getIn';
-      },
+      preRun: (data) => data.lastIceDir = 'getIn',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text({ type: output.type(), dir: output.dir() }),
-      tts: (data, _, output) => output.dir(),
+      infoText: (_data, _matches, output) => {
+        return output.text({ type: output.type(), dir: output.dir() });
+      },
+      tts: (_data, _matches, output) => output.dir(),
       outputStrings: {
         text: strings.typeAndDir,
         type: strings.fakeIce,
@@ -610,12 +638,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['28C8', '2B2D'], source: 'ケフカ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['28C8', '2B2D'], source: '凯夫卡', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['28C8', '2B2D'], source: '케프카', capture: false }),
-      preRun: function(data) {
-        data.lastIceDir = 'getOut';
-      },
+      preRun: (data) => data.lastIceDir = 'getOut',
       suppressSeconds: 40,
-      infoText: (data, _, output) => output.text({ type: output.type(), dir: output.dir() }),
-      tts: (data, _, output) => output.dir(),
+      infoText: (_data, _matches, output) => {
+        return output.text({ type: output.type(), dir: output.dir() });
+      },
+      tts: (_data, _matches, output) => output.dir(),
       outputStrings: {
         text: strings.typeAndDir,
         type: strings.trueIce,
@@ -633,6 +661,8 @@ export default {
         'The limit gauge resets!': 'Der Limitrausch-Balken wurde geleert.',
       },
       'replaceText': {
+        '\\(small\\)': '(klein)',
+        '\\(big\\)': '(groß)',
         'Aero Assault': 'Wallendes Windga',
         'All Things Ending': 'Ende aller Dinge',
         'Blizzard Blitz': 'Erstarrendes Eisga',

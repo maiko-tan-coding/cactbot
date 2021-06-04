@@ -1,11 +1,12 @@
-import Regexes from '../../resources/regexes.js';
-import UserConfig from '../../resources/user_config.js';
-import ZoneId from '../../resources/zone_id.js';
-import ZoneInfo from '../../resources/zone_info.js';
-import { getWeather, findNextWeather, findNextWeatherNot, findNextNight, findNextDay, isNightTime } from '../../resources/weather.js';
+import { addOverlayListener } from '../../resources/overlay_plugin_api';
 
-import './eureka_config.js';
-import '../../resources/common.js';
+import Regexes from '../../resources/regexes';
+import UserConfig from '../../resources/user_config';
+import ZoneId from '../../resources/zone_id';
+import ZoneInfo from '../../resources/zone_info';
+import { getWeather, findNextWeather, findNextWeatherNot, findNextNight, findNextDay, isNightTime } from '../../resources/weather';
+
+import './eureka_config';
 
 const bunnyLabel = {
   en: 'Bunny',
@@ -18,9 +19,9 @@ const bunnyLabel = {
 
 const Options = {
   Debug: false,
-  PopSound: '../../resources/sounds/PowerAuras/sonar.ogg',
-  BunnyPopSound: '../../resources/sounds/WeakAuras/WaterDrop.ogg',
-  CriticalPopSound: '../../resources/sounds/PowerAuras/sonar.ogg',
+  PopSound: '../../resources/sounds/freesound/sonar.ogg',
+  BunnyPopSound: '../../resources/sounds/freesound/water_drop.ogg',
+  CriticalPopSound: '../../resources/sounds/freesound/sonar.ogg',
   timeStrings: {
     weatherFor: {
       en: (nowMs, stopTime) => {
@@ -143,19 +144,19 @@ const Options = {
     // de, fr, ja languages all share the English regexes here.
     // If you ever need to add another language, include all of the regexes for it.
     en: {
-      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)(?:Eureka (?:Anemos|Pagos|Pyros|Hydatos)|Bozjan Southern Front) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
+      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:Eureka (?:Anemos|Pagos|Pyros|Hydatos)|Bozjan Southern Front|Zadnor) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': Regexes.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': Regexes.parse(/00:00..:(.*)NMs on cooldown: (\S.*\))/),
       'gTimeRegex': Regexes.parse(/(.*) \((\d*)m\)/),
     },
     cn: {
-      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)(?:常风之地|恒冰之地|涌火之地|丰水之地) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
+      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:常风之地|恒冰之地|涌火之地|丰水之地) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': Regexes.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': Regexes.parse(/00:00..:(.*)冷却中的NM: (\S.*\))/),
       'gTimeRegex': Regexes.parse(/(.*) \((\d*)分(钟*)\)/),
     },
     ko: {
-      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)에우레카: (?:아네모스|파고스|피로스|히다토스) 지대 \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
+      'gFlagRegex': Regexes.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:에우레카: (?:아네모스|파고스|피로스|히다토스) 지대|남부 보즈야 전선) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': Regexes.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': Regexes.parse(/00:00..:(.*)토벌한 마물: (\S.*\))/),
       'gTimeRegex': Regexes.parse(/(.*) \((\d*)분\)/),
@@ -172,6 +173,7 @@ const Options = {
 
     // Bozja
     // Southern Front: https://xivapi.com/search?indexes=Fate&filters=ID%3E=1597,ID%3C=1628&columns=Description,Name,Url
+    // Zadnor: https://xivapi.com/search?indexes=Fate&filters=ID%3E=1717,ID%3C=1742&columns=Description,Name,Url
     [ZoneId.TheForbiddenLandEurekaAnemos]: {
       mapImage: 'anemos.png',
       mapWidth: 1300,
@@ -1721,7 +1723,7 @@ const Options = {
       mapHeight: 1400,
       shortName: 'bozjasouthern',
       hasTracker: false,
-      dontShowInactive: true,
+      onlyShowInactiveWithExplicitRespawns: true,
       treatNMsAsSkirmishes: true,
       mapToPixelXScalar: 47.911,
       mapToPixelXConstant: -292.56,
@@ -1734,6 +1736,8 @@ const Options = {
             de: 'Taktisches Gemetzel',
             fr: 'Les yeux de l\'ennemi',
             ja: '術士大隊との会敵',
+            cn: '遭遇术师大队',
+            ko: '술사대대 발견',
           },
           x: 20.3,
           y: 26.8,
@@ -1745,6 +1749,8 @@ const Options = {
             de: 'Nichts als Schrott',
             fr: 'Les araignées de fer',
             ja: '無人魔導兵器との会敵',
+            cn: '遭遇无人魔导兵器',
+            ko: '무인 마도 병기 발견',
           },
           x: 24.8,
           y: 27.5,
@@ -1756,6 +1762,8 @@ const Options = {
             de: 'Husch, ins Körbchen!',
             fr: 'Museler le Chien',
             ja: '忠犬との遭遇',
+            cn: '发现忠犬',
+            ko: '충견과 조우하다',
           },
           x: 20.3,
           y: 26.8,
@@ -1767,6 +1775,8 @@ const Options = {
             de: 'Wer rastet, der blutet',
             fr: 'Pas de quartier',
             ja: '術士大隊への奇襲',
+            cn: '奇袭术师大队',
+            ko: '술사대대 기습',
           },
           x: 24.8,
           y: 27.5,
@@ -1778,6 +1788,8 @@ const Options = {
             de: 'Auf zum Gegenangriff',
             fr: 'Machines aux trousses',
             ja: '有人魔導兵器の迎撃',
+            cn: '迎击有人魔导兵器',
+            ko: '유인 마도 병기 요격',
           },
           x: 28.4,
           y: 29.3,
@@ -1789,6 +1801,8 @@ const Options = {
             de: 'Linientreue',
             fr: 'Des racines et des crocs',
             ja: '野生生物を排除せよ',
+            cn: '排除野生生物',
+            ko: '야생 생물을 제거하라',
           },
           x: 34.4,
           y: 29.3,
@@ -1800,6 +1814,8 @@ const Options = {
             de: 'Dem Rüpel seine Meute',
             fr: 'Ménagerie guerrière',
             ja: '豚面の魔獣使い',
+            cn: '兽性兽心的驯兽师',
+            ko: '시크족 마수 조련사',
           },
           x: 28.9,
           y: 26.1,
@@ -1811,6 +1827,8 @@ const Options = {
             de: 'Ungeheuerlich!',
             fr: 'Belles plantes',
             ja: '華麗なる珍獣使い',
+            cn: '华丽魔女的珍兽使者',
+            ko: '화려한 희귀마수 조련사',
           },
           x: 17.3,
           y: 26.6,
@@ -1822,6 +1840,8 @@ const Options = {
             de: 'Schufter-10',
             fr: 'Que des numéros dix',
             ja: '労働十号破壊命令',
+            cn: '破坏劳动十号',
+            ko: '노동 10호 파괴 명령',
           },
           x: 34.4,
           y: 29.3,
@@ -1833,6 +1853,8 @@ const Options = {
             de: 'Nächstenliebe',
             fr: 'Miséricorde impériale',
             ja: '恩徳の術士たち',
+            cn: '施恩布德的术师队',
+            ko: '은덕의 술사들',
           },
           x: 28.9,
           y: 26.1,
@@ -1844,6 +1866,8 @@ const Options = {
             de: 'Rache ist Blutwurst',
             fr: 'Le retour du chien fidèle',
             ja: '忠犬の逆襲',
+            cn: '忠犬的逆袭',
+            ko: '충견의 역습',
           },
           x: 31.3,
           y: 22.0,
@@ -1855,6 +1879,8 @@ const Options = {
             de: 'Großes Federlassen',
             fr: 'Quand les chocobos voient rouge',
             ja: '豚面と赤い馬鳥',
+            cn: '兽性兽心与红色马鸟',
+            ko: '시크족과 붉은 초코보',
           },
           x: 27.3,
           y: 17.7,
@@ -1866,6 +1892,8 @@ const Options = {
             de: 'Llofii',
             fr: 'La licorne des plaines',
             ja: '潔白の脱走兵',
+            cn: '洁白心的逃脱战',
+            ko: '결백한 탈주병',
           },
           x: 32.3,
           y: 17.0,
@@ -1877,6 +1905,8 @@ const Options = {
             de: 'Aufräumen im Dienst',
             fr: 'La bataille de l\'innovation',
             ja: '敵新兵器を調査せよ',
+            cn: '调查敌方新兵器',
+            ko: '적의 신병기를 조사하라',
           },
           x: 25.6,
           y: 22.6,
@@ -1888,6 +1918,8 @@ const Options = {
             de: 'Verhinderte Wartung',
             fr: 'Couper les vivres',
             ja: '整備場奇襲作戦',
+            cn: '奇袭整备场',
+            ko: '정비소 기습 작전',
           },
           x: 17.5,
           y: 23.4,
@@ -1899,6 +1931,8 @@ const Options = {
             de: 'Arbeitsniederlegung',
             fr: 'Force ouvrière',
             ja: '魔導レイバー破壊命令',
+            cn: '破坏魔导劳工',
+            ko: '마도 노동자 파괴 명령',
           },
           x: 31.3,
           y: 22.0,
@@ -1910,6 +1944,8 @@ const Options = {
             de: 'Unfreundlicher Besuch',
             fr: 'Idéaux irréconciliables',
             ja: '野営地への先制攻撃',
+            cn: '进攻野营地',
+            ko: '야영지 선제 공격',
           },
           x: 17.5,
           y: 23.4,
@@ -1921,6 +1957,8 @@ const Options = {
             de: 'Zurück ins Nichts',
             fr: 'Les dévoreurs d\'âmes',
             ja: '魂喰いの妖異たち',
+            cn: '噬魂的妖异',
+            ko: '혼을 먹는 요마들',
           },
           x: 25.6,
           y: 22.6,
@@ -1932,6 +1970,8 @@ const Options = {
             de: 'Jedes Leben zählt',
             fr: 'Résister ou mourir',
             ja: '術士大隊の猛攻',
+            cn: '术师大队的猛攻',
+            ko: '술사대대의 맹공격',
           },
           x: 18.3,
           y: 20.7,
@@ -1943,6 +1983,8 @@ const Options = {
             de: 'Pyromant',
             fr: 'Duel brûlant',
             ja: '最強のパイロマンサー',
+            cn: '最强的火焰法师',
+            ko: '최강의 불꽃술사',
           },
           x: 18.3,
           y: 20.7,
@@ -1954,6 +1996,8 @@ const Options = {
             de: 'Ende einer ... Karriere',
             fr: 'De toutes les couleurs',
             ja: '華麗なるお気に入り',
+            cn: '华丽魔女与心爱珍兽',
+            ko: '화려한 애완마수',
           },
           x: 25.1,
           y: 15.0,
@@ -1965,6 +2009,8 @@ const Options = {
             de: 'Revierkämpfe',
             fr: 'Sans maîtres ni loi',
             ja: '暴走魔獣の排除',
+            cn: '排除失控魔兽',
+            ko: '폭주 마수 처리',
           },
           x: 21.0,
           y: 14.3,
@@ -1976,6 +2022,8 @@ const Options = {
             de: 'rüpelhaftes Großmaul',
             fr: 'L\'incorruptible',
             ja: '豚面の勧誘者',
+            cn: '兽性兽心的劝诱',
+            ko: '포섭하는 시크족',
           },
           x: 11.0,
           y: 14.6,
@@ -1987,6 +2035,8 @@ const Options = {
             de: 'Arbeitsniederlegung - Plan B',
             fr: 'Plan B',
             ja: '魔導レイバーB型破壊命令',
+            cn: '破坏魔导劳工B型',
+            ko: '마도 노동자 B형 파괴 명령',
           },
           x: 20.8,
           y: 17.7,
@@ -1998,6 +2048,8 @@ const Options = {
             de: 'Neu und besser',
             fr: 'Des machines et des hommes',
             ja: '強化兵部隊の襲撃',
+            cn: '袭击强化兵部队',
+            ko: '강화병 부대의 습격',
           },
           x: 14.0,
           y: 15.3,
@@ -2009,6 +2061,8 @@ const Options = {
             de: 'fällt selbst hinein',
             fr: 'Ceux qui creusent',
             ja: '戦場の盗掘者',
+            cn: '战场的偷盗者',
+            ko: '전장의 도굴자',
           },
           x: 24.8,
           y: 17.1,
@@ -2020,6 +2074,8 @@ const Options = {
             de: 'Deins wird meins',
             fr: 'Casser la voie',
             ja: '補給物資強奪作戦',
+            cn: '补给物资夺取战',
+            ko: '보급 물자 강탈 작전',
           },
           x: 21.0,
           y: 14.3,
@@ -2031,6 +2087,8 @@ const Options = {
             de: 'Der Geruch der Angst',
             fr: 'Par l\'hémoglobine alléchés',
             ja: '血の匂いに誘われて',
+            cn: '闻血而来',
+            ko: '피비린내에 이끌려',
           },
           x: 11.1,
           y: 20.2,
@@ -2042,6 +2100,8 @@ const Options = {
             de: 'Eine neue Unordnung',
             fr: 'Miséricorde vengeresse',
             ja: '燃え上がる南方戦線',
+            cn: '南方战线的激战',
+            ko: '타오르는 남부 전선',
           },
           x: 13.8,
           y: 18.3,
@@ -2053,6 +2113,8 @@ const Options = {
             de: 'Auf und ab',
             fr: 'Le fer et le feu',
             ja: '続・燃え上がる南方戦線',
+            cn: '南方战线的续战',
+            ko: '타오르는 남부 전선 속편',
           },
           x: 13.8,
           y: 18.3,
@@ -2064,6 +2126,8 @@ const Options = {
             de: 'Vor die Hunde gekommen',
             fr: 'Brigade canine',
             ja: '戦場の犬を解き放て',
+            cn: '释放战场之犬',
+            ko: '전장에 개를 풀어라',
           },
           x: 14.0,
           y: 15.3,
@@ -2075,6 +2139,8 @@ const Options = {
             de: 'Ende Gelände',
             fr: 'Cent mille guerriers de métal',
             ja: 'シシニアスの実験場',
+            cn: '西西尼乌斯的实验场',
+            ko: '시시니우스의 실험장',
           },
           x: 11.1,
           y: 20.2,
@@ -2086,12 +2152,15 @@ const Options = {
             de: 'Castrum',
             fr: 'Castrum',
             ja: 'カストルム',
+            cn: '湖岸堡',
+            ko: '공성전',
           },
           x: 18.9,
           y: 12.6,
           isCritical: true,
           ceKey: 0,
-          respawnMinutes: 60,
+          // TODO: this needs a 60 minute respawn *after* it finishes.
+          // respawnMinutes: 60,
         },
         killitwithfire: {
           label: {
@@ -2099,6 +2168,8 @@ const Options = {
             de: 'Peeriefool',
             fr: 'Grandeur et pestilence',
             ja: 'ピーリフール',
+            cn: '皮里福尔',
+            ko: '피어리풀',
           },
           x: 17.4,
           y: 26.9,
@@ -2111,6 +2182,8 @@ const Options = {
             de: 'Canis dirus',
             fr: 'Le chien des enfers',
             ja: 'カニスディルス',
+            cn: '恐惧妖犬',
+            ko: '카니스 디루스',
           },
           x: 22.8,
           y: 28.8,
@@ -2123,10 +2196,13 @@ const Options = {
             de: 'Vigil',
             fr: 'Vigile de feu',
             ja: 'ヴィジル',
+            cn: '守夜',
+            ko: '비질',
           },
           x: 28.4,
           y: 29.5,
           isCritical: true,
+          isDuelPrecursor: true,
           ceKey: 3,
         },
         aceshigh: {
@@ -2135,11 +2211,14 @@ const Options = {
             de: 'Gabriel',
             fr: 'Force divine',
             ja: 'ガブリエル',
+            cn: '加百列',
+            ko: '가브리엘',
           },
           x: 32.3,
           y: 26.8,
           isCritical: true,
           isDuel: true,
+          respawnMinutes: 60,
           ceKey: 4,
         },
         shadowdeathshand: {
@@ -2148,6 +2227,8 @@ const Options = {
             de: 'Akbaba',
             fr: 'Les ailes noires de la mort',
             ja: '黒アクババ',
+            cn: '阿库巴巴',
+            ko: '아크바바',
           },
           x: 36.5,
           y: 25.8,
@@ -2160,6 +2241,8 @@ const Options = {
             de: 'Spartoi',
             fr: 'Menace spectrale',
             ja: 'スパルトイ',
+            cn: '地生人',
+            ko: '스파르토이',
           },
           x: 33.3,
           y: 17.5,
@@ -2172,10 +2255,13 @@ const Options = {
             de: 'Roter Meteor',
             fr: 'Une ruée en rouge',
             ja: '赤レッドコメット',
+            cn: '红色彗星',
+            ko: '붉은 혜성',
           },
           x: 27.3,
           y: 17.7,
           isCritical: true,
+          isDuelPrecursor: true,
           ceKey: 7,
         },
         beastofman: {
@@ -2184,11 +2270,14 @@ const Options = {
             de: 'Lyon',
             fr: 'Le Roi bestial',
             ja: '獣王ライアン',
+            cn: '兽王莱昂',
+            ko: '마수왕 라이언',
           },
           x: 23.3,
           y: 20.4,
           isCritical: true,
           isDuel: true,
+          respawnMinutes: 60,
           ceKey: 8,
         },
         firesofwar: {
@@ -2197,6 +2286,8 @@ const Options = {
             de: 'Flammenden Hundert',
             fr: 'Brasier de guerre',
             ja: '火焔百人隊',
+            cn: '火焰百夫队',
+            ko: '화염백인대',
           },
           x: 20.8,
           y: 23.9,
@@ -2209,6 +2300,8 @@ const Options = {
             de: 'Verteidigungsmaschine',
             fr: 'Les fusils du patriote',
             ja: 'パトリオット',
+            cn: '爱国者',
+            ko: '패트리어트',
           },
           x: 14.2,
           y: 21.2,
@@ -2221,6 +2314,8 @@ const Options = {
             de: 'Die bösen Blicke der Eale',
             fr: 'L\'œil du malin',
             ja: '邪エアレー',
+            cn: '耶鲁',
+            ko: '에알레',
           },
           x: 9.9,
           y: 18.1,
@@ -2233,11 +2328,14 @@ const Options = {
             de: 'Sartauvoir',
             fr: '"L\'envol du phénix',
             ja: 'サルトヴォアール',
+            cn: '萨托瓦尔',
+            ko: '사르토부아르',
           },
           x: 18.8,
           y: 15.9,
           isCritical: true,
           isDuel: true,
+          respawnMinutes: 60,
           ceKey: 12,
         },
         metalfoxchaos: {
@@ -2246,10 +2344,13 @@ const Options = {
             de: 'Dáinsleif',
             fr: 'Le guerrier de métal',
             ja: 'ダーインスレイヴ',
+            cn: '达因斯莱瓦',
+            ko: '다인슬라이프',
           },
           x: 13.8,
           y: 18.3,
           isCritical: true,
+          isDuelPrecursor: true,
           ceKey: 13,
         },
         riseoftherobots: {
@@ -2258,6 +2359,8 @@ const Options = {
             de: 'Modell X',
             fr: 'Le soulèvement des machines',
             ja: '魔導レイバーX型',
+            cn: '魔导劳工X式',
+            ko: '마도 노동자 X형',
           },
           x: 21.2,
           y: 17.6,
@@ -2270,10 +2373,432 @@ const Options = {
             de: 'Der untote Chlevnik',
             fr: 'Le mastodonte enragé',
             ja: 'チルヴニク',
+            cn: '奇尔维尼克',
+            ko: '칠레브니크',
           },
           x: 24.2,
           y: 14.9,
           isCritical: true,
+          ceKey: 15,
+        },
+      },
+    },
+    [ZoneId.Zadnor]: {
+      mapImage: 'zadnor.png',
+      mapWidth: 1600,
+      mapHeight: 1400,
+      shortName: 'zadnor',
+      hasTracker: false,
+      onlyShowInactiveWithExplicitRespawns: true,
+      treatNMsAsSkirmishes: true,
+      mapToPixelXScalar: 39.067,
+      mapToPixelXConstant: 10.03,
+      mapToPixelYScalar: 39.247,
+      mapToPixelYConstant: -202.55,
+      nms: {
+        ofbeastsandbraggadocio: {
+          label: {
+            en: 'Beasts',
+            de: 'Bestienbändigerin',
+          },
+          x: 24.1,
+          y: 37.4,
+          fateID: 1717,
+        },
+        partsandparcel: {
+          label: {
+            en: 'Parcel',
+            de: 'Oboro',
+          },
+          x: 22.8,
+          y: 34.2,
+          fateID: 1718,
+        },
+        animmoraldilemma: {
+          label: {
+            en: 'Dilemma',
+            de: 'Ketzer Fabineau',
+          },
+          x: 22.7,
+          y: 34.2,
+          fateID: 1719,
+        },
+        deadlydivination: {
+          label: {
+            en: 'Divination',
+            de: 'Mörderischer Onmyoji',
+          },
+          x: 24.8,
+          y: 31.4,
+          fateID: 1720,
+        },
+        awrenchinthereconnaissanceeffort: {
+          label: {
+            en: 'Wrench',
+            de: 'Beobachten verboten',
+          },
+          x: 29.4,
+          y: 35.4,
+          fateID: 1721,
+        },
+        anotherpilotepisode: {
+          label: {
+            en: 'Pilot',
+            de: 'Magitek-Soldaten',
+          },
+          x: 28.0,
+          y: 29.2,
+          fateID: 1722,
+        },
+        breakingtheice: {
+          label: {
+            en: 'Ice',
+            de: 'Eiskalt',
+          },
+          x: 24.8,
+          y: 31.1,
+          fateID: 1723,
+        },
+        meetthepuppetmaster: {
+          label: {
+            en: 'Puppet',
+            de: 'Puppen',
+          },
+          x: 24.1,
+          y: 37.4,
+          fateID: 1724,
+        },
+        challengeaccepted: {
+          label: {
+            en: 'Challenge',
+            de: 'Größtmöglicher',
+          },
+          x: 7.2,
+          y: 28.8,
+          fateID: 1725,
+        },
+        thubantheterrible: {
+          label: {
+            en: 'Th\'uban',
+            de: 'Bestien',
+          },
+          x: 8.6,
+          y: 34.4,
+          fateID: 1726,
+        },
+        anendtoatrocities: {
+          label: {
+            en: 'Atrocities',
+            de: 'Endkampf (Ketzer)',
+          },
+          x: 4.9,
+          y: 25.3,
+          fateID: 1727,
+        },
+        ajustpursuit: {
+          label: {
+            en: 'Pursuit',
+            de: 'mörderische Meister',
+          },
+          x: 11.6,
+          y: 27.6,
+          fateID: 1728,
+        },
+        tankingup: {
+          label: {
+            en: 'Tanking',
+            de: 'Seiryu Zwo',
+          },
+          x: 8.1,
+          y: 24.0,
+          fateID: 1729,
+        },
+        supersolderrising: {
+          label: {
+            en: 'Supersoldier',
+            de: 'Magitek-Soldat',
+          },
+          x: 8.1,
+          y: 24.0,
+          fateID: 1730,
+        },
+        dementedmentor: {
+          label: {
+            en: 'Demented',
+            de: 'Rettende Hiebe',
+          },
+          x: 7.2,
+          y: 28.8,
+          fateID: 1731,
+        },
+        severthestrings: {
+          label: {
+            en: 'Sever',
+            de: 'Endkampf (Puppenspieler)',
+          },
+          x: 11.6,
+          y: 27.6,
+          fateID: 1732,
+        },
+        thebeastsareback: {
+          label: {
+            en: 'Back',
+            de: 'Allergrößte gibt nicht auf',
+          },
+          x: 25.4,
+          y: 14.3,
+          fateID: 1733,
+        },
+        stillonlycountsasone: {
+          label: {
+            en: 'Still',
+            de: 'Schillernde ',
+          },
+          x: 14.5,
+          y: 10.4,
+          fateID: 1734,
+        },
+        seeqandyouwillfind: {
+          label: {
+            en: 'Seeq',
+            de: 'Farbe des Blutes',
+          },
+          x: 20.3,
+          y: 16.5,
+          fateID: 1735,
+        },
+        meanspirited: {
+          label: {
+            en: 'Mean',
+            de: 'Onmyoji!',
+          },
+          x: 25.4,
+          y: 14.3,
+          fateID: 1736,
+        },
+        arelicunleashed: {
+          label: {
+            en: 'Relic',
+            de: 'Famfrit',
+          },
+          x: 25.4,
+          y: 14.3,
+          fateID: 1737,
+        },
+        whenmagesrage: {
+          label: {
+            en: 'Mages',
+            de: 'Was du heute kannst besorgen',
+          },
+          x: 20.3,
+          y: 16.5,
+          fateID: 1738,
+        },
+        hypertunedhavoc: {
+          label: {
+            en: 'Hyper',
+            de: 'goldene Gelegenheit',
+          },
+          x: 16.6,
+          y: 16.8,
+          fateID: 1739,
+        },
+        attackofthesupersoldiers: {
+          label: {
+            en: 'Soldiers',
+            de: 'Verstärkung .. Mech-Einheit',
+          },
+          x: 16.6,
+          y: 16.8,
+          fateID: 1740,
+        },
+        thestudentbecalmsthemaster: {
+          label: {
+            en: 'Student',
+            de: 'Rettende Hiebe 2',
+          },
+          x: 14.5,
+          y: 10.4,
+          fateID: 1741,
+        },
+        attackofthemachines: {
+          label: {
+            en: 'Machines',
+            de: 'Magitek-Maschinen en masse',
+          },
+          x: 12.1,
+          y: 13.6,
+          fateID: 1742,
+        },
+        dalriada: {
+          label: {
+            en: 'Dalriada',
+            de: 'Dalriada',
+          },
+          x: 25.9,
+          y: 8.2,
+          isCritical: true,
+          ceKey: 0,
+          // TODO: this needs a 60 minute respawn *after* it finishes.
+          // respawnMinutes: 60,
+        },
+        onserpentswings: {
+          label: {
+            en: 'Serpents',
+            de: 'Geistertrupp',
+          },
+          x: 31.4,
+          y: 37.4,
+          isCritical: true,
+          ceKey: 1,
+        },
+        feelingtheburn: {
+          label: {
+            en: 'Feeling',
+            de: 'Schwarzbrands',
+          },
+          x: 16.6,
+          y: 16.8,
+          isCritical: true,
+          isDuelPrecursor: true,
+          ceKey: 2,
+        },
+        thebrokenblade: {
+          label: {
+            en: 'Blade',
+            de: 'Hyper-Dabog',
+          },
+          x: 26.5,
+          y: 35.6,
+          isCritical: true,
+          isDuel: true,
+          respawnMinutes: 60,
+          ceKey: 3,
+        },
+        frombeyondthegrave: {
+          label: {
+            en: 'Grave',
+            de: 'Shemhazai ',
+          },
+          x: 20.2,
+          y: 37.4,
+          isCritical: true,
+          ceKey: 4,
+        },
+        withdiremiteandmain: {
+          label: {
+            en: 'Diremite',
+            de: 'Hedetet',
+          },
+          x: 17.0,
+          y: 32.1,
+          isCritical: true,
+          ceKey: 5,
+        },
+        herecomesthecavalry: {
+          label: {
+            en: 'Cavalry',
+            de: 'Halb Pferd',
+          },
+          x: 6.4,
+          y: 37.2,
+          isCritical: true,
+          ceKey: 6,
+        },
+        headofthesnake: {
+          label: {
+            en: 'Snake',
+            de: 'Menenius',
+          },
+          x: 5.3,
+          y: 31.9,
+          isCritical: true,
+          isDuel: true,
+          respawnMinutes: 60,
+          ceKey: 7,
+        },
+        therewouldbeblood: {
+          label: {
+            en: 'Blood',
+            de: 'Hanbi',
+          },
+          x: 13.7,
+          y: 26.0,
+          isCritical: true,
+          ceKey: 8,
+        },
+        nevercrywolf: {
+          label: {
+            en: 'Wolf',
+            de: 'Hrodvitnir',
+          },
+          x: 4.9,
+          y: 25.3,
+          isCritical: true,
+          isDuelPrecursor: true,
+          ceKey: 9,
+        },
+        timetoburn: {
+          label: {
+            en: 'Time',
+            de: 'Belias',
+          },
+          x: 10.5,
+          y: 21.5,
+          isCritical: true,
+          ceKey: 10,
+        },
+        leanmeanmagitekmachines: {
+          label: {
+            en: 'Magitek',
+            de: 'Gepanzerte Zenturie',
+          },
+          x: 15.2,
+          y: 13.0,
+          isCritical: true,
+          ceKey: 11,
+        },
+        worntoashadow: {
+          label: {
+            en: 'Shadow',
+            de: 'Alkonost',
+          },
+          x: 11.8,
+          y: 7.6,
+          isCritical: true,
+          ceKey: 12,
+        },
+        afamiliarface: {
+          label: {
+            en: 'Familiar',
+            de: 'Hashmallim',
+          },
+          x: 28.0,
+          y: 29.2,
+          isCritical: true,
+          isDuelPrecursor: true,
+          ceKey: 13,
+        },
+        lookstodiefor: {
+          label: {
+            en: 'Looks',
+            de: 'Ayda',
+          },
+          x: 17.4,
+          y: 9.8,
+          isCritical: true,
+          ceKey: 14,
+        },
+        takingthelyonsshare: {
+          label: {
+            en: 'Lyon\'s',
+            de: 'Revanche: Lyon',
+          },
+          x: 22.5,
+          y: 13.2,
+          isCritical: true,
+          isDuel: true,
+          respawnMinutes: 60,
           ceKey: 15,
         },
       },
@@ -2370,7 +2895,10 @@ class EurekaTracker {
 
     if (nm.isCritical)
       label.classList.add('critical');
-    if (this.zoneInfo.dontShowInactive)
+    if (nm.isDuel)
+      label.classList.add('duel');
+    // Start these off hidden.
+    if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns)
       label.classList.add('nm-hidden');
 
     label.id = nmKey;
@@ -2492,16 +3020,15 @@ class EurekaTracker {
 
   OnFatePop(fate) {
     this.DebugPrint(`OnFatePop: ${this.TransByDispLang(fate.label)}`);
-    if (fate.element.classList.contains('nm-hidden'))
-      fate.element.classList.remove('nm-hidden');
-
+    const classList = fate.element.classList;
     if (fate.isCritical)
-      fate.element.classList.add('critical-pop');
+      classList.add('critical-pop');
     else
-      fate.element.classList.add('nm-pop');
+      classList.add('nm-pop');
 
-    fate.element.classList.remove('nm-down');
-    fate.lastPopTimeMsLocal = +new Date();
+    classList.remove('nm-hidden');
+    classList.remove('nm-down');
+    classList.remove('critical-down');
     fate.respawnTimeMsLocal = this.RespawnTime(fate);
 
     if (fate.bunny) {
@@ -2509,8 +3036,8 @@ class EurekaTracker {
       if (shouldPlay && this.options.BunnyPopSound && this.options.BunnyPopVolume)
         this.PlaySound(this.options.BunnyPopSound, this.options.BunnyPopVolume);
     } else if (fate.isCritical) {
-      const shouldPlay = fate.isDuel && this.options.PopNoiseForDuel ||
-          !fate.isDuel && this.options.PopNoiseForCriticalEngagement;
+      const shouldPlay = fate.isDuelPrecursor && this.options.PopNoiseForDuel ||
+          this.options.PopNoiseForCriticalEngagement;
       if (shouldPlay && this.options.CriticalPopSound && this.options.CriticalPopVolume)
         this.PlaySound(this.options.CriticalPopSound, this.options.CriticalPopVolume);
     } else {
@@ -2537,14 +3064,14 @@ class EurekaTracker {
     this.DebugPrint(`OnFateKill: ${this.TransByDispLang(fate.label)}`);
     this.UpdateTimes();
     if (fate.element.classList.contains('nm-pop')) {
-      if (this.zoneInfo.dontShowInactive)
+      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes)
         fate.element.classList.add('nm-hidden');
       fate.element.classList.add('nm-down');
       fate.element.classList.remove('nm-pop');
       fate.progressElement.innerText = null;
       return;
     } else if (fate.element.classList.contains('critical-pop')) {
-      if (this.zoneInfo.dontShowInactive)
+      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes)
         fate.element.classList.add('nm-hidden');
       fate.element.classList.add('critical-down');
       fate.element.classList.remove('critical-pop');
@@ -2628,12 +3155,6 @@ class EurekaTracker {
 
     document.getElementById('label-tracker').innerHTML = this.currentTracker;
 
-    // TODO: don't early out here, because it means bozja can't show a timer.
-    // Instead, maybe add a per-zone default respawn time which, if null/zero,
-    // means don't show respawn times unless specified.
-    if (this.zoneInfo.shortName === 'bozjasouthern')
-      return;
-
     for (let i = 0; i < this.nmKeys.length; ++i) {
       const nm = this.nms[this.nmKeys[i]];
 
@@ -2703,8 +3224,8 @@ class EurekaTracker {
         const remainingMinutes = Math.ceil(remainingMs / 1000 / 60);
         const nmString = respawnIcon + remainingMinutes +
           this.TransByDispLang(this.options.timeStrings.minute);
-        nm.timeElement.innerHTML = nmString;
-        nm.element.classList.add('nm-down');
+        if (nm.timeElement.innerHTML !== nmString)
+          nm.timeElement.innerHTML = nmString;
       }
     }
   }

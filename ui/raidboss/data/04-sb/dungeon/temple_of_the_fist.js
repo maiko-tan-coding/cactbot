@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheTempleOfTheFist,
@@ -11,9 +11,7 @@ export default {
       id: 'Temple Pounce',
       regex: /Pounce/,
       beforeSeconds: 5,
-      condition: function(data) {
-        return data.role === 'healer' || data.role === 'tank';
-      },
+      condition: (data) => data.role === 'healer' || data.role === 'tank',
       response: Responses.tankBuster(),
     },
     {
@@ -61,13 +59,13 @@ export default {
       id: 'Temple Moonseal',
       netRegex: NetRegexes.headMarker({ id: '0059' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in blue',
           de: 'Im Blauen stehen',
-          fr: 'Tenez-vous dans le bleu',
-          ja: '青色に踏む',
+          fr: 'Placez-vous dans le bleu',
+          ja: '青色を踏む',
           cn: '站在蓝色区域',
           ko: '파랑장판에 서기',
         },
@@ -77,13 +75,13 @@ export default {
       id: 'Temple Sunseal',
       netRegex: NetRegexes.headMarker({ id: '0058' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in red',
           de: 'Im Roten stehen',
-          fr: 'Tenez-vous dans le rouge',
-          ja: '赤色に踏む',
+          fr: 'Placez-vous dans le rouge',
+          ja: '赤色を踏む',
           cn: '站在红色区域',
           ko: '빨강장판에 서기',
         },
@@ -117,13 +115,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '1FDE', source: 'アブダ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '1FDE', source: '额部陀', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '1FDE', source: '아부다', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'watch for safe',
           de: 'nach sicherer Position schauen',
           fr: 'Trouvez une zone sûre',
-          ja: '安全場所へ',
+          ja: '安置へ',
           cn: '前往安全区',
           ko: '안전지대 찾기',
         },
@@ -148,18 +146,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '1FE6', source: '双豹のイヴォン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '1FE6', source: '双豹伊沃恩' }),
       netRegexKo: NetRegexes.startsUsing({ id: '1FE6', source: '쌍표범 이본' }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
-      infoText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.target) });
-      },
+      condition: (data) => data.role === 'healer',
+      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
           en: 'Heal ${player} soon',
           de: 'Bald ${player} heilen',
           fr: 'Soignez ${player} bientôt',
-          ja: 'すぐに${player}にヒール',
+          ja: 'すぐに${player}をヒール',
           cn: '马上奶 ${player}',
           ko: '${player}힐 준비',
         },
@@ -173,13 +167,13 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '1FE9', source: '双豹のイヴォン', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '1FE9', source: '双豹伊沃恩', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '1FE9', source: '쌍표범 이본', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid floating heads',
           de: 'Weiche den fliegenden Köpfen aus',
           fr: 'Évitez les têtes flottantes',
-          ja: 'ヘッドに避け',
+          ja: 'ヘッドを避ける',
           cn: '避开漂浮的头',
           ko: '커얼머리 피하기',
         },
@@ -193,13 +187,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '1FED', source: '双豹のイヴォン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '1FED', source: '双豹伊沃恩', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '1FED', source: '쌍표범 이본', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from marker',
           de: 'Weg von den Markierungen',
           fr: 'Éloignez-vous du marqueur',
-          ja: 'マークに離れ',
+          ja: 'マーカーから離れる',
           cn: '远离标记',
           ko: '마커에게서 멀어지기',
         },

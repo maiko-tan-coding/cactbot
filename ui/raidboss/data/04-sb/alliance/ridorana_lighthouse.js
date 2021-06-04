@@ -1,9 +1,9 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
-const mathDirection = function(mathBaseValue, correctMath, output) {
+const mathDirection = (mathBaseValue, correctMath, output) => {
   if (!correctMath)
     return;
   if (mathBaseValue < 1 || mathBaseValue > 9) {
@@ -93,13 +93,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2C50', source: '暗黑之云法姆弗里特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2C50', source: '암흑의 구름 팜프리트', capture: false }),
       delaySeconds: 4.5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
           de: 'Auf Krug achten',
           fr: 'Attention Tsunami',
-          ja: '水瓶が向いてる方向から離れ',
+          ja: '水瓶が向いてる方向から離れる',
           cn: '离开水瓶口方向',
           ko: '대해일 확인',
         },
@@ -114,13 +114,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2C50', source: '暗黑之云法姆弗里特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2C50', source: '암흑의 구름 팜프리트', capture: false }),
       delaySeconds: 16.5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
           de: 'Auf Krug achten',
           fr: 'Attention Tsunami',
-          ja: '水瓶が向いてる方向から離れ',
+          ja: '水瓶が向いてる方向から離れる',
           cn: '离开水瓶口方向',
           ko: '대해일 확인',
         },
@@ -135,13 +135,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2C50', source: '暗黑之云法姆弗里特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2C50', source: '암흑의 구름 팜프리트', capture: false }),
       delaySeconds: 28.5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look for Tsunami',
           de: 'Auf Krug achten',
           fr: 'Attention Tsunami',
-          ja: '水瓶が向いてる方向から離れ',
+          ja: '水瓶が向いてる方向から離れる',
           cn: '离开水瓶口方向',
           ko: '대해일 확인',
         },
@@ -188,13 +188,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CDE', source: '魔人ベリアス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CDE', source: '魔人贝利亚斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CDE', source: '마인 벨리아스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand on Slow Clock',
           de: 'In der langsamen Uhr stehen',
           fr: 'Placez-vous sur une horloge lente',
-          ja: '遅い時計へ待機（早い方が爆発したらすぐ安置へ）',
+          ja: '遅い時計で待機（早い方が爆発したらすぐ安置へ）',
           cn: '站慢速时钟等待',
           ko: '느린 시계 위로',
         },
@@ -205,13 +205,13 @@ export default {
       id: 'Ridorana Belias Hand of Time',
       netRegex: NetRegexes.gainsEffect({ effectId: '212' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stretch Tether Outside',
           de: 'Verbindung nach außen strecken',
           fr: 'Lien vers l\'exterieur',
-          ja: '線を伸ばし外に向け',
+          ja: '線を伸ばして外に向ける',
           cn: '将连线朝外远离人群',
           ko: '줄 바깥으로 늘이기',
         },
@@ -225,13 +225,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CE6', source: '魔人ベリアス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CE6', source: '魔人贝利亚斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CE6', source: '마인 벨리아스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stop Clocks',
           de: 'Uhrzeiger nach außen',
           fr: 'Arrêtez horloge',
-          ja: '針を外に指させ',
+          ja: '針を外に向ける',
           cn: '定时炸弹',
           ko: '시간 폭탄',
         },
@@ -262,17 +262,13 @@ export default {
       id: 'Ridorana Construct Accelerate Spread',
       netRegex: NetRegexes.headMarker({ id: '008A' }),
       condition: Conditions.targetIsYou(),
-      preRun: function(data) {
-        data.accelerateSpreadOnMe = true;
-      },
+      preRun: (data) => data.accelerateSpreadOnMe = true,
       response: Responses.spread(),
     },
     {
       id: 'Ridorana Construct Accelerate Stack',
       netRegex: NetRegexes.headMarker({ id: '0064' }),
-      condition: function(data) {
-        return !data.accelerateSpreadOnMe;
-      },
+      condition: (data) => !data.accelerateSpreadOnMe,
       response: Responses.stackMarkerOn(),
     },
     {
@@ -283,9 +279,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2C65', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2C65', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2C65', source: '노동 7호', capture: false }),
-      run: function(data) {
-        delete data.accelerateSpreadOnMe;
-      },
+      run: (data) => delete data.accelerateSpreadOnMe,
     },
     {
       id: 'Ridorana Construct Math Setup',
@@ -295,16 +289,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2C6C', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2C6C', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2C6C', source: '노동 7호', capture: false }),
-      run: function(data) {
-        data.mathBaseValue = 0;
-      },
+      run: (data) => data.mathBaseValue = 0,
     },
     {
       // Hp Penalty effect.
       id: 'Ridorana Construct Math HP Check 1',
       netRegex: NetRegexes.gainsEffect({ effectId: '615' }),
       condition: Conditions.targetIsYou(),
-      preRun: function(data) {
+      preRun: (data) => {
         if (!data.mathBaseValue && data.currentHP > 0 && data.currentHP < 10)
           data.mathBaseValue = data.currentHP;
       },
@@ -317,7 +309,7 @@ export default {
       id: 'Ridorana Construct Math HP Check 2',
       netRegex: NetRegexes.gainsEffect({ effectId: '615' }),
       condition: Conditions.targetIsYou(),
-      preRun: function(data) {
+      preRun: (data) => {
         if (!data.mathBaseValue && data.currentHP > 0 && data.currentHP < 10)
           data.mathBaseValue = data.currentHP;
       },
@@ -331,7 +323,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CCD', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CCD', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CCD', source: '노동 7호', capture: false }),
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         const correctMath = [-1, 4, 3, 2, 1, 0, 4, 3, 2, 1];
         return mathDirection(data.mathBaseValue, correctMath, output);
       },
@@ -345,7 +337,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CCC', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CCC', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CCC', source: '노동 7호', capture: false }),
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         const correctMath = [-1, 3, 2, 1, 0, 3, 2, 1, 0, 3];
         return mathDirection(data.mathBaseValue, correctMath, output);
       },
@@ -359,7 +351,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CCA', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CCA', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CCA', source: '노동 7호', capture: false }),
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         const correctMath = [-1, 2, 1, 0, 2, 1, 0, 2, 1, 0];
         return mathDirection(data.mathBaseValue, correctMath, output);
       },
@@ -373,7 +365,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2CCE', source: '労働七号', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2CCE', source: '劳动七号', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2CCE', source: '노동 7호', capture: false }),
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         const correctMath = [-1, 1, 0, 0, 1, 0, 1, 0, 3, 2];
         return mathDirection(data.mathBaseValue, correctMath, output);
       },
@@ -425,9 +417,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2E32', source: '鬼龍ヤズマット', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2E32', source: '鬼龙雅兹玛特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2E32', source: '귀룡 야즈마트', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank';
-      },
+      condition: (data) => data.role === 'tank',
       response: Responses.awayFromFront(),
     },
     {
@@ -444,7 +434,7 @@ export default {
       id: 'Ridorana Yiazmat Magnetic Negative',
       netRegex: NetRegexes.gainsEffect({ effectId: '60F' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move to Postive',
@@ -460,13 +450,13 @@ export default {
       id: 'Ridorana Yiazmat Magnetic Positive',
       netRegex: NetRegexes.gainsEffect({ effectId: '60E' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move to Negative',
           de: 'Ins Negative laufen',
           fr: 'Allez sur le moins',
-          ja: 'マイナス（ー）へ',
+          ja: 'マイナス（－）へ',
           cn: '移动到负极',
           ko: '-전하 쪽으로',
         },
@@ -492,7 +482,7 @@ export default {
       netRegexCn: NetRegexes.addedCombatant({ name: '鬼龙的核心', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '야즈마트의 심핵', capture: false }),
       suppressSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Heart',
@@ -523,6 +513,12 @@ export default {
         'Yiazmat': 'Yiasmat',
       },
       'replaceText': {
+        '\\(close\\)': '(Nahe)',
+        '\\(cross\\)': '(Kreuz)',
+        '\\(combo\\)': '(Kombo)',
+        '\\(orbit\\)': '(Orbit)',
+        '\\(far\\)': '(Entfernt)',
+        '\\(single\\)': '(Einzeln)',
         'Accelerate': 'Beschleunigen',
         'Annihilation Mode': 'Auslöschungsmodul',
         'Archaeodemon spawn': 'Archaeodämon erscheint',
@@ -663,6 +659,11 @@ export default {
         'Yiazmat': '鬼龍ヤズマット',
       },
       'replaceText': {
+        '\\(close\\)': '(近い)',
+        '\\(combo\\)': '(コンボ)',
+        '\\(orbit\\)': '(曲線)',
+        '\\(far\\)': '(遠い)',
+        '\\(single\\)': '(一撃)',
         'Accelerate': '突貫する',
         'Annihilation Mode': 'ジェノサイドチップ',
         'Archaeodemon spawn': 'アルケオデーモン',
@@ -855,7 +856,6 @@ export default {
         'Ventilate': '냉각',
         'Water IV': '워터쟈',
         'White Breath': '하얀 숨결',
-        'cross': '지나감',
         'orbit': '떠있음',
         'close': '가까이',
         'far': '멀리',

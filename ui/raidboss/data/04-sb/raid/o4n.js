@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O4N - Deltascape 4.0 Normal
 export default {
@@ -16,14 +16,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '24B7', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '24B7', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '24B7', source: '엑스데스', capture: false }),
-      condition: function(data) {
-        return data.CanCleanse();
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.CanCleanse(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Cleanse Doom soon',
           de: 'Reinige Verhängnis bald',
+          fr: 'Guérison sur le Glas bientot',
           ja: '死の宣告にエスナ',
           cn: '驱散死宣',
           ko: '죽음의 선고 해제하기',
@@ -59,12 +58,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '24C0', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '24C0', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '24C0', source: '엑스데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move around',
           de: 'Bewegen',
-          ja: '動く続ける',
+          fr: 'Bougez',
+          ja: '動き続ける',
           cn: '不停移动',
           ko: '움직이기',
         },
@@ -98,18 +98,19 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2408', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2408', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2408', source: '엑스데스', capture: false }),
-      condition: function(data) {
+      condition: (data) => {
         // Without a condition, this notifies on the first one, where it's meaningless.
         data.battleCount = data.battleCount || 0;
         data.battleCount += 1;
         return data.battleCount > 1;
       },
       delaySeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in the gap',
           de: 'In der Lücke stehen',
+          fr: 'Placez-vous à l\'écart',
           ja: '狭間に',
           cn: '远离中间位置',
           ko: '빈틈에 서기',
@@ -125,11 +126,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '240A', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '240A', source: '엑스데스', capture: false }),
       delaySeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Behind head--Avoid zombie breath',
           de: 'Hinter den Kopf - Vermeide den Zombie-Atem',
+          fr: 'Derrière la tête - Évitez l\'haleine zombie',
           ja: '頭の後ろに - ゾンビブレス来るぞ',
           cn: '站头后方',
           ko: '머리 뒤로 - 좀비 숨결 피하기',
@@ -144,12 +146,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '24C8', source: 'エクスデス', target: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '24C8', source: '艾克斯迪司', target: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '24C8', source: '엑스데스', target: '엑스데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid black holes',
           de: 'Weiche den Schwarzen Löchern aus',
-          ja: 'ブラックホールに離れ',
+          fr: 'Évitez les trous noirs',
+          ja: 'ブラックホールから離れる',
           cn: '远离黑洞',
           ko: '블랙홀 피하기',
         },
@@ -169,11 +172,12 @@ export default {
       id: 'O4N Flare',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Flare on YOU',
           de: 'Flare auf DIR',
+          fr: 'Brasier sur VOUS',
           ja: '自分にフレア',
           cn: '核爆点名',
           ko: '플레어 대상자',
@@ -205,6 +209,7 @@ export default {
         'Exdeath': 'Exdeath',
       },
       'replaceText': {
+        '\\(Buster\\)': '(Tankbuster)',
         'Black Hole': 'Schwarzes Loch',
         'Blizzard/Fire III': 'Eisga/Feuga',
         'Clearout': 'Kreisfeger',
@@ -227,14 +232,16 @@ export default {
         'Exdeath': 'Exdeath',
       },
       'replaceText': {
+        '\\?': ' ?',
+        '\\(Buster\\)': '(Tank buster)',
         'Black Hole': 'Trou noir',
-        'Blizzard/Fire III': 'Mega Feu/Glace',
+        'Blizzard/Fire III': 'Méga Glace/Feu',
         'Clearout': 'Fauchage',
         'Collision': 'Impact',
         'Doom': 'Glas',
         'Flare': 'Brasier',
         'Holy': 'Miracle',
-        'Mega Blizzard/Fire/Thunder': 'Feu/Foudre/Glace ++',
+        'Mega Blizzard/Fire/Thunder': 'Extra Glace/Feu/Foudre',
         'Meteor': 'Météore',
         'The Decisive Battle': 'Combat décisif',
         '(?<!/)Thunder III': 'Méga Foudre',

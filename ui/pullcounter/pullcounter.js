@@ -1,8 +1,9 @@
-import '../../resources/common.js';
-import { LocaleRegex } from '../../resources/translations.js';
-import Regexes from '../../resources/regexes.js';
-import UserConfig from '../../resources/user_config.js';
-import ZoneId from '../../resources/zone_id.js';
+import { callOverlayHandler, addOverlayListener } from '../../resources/overlay_plugin_api';
+
+import { LocaleRegex } from '../../resources/translations';
+import Regexes from '../../resources/regexes';
+import UserConfig from '../../resources/user_config';
+import ZoneId from '../../resources/zone_id';
 
 const Options = {
   Language: 'en',
@@ -124,6 +125,11 @@ const gBossFightTriggers = [
   },
   {
     zoneId: ZoneId.TheBozjanSouthernFront,
+    countdownStarts: false,
+    preventAutoStart: true,
+  },
+  {
+    zoneId: ZoneId.Zadnor,
     countdownStarts: false,
     preventAutoStart: true,
   },

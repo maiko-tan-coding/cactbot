@@ -41,25 +41,43 @@ namespace Cactbot {
       public int size;
       public int opcode;
     }
+    //
+    // CE Opcode History
+    // Intl
+    // v5.35            0x299
+    // v5.35h           0x143
+    // v5.40            0x3c1
+    // v5.40h           0x31b
+    // v5.41            0x31B
+    // v5.45            0x3e1
+    // v5.45h           0x1f5
+    // v5.5             0x2e7
+    // v5.5h            0x160
+    // v5.55            0x1ac
+    // v5.55h           0x248
+    //
+    // CN
+    // v5.35            0x144
+    // v5.40            0x129
+    // v5.41            0x0120
+    //
+    // KR
+    // v5.35            0x0347
+    //
 
-    private static readonly CEDirectorOPCodes cedirector_v5_35 = new CEDirectorOPCodes(
+    private static readonly CEDirectorOPCodes cedirector_ko = new CEDirectorOPCodes(
       0x30,
-      0x299
+      0x0347
     );
 
-    private static readonly CEDirectorOPCodes cedirector_v5_35_hotfix = new CEDirectorOPCodes(
+    private static readonly CEDirectorOPCodes cedirector_cn = new CEDirectorOPCodes(
       0x30,
-      0x143
+      0x0120
     );
 
-    private static readonly CEDirectorOPCodes cedirector_v5_40 = new CEDirectorOPCodes(
+    private static readonly CEDirectorOPCodes cedirector_intl = new CEDirectorOPCodes(
       0x30,
-      0x3c1
-    );
-
-    private static readonly CEDirectorOPCodes cedirector_v5_40_hotfix = new CEDirectorOPCodes(
-      0x30,
-      0x31B
+      0x248
     );
 
     private struct ActorControl143{
@@ -129,7 +147,9 @@ namespace Cactbot {
       ac143opcodes.Add("intl", ac143_v5_2);
 
       cedirectoropcodes = new Dictionary<string, CEDirectorOPCodes>();
-      cedirectoropcodes.Add("intl", cedirector_v5_40_hotfix);
+      cedirectoropcodes.Add("ko", cedirector_ko);
+      cedirectoropcodes.Add("cn", cedirector_cn);
+      cedirectoropcodes.Add("intl", cedirector_intl);
 
       fates = new Dictionary<int, int>();
       ces = new Dictionary<int, CEDirectorData>();

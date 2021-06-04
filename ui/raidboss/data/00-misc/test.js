@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../resources/netregexes.js';
-import ZoneId from '../../../../resources/zone_id.js';
+import NetRegexes from '../../../../resources/netregexes';
+import ZoneId from '../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.MiddleLaNoscea,
@@ -12,21 +12,21 @@ export default {
     'alerttext "Final Sting" before 4 "oh no final sting in 4"',
     'alarmtext "Death" before 3',
     'alertall "Long Castbar" before 1 speak "voice" "long"',
-    function(data) {
+    (data) => {
       if (data.role !== 'tank' && data.role !== 'healer')
         return 'hideall "Super Tankbuster"';
       return 'alarmtext "Super Tankbuster" before 2';
     },
-    function(data) {
+    (data) => {
       if (!data.role.startsWith('dps'))
         return 'hideall "Pentacle Sac (DPS)"';
     },
-    function(data) {
+    (data) => {
       if (data.role !== 'healer')
         return 'hideall "Almagest"';
       return 'alarmtext "Almagest" before 0';
     },
-    function(data) {
+    (data) => {
       // <_<
       const shortName = data.me.indexOf(' ') >= 0 ? data.me.substring(0, data.me.indexOf(' ')) : data.me;
       return [
@@ -49,8 +49,8 @@ export default {
       id: 'Test Angry Dummy',
       regex: /Angry Dummy/,
       beforeSeconds: 2,
-      infoText: (data, matches, output) => output.stack(),
-      tts: (data, matches, output) => output.stackTTS(),
+      infoText: (_data, _matches, output) => output.stack(),
+      tts: (_data, _matches, output) => output.stackTTS(),
       outputStrings: {
         stack: {
           en: 'Stack for Angry Dummy',
@@ -75,7 +75,7 @@ export default {
       regex: /Angry Dummy/,
       // Add in a huge delay to make it obvious the delay runs before promise.
       delaySeconds: 10,
-      promise: function(data, matches) {
+      promise: (data) => {
         data.delayedDummyTimestampBefore = Date.now();
         const p = new Promise((res) => {
           window.setTimeout(() => {
@@ -85,7 +85,7 @@ export default {
         });
         return p;
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, _matches, output) => {
         const elapsed = data.delayedDummyTimestampAfter - data.delayedDummyTimestampBefore;
         return output.elapsed({ elapsed: elapsed });
       },
@@ -110,10 +110,8 @@ export default {
       netRegexJa: NetRegexes.gameNameLog({ line: '.*は木人をつついた.*?', capture: false }),
       netRegexCn: NetRegexes.gameNameLog({ line: '.*用手指戳向木人.*?', capture: false }),
       netRegexKo: NetRegexes.gameNameLog({ line: '.*나무인형을 쿡쿡 찌릅니다.*?', capture: false }),
-      preRun: (data) => {
-        data.pokes = (data.pokes || 0) + 1;
-      },
-      infoText: (data, _, output) => output.poke({ numPokes: data.pokes }),
+      preRun: (data) => data.pokes = (data.pokes || 0) + 1,
+      infoText: (data, _matches, output) => output.poke({ numPokes: data.pokes }),
       outputStrings: {
         poke: {
           en: 'poke #${numPokes}',
@@ -133,7 +131,7 @@ export default {
       netRegexJa: NetRegexes.gameNameLog({ line: '.*は木人に活を入れた.*?', capture: false }),
       netRegexCn: NetRegexes.gameNameLog({ line: '.*激励木人.*?', capture: false }),
       netRegexKo: NetRegexes.gameNameLog({ line: '.*나무인형에게 힘을 불어넣습니다.*?', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       tts: {
         en: 'psych',
         de: 'auf gehts',
@@ -162,7 +160,7 @@ export default {
       netRegexCn: NetRegexes.gameNameLog({ line: '.*看着木人高声大笑.*?', capture: false }),
       netRegexKo: NetRegexes.gameNameLog({ line: '.*나무인형을 보고 폭소를 터뜨립니다.*?', capture: false }),
       suppressSeconds: 5,
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       tts: {
         en: 'hahahahaha',
         de: 'hahahahaha',
@@ -190,9 +188,9 @@ export default {
       netRegexJa: NetRegexes.gameNameLog({ line: '.*は木人に拍手した.*?', capture: false }),
       netRegexCn: NetRegexes.gameNameLog({ line: '.*向木人送上掌声.*?', capture: false }),
       netRegexKo: NetRegexes.gameNameLog({ line: '.*나무인형에게 박수를 보냅니다.*?', capture: false }),
-      sound: '../../resources/sounds/WeakAuras/Applause.ogg',
+      sound: '../../resources/sounds/freesound/power_up.ogg',
       soundVolume: 0.3,
-      tts: (data, _, output) => output.text(),
+      tts: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'clapity clap',
@@ -211,9 +209,7 @@ export default {
       netRegexDe: NetRegexes.echo({ line: 'cactbot sprache.*?', capture: false }),
       netRegexJa: NetRegexes.echo({ line: 'cactbot言語.*?', capture: false }),
       netRegexKo: NetRegexes.echo({ line: 'cactbot 언어.*?', capture: false }),
-      infoText: (data, _, output) => {
-        return output.text({ lang: data.parserLang });
-      },
+      infoText: (data, _matches, output) => output.text({ lang: data.parserLang }),
       outputStrings: {
         text: {
           en: 'Language: ${lang}',
@@ -229,7 +225,7 @@ export default {
       id: 'Test Response',
       netRegex: NetRegexes.echo({ line: 'cactbot test response.*?', capture: false }),
       netRegexDe: NetRegexes.echo({ line: 'cactbot test antwort.*?', capture: false }),
-      response: (data, _, output) => {
+      response: (_data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           alarmOne: '1',

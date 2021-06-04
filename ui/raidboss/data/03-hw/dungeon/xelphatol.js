@@ -1,8 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Regexes from '../../../../../resources/regexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Regexes from '../../../../../resources/regexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Xelphatol
 export default {
@@ -71,7 +71,7 @@ export default {
       id: 'Xelphatol Dark Wings',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
@@ -157,7 +157,7 @@ export default {
         'Tozol Huatotl': 'Tozol Huatotl',
       },
       'replaceText': {
-        '\\(buster\\)': '(Tankbuster)',
+        '\\(buster\\)': '(Tank buster)',
         '\\(line\\)': '(Ligne)',
         '\\(aoe\\)': '(AoE)',
         'Aerial Blast': 'Rafale aérienne',

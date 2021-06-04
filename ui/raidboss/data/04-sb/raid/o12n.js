@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O12N - Alphascape 4.0
 export default {
@@ -12,7 +12,7 @@ export default {
       id: 'O12N Knockback',
       regex: /Discharger/,
       beforeSeconds: 5,
-      response: Responses.knockback('alert'),
+      response: Responses.knockback(),
     },
   ],
   triggers: [
@@ -24,9 +24,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['330F', '3310'], source: ['オメガ', 'オメガM'] }),
       netRegexCn: NetRegexes.startsUsing({ id: ['330F', '3310'], source: ['欧米茄', '欧米茄M'] }),
       netRegexKo: NetRegexes.startsUsing({ id: ['330F', '3310'], source: ['오메가', '오메가 M'] }),
-      condition: function(data, matches) {
-        return data.me === matches.target || data.role === 'healer';
-      },
+      condition: (data, matches) => data.me === matches.target || data.role === 'healer',
       suppressSeconds: 1,
       response: Responses.tankBuster(),
     },
@@ -38,9 +36,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['3321', '3322'], source: ['オメガ', 'オメガM'] }),
       netRegexCn: NetRegexes.startsUsing({ id: ['3321', '3322'], source: ['欧米茄', '欧米茄M'] }),
       netRegexKo: NetRegexes.startsUsing({ id: ['3321', '3322'], source: ['오메가', '오메가 M'] }),
-      condition: function(data, matches) {
-        return data.me === matches.target || data.role === 'healer';
-      },
+      condition: (data, matches) => data.me === matches.target || data.role === 'healer',
       suppressSeconds: 1,
       response: Responses.tankBuster(),
     },
@@ -52,17 +48,15 @@ export default {
       netRegexJa: NetRegexes.gainsEffect({ target: 'オメガ', effectId: '67E', capture: false }),
       netRegexCn: NetRegexes.gainsEffect({ target: '欧米茄', effectId: '67E', capture: false }),
       netRegexKo: NetRegexes.gainsEffect({ target: '오메가', effectId: '67E', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank';
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank',
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move bosses apart',
           de: 'Bosse auseinander ziehen',
           fr: 'Ecartez les boss',
           ja: 'ボスを引き離す',
-          cn: '分开boss',
+          cn: '拉开boss',
           ko: '보스 서로 떨어뜨리기',
         },
       },
@@ -76,12 +70,12 @@ export default {
     {
       id: 'O12N Stack Spread Markers',
       netRegex: NetRegexes.headMarker({ id: '008B' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
         return output.getOut();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return;
         return output.stack();
@@ -109,7 +103,7 @@ export default {
       id: 'O12N Packet Filter F',
       netRegex: NetRegexes.gainsEffect({ effectId: '67D' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Attack Omega-M',
@@ -125,7 +119,7 @@ export default {
       id: 'O12N Packet Filter M',
       netRegex: NetRegexes.gainsEffect({ effectId: '67C' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Attack Omega-F',

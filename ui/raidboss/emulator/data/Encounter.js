@@ -1,6 +1,19 @@
-import CombatantTracker from './CombatantTracker.js';
-import LogEventHandler from './LogEventHandler.js';
-import PetNamesByLang from '../../../../resources/pet_names.js';
+import CombatantTracker from './CombatantTracker';
+import LogEventHandler from './LogEventHandler';
+import PetNamesByLang from '../../../../resources/pet_names';
+import EmulatorCommon from '../EmulatorCommon';
+
+const isPetName = (name, language = undefined) => {
+  if (language)
+    return PetNamesByLang[language].includes(name);
+
+  for (const lang in PetNamesByLang) {
+    if (PetNamesByLang[lang].includes(name))
+      return true;
+  }
+
+  return false;
+};
 
 export default class Encounter {
   constructor(encounterDay, encounterZoneId, encounterZoneName, logLines) {
@@ -13,7 +26,6 @@ export default class Encounter {
   }
 
   initialize() {
-    this.language = 'en';
     this.initialOffset = Number.MAX_SAFE_INTEGER;
     this.endStatus = 'Unknown';
     this.startStatus = new Set();
@@ -21,33 +33,32 @@ export default class Encounter {
     this.firstPlayerAbility = Number.MAX_SAFE_INTEGER;
     this.firstEnemyAbility = Number.MAX_SAFE_INTEGER;
 
-    const petNames = PetNamesByLang[this.language];
-
     this.firstLineIndex = 0;
 
     for (let i = 0; i < this.logLines.length; ++i) {
       const line = this.logLines[i];
-      let res = LogEventHandler.isMatchStart(line.networkLine);
+      let res = EmulatorCommon.matchStart(line.networkLine);
       if (res) {
         this.firstLineIndex = i;
         this.startStatus.add(res.groups.StartType);
-        if (res.groups.StartIn >= 0)
-          this.engageAt = Math.min(line.timestamp + res.groups.StartIn, this.engageAt);
+        const startIn = parseInt(res.groups.StartIn);
+        if (startIn >= 0)
+          this.engageAt = Math.min(line.timestamp + startIn, this.engageAt);
       } else {
-        res = LogEventHandler.isMatchEnd(line.networkLine);
+        res = EmulatorCommon.matchEnd(line.networkLine);
         if (res) {
           this.endStatus = res.groups.EndType;
         } else if (line.id && line.targetId) {
           if (line.id.startsWith('1') ||
-            (line.id.startsWith('4') && petNames.includes(line.name))) {
+            (line.id.startsWith('4') && isPetName(line.name, this.language))) {
             // Player or pet ability
-            if (line.targetId.startsWith('4') && !petNames.includes(line.targetName)) {
+            if (line.targetId.startsWith('4') && !isPetName(line.targetName, this.language)) {
               // Targetting non player or pet
               this.firstPlayerAbility = Math.min(this.firstPlayerAbility, line.timestamp);
             }
-          } else if (line.id.startsWith('4') && !petNames.includes(line.name)) {
+          } else if (line.id.startsWith('4') && !isPetName(line.name, this.language)) {
             // Non-player ability
-            if (line.targetId.startsWith('1') || petNames.includes(line.targetName)) {
+            if (line.targetId.startsWith('1') || isPetName(line.targetName, this.language)) {
               // Targetting player or pet
               this.firstEnemyAbility = Math.min(this.firstEnemyAbility, line.timestamp);
             }
@@ -58,6 +69,7 @@ export default class Encounter {
         this.language = res.groups.language || this.language;
     }
 
+    this.language = this.language || 'en';
 
     if (this.firstPlayerAbility === Number.MAX_SAFE_INTEGER)
       this.firstPlayerAbility = null;
@@ -87,5 +99,9 @@ export default class Encounter {
     this.playbackOffset = this.logLines[this.firstLineIndex].offset;
 
     this.startStatus = [...this.startStatus].sort().join(', ');
+  }
+
+  shouldPersistFight() {
+    return this.firstPlayerAbility > 0 && this.firstEnemyAbility > 0;
   }
 }

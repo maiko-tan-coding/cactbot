@@ -1,6 +1,6 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.BrayfloxsLongstop,
@@ -31,7 +31,7 @@ export default {
       condition: (data) => data.role === 'healer',
       delaySeconds: 1,
       suppressSeconds: 2,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         if (!data.pelicanPoisons)
           return;
 
@@ -69,7 +69,7 @@ export default {
       id: 'Brayflox Normal Pelican Adds',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '1283', capture: false }),
       suppressSeconds: 2,
-      response: Responses.killAdds('info'),
+      response: Responses.killAdds(),
     },
     {
       id: 'Brayflox Normal Ashdrake Burning Cyclone',
@@ -86,7 +86,7 @@ export default {
       // Tempest Biast Spawn
       id: 'Brayflox Normal Tempest Biast',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '1285', capture: false }),
-      response: Responses.killAdds('info'),
+      response: Responses.killAdds(),
     },
     {
       id: 'Brayflox Normal Inferno Drake Burning Cyclone',
@@ -151,7 +151,7 @@ export default {
       id: 'Brayflox Normal Aiatar Toxic Vomit Tank',
       netRegex: NetRegexes.gainsEffect({ effectId: '117', capture: false }),
       condition: (data) => data.role === 'tank',
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move Boss Out of Puddles',

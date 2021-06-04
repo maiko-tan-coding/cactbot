@@ -1,4 +1,4 @@
-import ZoneId from '../../../../../resources/zone_id.js';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.ContainmentBayS1T7Extreme,
@@ -14,6 +14,8 @@ export default {
         'Storm Of Words': 'Wörtersturm',
       },
       'replaceText': {
+        'Tethers': 'Verbindungen',
+        'spread': 'verteilen',
         'Adds Spawn': 'Adds erscheinen',
         'Ascension': 'Himmelfahrt',
         'Chesed': 'Chesed',
@@ -76,10 +78,12 @@ export default {
       'replaceText': {
         'Adds Spawn': '雑魚',
         'Ascension': 'アセンション',
-        'Chesed': 'ケセド',
+        '(?! )Chesed(?! )': 'ケセド',
+        'Chesed Gevurah': 'ケセド・ゲブラー',
         'Da\'at': 'ダアト',
         'Earth Shaker': 'アースシェイカー',
-        'Ein Sof': 'アイン・ソフ',
+        'Ein Sof(?! )': 'アイン・ソフ',
+        'Ein Sof Ohr': 'アイン・ソフ・オウル',
         'Fiendish Rage': '魔神の怒り',
         'Fiendish Wail': '魔神の嘆き',
         'Force Field': 'フォースフィールド',
@@ -89,7 +93,9 @@ export default {
         'Pillar of Mercy': 'ピラー・オブ・メルシー',
         'Pillar of Severity': 'ピラー・オブ・セベリティ',
         'Ratzon': 'ラツォン',
+        '(?<= )spread': '散開',
         'Spirit': 'スピリット',
+        '(?<= )Tethers': '線',
         'Tiferet': 'ティファレト',
         'Triple Trial': 'トリプルブロー',
         'Yesod': 'イェソドクラッシュ',

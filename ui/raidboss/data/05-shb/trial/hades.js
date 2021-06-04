@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheDyingGasp,
@@ -15,9 +16,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4180', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4180', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4180', source: '하데스', capture: false }),
-      run: function(data) {
-        data.neoHades = true;
-      },
+      run: (data) => data.neoHades = true,
     },
     {
       id: 'Hades Ravenous Assault',
@@ -27,14 +26,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4158', source: 'ハーデス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4158', source: '哈迪斯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '4158', source: '하데스' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.tankBusterOnYou();
 
         if (data.role === 'healer')
           return output.busterOn({ player: data.ShortName(matches.target) });
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (matches.target === data.me)
           return;
         return output.awayFromPlayer({ player: data.ShortName(matches.target) });
@@ -44,26 +43,12 @@ export default {
           en: 'Away From ${player}',
           de: 'Weg von ${player}',
           fr: 'Éloignez-vous de ${player}',
-          ja: '${player} から離れ',
+          ja: '${player} から離れる',
           cn: '远离 ${player}',
           ko: '${player} 한테서 피하세요',
         },
-        tankBusterOnYou: {
-          en: 'Tank Buster on YOU',
-          de: 'Tankbuster auf DIR',
-          fr: 'Tank buster sur VOUS',
-          ja: '自分にタンクバスター',
-          cn: '死刑',
-          ko: '탱버 대상자',
-        },
-        busterOn: {
-          en: 'Buster on ${player}',
-          de: 'Tankbuster auf ${player}',
-          fr: 'Tank buster sur ${player}',
-          ja: '${player}にタンクバスター',
-          cn: '死刑 点${player}',
-          ko: '"${player}" 탱버',
-        },
+        tankBusterOnYou: Outputs.tankBusterOnYou,
+        busterOn: Outputs.tankBusterOnPlayer,
       },
     },
     {
@@ -94,13 +79,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '414D', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '414D', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '414D', source: '하데스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dodge Giant Circles',
           de: 'Weiche dem großen Kreis aus',
           fr: 'Évitez les cercles géants',
-          ja: '降ったサークルを避け',
+          ja: '降ったサークルを避ける',
           cn: '躲避大圈',
           ko: '대형장판피하기',
         },
@@ -161,7 +146,7 @@ export default {
       id: 'Hades Doom',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D2' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Cleanse Doom In Circle',
@@ -181,7 +166,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4166', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4166', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4166', source: '하데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Right Knockback',
@@ -201,7 +186,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4165', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4165', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4165', source: '하데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Left Knockback',
@@ -221,28 +206,17 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4161', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4161', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '4161', source: '하데스', capture: false }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'healer',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Tank Busters',
-          de: 'Tank Buster',
-          fr: 'Tank buster',
-          ja: 'タンクバスター',
-          cn: '坦克死刑',
-          ko: '탱크버스터',
-        },
+        text: Outputs.tankBusters,
       },
     },
     {
       id: 'Hades Dual Strike',
       netRegex: NetRegexes.headMarker({ id: '0060' }),
-      condition: function(data, matches) {
-        return data.neoHades && data.me === matches.target;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data, matches) => data.neoHades && data.me === matches.target,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tank Buster Spread',
@@ -258,7 +232,7 @@ export default {
       id: 'Hades Hellborn Yawp',
       netRegex: NetRegexes.headMarker({ id: '0028' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop Marker Outside',
@@ -274,7 +248,7 @@ export default {
       id: 'Hades Fetters',
       netRegex: NetRegexes.headMarker({ id: '0078' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fetters on YOU',
@@ -294,9 +268,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '4175', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '4175', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '4175', source: '하데스', capture: false }),
-      run: function(data) {
-        data.seenLifeInCaptivity = true;
-      },
+      run: (data) => data.seenLifeInCaptivity = true,
     },
     {
       id: 'Hades Gaol',
@@ -306,13 +278,13 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '417F', source: 'ハーデス', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '417F', source: '哈迪斯', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '417F', source: '하데스', capture: false }),
-      condition: function(data) {
+      condition: (data) => {
         // There can be multiple gaols (if the phase loops), but ability also
         // gets used during the finall phase transition.  Ignore that one.
         return !data.seenLifeInCaptivity;
       },
       delaySeconds: 2,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Jail',
@@ -333,10 +305,8 @@ export default {
     {
       id: 'Hades Ancient Darkness',
       netRegex: NetRegexes.headMarker({ id: '0060' }),
-      condition: function(data, matches) {
-        return !data.neoHades && data.me === matches.target;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data, matches) => !data.neoHades && data.me === matches.target,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread (Don\'t Stack!)',
@@ -357,10 +327,8 @@ export default {
     {
       id: 'Hades Ancient Collect',
       netRegex: NetRegexes.headMarker({ id: ['0060', '003E'] }),
-      condition: function(data) {
-        return !data.neoHades;
-      },
-      run: function(data, matches) {
+      condition: (data) => !data.neoHades,
+      run: (data, matches) => {
         data.ancient = data.ancient || {};
         data.ancient[matches.target] = matches.id;
       },
@@ -369,30 +337,21 @@ export default {
       id: 'Hades Ancient No Marker',
       netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
       delaySeconds: 0.5,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.ancient[data.me])
           return;
         const name = Object.keys(data.ancient).find((key) => data.ancient[key] === '003E');
         return output.text({ player: data.ShortName(name) });
       },
       outputStrings: {
-        text: {
-          en: 'Stack on ${player}',
-          de: 'Sammeln auf ${player}',
-          fr: 'Packez-vous sur ${player}',
-          ja: '${player} に集合',
-          cn: '靠近 ${player} 集合',
-          ko: '"${player}" 쉐어징',
-        },
+        text: Outputs.stackOnPlayer,
       },
     },
     {
       id: 'Hades Ancient Cleanup',
       netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
       delaySeconds: 10,
-      run: function(data) {
-        delete data.ancient;
-      },
+      run: (data) => delete data.ancient,
     },
   ],
   timelineReplace: [

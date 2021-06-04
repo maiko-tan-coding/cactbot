@@ -1,6 +1,6 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheBindingCoilOfBahamutTurn4,
@@ -15,7 +15,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ source: '转盘堡', id: '4D4' }),
       netRegexKo: NetRegexes.startsUsing({ source: '보루형 회전전차', id: '4D4' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'LOS Thrust',
@@ -35,7 +35,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ source: '转盘堡', id: '4D5' }),
       netRegexKo: NetRegexes.startsUsing({ source: '보루형 회전전차', id: '4D5' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'LOS Pox',
@@ -55,7 +55,7 @@ export default {
       netRegexCn: NetRegexes.addedCombatant({ name: '亚拉戈发条骑士', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '알라그 태엽기사', capture: false }),
       suppressSeconds: 100000,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Magic on Soldier, Physical on Knights',
@@ -78,8 +78,6 @@ export default {
         'Spinner-rook': 'Drehturm',
       },
       'replaceText': {
-        '\\(center\\)': '(mitte)',
-        '\\(outside\\)': '(draußen)',
         'Bug': 'Wanze',
         'Dreadnaught': 'Brummonaut',
         'Emergency Override': 'Not-Übersteuerung',
@@ -98,8 +96,6 @@ export default {
         'Spinner-rook': 'Drone-Drille',
       },
       'replaceText': {
-        '\\(center\\)': '(centre)',
-        '\\(outside\\)': '(à l\'extérieur)',
         'Bug': 'Insecte',
         'Dreadnaught': 'Cuirassé',
         'Emergency Override': 'Annulation d\'urgence',
@@ -118,8 +114,6 @@ export default {
         'Spinner-rook': 'ルークスピナー',
       },
       'replaceText': {
-        '\\(center\\)': '(中央)',
-        '\\(outside\\)': '(外)',
         'Bug': 'アラガンワーク・バグ',
         'Dreadnaught': 'ドレッドノート',
         'Emergency Override': 'エマージェンシー・オーバーライド',
@@ -138,8 +132,6 @@ export default {
         'Spinner-rook': '转盘堡',
       },
       'replaceText': {
-        '\\(center\\)': '(中央)',
-        '\\(outside\\)': '(外面)',
         'Bug': '故障虫',
         'Dreadnaught': '恐慌装甲',
         'Emergency Override': '紧急超驰控制',
@@ -158,8 +150,6 @@ export default {
         'Spinner-rook': '보루형 회전전차',
       },
       'replaceText': {
-        '\\(center\\)': '(중앙)',
-        '\\(outside\\)': '(바깥)',
         'Bug': '버그',
         'Dreadnaught': '드레드노트',
         'Emergency Override': '긴급 체제 변환',

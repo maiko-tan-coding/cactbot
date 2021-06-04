@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheQitanaRavel,
@@ -15,9 +15,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3C89', source: 'ロツァトル' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3C89', source: '洛查特尔' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3C89', source: '로차틀' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -40,13 +38,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3C8B', source: '洛查特尔', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3C8B', source: '로차틀', capture: false }),
       delaySeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look for pillar',
           de: 'Auf die Pfeiler schauen',
           fr: 'Cherchez les piliers',
-          ja: '光った像に避ける',
+          ja: '光った像を避ける',
           cn: '躲开发光石像的半场',
           ko: '빛나는 기둥 위치확인',
         },
@@ -62,7 +60,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '3C8D', source: '로차틀', capture: false }),
       delaySeconds: 6,
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stay on left flank',
@@ -84,7 +82,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '3C8E', source: '로차틀', capture: false }),
       delaySeconds: 6,
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stay on right flank',
@@ -104,9 +102,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3C91', source: 'バッツカッチ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3C91', source: '大脚野蝠' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3C91', source: '배츠콰치' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -139,9 +135,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3C99', source: 'エロース' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3C99', source: '艾洛斯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3C99', source: '에로스' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -164,13 +158,13 @@ export default {
       netRegexCn: NetRegexes.tether({ id: '0039', source: '艾洛斯' }),
       netRegexKo: NetRegexes.tether({ id: '0039', source: '에로스' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
-          ja: 'ボスに離れ',
+          ja: 'ボスから離れる',
           cn: '远离Boss',
           ko: '보스와 거리 벌리기',
         },
@@ -180,13 +174,13 @@ export default {
       id: 'Qitana Viper Poison',
       netRegex: NetRegexes.headMarker({ id: '00AB' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop Poison Outside',
           de: 'Gift am Rand ablegen',
           fr: 'Déposez le poison à l\'extérieur',
-          ja: '外周に捨て',
+          ja: '外周に捨てる',
           cn: '远处放毒',
           ko: '독 장판을 바깥 쪽에 버리기',
         },
@@ -195,7 +189,7 @@ export default {
     {
       id: 'Qitana Confession of Faith Stack',
       netRegex: NetRegexes.headMarker({ id: '003E' }),
-      response: Responses.stackMarkerOn('alert'),
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'Qitana Confession of Faith Spread',
@@ -205,7 +199,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3CA1', source: 'エロース', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3CA1', source: '艾洛斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3CA1', source: '에로스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread to Sides',

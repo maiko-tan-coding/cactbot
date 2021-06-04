@@ -1,23 +1,24 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O4S - Deltascape 4.0 Savage
 export default {
   zoneId: ZoneId.DeltascapeV40Savage,
-  timelineNeedsFixing: true,
   timelineFile: 'o4s.txt',
   timelineTriggers: [
     {
       id: 'O4S Neo Vacuum Wave',
       regex: /Vacuum Wave/,
       beforeSeconds: 8,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Vacuum Wave soon',
           de: 'Vakuumwelle bald',
+          fr: 'Vague de vide bientôt',
           ja: 'まもなく真空波',
           cn: '马上真空波',
           ko: '곧 진공파',
@@ -28,7 +29,7 @@ export default {
   triggers: [
     // Part 1
     {
-      // Phase Tracker: Thunder III not after Decisive Battle.
+      // Phase Tracker: Thunder III not after Dualcast.
       id: 'O4S Exdeath Thunder III Counter',
       netRegex: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
@@ -36,12 +37,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '23F9', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '23F9', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '23F9', source: '엑스데스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.thunderCount = (data.thunderCount || 0) + 1;
       },
     },
     {
-      // Fire III not after Decisive Battle.
+      // Fire III + Dualcast.
       id: 'O4S Exdeath Fire III Counter',
       netRegex: NetRegexes.startsUsing({ id: '23F5', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23F5', source: 'Exdeath', capture: false }),
@@ -49,11 +50,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '23F5', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '23F5', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '23F5', source: '엑스데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fire III',
           de: 'Feuga',
+          fr: 'Méga Feu',
           ja: 'ファイガ',
           cn: '静止',
           ko: '파이가',
@@ -61,7 +63,7 @@ export default {
       },
     },
     {
-      // Blizzard III not after Decisive Battle.
+      // Blizzard III + Dualcast.
       id: 'O4S Exdeath Blizzard III',
       netRegex: NetRegexes.startsUsing({ id: '23F7', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23F7', source: 'Exdeath', capture: false }),
@@ -69,11 +71,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '23F7', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '23F7', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '23F7', source: '엑스데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Blizzard III',
           de: 'Eisga',
+          fr: 'Méga Glace',
           ja: 'ブリザガ',
           cn: '蛇皮走位',
           ko: '블리자가',
@@ -81,7 +84,7 @@ export default {
       },
     },
     {
-      // Thunder III not after Decisive Battle.
+      // Thunder III + Dualcast.
       id: 'O4S Exdeath Thunder III',
       netRegex: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
@@ -89,18 +92,18 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '23F9', source: 'エクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '23F9', source: '艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '23F9', source: '엑스데스', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         // Tanks/healers always get an alert.
         if (data.role === 'tank' || data.role === 'healer')
           return output.thunderBuster();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         // Tanks/healers always get an alert.
         if (data.role === 'tank' || data.role === 'healer')
           return false;
         return output.thunder();
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.role === 'tank' || data.role === 'healer')
           return output.thunderTTS();
       },
@@ -108,6 +111,7 @@ export default {
         thunderBuster: {
           en: 'Thunder III: Tank buster',
           de: 'Blitzga: Tank buster',
+          fr: 'Méga Foudre : Tank buster',
           ja: 'サンダガ: タンクバスター',
           cn: '雷三：坦克死刑',
           ko: '선더가: 탱버',
@@ -115,6 +119,7 @@ export default {
         thunder: {
           en: 'Thunder III',
           de: 'Blitzga',
+          fr: 'Méga Foudre',
           ja: 'サンダガ',
           cn: '雷三',
           ko: '선더가',
@@ -122,14 +127,15 @@ export default {
         thunderTTS: {
           en: 'thunder',
           de: 'blitzga',
-          ja: '離れ',
+          fr: 'foudre',
+          ja: '離れる',
           cn: '远离',
           ko: '선더가',
         },
       },
     },
     {
-      // Fire III after Decisive Battle.
+      // Fire III after Dualcast.
       id: 'O4S Exdeath Ultimate Fire III',
       netRegex: NetRegexes.startsUsing({ id: '23FB', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23FB', source: 'Exdeath', capture: false }),
@@ -140,7 +146,7 @@ export default {
       response: Responses.stopMoving(),
     },
     {
-      // Blizzard III after Decisive Battle.
+      // Blizzard III after Dualcast.
       id: 'O4S Exdeath Ultimate Blizzard III',
       netRegex: NetRegexes.startsUsing({ id: '23FC', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23FC', source: 'Exdeath', capture: false }),
@@ -151,7 +157,7 @@ export default {
       response: Responses.moveAround(),
     },
     {
-      // Thunder III after Decisive Battle.
+      // Thunder III after Dualcast.
       id: 'O4S Exdeath Ultimate Thunder III',
       netRegex: NetRegexes.startsUsing({ id: '23FD', source: 'Exdeath', capture: false }),
       netRegexDe: NetRegexes.startsUsing({ id: '23FD', source: 'Exdeath', capture: false }),
@@ -170,22 +176,21 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2401', source: 'エクスデス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '2401', source: '艾克斯迪司' }),
       netRegexKo: NetRegexes.startsUsing({ id: '2401', source: '엑스데스' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         data.flareTargets = data.flareTargets || [];
         data.flareTargets.push(matches.target);
         return data.flareTargets.length === 3;
       },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.flareTargets.includes(data.me))
           return output.text();
       },
-      run: function(data) {
-        delete data.flareTargets;
-      },
+      run: (data) => delete data.flareTargets,
       outputStrings: {
         text: {
           en: 'Flare on you',
           de: 'Flare auf dir',
+          fr: 'Brasier sur vous',
           ja: '自分にフレア',
           cn: '核爆点名',
           ko: '플레어 대상자',
@@ -202,25 +207,23 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '242B', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '242B', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '242B', source: '네오 엑스데스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.phase = 'alpha';
         data.alphaCount = (data.alphaCount || 0) + 1;
 
-        // Common setup.
-        data.dieDieDieSound = '../../resources/sounds/Overwatch/Reaper_-_Die_die_die.ogg';
         // TODO: should have options for this.
         data.dieOnLaser = 1;
-        data.shouldDieOnLaser = function() {
-          if (!this.beyondDeath)
+        data.shouldDieOnLaser = () => {
+          if (!data.beyondDeath)
             return false;
           // Beyond death doesn't update for laser #2 if you died on
           // laser #1, so don't tell anybody to die on laser #2.
           // If you still have beyond death, it'll remind you for #3.
-          if (this.omegaLaserCount === 2 && this.omegaProbablyDiedOnLaser)
+          if (data.omegaLaserCount === 2 && data.omegaProbablyDiedOnLaser)
             return false;
-          if (this.phase !== 'omega')
+          if (data.phase !== 'omega')
             return true;
-          return this.omegaLaserCount >= this.dieOnLaser;
+          return data.omegaLaserCount >= data.dieOnLaser;
         };
       },
     },
@@ -232,7 +235,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '242C', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '242C', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '242C', source: '네오 엑스데스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.phase = 'delta';
         data.waterHealer = null;
       },
@@ -245,7 +248,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '242D', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '242D', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '242D', source: '네오 엑스데스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.phase = 'omega';
         data.waterHealer = null;
         data.omegaLaserCount = 1;
@@ -259,73 +262,55 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2426', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2426', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2426', source: '네오 엑스데스', capture: false }),
-      run: function(data) {
-        data.finalphase = true;
-      },
+      run: (data) => data.finalphase = true,
     },
     {
       id: 'O4S Neo White Wound Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '564' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.whiteWound = true;
-      },
+      run: (data) => data.whiteWound = true,
     },
     {
       id: 'O4S Neo White Wound Lost',
       netRegex: NetRegexes.losesEffect({ effectId: '564' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.whiteWound = false;
-      },
+      run: (data) => data.whiteWound = false,
     },
     {
       id: 'O4S Neo Black Wound Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '565' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.blackWound = true;
-      },
+      run: (data) => data.blackWound = true,
     },
     {
       id: 'O4S Neo Black Wound Lost',
       netRegex: NetRegexes.losesEffect({ effectId: '565' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.blackWound = false;
-      },
+      run: (data) => data.blackWound = false,
     },
     {
       id: 'O4S Neo Beyond Death Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.beyondDeath = true;
-      },
+      run: (data) => data.beyondDeath = true,
     },
     {
       id: 'O4S Neo Beyond Death Lost',
       netRegex: NetRegexes.losesEffect({ effectId: '566' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.beyondDeath = false;
-      },
+      run: (data) => data.beyondDeath = false,
     },
     {
       id: 'O4S Neo Allagan Field Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '1C6' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.allaganField = true;
-      },
+      run: (data) => data.allaganField = true,
     },
     {
       id: 'O4S Neo Allagan Field Lost',
       netRegex: NetRegexes.losesEffect({ effectId: '1C6' }),
       condition: Conditions.targetIsYou(),
-      run: function(data, matches) {
-        data.allaganField = false;
-      },
+      run: (data) => data.allaganField = false,
     },
     {
       id: 'O4S Neo Flood of Naught: Inside',
@@ -336,19 +321,15 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '240E', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '240E', source: '네오 엑스데스', capture: false }),
       durationSeconds: 6,
-      sound: function(data) {
-        if (data.shouldDieOnLaser())
-          return data.dieDieDieSound;
-      },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return output.dieOnInside();
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (!data.shouldDieOnLaser())
           return output.goOutside();
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return output.dieInInIn();
 
@@ -358,6 +339,7 @@ export default {
         goOutside: {
           en: 'Go Outside',
           de: 'Nach Außen',
+          fr: 'Allez à l\'extérieur',
           ja: '外に出る',
           cn: '去外面',
           ko: '바깥으로',
@@ -365,13 +347,15 @@ export default {
         dieOnInside: {
           en: 'Die on Inside',
           de: 'Innen sterben',
-          ja: '中に死ぬ',
+          fr: 'Mourrez à l\'intérieur',
+          ja: '中で死ぬ',
           cn: '在里面死亡',
           ko: '안쪽 레이저 맞기',
         },
         dieInInIn: {
           en: 'die in in in',
           de: 'sterben rein rein rein',
+          fr: 'Mourrez Intérieur Intérieur Intérieur',
           ja: '死になさい！',
           cn: '死亡',
           ko: '안쪽 레이저 맞기',
@@ -379,7 +363,8 @@ export default {
         outOutOut: {
           en: 'out out out',
           de: 'raus raus raus',
-          ja: '出ていて！',
+          fr: 'Extérieur Extérieur Extérieur',
+          ja: '出て出て！',
           cn: '出去出去',
           ko: '바깥으로',
         },
@@ -394,19 +379,15 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '240F', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '240F', source: '네오 엑스데스', capture: false }),
       durationSeconds: 6,
-      sound: function(data) {
-        if (data.shouldDieOnLaser())
-          return data.dieDieDieSound;
-      },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return output.dieOnOutside();
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (!data.shouldDieOnLaser())
           return output.goInside();
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return output.dieOutOutOut();
 
@@ -416,6 +397,7 @@ export default {
         goInside: {
           en: 'Go Inside',
           de: 'Rein gehen',
+          fr: 'Allez à l\'intérieur',
           ja: '中に入る',
           cn: '去里面',
           ko: '안으로',
@@ -423,13 +405,15 @@ export default {
         dieOnOutside: {
           en: 'Die on Outside',
           de: 'Außen sterben',
-          ja: '外に死ぬ',
+          fr: 'Mourrez à l\'extérieur',
+          ja: '外で死ぬ',
           cn: '在外面死亡',
           ko: '바깥 레이저 맞기',
         },
         dieOutOutOut: {
           en: 'die out out out',
           de: 'sterben raus raus raus',
+          fr: 'Mourrez Extérieur Extérieur Extérieur',
           ja: '死になさい！',
           cn: '在外面死亡',
           ko: '바깥 레이저 맞기',
@@ -437,6 +421,7 @@ export default {
         inInIn: {
           en: 'in in in',
           de: 'rein rein rein',
+          fr: 'Intérieur Intérieur Intérieur',
           ja: '入れ入れ',
           cn: '进去进去',
           ko: '안으로',
@@ -452,11 +437,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2411', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2411', source: '네오 엑스데스', capture: false }),
       durationSeconds: 6,
-      sound: function(data) {
-        if (data.shouldDieOnLaser())
-          return data.dieDieDieSound;
-      },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (!data.shouldDieOnLaser())
           return;
 
@@ -467,7 +448,7 @@ export default {
 
         return output.dieOnColorSides();
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return;
 
@@ -478,11 +459,12 @@ export default {
 
         return output.colorSides();
       },
-      tts: (data, _, output) => output.colors(),
+      tts: (_data, _matches, output) => output.colors(),
       outputStrings: {
         leftOnPurple: {
           en: 'Left On Purple',
           de: 'Links auf Pink',
+          fr: 'À gauche sur le violet',
           ja: '左の紫色に',
           cn: '左边紫色',
           ko: '왼쪽 보라',
@@ -490,6 +472,7 @@ export default {
         rightOnBlue: {
           en: 'Right On Blue',
           de: 'Rechts auf Blau',
+          fr: 'À droite sur le bleu',
           ja: '右の青色に',
           cn: '右边蓝色',
           ko: '오른쪽 파랑',
@@ -497,6 +480,7 @@ export default {
         colorSides: {
           en: 'Color sides',
           de: 'Farbige Seiten',
+          fr: 'Côtés de couleur',
           ja: '同じ色に',
           cn: '颜色一侧',
           ko: '색깔 맞기',
@@ -504,27 +488,31 @@ export default {
         dieOnRightBlue: {
           en: 'Die On Right Blue',
           de: 'In Blauem rechts sterben',
-          ja: '右の青色に死ぬ',
+          fr: 'Mourrez à droite sur le bleu',
+          ja: '右の青色で死ぬ',
           cn: '在右边蓝色死亡',
           ko: '오른쪽 파랑 맞기',
         },
         dieOnLeftPurple: {
           en: 'Die On Left Purple',
           de: 'In Pinkem links sterben',
-          ja: '左の紫色に死ぬ',
+          fr: 'Mourrez à gauche sur le violet',
+          ja: '左の紫色で死ぬ',
           cn: '在左边紫色死亡',
           ko: '왼쪽 보라 맞기',
         },
         dieOnColorSides: {
           en: 'Die on color sides',
           de: 'Auf Farben sterben',
-          ja: '同じ色に死ぬ',
+          fr: 'Mourrez sur les côtés de couleur',
+          ja: '同じ色で死ぬ',
           cn: '在同色一边死亡',
           ko: '색깔 맞기',
         },
         colors: {
           en: 'colors',
           de: 'Farben',
+          fr: 'Couleurs',
           ja: '色',
           cn: '看颜色',
           ko: '색깔',
@@ -540,11 +528,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2412', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2412', source: '네오 엑스데스', capture: false }),
       durationSeconds: 6,
-      sound: function(data) {
-        if (data.shouldDieOnLaser())
-          return data.dieDieDieSound;
-      },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (!data.shouldDieOnLaser())
           return;
 
@@ -555,7 +539,7 @@ export default {
 
         return output.dieOnColorSides();
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.shouldDieOnLaser())
           return;
 
@@ -566,11 +550,12 @@ export default {
 
         return output.colorSides();
       },
-      tts: (data, _, output) => output.colors(),
+      tts: (_data, _matches, output) => output.colors(),
       outputStrings: {
         beRightOnPurple: {
           en: 'Be Right On Purple',
           de: 'Rechts auf Pink',
+          fr: 'Soyez à droite sur le violet',
           ja: '右の紫色に',
           cn: '去右边紫色',
           ko: '오른쪽 보라 맞기',
@@ -578,6 +563,7 @@ export default {
         beLeftOnBlue: {
           en: 'Be Left On Blue',
           de: 'Links auf Blau',
+          fr: 'Soyez à gauche sur le bleu',
           ja: '左の青色に',
           cn: '去左边蓝色',
           ko: '왼쪽 파랑 맞기',
@@ -585,6 +571,7 @@ export default {
         colorSides: {
           en: 'Color sides',
           de: 'Farbige Seiten',
+          fr: 'Côtés de couleur',
           ja: '同じ色に',
           cn: '颜色一侧',
           ko: '색깔 방향',
@@ -592,27 +579,31 @@ export default {
         dieOnLeftBlue: {
           en: 'Die On Left Blue',
           de: 'Auf Blauem links sterben',
-          ja: '左の青色に死ぬ',
+          fr: 'Mourrez à gauche sur le bleu',
+          ja: '左の青色で死ぬ',
           cn: '在左边蓝色死亡',
           ko: '왼쪽 파랑 맞기',
         },
         dieOnRightPurple: {
           en: 'Die On Right Purple',
           de: 'Auf Pinkem rechts sterben',
-          ja: '右の紫色に死ぬ',
+          fr: 'Mourrez à droite sur le violet',
+          ja: '右の紫色で死ぬ',
           cn: '在右边紫色死亡',
           ko: '오른쪽 보라 맞기',
         },
         dieOnColorSides: {
           en: 'Die on color sides',
           de: 'Auf Farben sterben',
-          ja: '同じ色に死ぬ',
+          fr: 'Mourrez sur les côtés de couleur',
+          ja: '同じ色で死ぬ',
           cn: '在同色一边死亡',
           ko: '색깔 맞기',
         },
         colors: {
           en: 'colors',
           de: 'farben',
+          fr: 'Couleurs',
           ja: '色',
           cn: '颜色',
           ko: '색깔',
@@ -627,7 +618,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['240E', '240F', '2411', '2412'], source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['240E', '240F', '2411', '2412'], source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['240E', '240F', '2411', '2412'], source: '네오 엑스데스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.phase !== 'omega')
           return;
 
@@ -651,7 +642,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2416', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2416', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2416', source: '네오 엑스데스', capture: false }),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.allaganField) {
           if (data.role === 'tank')
             return output.chargeBeBehindOtherTank();
@@ -663,11 +654,12 @@ export default {
 
         return output.chargeBeBehindTanks();
       },
-      tts: (data, _, output) => output.charge(),
+      tts: (_data, _matches, output) => output.charge(),
       outputStrings: {
         chargeBeBehindOtherTank: {
           en: 'Charge: be behind other tank',
           de: 'Aufladung: hinter anderen Tank',
+          fr: 'Charge : Soyez derrière l\'autre tank',
           ja: '突進: 他のタンクの後ろに',
           cn: '站在另一个坦克后面',
           ko: '탱커 뒤에 있기',
@@ -675,6 +667,7 @@ export default {
         chargeBeInTheVeryBack: {
           en: 'Charge: be in the very back',
           de: 'Aufladung: Ganz nach hinten',
+          fr: 'Charge : Soyez tout au fond',
           ja: '突進: 後ろの遠くへ',
           cn: '去后面',
           ko: '가장 뒤에 있기',
@@ -682,6 +675,7 @@ export default {
         chargeBeInFront: {
           en: 'Charge: be in front!',
           de: 'Aufladung: Ganz nach vorn',
+          fr: 'Charge : Soyez devant !',
           ja: '突進: 前方に',
           cn: '去前面',
           ko: '앞쪽으로',
@@ -689,6 +683,7 @@ export default {
         chargeBeBehindTanks: {
           en: 'Charge: be behind tanks',
           de: 'Aufladung: Hinter die Tanks',
+          fr: 'Charge : Soyez derrière les tanks',
           ja: '突進: タンクの後ろに',
           cn: '站在坦克后面',
           ko: '탱커 뒤로',
@@ -696,6 +691,7 @@ export default {
         charge: {
           en: 'charge',
           de: 'aufladung',
+          fr: 'Charge',
           ja: '無の氾濫',
           cn: '充能',
           ko: '무의 범람',
@@ -710,17 +706,18 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '241C', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '241C', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '241C', source: '네오 엑스데스', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.doubleAttack();
 
         return output.doubleAttackGetOut();
       },
-      tts: (data, _, output) => output.doubleAttack(),
+      tts: (_data, _matches, output) => output.doubleAttack(),
       outputStrings: {
         doubleAttack: {
           en: 'Double Attack',
           de: 'Doppelangriff',
+          fr: 'Double attaque',
           ja: 'ダブルアタック',
           cn: '双重攻击',
           ko: '이중 공격',
@@ -728,6 +725,7 @@ export default {
         doubleAttackGetOut: {
           en: 'Double Attack: Get out',
           de: 'Doppelangriff: Raus da',
+          fr: 'Double attaque : À l\'extérieur',
           ja: 'ダブルアタック: 外へ',
           cn: '双重攻击：去外面',
           ko: '이중 공격: 밖으로',
@@ -742,12 +740,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '242B', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '242B', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '242B', source: '네오 엑스데스', capture: false }),
-      infoText: (data, _, output) => output.text(),
-      tts: (data, _, output) => output.tts(),
+      infoText: (_data, _matches, output) => output.text(),
+      tts: (_data, _matches, output) => output.tts(),
       outputStrings: {
         text: {
           en: 'Grand Cross Alpha: Go to middle',
           de: 'Supernova Alpha: In die Mitte',
+          fr: 'Croix suprême alpha : Allez au milieu',
           ja: 'グランドクロス・アルファ: 中央に',
           cn: '前往中间集合',
           ko: '그랜드크로스: 알파, 중앙으로',
@@ -755,6 +754,7 @@ export default {
         tts: {
           en: 'go to middle',
           de: 'In die Mitte',
+          fr: 'allez au milieu',
           ja: '中央に',
           cn: '前往中间',
           ko: '중앙으로',
@@ -769,7 +769,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '242C', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '242C', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '242C', source: '네오 엑스데스', capture: false }),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.beInFront();
 
@@ -778,7 +778,7 @@ export default {
 
         return output.beInsideBoss();
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.beInFrontTTS();
 
@@ -791,6 +791,7 @@ export default {
         beInFront: {
           en: 'Grand Cross Delta: Be in front of boss',
           de: 'Supernova Delta: Vor den Boss',
+          fr: 'Croix suprême delta : Soyez devant le boss',
           ja: 'グランドクロス・デルタ: ボスの前に',
           cn: '站在boss前面',
           ko: '그랜드크로스: 델타, 보스 범위 끝으로',
@@ -798,6 +799,7 @@ export default {
         beOnSides: {
           en: 'Grand Cross Delta: Be on sides of boss',
           de: 'Supernova Delta: An die Seiten vom Boss',
+          fr: 'Croix suprême delta : Soyez sur les côtés du boss',
           ja: 'グランドクロス・デルタ: ボスの横に',
           cn: '站在boss后面',
           ko: '그랜드크로스: 델타, 보스 옆쪽으로',
@@ -805,6 +807,7 @@ export default {
         beInsideBoss: {
           en: 'Grand Cross Delta: Inside boss',
           de: 'Supernvoa Delta: In den Boss',
+          fr: 'Croix suprême delta : À l\'intérieur du boss',
           ja: 'グランドクロス・デルタ: ボスの真ん中に',
           cn: '站在boss中间',
           ko: '그랜드크로스: 델타, 보스 안쪽으로',
@@ -812,6 +815,7 @@ export default {
         beInFrontTTS: {
           en: 'delta: be in front',
           de: 'delta: vor den boss',
+          fr: 'delta : soyez devant',
           ja: 'ボスの前に',
           cn: '去前面',
           ko: '델타, 보스 범위 끝으로',
@@ -819,6 +823,7 @@ export default {
         beOnSidesTTS: {
           en: 'delta: be on sides',
           de: 'delta: an die seiten',
+          fr: 'delta : soyez sur les côtés',
           ja: 'ボスの横に',
           cn: '去两侧',
           ko: '델타, 보스 옆쪽으로',
@@ -826,6 +831,7 @@ export default {
         beInsideBossTTS: {
           en: 'delta: be inside boss',
           de: 'delta: in den boss',
+          fr: 'delta : À l\'intérieur du boss',
           ja: 'ボスの真ん中に',
           cn: '去boss中间',
           ko: '델타, 보스 안쪽으로',
@@ -853,10 +859,8 @@ export default {
       id: 'O4S Neo Acceleration Bomb',
       netRegex: NetRegexes.gainsEffect({ effectId: '568' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.duration) - 4;
-      }, // 4 second warning.
-      alarmText: function(data, _, output) {
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4, // 4 second warning.
+      alarmText: (data, _matches, output) => {
         if (data.phase === 'omega')
           return output.lookAwayAndStop();
 
@@ -866,6 +870,7 @@ export default {
         lookAwayAndStop: {
           en: 'look away and stop',
           de: 'wegschauen und stehenbleiben',
+          fr: 'regardez ailleurs et arrêtez',
           ja: '見ない、動かない',
           cn: '看外面并静止',
           ko: '바라보지 말고 멈추기',
@@ -873,6 +878,7 @@ export default {
         stop: {
           en: 'stop',
           de: 'Stopp',
+          fr: 'Arrêtez',
           ja: '動かない',
           cn: '静止',
           ko: '멈추기',
@@ -882,14 +888,13 @@ export default {
     {
       id: 'O4S Neo Acceleration Bomb Delta',
       netRegex: NetRegexes.gainsEffect({ effectId: '568' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.phase === 'delta';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data, matches) => matches.target === data.me && data.phase === 'delta',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Acceleration Bomb',
           de: 'Beschleunigungsbombe',
+          fr: 'Bombe à accélération',
           ja: '加速度爆弾',
           cn: '加速度炸弹',
           ko: '가속도 폭탄',
@@ -899,18 +904,15 @@ export default {
     {
       id: 'O4S Neo Omega Shriek',
       netRegex: NetRegexes.gainsEffect({ effectId: '1C4' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.phase === 'omega';
-      },
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.duration) - 5;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data, matches) => matches.target === data.me && data.phase === 'omega',
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'shriek: get mid, look away',
           de: 'Schrei: Zur mitte und wegschauen',
-          ja: '呪詛の叫声: 中へ、外に向け',
+          fr: 'Cri : allez au milieu, regardez ailleurs',
+          ja: '呪詛の叫声: 中へ、外を向け',
           cn: '石化点名',
           ko: '중앙으로, 바깥보기',
         },
@@ -919,16 +921,14 @@ export default {
     {
       id: 'O4S Neo Water Tracker',
       netRegex: NetRegexes.gainsEffect({ effectId: '3FF' }),
-      run: function(data, matches) {
-        data.waterHealer = matches.target;
-      },
+      run: (data, matches) => data.waterHealer = matches.target,
     },
     {
       // Water Me (Delta/Omega)
       id: 'O4S Neo Water Me',
       netRegex: NetRegexes.gainsEffect({ effectId: '3FF' }),
       condition: Conditions.targetIsYou(),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         // Not clear where to tell the healer where to go on delta
         // due to picking a side for uptime strat, or other strats.
         if (data.phase === 'delta')
@@ -940,6 +940,7 @@ export default {
         waterOnYou: {
           en: 'water on you',
           de: 'wasser auf dir',
+          fr: 'Eau sur vous',
           ja: '自分に水属性圧縮',
           cn: '水点名',
           ko: '물 대상자',
@@ -947,7 +948,8 @@ export default {
         waterStackUnderNeo: {
           en: 'water: stack under neo',
           de: 'Wasser: Unter Neo stacken',
-          ja: '水属性圧縮: ボスの下に頭割り',
+          fr: 'Eau : packez-vous sous Néo',
+          ja: '水属性圧縮: ボスの下で頭割り',
           cn: '去下面',
           ko: '물: 보스 아래 모이기',
         },
@@ -957,29 +959,22 @@ export default {
       // Beyond Death Tank (Delta)
       id: 'O4S Neo Beyond Death Delta Tank',
       netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
-      condition: function(data, matches) {
-        return data.phase === 'delta' && matches.target === data.me && data.role === 'tank';
-      },
+      condition: (data, matches) => data.phase === 'delta' && matches.target === data.me && data.role === 'tank',
       delaySeconds: 0.5,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         // Something went awry, or maybe healers dead.  Just say stack on water anyway,
         // instead of trying to be smart when the healers die.
         if (data.waterHealer)
-          return output.stackOnWaterhealer({ waterHealer: data.waterHealer });
+          return output.stackOnWaterhealer({ player: data.waterHealer });
 
         return output.stackOnWater();
       },
       outputStrings: {
-        stackOnWaterhealer: {
-          en: 'Stack on ${waterHealer}',
-          de: 'Stack auf ${waterHealer}',
-          ja: '${waterHealer}に頭割り',
-          cn: '分摊于${waterHealer}',
-          ko: '"${waterHealer}"에게 모이기',
-        },
+        stackOnWaterhealer: Outputs.stackOnPlayer,
         stackOnWater: {
           en: 'Stack on water',
           de: 'Bei Wasser stacken',
+          fr: 'Packez-vous sur l\'eau',
           ja: '水持ちと頭割り',
           cn: '和水点名分摊',
           ko: '물 쉐어',
@@ -990,14 +985,13 @@ export default {
       // Beyond Death (Delta)
       id: 'O4S Neo Beyond Death Delta Initial',
       netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
-      condition: function(data, matches) {
-        return data.phase === 'delta' && matches.target === data.me && data.role !== 'tank';
-      },
-      infoText: (data, _, output) => output.beyondDeath(),
+      condition: (data, matches) => data.phase === 'delta' && matches.target === data.me && data.role !== 'tank',
+      infoText: (_data, _matches, output) => output.beyondDeath(),
       outputStrings: {
         beyondDeath: {
           en: 'Beyond Death',
           de: 'Jenseis Des Jenseits',
+          fr: 'Outre-mort',
           ja: '死の超越',
           cn: '超越死亡',
           ko: '죽음 초월',
@@ -1008,11 +1002,9 @@ export default {
       // Off Balance (Omega)
       id: 'O4S Neo Off Balance Omega',
       netRegex: NetRegexes.gainsEffect({ effectId: '569' }),
-      condition: function(data, matches) {
-        return data.phase === 'omega' && matches.target === data.me;
-      },
+      condition: (data, matches) => data.phase === 'omega' && matches.target === data.me,
       delaySeconds: 0.5,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         // Good for both dps and tanks.
         if (data.waterHealer)
           return output.stackUnderBossOnWaterhealer({ waterHealer: data.waterHealer });
@@ -1023,13 +1015,15 @@ export default {
         stackUnderBossOnWaterhealer: {
           en: 'Stack under boss on ${waterHealer}',
           de: 'Unter Boss auf ${waterHealer} stacken',
-          ja: 'ボスの下に${waterHealer}と頭割り',
+          fr: 'Packez-vous sous le boss sur ${waterHealer}',
+          ja: 'ボスの下で${waterHealer}と頭割り',
           cn: '分摊于${waterHealer}',
           ko: '보스 아래에서 "${waterHealer}"에게 모이기',
         },
         stackOnWater: {
           en: 'Stack on water',
           de: 'Auf Wasser stacken',
+          fr: 'Packez-vous sur l\'eau',
           ja: '水と頭割り',
           cn: '和水点名分摊',
           ko: '물 쉐어',
@@ -1039,17 +1033,13 @@ export default {
     {
       id: 'O4S Neo Earthshaker on Tank',
       netRegex: NetRegexes.headMarker({ id: '0028' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.role === 'tank';
-      },
+      condition: (data, matches) => matches.target === data.me && data.role === 'tank',
       response: Responses.earthshaker('info'),
     },
     {
       id: 'O4S Neo Earthshaker on not Tank',
       netRegex: NetRegexes.headMarker({ id: '0028' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.role !== 'tank';
-      },
+      condition: (data, matches) => matches.target === data.me && data.role !== 'tank',
       response: Responses.earthshaker('alarm'),
     },
     {
@@ -1060,7 +1050,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '241E', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '241E', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '241E', source: '네오 엑스데스', capture: false }),
-      response: Responses.stackMarker(),
+      response: Responses.getTogether(),
     },
     {
       id: 'O4S Neo Almagest',
@@ -1070,14 +1060,15 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2417', source: 'ネオエクスデス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2417', source: '新生艾克斯迪司', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2417', source: '네오 엑스데스', capture: false }),
-      alertText: (data, _, output) => output.almagest(),
-      run: function(data) {
+      alertText: (_data, _matches, output) => output.almagest(),
+      run: (data) => {
         data.almagestCount = (data.almagestCount || 0) + 1;
       },
       outputStrings: {
         almagest: {
           en: 'Almagest',
           de: 'Almagest',
+          fr: 'Almageste',
           ja: 'アルマゲスト',
           cn: '大AOE',
           ko: '알마게스트',
@@ -1092,32 +1083,31 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2401', source: 'ネオエクスデス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '2401', source: '新生艾克斯迪司' }),
       netRegexKo: NetRegexes.startsUsing({ id: '2401', source: '네오 엑스데스' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         data.flareTargets = data.flareTargets || [];
         data.flareTargets.push(matches.target);
         return data.flareTargets.length === 3;
       },
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.flareTargets.includes(data.me))
           return output.flareOnYou();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (!data.flareTargets.includes(data.me))
           return output.stack();
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.flareTargets.includes(data.me))
           return output.flareOnYou();
 
         return output.stackTTS();
       },
-      run: function(data) {
-        delete data.flareTargets;
-      },
+      run: (data) => delete data.flareTargets,
       outputStrings: {
         stack: {
           en: 'Light and Darkness: Stack',
           de: 'Licht und Dunkel: Stack',
+          fr: 'Clair-obscur : Packez-vous',
           ja: 'ライト・アンド・ダークネス: 頭割り',
           cn: '分摊点名',
           ko: '빛과 어둠: 모이기',
@@ -1125,6 +1115,7 @@ export default {
         flareOnYou: {
           en: 'Flare on you',
           de: 'Flare auf dir',
+          fr: 'Brasier sur vous',
           ja: '自分にフレア',
           cn: '核爆点名',
           ko: '플레어 대상자',
@@ -1132,6 +1123,7 @@ export default {
         stackTTS: {
           en: 'stack',
           de: 'stek',
+          fr: 'packez-vous',
           ja: '頭割り',
           cn: '分摊',
           ko: '모이기',
@@ -1141,21 +1133,26 @@ export default {
   ],
   timelineReplace: [
     {
+      'locale': 'en',
+      'replaceText': {
+        'Blizzard III/Fire III/Thunder III': 'Blizzard/Fire/Thunder III',
+      },
+    },
+    {
       'locale': 'de',
       'replaceSync': {
         'Exdeath': 'Exdeath',
       },
       'replaceText': {
-        '--Acceleration Bomb Resolves--': '--Beschleunigungsbombe löst sich auf--',
-        '--Allagan Field Explodes--': '--Allagisches Feld explodiert--',
-        '--LB Gauge Resets--': '--LB Leiste reset--',
+        '\\(charge\\)': '(Aufladung)',
+        '\\(colors': '(Farben',
+        'lasers\\)': 'Laser)',
         'Aero III': 'Windga',
         'Almagest': 'Almagest',
         'Black Hole': 'Schwarzes Loch',
         'Blizzard III': 'Eisga',
-        'Charge': 'Sturm',
         'Charybdis': 'Charybdis',
-        'Cursed Shriek': 'Schrei der Verwünschung',
+        'Collision': 'Aufprall',
         'Delta Attack': 'Delta-Attacke',
         'Double Attack': 'Doppelangriff',
         'Dualcast': 'Doppelzauber',
@@ -1165,49 +1162,47 @@ export default {
         'Fire III': 'Feuga',
         'Flare': 'Flare',
         'Flood of Naught': 'Flut der Leere',
-        'Forked Lightning': 'Gabelblitz',
+        'Flying Frenzy': 'Rasender Sturz',
         'Frenzied Fist': 'Rasende Faust',
         'Frenzied Sphere': 'Rasender Orbis',
         'Grand Cross Alpha': 'Supernova Alpha',
         'Grand Cross Delta': 'Supernova Delta',
         'Grand Cross Omega': 'Supernova Omega',
-        'HP Down Debuff': 'Verringerte HP Debuff',
         'Holy': 'Sanctus',
-        'Knockback': 'Rückstoß',
         'Light and Darkness': 'Licht und Dunkelheit',
-        'Meteor': 'Meteo',
+        'Meteor': 'Meteor',
         'Neverwhere': 'Nirgendwann',
-        'Random Elemental': 'Zufälliges Elementar',
+        'The Decisive Battle': 'Entscheidungsschlacht',
         'Thunder III': 'Blitzga',
         'Vacuum Wave': 'Vakuumwelle',
-        'Water': 'Aqua',
         'White Hole': 'Weißes Loch',
         'Zombie Breath': 'Zombie-Atem',
       },
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Exdeath': 'Exdeath',
       },
       'replaceText': {
+        '\\(colors\\)': '(couleurs)',
+        '\\(colors/lasers\\)': '(couleurs/lasers)',
         'Aero III': 'Méga Vent',
         'Almagest': 'Almageste',
         'Black Hole': 'Trou noir',
-        'Blizzard III': 'Méga Glace',
-        'Charge': 'Charge',
+        'Blizzard III(?!/)': 'Méga Glace',
+        'Blizzard III/Fire III/Thunder III': 'Méga Glace/Feu/Foudre',
         'Charybdis': 'Charybde',
-        'Cursed Shriek': 'Cri maudit',
+        'Collision': 'Impact',
         'Delta Attack': 'Attaque Delta',
         'Double Attack': 'Double attaque',
         'Dualcast': 'Chaîne de sorts',
         'Earth Shaker': 'Secousse',
         'Emptiness': 'Désolation du néant',
-        'Fire III': 'Méga Feu',
+        '(?<!/)Fire III(?!/)': 'Méga Feu',
         'Flare': 'Brasier',
         'Flood of Naught': 'Crue du néant',
-        'Forked Lightning': 'Éclair ramifié',
+        'Flying Frenzy': 'Démence',
         'Frenzied Fist': 'Poing de la démence',
         'Frenzied Sphere': 'Démence terminale',
         'Grand Cross Alpha': 'Croix suprême alpha',
@@ -1217,29 +1212,28 @@ export default {
         'Light and Darkness': 'Clair-obscur',
         'Meteor': 'Météore',
         'Neverwhere': 'Anarchie',
-        'Thunder III': 'Méga Foudre',
+        'The Decisive Battle': 'Combat décisif',
+        'The Final Battle': 'Lutte finale',
+        '(?<!/)Thunder III': 'Méga Foudre',
         'Vacuum Wave': 'Vague de vide',
-        'Water': 'Eau',
         'White Hole': 'Trou blanc',
         'Zombie Breath': 'Haleine zombie',
       },
     },
     {
       'locale': 'ja',
+      'missingTranslations': true,
       'replaceSync': {
-        'Exdeath': 'エクスデス',
+        '(?<! )Exdeath': 'エクスデス',
+        'Neo Exdeath': 'ネオエクスデス',
       },
       'replaceText': {
-        '--Acceleration Bomb Resolves--': '--加速度爆弾処理--',
-        '--Allagan Field Explodes--': '--アラガンフィールド処理--',
-        '--LB Gauge Resets--': '--LBゲージリセット--',
         'Aero III': 'エアロガ',
         'Almagest': 'アルマゲスト',
         'Black Hole': 'ブラックホール',
         'Blizzard III': 'ブリザガ',
-        'Charge': 'チャージ',
         'Charybdis': 'ミールストーム',
-        'Cursed Shriek': '呪詛の叫声',
+        'Collision': '衝撃',
         'Delta Attack': 'デルタアタック',
         'Double Attack': 'ダブルアタック',
         'Dualcast': '連続魔',
@@ -1248,44 +1242,38 @@ export default {
         'Final Battle': '最後の闘い',
         'Fire III': 'ファイガ',
         'Flare': 'フレア',
+        'Flying Frenzy': '狂乱',
         'Flood of Naught': '無の氾濫',
-        'Forked Lightning': 'フォークライトニング',
         'Frenzied Fist': '狂乱の拳',
         'Frenzied Sphere': '狂乱の極地',
         'Grand Cross Alpha': 'グランドクロス・アルファ',
         'Grand Cross Delta': 'グランドクロス・デルタ',
         'Grand Cross Omega': 'グランドクロス・オメガ',
-        'HP Down Debuff': '最大HPダウン',
         'Holy': 'ホーリー',
-        'Knockback': 'ノックバック',
         'Light and Darkness': 'ライト・アンド・ダークネス',
         'Meteor': 'メテオ',
         'Neverwhere': '法則崩壊',
-        'Random Elemental': 'ランダムエレメント',
+        'The Decisive Battle': '決戦',
         'Thunder III': 'サンダガ',
         'Vacuum Wave': '真空波',
-        'Water': 'ウォータ',
         'White Hole': 'ホワイトホール',
         'Zombie Breath': 'ゾンビブレス',
       },
     },
     {
       'locale': 'cn',
+      'missingTranslations': true,
       'replaceSync': {
         '(?<! )Exdeath': '艾克斯迪司',
         'Neo Exdeath': '新生艾克斯迪司',
       },
       'replaceText': {
-        '--Acceleration Bomb Resolves--': '--加速度炸弹处理--',
-        '--Allagan Field Explodes--': '--亚拉戈领域爆炸--',
-        '--LB Gauge Resets--': '--LB量表重置--',
         'Aero III': '暴风',
         'Almagest': '至高无上',
         'Black Hole': '黑洞',
         'Blizzard III': '冰封',
-        'Charge': '刺冲',
         'Charybdis': '大漩涡',
-        'Cursed Shriek': '诅咒之嚎',
+        'Collision': '冲击',
         'Delta Attack': '三角攻击',
         'Double Attack': '双重攻击',
         'Tethers': '连线',
@@ -1295,44 +1283,39 @@ export default {
         'Final Battle': '最终之战',
         'Fire III': '爆炎',
         'Flare': '核爆',
+        'Flying Frenzy': '狂乱',
         'Flood of Naught': '无之泛滥',
-        'Forked Lightning': '叉形闪电',
         'Frenzied Fist': '狂乱之拳',
         'Frenzied Sphere': '狂乱领域',
         'Grand Cross Alpha': '大十字·阿尔法',
         'Grand Cross Delta': '大十字·德尔塔',
         'Grand Cross Omega': '大十字·欧米茄',
         'Holy': '神圣',
-        'HP Down Debuff': '血量上限降低Debuff',
-        'Knockback': '击退',
         'Light and Darkness': '光与暗',
         'Meteor': '陨石',
         'Neverwhere': '规律崩坏',
-        'Random Elemental': '随机元灵',
+        'The Decisive Battle': '决战',
         'Thunder III': '暴雷',
         'T/H': 'T/奶',
         'Vacuum Wave': '真空波',
-        'Water': '流水',
         'White Hole': '白洞',
         'Zombie Breath': '死亡吐息',
       },
     },
     {
       'locale': 'ko',
+      'missingTranslations': true,
       'replaceSync': {
-        'Exdeath': '엑스데스',
+        '(?<! )Exdeath': '엑스데스',
+        'Neo Exdeath': '네오 엑스데스',
       },
       'replaceText': {
-        '--Acceleration Bomb Resolves--': '--가속도 폭탄 처리--',
-        '--Allagan Field Explodes--': '--알라간 필드 폭발--',
-        '--LB Gauge Resets--': '--리밋 게이지 초기화--',
         'Aero III': '에어로가',
         'Almagest': '알마게스트',
         'Black Hole': '블랙홀',
         'Blizzard III': '블리자가',
-        'Charge': '돌격',
         'Charybdis': '대소용돌이',
-        'Cursed Shriek': '저주의 외침',
+        'Collision': '충격',
         'Delta Attack': '델타 공격',
         'Double Attack': '이중 공격',
         'Dualcast': '연속 마법',
@@ -1342,24 +1325,21 @@ export default {
         'Flare': '플레어',
         'Flood of Naught': '무의 범람',
         'Final Battle': '마지막 싸움',
-        'Forked Lightning': '갈래 번개',
+        'Flying Frenzy': '광란',
         'Frenzied Fist': '광란의 주먹',
         'Frenzied Sphere': '광란의 극지',
         'Grand Cross Alpha': '그랜드크로스: 알파',
         'Grand Cross Delta': '그랜드크로스: 델타',
         'Grand Cross Omega': '그랜드크로스: 오메가',
         'Holy': '홀리',
-        'HP Down Debuff': '최대 체력 저하 디버프',
-        'Knockback': '넉백',
         'Light and Darkness': '빛과 어둠',
-        'Random Elemental': '강화된 선더가/파이가/블리자가',
         'Tethers': '선',
         'Meteor': '메테오',
         'Neverwhere': '법칙 붕괴',
+        'The Decisive Battle': '결전',
         'Thunder III': '선더가',
         'T/H': '탱/힐',
         'Vacuum Wave': '진공파',
-        'Water': '워터',
         'White Hole': '화이트홀',
         'Zombie Breath': '좀비 숨결',
       },

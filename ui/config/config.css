@@ -229,6 +229,11 @@ html {
 
 .trigger-detail {
   display: inline;
+  align-self: center;
+}
+
+.trigger-source {
+  justify-content: flex-end;
 }
 
 .alarm-text {

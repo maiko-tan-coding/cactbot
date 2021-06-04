@@ -1,8 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Regexes from '../../../../../resources/regexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Regexes from '../../../../../resources/regexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheSecondCoilOfBahamutTurn2,
@@ -18,7 +18,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '860', source: '프로토 키마이라', capture: false }),
       // TODO: is this silenceable in 5.0?
       condition: (data) => data.CanStun() || data.CanSilence(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Silence Ram\'s Voice',
@@ -40,7 +40,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '861', source: '프로토 키마이라', capture: false }),
       // TODO: is this silenceable in 5.0?
       condition: (data) => data.CanStun() || data.CanSilence(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Silence Dragon\'s Voice',
@@ -63,7 +63,7 @@ export default {
       condition: (data, matches) => data.me === matches.target && data.job === 'BLU',
       delaySeconds: 6,
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tail Slap in 10',
@@ -83,7 +83,7 @@ export default {
       netRegexJa: NetRegexes.addedCombatant({ name: 'ルノー', capture: false }),
       netRegexCn: NetRegexes.addedCombatant({ name: '雷诺', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '르노', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Renaud Add',
@@ -99,8 +99,8 @@ export default {
       id: 'T7 Cursed Voice',
       netRegex: NetRegexes.gainsEffect({ effectId: '1C3' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: (data, matches) => matches.duration - 3,
-      alertText: (data, _, output) => output.text(),
+      delaySeconds: (_data, matches) => matches.duration - 3,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Voice Soon',
@@ -167,7 +167,7 @@ export default {
           en: 'Dodge Shriek',
           de: 'Schrei Der Verwünschung ausweichen',
           fr: 'Esquivez le cri maudit',
-          ja: '呪詛の叫声に避け',
+          ja: '呪詛の叫声を避ける',
           cn: '躲避诅咒之嚎',
           ko: '저주의 외침 피하기',
         },
@@ -231,7 +231,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '7B2', source: 'メリュジーヌ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '7B2', source: '美瑠姬奴', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '7B2', source: '멜뤼진', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Venomous Tail',
@@ -301,6 +301,7 @@ export default {
         'Renaud': 'ルノー',
       },
       'replaceText': {
+        '(.*) Adds?': '雑魚: $1',
         'Circle Blade': 'サークルブレード',
         'Circle Of Flames': 'サークル・オブ・フレイム',
         'Cursed Shriek': '呪詛の叫声',

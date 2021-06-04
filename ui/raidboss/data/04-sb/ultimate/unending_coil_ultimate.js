@@ -1,8 +1,9 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Regexes from '../../../../../resources/regexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Regexes from '../../../../../resources/regexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // UCU - The Unending Coil Of Bahamut (Ultimate)
 export default {
@@ -18,7 +19,7 @@ export default {
       // Both tanks should care about the tankbuster because they can throw
       // mitigation on the other, so just always play this for both tanks.
       conditions: Conditions.caresAboutPhysical(),
-      response: Responses.tankBuster('alert'),
+      response: Responses.tankBuster(),
     },
   ],
   triggers: [
@@ -27,33 +28,25 @@ export default {
       id: 'UCU Firescorched Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '1D0' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.fireDebuff = true;
-      },
+      run: (data) => data.fireDebuff = true,
     },
     {
       id: 'UCU Firescorched Lose',
       netRegex: NetRegexes.losesEffect({ effectId: '1D0' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.fireDebuff = false;
-      },
+      run: (data) => data.fireDebuff = false,
     },
     {
       id: 'UCU Icebitten Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '1D1' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.iceDebuff = true;
-      },
+      run: (data) => data.iceDebuff = true,
     },
     {
       id: 'UCU Icebitten Lose',
       netRegex: NetRegexes.losesEffect({ effectId: '1D1' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.iceDebuff = false;
-      },
+      run: (data) => data.iceDebuff = false,
     },
     {
       id: 'UCU Fireball Counter',
@@ -63,7 +56,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '26C5', source: 'ファイアホーン' }),
       netRegexCn: NetRegexes.ability({ id: '26C5', source: '火角' }),
       netRegexKo: NetRegexes.ability({ id: '26C5', source: '화염뿔' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.fireballs[data.naelFireballCount].push(matches.target);
       },
     },
@@ -75,8 +68,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E2', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E2', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E2', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('quickmarch');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('quickmarch');
       },
     },
     {
@@ -87,8 +81,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E3', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E3', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E3', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('blackfire');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('blackfire');
       },
     },
     {
@@ -99,8 +94,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E4', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E4', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E4', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('fellruin');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('fellruin');
       },
     },
     {
@@ -111,8 +107,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E5', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E5', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E5', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('heavensfall');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('heavensfall');
       },
     },
     {
@@ -123,8 +120,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E6', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E6', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E6', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('tenstrike');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('tenstrike');
       },
     },
     {
@@ -135,8 +133,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26E7', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26E7', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26E7', source: '바하무트 프라임', capture: false }),
-      run: function(data) {
-        if (data.resetTrio) data.resetTrio('octet');
+      run: (data) => {
+        if (data.resetTrio)
+          data.resetTrio('octet');
       },
     },
     {
@@ -147,7 +146,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '26B8', source: 'ラグナロク' }),
       netRegexCn: NetRegexes.ability({ id: '26B8', source: '诸神黄昏' }),
       netRegexKo: NetRegexes.ability({ id: '26B8', source: '라그나로크' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         // This happens once during the nael transition and again during
         // the heavensfall trio.  This should proooobably hit all 8
         // people by the time you get to octet.
@@ -165,14 +164,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26AA', source: 'ツインタニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26AA', source: '双塔尼亚', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26AA', source: '트윈타니아', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Twisters',
           de: 'Wirbelstürme',
           fr: 'Tornades',
           ja: '大竜巻',
-          cn: '大龙卷',
+          cn: '旋风',
           ko: '회오리',
         },
       },
@@ -185,10 +184,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26A9', source: 'ツインタニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26A9', source: '双塔尼亚', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26A9', source: '트윈타니아', capture: false }),
-      alertText: (data, _, output) => {
-        if (data.role === 'tank' || data.role === 'healer')
-          return output.text();
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Death Sentence',
@@ -203,7 +200,7 @@ export default {
     {
       id: 'UCU Hatch Collect',
       netRegex: NetRegexes.headMarker({ id: '0076' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.hatch = data.hatch || [];
         data.hatch.push(matches.target);
       },
@@ -212,7 +209,7 @@ export default {
       id: 'UCU Hatch Marker YOU',
       netRegex: NetRegexes.headMarker({ id: '0076' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hatch on YOU',
@@ -228,7 +225,7 @@ export default {
       id: 'UCU Hatch Callouts',
       netRegex: NetRegexes.headMarker({ id: '0076', capture: false }),
       delaySeconds: 0.25,
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (!data.hatch)
           return;
         const hatches = data.hatch.map((n) => data.ShortName(n)).join(', ');
@@ -250,9 +247,7 @@ export default {
       id: 'UCU Hatch Cleanup',
       netRegex: NetRegexes.headMarker({ id: '0076', capture: false }),
       delaySeconds: 5,
-      run: function(data) {
-        delete data.hatch;
-      },
+      run: (data) => delete data.hatch,
     },
     {
       id: 'UCU Twintania P2',
@@ -263,7 +258,7 @@ export default {
       regexCn: Regexes.hasHP({ name: '双塔尼亚', hp: '75', capture: false }),
       regexKo: Regexes.hasHP({ name: '트윈타니아', hp: '75', capture: false }),
       sound: 'Long',
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Phase 2 Push',
@@ -284,7 +279,7 @@ export default {
       regexCn: Regexes.hasHP({ name: '双塔尼亚', hp: '45', capture: false }),
       regexKo: Regexes.hasHP({ name: '트윈타니아', hp: '45', capture: false }),
       sound: 'Long',
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Phase 3 Push',
@@ -308,7 +303,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我降临于此，\\s*对月长啸！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와 달을 올려다보리라!.*?', capture: false }),
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread => In',
@@ -330,7 +325,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我降临于此，\\s*征战铁血霸道！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와 강철의 패도를 걸으리라!.*?', capture: false }),
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread => Out',
@@ -352,7 +347,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '炽热燃烧！\\s*给予我月亮的祝福！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '붉게 타오른 달의 축복을!.*?', capture: false }),
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack => In',
@@ -373,7 +368,7 @@ export default {
       netRegexJa: NetRegexes.dialog({ line: '赤熱し、焼かれし道を\\s*鉄の覇道と成す！.*?', capture: false }),
       netRegexCn: NetRegexes.dialog({ line: '被炽热灼烧过的轨迹\\s*乃成铁血霸道！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '붉게 타오른 길을 강철의 패도로 만들겠노라!.*?', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack => Out',
@@ -394,7 +389,7 @@ export default {
       netRegexJa: NetRegexes.dialog({ line: '月よ！\\s*赤熱し、神敵を焼け！.*?', capture: false }),
       netRegexCn: NetRegexes.dialog({ line: '月光啊！\\s*用你的炽热烧尽敌人！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '달이여! 붉게 타올라 신의 적을 태워버려라!.*?', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In => Stack',
@@ -415,7 +410,7 @@ export default {
       netRegexJa: NetRegexes.dialog({ line: '月よ！\\s*鉄の覇道を照らせ！.*?', capture: false }),
       netRegexCn: NetRegexes.dialog({ line: '月光啊！\\s*照亮铁血霸道！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '달이여! 강철의 패도를 비춰라!.*?', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In => Out',
@@ -438,7 +433,7 @@ export default {
       netRegexKo: NetRegexes.dialog({ line: '초신성이여, 빛을 더하라! 붉은 달 아래, 붉게 타오르는 땅을 비춰라!.*?', capture: false }),
       delaySeconds: 4,
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from Tank => Stack',
@@ -461,7 +456,7 @@ export default {
       netRegexKo: NetRegexes.dialog({ line: '초신성이여, 빛을 더하라! 유성이 쏟아지는 밤에, 붉은 달을 우러러보라!.*?', capture: false }),
       delaySeconds: 4,
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread => Away from Tank',
@@ -483,7 +478,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我降临于此对月长啸！\\s*召唤星降之夜！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '흉조가 내려와, 달을 올려다보니 유성이 쏟아지는 밤이 도래하리라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread => In',
@@ -505,7 +500,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我自月而来降临于此，\\s*召唤星降之夜！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '달로부터 흉조가 내려와 유성이 쏟아지는 밤이 도래하리라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In => Spread',
@@ -527,7 +522,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我自月而来携钢铁降临于此！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '달로부터 강철의 패도를 거쳐 흉조가 내려오리라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In => Out => Spread',
@@ -549,7 +544,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '我自月而来降临于此，\\s*踏过炽热之地！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '달로부터 흉조가 내려와 붉게 타오르는 땅을 걸으리라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In => Spread => Stack',
@@ -571,7 +566,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '钢铁燃烧吧！\\s*成为我降临于此的刀剑吧！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '강철이여, 붉게 타올라라! 흉조가 내려오니 그 칼날이 되어라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Out => Stack => Spread',
@@ -593,7 +588,7 @@ export default {
       netRegexCn: NetRegexes.dialog({ line: '钢铁成为我降临于此的燃烧之剑！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '강철이여, 흉조가 내려오는도다! 그 칼날이 되어 붉게 타올라라!.*?', capture: false }),
       durationSeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Out => Spread => Stack',
@@ -616,7 +611,7 @@ export default {
       netRegexCn: NetRegexes.ability({ source: '雷翼', id: '26C7' }),
       netRegexKo: NetRegexes.ability({ source: '번개날개', id: '26C7' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Thunder on YOU',
@@ -631,7 +626,7 @@ export default {
     {
       id: 'UCU Nael Your Doom',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D2' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         // FIXME: temporary workaround for "gains the effect for 9999.00"
         // https://github.com/ravahn/FFXIV_ACT_Plugin/issues/223
         if (matches.duration > 1000)
@@ -640,7 +635,7 @@ export default {
       },
       // FIXME: temporary workaround for multiple gains effects messages.
       // https://github.com/ravahn/FFXIV_ACT_Plugin/issues/223#issuecomment-513486275
-      durationSeconds: function(data, matches) {
+      durationSeconds: (_data, matches) => {
         if (parseFloat(matches.duration) <= 6)
           return 3;
 
@@ -650,14 +645,14 @@ export default {
         return 9;
       },
       suppressSeconds: 20,
-      alarmText: (data, matches, output) => {
+      alarmText: (_data, matches, output) => {
         if (parseFloat(matches.duration) <= 6)
           return output.doom1();
         if (parseFloat(matches.duration) <= 10)
           return output.doom2();
         return output.doom3();
       },
-      tts: (data, matches, output) => {
+      tts: (_data, matches, output) => {
         if (parseFloat(matches.duration) <= 6)
           return output.justNumber({ num: '1' });
 
@@ -704,12 +699,12 @@ export default {
     {
       id: 'UCU Doom Init',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D2' }),
-      condition: function(data, matches) {
+      condition: (_data, matches) => {
         // FIXME: temporary workaround for "gains the effect for 9999.00"
         // https://github.com/ravahn/FFXIV_ACT_Plugin/issues/223
         return matches.duration < 1000;
       },
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.dooms = data.dooms || [null, null, null];
         let order = null;
         if (parseFloat(matches.duration) < 9)
@@ -729,7 +724,7 @@ export default {
       id: 'UCU Doom Cleanup',
       netRegex: NetRegexes.gainsEffect({ effectId: 'D2', capture: false }),
       delaySeconds: 20,
-      run: function(data) {
+      run: (data) => {
         delete data.dooms;
         delete data.doomCount;
       },
@@ -742,7 +737,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'ライトファング', id: '26CA', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '光牙', id: '26CA', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '빛의 송곳니', id: '26CA', capture: false }),
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         data.doomCount = data.doomCount || 0;
         let name;
         if (data.dooms)
@@ -772,10 +767,8 @@ export default {
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 35,
       suppressSeconds: 99999,
-      infoText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.naelFireballCount = 1;
-      },
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => data.naelFireballCount = 1,
       outputStrings: {
         text: {
           en: 'Fire IN',
@@ -797,7 +790,7 @@ export default {
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 51,
       suppressSeconds: 99999,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         // All players should be neutral by the time fire #2 happens.
         // If you have ice at this point, it means you missed the first
         // stack.  Therefore, make sure you stack.  It's possible you
@@ -806,10 +799,11 @@ export default {
         if (!data.fireballs[1].includes(data.me))
           return output.fireOutBeInIt();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.fireballs[1].includes(data.me))
           return output.fireOut();
       },
+      run: (data) => data.naelFireballCount = 2,
       outputStrings: {
         fireOut: {
           en: 'Fire OUT',
@@ -828,9 +822,6 @@ export default {
           ko: '불 대상자 밖으로: 나는 같이 맞기',
         },
       },
-      run: function(data) {
-        data.naelFireballCount = 2;
-      },
     },
     {
       id: 'UCU Nael Fireball 3',
@@ -842,13 +833,13 @@ export default {
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
       delaySeconds: 77,
       suppressSeconds: 99999,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         // If you were the person with fire tether #2, then you could
         // have fire debuff here and need to not stack.
         if (data.fireballs[1].includes(data.me) && data.fireballs[2].includes(data.me))
           return output.fireInAvoid();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         const tookTwo = data.fireballs[1].filter((p) => {
           return data.fireballs[2].includes(p);
         });
@@ -861,6 +852,7 @@ export default {
         }
         return output.fireIn();
       },
+      run: (data) => data.naelFireballCount = 3,
       outputStrings: {
         fireIn: {
           en: 'Fire IN',
@@ -887,9 +879,6 @@ export default {
           ko: '불 같이맞기: 나는 피하기',
         },
       },
-      run: function(data) {
-        data.naelFireballCount = 3;
-      },
     },
     {
       id: 'UCU Nael Fireball 4',
@@ -899,7 +888,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'ラグナロク', id: '26B8', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '诸神黄昏', id: '26B8', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '라그나로크', id: '26B8', capture: false }),
-      preRun: function(data) {
+      delaySeconds: 98,
+      suppressSeconds: 99999,
+      alertText: (data, _matches, output) => {
         const tookTwo = data.fireballs[1].filter((p) => {
           return data.fireballs[2].includes(p);
         });
@@ -907,20 +898,17 @@ export default {
           return data.fireballs[3].includes(p);
         });
         data.tookThreeFireballs = tookThree.includes(data.me);
-      },
-      delaySeconds: 98,
-      suppressSeconds: 99999,
-      alertText: (data, _, output) => {
         // It's possible that you can take 1, 2, and 3 even if nobody dies with
         // careful ice debuff luck.  However, this means you probably shouldn't
         // take 4.
         if (data.tookThreeFireballs)
           return output.fireInAvoid();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (!data.tookThreeFireballs)
           return output.fireIn();
       },
+      run: (data) => data.naelFireballCount = 4,
       outputStrings: {
         fireIn: {
           en: 'Fire IN',
@@ -939,9 +927,6 @@ export default {
           ko: '불 같이맞기: 나는 피하기',
         },
       },
-      run: function(data) {
-        data.naelFireballCount = 4;
-      },
     },
     {
       id: 'UCU Dragon Tracker',
@@ -951,12 +936,10 @@ export default {
       netRegexJa: NetRegexes.abilityFull({ source: ['アイスクロウ', 'サンダーウィング', 'ライトファング', 'ダークテイル', 'ファイアホーン'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
       netRegexCn: NetRegexes.abilityFull({ source: ['冰爪', '雷翼', '光牙', '暗尾', '火角'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
       netRegexKo: NetRegexes.abilityFull({ source: ['얼음발톱', '번개날개', '빛의 송곳니', '어둠의 꼬리', '화염뿔'], id: ['26C6', '26C7', '26CA', '26C9', '26C5'] }),
-      condition: function(data, matches) {
-        return !data.seenDragon || !(matches.source in data.seenDragon);
-      },
-      run: function(data, matches) {
+      condition: (data, matches) => !data.seenDragon || !(matches.source in data.seenDragon),
+      run: (data, matches) => {
         // seenDragon[dragon name] => boolean
-        data.seenDragon = data.seenDragon || [];
+        data.seenDragon = data.seenDragon || {};
         data.seenDragon[matches.source] = true;
 
         const x = parseFloat(matches.x);
@@ -1015,11 +998,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'ネール・デウス・ダーナス', id: '26B6', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奈尔·神·达纳斯', id: '26B6', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '넬 데우스 다르누스', id: '26B6', capture: false }),
-      condition: function(data) {
-        return data.naelMarks && !data.calledNaelDragons;
-      },
+      condition: (data) => data.naelMarks && !data.calledNaelDragons,
       durationSeconds: 10,
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         data.calledNaelDragons = true;
         const params = {
           dive1: data.naelMarks[0],
@@ -1070,14 +1051,7 @@ export default {
           cn: '带着点名去${dir}',
           ko: '${dir}으로 이동',
         },
-        unknownDir: {
-          en: '???',
-          de: '???',
-          fr: '???',
-          ja: '???',
-          cn: '???',
-          ko: '???',
-        },
+        unknownDir: Outputs.unknown,
       },
     },
     {
@@ -1105,21 +1079,15 @@ export default {
     {
       id: 'UCU Nael Dragon Dive Marker Counter',
       netRegex: NetRegexes.headMarker({ id: '0014', capture: false }),
-      condition: function(data) {
-        return !data.trio;
-      },
-      run: function(data) {
-        data.naelDiveMarkerCount++;
-      },
+      condition: (data) => !data.trio,
+      run: (data) => data.naelDiveMarkerCount++,
     },
     {
       // Octet marker tracking (77=nael, 14=dragon, 29=baha, 2A=twin)
       id: 'UCU Octet Marker Tracking',
       netRegex: NetRegexes.headMarker({ id: ['0077', '0014', '0029'] }),
-      condition: function(data) {
-        return data.trio === 'octet';
-      },
-      run: function(data, matches) {
+      condition: (data) => data.trio === 'octet',
+      run: (data, matches) => {
         data.octetMarker = data.octetMarker || [];
         data.octetMarker.push(matches.target);
         if (data.octetMarker.length !== 7)
@@ -1220,11 +1188,11 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '0029', capture: false }),
       condition: (data) => data.trio === 'octet',
       delaySeconds: 0.5,
-      alarmText: (data, _, output) => {
+      alarmText: (data, _matches, output) => {
         if (data.lastOctetMarker === data.me)
           return output.twinOnYou();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (!data.lastOctetMarker)
           return output.twinOnUnknown();
 
@@ -1233,7 +1201,7 @@ export default {
         if (data.lastOctetMarker !== data.me)
           return output.twinOnPlayer({ player: data.ShortName(data.lastOctetMarker) });
       },
-      tts: (data, _, output) => {
+      tts: (data, _matches, output) => {
         if (!data.lastOctetMarker || data.lastOctetMarker === data.me)
           return output.stackTTS();
       },
@@ -1281,7 +1249,7 @@ export default {
       netRegexCn: NetRegexes.ability({ source: '双塔尼亚', id: '26B2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '트윈타니아', id: '26B2', capture: false }),
       suppressSeconds: 2,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Twisters',
@@ -1301,7 +1269,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '26D6', source: 'バハムート・プライム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '26D6', source: '至尊巴哈姆特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26D6', source: '바하무트 프라임', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Gigaflare',
@@ -1317,7 +1285,7 @@ export default {
       id: 'UCU Megaflare Stack Me',
       netRegex: NetRegexes.headMarker({ id: '0027' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Megaflare Stack',
@@ -1332,14 +1300,12 @@ export default {
     {
       id: 'UCU Megaflare Stack Tracking',
       netRegex: NetRegexes.headMarker({ id: '0027' }),
-      run: function(data, matches) {
-        data.megaStack.push(matches.target);
-      },
+      run: (data, matches) => data.megaStack.push(matches.target),
     },
     {
       id: 'UCU Megaflare Tower',
       netRegex: NetRegexes.headMarker({ id: '0027', capture: false }),
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.trio !== 'blackfire' && data.trio !== 'octet' || data.megaStack.length !== 4)
           return;
 
@@ -1354,7 +1320,7 @@ export default {
 
         return output.octetTower();
       },
-      tts: (data, _, output) => {
+      tts: (data, _matches, output) => {
         if (data.trio !== 'blackfire' && data.trio !== 'octet' || data.megaStack.length !== 4)
           return;
 
@@ -1383,7 +1349,7 @@ export default {
           de: 'Geh in entfernten Turm',
           fr: 'Aller dans une tour lointaine',
           ja: '遠いタワー',
-          cn: '踩远塔',
+          cn: '踩远处的塔',
           ko: '기둥 밟기',
         },
         towerTTS: {
@@ -1401,7 +1367,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '0027', capture: false }),
       delaySeconds: 0.5,
       suppressSeconds: 1,
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.trio !== 'blackfire' && data.trio !== 'octet' || data.megaStack.length !== 4)
           return;
         if (!data.lastOctetMarker || data.lastOctetMarker === data.me)
@@ -1439,14 +1405,12 @@ export default {
     {
       id: 'UCU Earthshaker Tracking',
       netRegex: NetRegexes.headMarker({ id: '0028' }),
-      run: function(data, matches) {
-        data.shakers.push(matches.target);
-      },
+      run: (data, matches) => data.shakers.push(matches.target),
     },
     {
       id: 'UCU Earthshaker Not Me',
       netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         if (data.trio !== 'quickmarch')
           return;
         if (data.shakers.length !== 3)
@@ -1454,7 +1418,7 @@ export default {
         if (data.role === 'tank')
           return output.quickmarchTankTether();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.trio === 'quickmarch') {
           if (data.shakers.length !== 3)
             return;
@@ -1464,6 +1428,10 @@ export default {
           if (data.shakers.length === 4 && !data.shakers.includes(data.me))
             return output.tenstrikeNotOnYou();
         }
+      },
+      run: (data) => {
+        if (data.trio === 'tenstrike' && data.shakers.length === 4)
+          data.shakers = [];
       },
       outputStrings: {
         quickmarchTankTether: {
@@ -1479,7 +1447,7 @@ export default {
           de: 'Kein Erdstoß; im süden sammeln',
           fr: 'Pas de Secousse; se rassembler au Sud.',
           ja: 'シェイカーない；頭割りで南',
-          cn: '不地震，南侧集合',
+          cn: '无点名，南侧集合',
           ko: '징 없음, 모여서 쉐어',
         },
         tenstrikeNotOnYou: {
@@ -1490,10 +1458,6 @@ export default {
           cn: '安全点集合',
           ko: '안전장소에 모이기',
         },
-      },
-      run: function(data) {
-        if (data.trio === 'tenstrike' && data.shakers.length === 4)
-          data.shakers = [];
       },
     },
     {
@@ -1547,7 +1511,7 @@ export default {
         data.akhMornCount = data.akhMornCount || 0;
         data.akhMornCount++;
       },
-      infoText: (data, _, output) => output.text({ num: data.akhMornCount }),
+      infoText: (data, _matches, output) => output.text({ num: data.akhMornCount }),
       outputStrings: {
         text: {
           en: 'Akh Morn #${num}',
@@ -1570,7 +1534,7 @@ export default {
         data.exaflareCount = data.exaflareCount || 0;
         data.exaflareCount++;
       },
-      infoText: (data, _, output) => output.text({ num: data.exaflareCount }),
+      infoText: (data, _matches, output) => output.text({ num: data.exaflareCount }),
       outputStrings: {
         text: {
           en: 'Exaflare #${num}',
@@ -1592,7 +1556,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '26AA', source: '双塔尼亚', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '26AA', source: '트윈타니아', capture: false }),
       suppressSeconds: 99999,
-      run: function(data) {
+      run: (data) => {
         // TODO: a late white puddle can cause dragons to get seen for the next
         // phase so clear them again here.  Probably data for triggers needs
         // to be cleared at more reliable times.
@@ -1610,14 +1574,14 @@ export default {
           4: [],
         };
 
-        data.resetTrio = function(trio) {
-          this.trio = trio;
-          this.shakers = [];
-          this.megaStack = [];
+        data.resetTrio = (trio) => {
+          data.trio = trio;
+          data.shakers = [];
+          data.megaStack = [];
         };
 
         // Begin copy and paste from dragon_test.js.
-        const modDistance = function(mark, dragon) {
+        const modDistance = (mark, dragon) => {
           const oneWay = (dragon - mark + 8) % 8;
           const otherWay = (mark - dragon + 8) % 8;
           const distance = Math.min(oneWay, otherWay);
@@ -1625,7 +1589,7 @@ export default {
           return distance;
         };
 
-        const badSpots = function(mark, dragon) {
+        const badSpots = (mark, dragon) => {
           // All spots between mark and dragon are bad.  If distance == 1,
           // then the dragon hits the spot behind the mark too.  e.g. N
           // mark, NE dragon will also hit NW.
@@ -1649,7 +1613,7 @@ export default {
           return bad;
         };
 
-        const findDragonMarks = function(array) {
+        const findDragonMarks = (array) => {
           const marks = [-1, -1, -1];
           const ret = {
             // Third drive is on a dragon three squares away and will cover

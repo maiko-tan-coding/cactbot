@@ -1,6 +1,6 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheFinalCoilOfBahamutTurn1,
@@ -150,8 +150,8 @@ export default {
         'Electrocharge': 'エレクトロチャージ',
         'Heat Lightning': 'ヒートライトニング',
         'Random \\+ Charge': 'ランダム + チャージ',
-        '1x Son / 1x Daughter Adds': '雑魚: 1x サン / 1x ドーター',
-        '2x Son / 2x Daughter Adds': '雑魚: 2x サン / 2x ドーター',
+        '1x Son / 1x Daughter Adds': '雑魚: 1サン/1ドーター',
+        '2x Son / 2x Daughter Adds': '雑魚: 2サン/2ドーター',
         'Spike Flail': 'スパイクフレイル',
         'Wild Charge': 'ワイルドチャージ',
       },

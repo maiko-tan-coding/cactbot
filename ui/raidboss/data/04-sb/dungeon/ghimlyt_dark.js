@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheGhimlytDark,
@@ -11,13 +11,13 @@ export default {
       id: 'Ghimlyt Dark Prometheus Laser',
       regex: /Heat/,
       beforeSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid wall laser',
           de: 'Weiche dem Wand-Laser aus',
           fr: 'Évitez le laser du mur',
-          ja: 'レーザーに避ける',
+          ja: 'レーザーを避ける',
           cn: '躲避墙壁激光',
           ko: '벽 레이저 피하기',
         },
@@ -63,23 +63,21 @@ export default {
       // 00A7 is the orange clockwise indicator. 00A8 is the blue counterclockwise one.
       id: 'Ghimlyt Dark Magitek Slash',
       netRegex: NetRegexes.headMarker({ id: ['00A7', '00A8'] }),
-      infoText: (data, matches, output) => {
-        return matches.id === '00A7' ? output.left() : output.right();
-      },
+      infoText: (_data, matches, output) => matches.id === '00A7' ? output.left() : output.right(),
       outputStrings: {
         left: {
           en: 'Rotate left',
           de: 'Nach links rotieren',
-          fr: 'Rotation vers la gauche',
-          ja: '逆時針回り',
+          fr: 'Tournez vers la gauche',
+          ja: '反時計回り',
           cn: '向左转',
           ko: '왼쪽으로 회전',
         },
         right: {
           en: 'Rotate right',
           de: 'Nach rechts rotieren',
-          fr: 'Rotation vers la droite',
-          ja: '時針回り',
+          fr: 'Tournez vers la droite',
+          ja: '時計回り',
           cn: '向右转',
           ko: '오른쪽으로 회전',
         },
@@ -125,7 +123,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '3727', source: 'Julia Quo Soranus', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '3727', source: 'ユリア・クォ・ソラノス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3727', source: '茱莉亚・库奥・索拉努斯', capture: false }),
-      netRegexKo: NetRegexes.startsUsing({ id: '3727', source: '율리아 쿠오 소라노스', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '3727', source: '율리아 쿠오 소라누스', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
@@ -136,7 +134,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '3729', source: 'Julia Quo Soranus' }),
       netRegexJa: NetRegexes.startsUsing({ id: '3729', source: 'ユリア・クォ・ソラノス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3729', source: '茱莉亚・库奥・索拉努斯' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '3729', source: '율리아 쿠오 소라노스' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '3729', source: '율리아 쿠오 소라누스' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBuster(),
     },
@@ -147,7 +145,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '372A', source: 'Annia Quo Soranus' }),
       netRegexJa: NetRegexes.startsUsing({ id: '372A', source: 'アンニア・クォ・ソラノス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '372A', source: '安妮亚・库奥・索拉努斯' }),
-      netRegexKo: NetRegexes.startsUsing({ id: '372A', source: '안니아 쿠오 소라노스' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '372A', source: '안니아 쿠오 소라누스' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBuster(),
     },
@@ -155,7 +153,7 @@ export default {
       // This head marker is used on players and NPCs, so we have to exclude NPCs explicitly.
       id: 'Ghimlyt Dark Heirsbane',
       netRegex: NetRegexes.headMarker({ id: '0001' }),
-      condition: (data, matches) => matches.targetId[0] !== '4' && Conditions.caresAboutPhysical()(data, matches),
+      condition: (data, matches) => matches.targetId[0] !== '4' && Conditions.caresAboutPhysical()(data),
       response: Responses.tankBuster(),
     },
     {
@@ -165,7 +163,7 @@ export default {
       netRegexFr: NetRegexes.ability({ id: '3710', source: 'Annia Quo Soranus', capture: false }),
       netRegexJa: NetRegexes.ability({ id: '3710', source: 'アンニア・クォ・ソラノス', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3710', source: '安妮亚・库奥・索拉努斯', capture: false }),
-      netRegexKo: NetRegexes.ability({ id: '3710', source: '안니아 쿠오 소라노스', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '3710', source: '안니아 쿠오 소라누스', capture: false }),
       response: Responses.knockback(),
     },
     {
@@ -243,6 +241,7 @@ export default {
         'The Provisional Imperial Landing': 'Aire d\'atterrissage provisoire',
       },
       'replaceText': {
+        '\\?': ' ?',
         '\\(windup\\)': '(Préparation)',
         '\\(cast\\)': '(Lancement)',
         'Aglaia Bite': 'Morsure d\'Aglaia',
@@ -392,9 +391,9 @@ export default {
       'locale': 'ko',
       'missingTranslations': true,
       'replaceSync': {
-        'Annia Quo Soranus': '안니아 쿠오 소라노스',
+        'Annia Quo Soranus': '안니아 쿠오 소라누스',
         'Ceruleum Tank': '청린수 탱크',
-        'Julia Quo Soranus': '율리아 쿠오 소라노스',
+        'Julia Quo Soranus': '율리아 쿠오 소라누스',
         'Mark III-B Magitek Colossus': '마도 콜로서스 III-B형',
         'Prometheus': '프로메테우스',
         'Soranus Duo': '율리아와 안니아',

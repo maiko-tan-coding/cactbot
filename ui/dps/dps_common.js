@@ -1,6 +1,8 @@
-import ContentType from '../../resources/content_type.js';
-import { Util } from '../../resources/common.js';
-import ZoneInfo from '../../resources/zone_info.js';
+import { addOverlayListener } from '../../resources/overlay_plugin_api';
+
+import ContentType from '../../resources/content_type';
+import Util from '../../resources/util';
+import ZoneInfo from '../../resources/zone_info';
 
 export const Options = {
   Language: 'en',

@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.EdensPromiseAnamorphosis,
@@ -28,7 +28,7 @@ export default {
       // 562D = Burnt Strike fire followup during most of the fight
       // 5644 = same thing, but from Fatebreaker's Image
       netRegex: NetRegexes.ability({ id: ['562D', '5644'] }),
-      deathReason: (e, data, matches) => {
+      deathReason: (_e, _data, matches) => {
         return {
           type: 'fail',
           name: matches.target,

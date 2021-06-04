@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../resources/netregexes.js';
-import ZoneId from '../../../../resources/zone_id.js';
+import NetRegexes from '../../../../resources/netregexes';
+import ZoneId from '../../../../resources/zone_id';
 
 // Abilities seem instant.
 const abilityCollectSeconds = 0.5;
@@ -12,7 +12,7 @@ const missedFunc = (args) => {
     // Sure, not all of these are "buffs" per se, but they're all in the buffs file.
     id: 'Buff ' + args.triggerId,
     netRegex: args.netRegex,
-    condition: function(evt, data, matches) {
+    condition: (_evt, data, matches) => {
       const sourceId = matches.sourceId.toUpperCase();
       if (data.party.partyIds.includes(sourceId))
         return true;
@@ -26,7 +26,7 @@ const missedFunc = (args) => {
       return false;
     },
     collectSeconds: args.collectSeconds,
-    mistake: function(allEvents, data, allMatches) {
+    mistake: (_allEvents, data, allMatches) => {
       const partyNames = data.party.partyNames;
 
       // TODO: consider dead people somehow
@@ -78,7 +78,7 @@ const missedFunc = (args) => {
             de: thingName + ' verfehlt ' + missed.map((x) => data.ShortName(x)).join(', '),
             fr: thingName + ' manqué(e) sur ' + missed.map((x) => data.ShortName(x)).join(', '),
             ja: '(' + missed.map((x) => data.ShortName(x)).join(', ') + ') が' + thingName + 'を受けなかった',
-            cn: thingName + ' 没受到 ' + missed.map((x) => data.ShortName(x)).join(', '),
+            cn: missed.map((x) => data.ShortName(x)).join(', ') + ' 没受到 ' + thingName,
             ko: thingName + ' ' + missed.map((x) => data.ShortName(x)).join(', ') + '에게 적용안됨',
           },
         };
@@ -93,7 +93,7 @@ const missedFunc = (args) => {
           de: thingName + ' verfehlte ' + missed.length + ' Personen',
           fr: thingName + ' manqué(e) sur ' + missed.length + ' personnes',
           ja: missed.length + '人が' + thingName + 'を受けなかった',
-          cn: thingName + ' 没奶到 ' + missed.length + ' 人',
+          cn: '有' + missed.length + '人没受到 ' + thingName,
           ko: thingName + ' ' + missed.length + '명에게 적용안됨',
         },
       };
@@ -109,19 +109,6 @@ const missedMitigationBuff = (args) => {
     netRegex: NetRegexes.gainsEffect({ effectId: args.effectId }),
     field: 'effect',
     type: 'heal',
-    ignoreSelf: args.ignoreSelf,
-    collectSeconds: args.collectSeconds ? args.collectSeconds : effectCollectSeconds,
-  });
-};
-
-const missedDamageBuff = (args) => {
-  if (!args.effectId)
-    console.error('Missing effectId: ' + JSON.stringify(args));
-  return missedFunc({
-    triggerId: args.id,
-    netRegex: NetRegexes.gainsEffect({ effectId: args.effectId }),
-    field: 'effect',
-    type: 'damage',
     ignoreSelf: args.ignoreSelf,
     collectSeconds: args.collectSeconds ? args.collectSeconds : effectCollectSeconds,
   });
@@ -160,7 +147,7 @@ export default {
     {
       id: 'Buff Pet To Owner Mapper',
       netRegex: NetRegexes.addedCombatantFull(),
-      run: function(e, data, matches) {
+      run: (_e, data, matches) => {
         if (matches.ownerId === '0')
           return;
 
@@ -172,7 +159,7 @@ export default {
     {
       id: 'Buff Pet To Owner Clearer',
       netRegex: NetRegexes.changeZone(),
-      run: function(e, data, matches) {
+      run: (_e, data) => {
         // Clear this hash periodically so it doesn't have false positives.
         data.petIdToOwnerId = {};
       },
@@ -243,5 +230,9 @@ export default {
 
     missedHeal({ id: 'White Wind', abilityId: '2C8E' }),
     missedHeal({ id: 'Gobskin', abilityId: '4780' }),
+
+    // TODO: export all of these missed functions into their own helper
+    // and then add this to the Delubrum Reginae files directly.
+    missedMitigationAbility({ id: 'Lost Aethershield', abilityId: '5753' }),
   ],
 };

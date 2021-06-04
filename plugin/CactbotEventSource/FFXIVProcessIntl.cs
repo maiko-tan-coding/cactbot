@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
@@ -40,6 +41,9 @@ namespace Cactbot {
 
       [FieldOffset(0x1C4)]
       public CharacterDetails charDetails;
+
+      [FieldOffset(0x1997)]
+      public byte shieldPercentage;
     }
 
     [StructLayout(LayoutKind.Explicit)]
@@ -71,10 +75,6 @@ namespace Cactbot {
 
       [FieldOffset(0x1F)]
       public byte level;
-
-      // TODO: find this again
-      // [FieldOffset(0x65)]
-      // public short shieldPercentage;
     }
     public FFXIVProcessIntl(ILogger logger) : base(logger) { }
 
@@ -199,10 +199,7 @@ namespace Cactbot {
           // This doesn't exist in memory, so just send the right value.
           // As there are other versions that still have it, don't change the event.
           entity.max_mp = 10000;
-
-          // TODO: fix me
-          // entity.shield_value = mem.charDetails.shieldPercentage * entity.max_hp / 100;
-          entity.shield_value = 0;
+          entity.shield_value = mem.shieldPercentage * entity.max_hp / 100;
 
           if (IsGatherer(entity.job)) {
             entity.gp = mem.charDetails.gp;
@@ -428,13 +425,10 @@ namespace Cactbot {
       [FieldOffset(0x06)]
       public byte currentStep; // Number of steps executed in current Standard Step/Technical Step combo.
 
-      public string steps {
+      public string[] steps {
         get {
-          string _steps = step1 == Step.None ? "None" : step1.ToString();
-          _steps += step2 != Step.None ? ", " + step2.ToString() : "";
-          _steps += step3 != Step.None ? ", " + step3.ToString() : "";
-          _steps += step4 != Step.None ? ", " + step4.ToString() : "";
-          return _steps;
+          Step[] _steps = { step1, step2, step3, step4 };
+          return _steps.Select(s => s.ToString()).Where(s => s != "None").ToArray();
         }
       }
     };
@@ -630,7 +624,7 @@ namespace Cactbot {
 
       [FieldOffset(0x05)]
       public byte battery;
-      
+
       [FieldOffset(0x06)]
       public byte lastBatteryAmount;
 
@@ -691,12 +685,10 @@ namespace Cactbot {
         }
       }
 
-      public string arcanums {
+      public string[] arcanums {
         get {
-          string _arcanums = arcanum_1 == Arcanum.None ? "None" : arcanum_1.ToString();
-          _arcanums += arcanum_2 != Arcanum.None ? ", " + arcanum_2.ToString() : "";
-          _arcanums += arcanum_3 != Arcanum.None ? ", " + arcanum_3.ToString() : "";
-          return _arcanums;
+          Arcanum[] _arcanums = { arcanum_1, arcanum_2, arcanum_3 };
+          return _arcanums.Select(a => a.ToString()).Where(a => a != "None").ToArray();
         }
       }
     };
@@ -705,7 +697,7 @@ namespace Cactbot {
     public struct SamuraiJobMemory {
       [FieldOffset(0x03)]
       public byte kenki;
-      
+
       [FieldOffset(0x04)]
       public byte meditationStacks;
 

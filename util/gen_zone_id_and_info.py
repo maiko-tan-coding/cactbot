@@ -12,9 +12,9 @@ import re
 # however, the name in ZoneId and the info in ZoneInfo contain information
 # from other tables like PlaceName and TerritoryType, so it's not strictly
 # about Territory.  Hence, "zone" as a short-to-type catch-all.
-_ZONE_ID_OUTPUT_FILE = "zone_id.js"
-_ZONE_INFO_OUTPUT_FILE = "zone_info.js"
-_CONTENT_TYPE_OUTPUT_FILE = "content_type.js"
+_ZONE_ID_OUTPUT_FILE = "zone_id.ts"
+_ZONE_INFO_OUTPUT_FILE = "zone_info.ts"
+_CONTENT_TYPE_OUTPUT_FILE = "content_type.ts"
 
 # name_key to territory_id mappings for locations with conflicts
 # these will only be added if the name is correct and will throw
@@ -27,8 +27,8 @@ known_ids = {
 # exist.  This is for things that have been taken out of the
 # game.  This will throw errors if anything conflicts.
 synthetic_ids = {
-    "TheDiadem521": 901,
     "TheAkhAfahAmphitheatreUnreal": 930,
+    "TheNavelUnreal": 953,
 }
 
 synthetic_zone_info = {
@@ -41,11 +41,28 @@ synthetic_zone_info = {
             "en": "The Akh Afah Amphitheatre (Unreal)",
             "fr": "L'Amphithéâtre d'Akh Afah (irréel)",
             "ja": "幻シヴァ討滅戦",
+            "ko": "환 시바 토벌전",
         },
         "offsetX": 0,
         "offsetY": 0,
         "sizeFactor": 400,
         "weatherRate": 46,
+    },
+    953: {
+        "contentType": 4,
+        "exVersion": 3,
+        "name": {
+            "cn": "泰坦幻巧战",
+            "de": "Traumprüfung - Titan",
+            "en": "The Navel (Unreal)",
+            "fr": "Le Nombril (irréel)",
+            "ja": "幻タイタン討滅戦",
+            "ko": "환 타이탄 토벌전",
+        },
+        "offsetX": 0,
+        "offsetY": 0,
+        "sizeFactor": 400,
+        "weatherRate": 23,
     },
 }
 
@@ -185,6 +202,11 @@ def generate_name_data(territory_map, cfc_map, place_name_map):
             print_error("collision", name_key, territory_map, territory_id)
             continue
 
+        # Ignore collisions with known ids.
+        if name_key in known_ids and known_ids[name_key] != int(territory_id):
+            print_error("skipping", name_key, territory_map, territory_id)
+            continue
+
         # If this is a collision with an existing name,
         # remove the old one.
         if name_key in map:
@@ -195,9 +217,6 @@ def generate_name_data(territory_map, cfc_map, place_name_map):
             continue
 
         territory_to_cfc_map[territory_id] = cfc_id_for_name
-        if name_key in known_ids and known_ids[name_key] != int(territory_id):
-            print_error("skipping", name_key, territory_map, territory_id)
-            continue
 
         map[name_key] = int(territory_id)
 
@@ -210,7 +229,7 @@ def generate_name_data(territory_map, cfc_map, place_name_map):
             raise Exception("Conflicting synthetic item", name)
         map[name] = id
 
-    # map is what gets written to zone_id.js, but it's also useful to keep additional information
+    # map is what gets written to zone_id.ts, but it's also useful to keep additional information
     # about where the name came from.
     return map, territory_to_cfc_map
 
@@ -291,11 +310,13 @@ if __name__ == "__main__":
 
     name_data, territory_to_cfc_map = generate_name_data(territory_map, cfc_map, place_name_map)
 
-    writer.write(
-        os.path.join("resources", _ZONE_ID_OUTPUT_FILE),
-        os.path.basename(os.path.abspath(__file__)),
-        "ZoneId",
-        name_data,
+    writer.writeTypeScript(
+        filename=os.path.join("resources", _ZONE_ID_OUTPUT_FILE),
+        scriptname=os.path.basename(os.path.abspath(__file__)),
+        header=None,
+        type=None,
+        as_const=True,
+        data=name_data,
     )
 
     # Build up multiple languages here, for translations.
@@ -326,17 +347,36 @@ if __name__ == "__main__":
     territory_info = generate_zone_info(
         territory_map, cfc_map_by_lang, map_map, territory_to_cfc_map, place_name_map_by_lang
     )
-    writer.write(
-        os.path.join("resources", _ZONE_INFO_OUTPUT_FILE),
-        os.path.basename(os.path.abspath(__file__)),
-        "ZoneInfo",
-        territory_info,
+
+    zone_info_header = """import { LocaleText } from '../types/trigger';
+
+type ZoneInfoType = {
+  [zoneId: number]: {
+    readonly exVersion: number;
+    readonly contentType?: number;
+    readonly name: LocaleText;
+    readonly offsetX: number;
+    readonly offsetY: number;
+    readonly sizeFactor: number;
+    readonly weatherRate: number;
+  };
+};"""
+
+    writer.writeTypeScript(
+        filename=os.path.join("resources", _ZONE_INFO_OUTPUT_FILE),
+        scriptname=os.path.basename(os.path.abspath(__file__)),
+        header=zone_info_header,
+        type="ZoneInfoType",
+        as_const=True,
+        data=territory_info,
     )
 
     content_type_map = make_content_type_map(reader.rawexd("ContentType"))
-    writer.write(
-        os.path.join("resources", _CONTENT_TYPE_OUTPUT_FILE),
-        os.path.basename(os.path.abspath(__file__)),
-        "ContentType",
-        generate_content_type(content_type_map),
+    writer.writeTypeScript(
+        filename=os.path.join("resources", _CONTENT_TYPE_OUTPUT_FILE),
+        scriptname=os.path.basename(os.path.abspath(__file__)),
+        header=None,
+        type=None,
+        as_const=True,
+        data=generate_content_type(content_type_map),
     )

@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheWeepingCityOfMhach,
@@ -19,11 +19,12 @@ export default {
       regex: /The Widow's Kiss/,
       beforeSeconds: 5,
       // Probably kills the player if failed, so it gets an alert.
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand on webs',
           de: 'Auf den Spinnennetzen stehen',
+          fr: 'Placez-vous dans les toiles',
           ja: 'アンキレーウェブに入る',
           cn: '站在网上',
           ko: '거미줄 위에 서기',
@@ -34,7 +35,7 @@ export default {
       id: 'Weeping City Punishing Ray',
       regex: /Punishing Ray/,
       beforeSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Puddles',
@@ -82,19 +83,17 @@ export default {
       netRegexJa: NetRegexes.message({ line: '蜘蛛女の狩場 will be sealed off.*?', capture: false }),
       netRegexCn: NetRegexes.message({ line: '女王蛛猎场 will be sealed off.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '거미 여왕의 사냥터 will be sealed off.*?', capture: false }),
-      run: function(data) {
-        data.arachneStarted = true;
-      },
+      run: (data) => data.arachneStarted = true,
     },
     {
       id: 'Weeping City HeadMarker Ozma',
       netRegex: NetRegexes.message({ line: 'The Gloriole will be sealed off.*?', capture: false }),
-      netRegexDe: NetRegexes.message({ line: '金字塔上层 will be sealed off.*?', capture: false }),
-      netRegexFr: NetRegexes.message({ line: 'Aureole will be sealed off.*?', capture: false }),
-      netRegexJa: NetRegexes.message({ line: 'Hauteurs de la pyramide will be sealed off.*?', capture: false }),
-      netRegexCn: NetRegexes.message({ line: 'ピラミッド上部層 will be sealed off.*?', capture: false }),
+      netRegexDe: NetRegexes.message({ line: 'Aureole will be sealed off.*?', capture: false }),
+      netRegexFr: NetRegexes.message({ line: 'Hauteurs de la pyramide will be sealed off.*?', capture: false }),
+      netRegexJa: NetRegexes.message({ line: 'ピラミッド上部層 will be sealed off.*?', capture: false }),
+      netRegexCn: NetRegexes.message({ line: '金字塔上层 will be sealed off.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '피라미드 상층부 will be sealed off.*?', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.arachneStarted = false;
         data.ozmaStarted = true;
       },
@@ -107,7 +106,7 @@ export default {
       netRegexJa: NetRegexes.message({ line: '要の玄室 will be sealed off.*?', capture: false }),
       netRegexCn: NetRegexes.message({ line: '契约石玄室 will be sealed off.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '쐐기 안치소 will be sealed off.*?', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.ozmaStarted = false;
         data.calStarted = true;
       },
@@ -121,9 +120,7 @@ export default {
     {
       id: 'Weeping City Shadow Burst',
       netRegex: NetRegexes.headMarker({ id: '003E' }),
-      condition: function(data) {
-        return data.arachneStarted;
-      },
+      condition: (data) => data.arachneStarted,
       response: Responses.stackMarkerOn(),
     },
     {
@@ -139,15 +136,14 @@ export default {
     {
       id: 'Weeping City Arachne Web',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
-      condition: function(data, matches) {
-        return data.arachneStarted && data.me === matches.target;
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data, matches) => data.arachneStarted && data.me === matches.target,
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop Web Outside',
           de: 'Spinnennetz draußen ablegen',
-          ja: 'ウェブを外周に捨て',
+          fr: 'Déposez les toiles à l\'extérieur',
+          ja: 'ウェブを外周に捨てる',
           cn: '蛛网点名，放在场边',
           ko: '거미줄 바깥쪽으로 빼기',
         },
@@ -163,12 +159,12 @@ export default {
       id: 'Weeping City Dark Eruption',
       netRegex: NetRegexes.headMarker({ id: '0019' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddles on YOU',
           de: 'Pfützen auf DIR',
-          fr: 'Mare sur VOUS',
+          fr: 'Zones au sol sur VOUS',
           ja: '自分に床範囲',
           cn: '圈圈点名',
           ko: '장판 바깥에 깔기',
@@ -183,9 +179,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '17CE', source: 'サモン・サキュバス' }),
       netRegexKo: NetRegexes.startsUsing({ id: '17CE', source: '소환된 서큐버스' }),
       netRegexCn: NetRegexes.startsUsing({ id: '17CE', source: '被召唤出的梦魔' }),
-      condition: function(data) {
-        return data.CanSilence();
-      },
+      condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
     {
@@ -207,9 +201,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '17CB', source: '포르갈', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '17CB', source: '弗加尔', capture: false }),
       // Hell Wind sets HP to single digits, so mitigations don't work. Don't notify non-healers.
-      condition: function(data) {
-        return data.role === 'healer';
-      },
+      condition: (data) => data.role === 'healer',
       response: Responses.aoe(),
     },
     {
@@ -220,11 +212,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '17CA', source: 'フォルガル', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '17CA', source: '포르갈', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '17CA', source: '弗加尔', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in one puddle',
           de: 'In einer Fläche stehen',
+          fr: 'Placez-vous dans une zone au sol',
           ja: '範囲に入る',
           cn: '站在圈里',
           ko: '장판으로',
@@ -235,11 +228,12 @@ export default {
       id: 'Weeping City Meteor Impact',
       netRegex: NetRegexes.headMarker({ id: '0039' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop meteor back or left',
           de: 'Meteor hinten oder links ablegen',
+          fr: 'Déposez le météore derrière ou à gauche',
           ja: 'メテオ、後ろや左に置く',
           cn: '流星点名，放在背后或左边',
           ko: '메테오 뒤/왼쪽으로 빼기',
@@ -256,11 +250,12 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '1826', source: 'オズマ', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '1826', source: '오즈마', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '1826', source: '奥兹玛', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get off rectangle platform',
           de: 'Von der plattform runter gehen',
+          fr: 'Descendez de la plateforme rectangle',
           ja: '通路で回避',
           cn: '离开平台',
           ko: '통로로 이동',
@@ -292,7 +287,7 @@ export default {
       netRegexCn: NetRegexes.ability({ id: '1803', source: '奥兹玛', capture: false }),
       // Delaying here to avoid colliding with other Flare Star triggers.
       delaySeconds: 4,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.tankLasers();
 
@@ -302,14 +297,16 @@ export default {
         tankLasers: {
           en: 'Tank lasers--Avoid party',
           de: 'Tank lasers--Weg von der Party',
-          ja: 'タンクレザー - 外に',
+          fr: 'Tank lasers - Évitez le groupe',
+          ja: 'タンクレーザー - 外に',
           cn: '坦克激光--远离人群',
           ko: '탱커 레이저-- 피하기',
         },
         avoidTanks: {
           en: 'Avoid tanks',
           de: 'Weg von den Tanks',
-          ja: 'タンクに離れ',
+          fr: 'Évitez les tanks',
+          ja: 'タンクから離れる',
           cn: '远离坦克',
           ko: '탱커 피하기',
         },
@@ -320,14 +317,13 @@ export default {
       // Failing to pop an orb means it will explode, dealing damage with 1808 Aethernova.
       id: 'Weeping City Flare Star Orbs',
       netRegex: NetRegexes.addedCombatantFull({ npcBaseId: '4889', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get orbs',
           de: 'Kugeln nehmen',
+          fr: 'Prenez les orbes',
           ja: '玉を取る',
           cn: '撞球',
           ko: '구슬 먹기',
@@ -338,9 +334,7 @@ export default {
       id: 'Weeping City Acceleration Bomb',
       netRegex: NetRegexes.gainsEffect({ effectId: '430' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.duration) - 3;
-      },
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       response: Responses.stopEverything(),
     },
     {
@@ -357,9 +351,7 @@ export default {
       // Each party gets a stack marker, so this is the best we can do.
       id: 'Weeping City Meteor Stack',
       netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
-      condition: function(data) {
-        return data.ozmaStarted;
-      },
+      condition: (data) => data.ozmaStarted,
       suppressSeconds: 5,
       response: Responses.stackMarker(),
     },
@@ -392,12 +384,13 @@ export default {
       id: 'Weeping City Living Lock Axes',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: ['4899', '4900'], capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Close to axes, avoid bulbs',
           de: 'Nahe den Äxten, vermeide Knospen',
-          ja: '刃物の髪に近づく、丸い髪に離れ',
+          fr: 'Soyez proche des haches, évitez les bulbes',
+          ja: '刃物の髪に近づき、丸い髪から離れる',
           cn: '靠近斧状发，远离球状发',
           ko: '도끼모양에 붙고, 둥근모양은 피하기',
         },
@@ -407,11 +400,12 @@ export default {
       id: 'Weeping City Living Lock Scythes',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '4898', capture: false }),
       suppressSeconds: 5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid scythe line AoEs',
           de: 'Weiche den Sensen AOEs aus',
+          fr: 'Évitez les AoEs en lignes des faux',
           ja: '十字AoE',
           cn: '躲避镰刀直线AOE',
           ko: '직선 장판 피하기',
@@ -423,12 +417,13 @@ export default {
       id: 'Weeping City Entanglement',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '4904', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid purple circles',
           de: 'Vermeide die lilanen Flächen',
-          ja: '紫の円範囲を避け',
+          fr: 'Évitez les cercles violets',
+          ja: '紫の円範囲を避ける',
           cn: '远离紫圈',
           ko: '보라색 원 피하기',
         },
@@ -450,10 +445,8 @@ export default {
     {
       id: 'Weeping City Particle Beam',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
-      condition: function(data) {
-        return data.calStarted;
-      },
-      alertText: function(data, matches, output) {
+      condition: (data) => data.calStarted,
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.skyLaserOnYou();
 
@@ -463,6 +456,7 @@ export default {
         skyLaserOnYou: {
           en: '16x Sky Laser on YOU!',
           de: '16x Himmelslaser auf DIR!',
+          fr: '16x Lasers du ciel sur VOUS',
           ja: '自分に16連撃潜地式波動砲！',
           cn: '16连追踪AOE点名',
           ko: '16 하늘 레이저 대상자',
@@ -470,7 +464,8 @@ export default {
         avoidSkyLasers: {
           en: 'Avoid Sky Lasers',
           de: 'Himmelslaser ausweichen',
-          ja: '潜地式波動砲に避け',
+          fr: 'Évitez les lasers du ciel',
+          ja: '潜地式波動砲を避ける',
           cn: '躲避追踪AOE',
           ko: '하늘 레이저 피하기',
         },
@@ -516,12 +511,16 @@ export default {
       'replaceSync': {
         'Arachne Eve': 'Arachne (?:der|die|das) Ahnin',
         'Calofisteri': 'Calofisteri',
+        'Entanglement': 'Verfilzung',
         'Forgall': 'Forgall',
         'Living Lock': 'lebend(?:e|er|es|en) Locke',
-        'Ozma': 'Yadis',
+        'Ozma(?!shade)': 'Yadis',
+        'Ozmashade': 'Yadis-Schatten',
         'Poison Mist': 'Giftnebel',
         'Shriveled Talon': 'verschrumpelt(?:e|er|es|en) Harpyie',
         'Singularity Fragment': 'Singularitätsfragment',
+        'Summoned Haagenti': 'beschworen(?:e|er|es|en) Haagenti',
+        'Summoned Succubus': 'beschworen(?:e|er|es|en) Sukkubus',
         'The Gloriole': 'Aureole',
         'The Queen\'s Room': 'Spinnenfalle',
         'The Shrine Of The Goetic': 'Altar der Goëtie',
@@ -558,7 +557,7 @@ export default {
         'Mana Explosion': 'Mana-Explosion',
         'Mega Death': 'Megatod',
         'Megiddo Flame': 'Megiddoflamme',
-        'Meteor(?![\\w\\s])': 'Meteo',
+        'Meteor(?![\\w\\s])': 'Meteor',
         'Meteor Headmarkers': 'Meteor Markierungen',
         'Meteor Impact': 'Meteoreinschlag',
         'Necropurge': 'Nekrobuße',
@@ -568,6 +567,7 @@ export default {
         'Pyramid': 'Pyramide',
         'Shadow Burst': 'Schattenstoß',
         'Silken Spray': 'Seidengespinst',
+        'Sphere': 'Kugel',
         'Split End': 'Gespaltene Spitzen',
         'Sticky Wicket': 'Klebfadenfetzen',
         'Tank Lasers': 'Tank Laser',
@@ -579,22 +579,26 @@ export default {
     },
     {
       'locale': 'fr',
-      'missingTranslations': true,
       'replaceSync': {
         'Arachne Eve': 'Arachné mère',
         'Calofisteri': 'Calofisteri',
+        'Entanglement': 'emmêlement',
         'Forgall': 'Forgall',
         'Living Lock': 'mèche animée',
-        'Ozma': 'Ozma',
+        'Ozma(?!shade)': 'Ozma',
+        'Ozmashade': 'ombre d\'Ozma',
         'Poison Mist': 'Brume empoisonnée',
         'Shriveled Talon': 'dépouille de Harpie féroce',
         'Singularity Fragment': 'fragment de singularité',
+        'Summoned Haagenti': 'haagenti adjuré',
+        'Summoned Succubus': 'succube adjuré',
         'The Gloriole': 'Hauteurs de la pyramide',
         'The Queen\'s Room': 'Domaine de la Tisseuse',
         'The Shrine Of The Goetic': 'Sanctuaire du Goétique',
         'The Tomb Of The Nullstone': 'Tombeau de la Clef de voûte',
       },
       'replaceText': {
+        '\\?': ' ?',
         'Acceleration Bomb': 'Bombe accélératrice',
         'Arachne Web': 'Toile d\'Arachné',
         'Aura Burst': 'Déflagration d\'aura',
@@ -626,6 +630,7 @@ export default {
         'Mega Death': 'Mégamort',
         'Megiddo Flame': 'Flamme de Megiddo',
         'Meteor(?![\\w\\s])': 'Météore',
+        'Meteor Headmarkers': 'Marqueurs de météores',
         'Meteor Impact': 'Impact de météore',
         'Necropurge': 'Nécropurge',
         'Penetration': 'Pénétration',
@@ -634,8 +639,10 @@ export default {
         'Pyramid': 'Pyramide',
         'Shadow Burst': 'Salve ténébreuse',
         'Silken Spray': 'Aspersion de soie',
+        'Sphere': 'Sphère',
         'Split End': 'Pointes fourchues',
         'Sticky Wicket': 'Projectile collant',
+        'Tank Lasers': 'Tank lasers',
         'The Widow\'s Embrace': 'Gravité arachnéenne',
         'The Widow\'s Kiss': 'Attraction arachnéenne',
         'Transfiguration': 'Transmutation',
@@ -648,11 +655,15 @@ export default {
         'Arachne Eve': 'アルケニー',
         'Calofisteri': 'カロフィステリ',
         'Forgall': 'フォルガル',
+        'Entanglement': '魔髪の縛め',
         'Living Lock': 'カロフィステリの魔髪',
-        'Ozma': 'オズマ',
+        'Ozma(?!shade)': 'オズマ',
+        'Ozmashade': 'オズマの影',
         'Poison Mist': '毒霧',
         'Shriveled Talon': '大鷲連合の遺骸',
         'Singularity Fragment': '圧縮世界の断片',
+        'Summoned Haagenti': 'サモン・ハーゲンティ',
+        'Summoned Succubus': 'サモン・サキュバス',
         'The Gloriole': 'ピラミッド上部層',
         'The Queen\'s Room': '蜘蛛女の狩場',
         'The Shrine Of The Goetic': '神託の祭壇',
@@ -715,11 +726,15 @@ export default {
         'Arachne Eve': '阿剌克涅',
         'Calofisteri': '卡洛菲斯提莉',
         'Forgall': '弗加尔',
+        'Entanglement': '魔发束缚',
         'Living Lock': '卡洛菲斯提莉的魔发',
-        'Ozma': '奥兹玛',
+        'Ozma(?!shade)': '奥兹玛',
+        'Ozmashade': '奥兹玛之影',
         'Poison Mist': '毒雾',
         'Shriveled Talon': '猛禽联盟遗骸',
         'Singularity Fragment': '压缩世界的断片',
+        'Summoned Haagenti': '被召唤出的哈加提',
+        'Summoned Succubus': '被召唤出的梦魔',
         'The Gloriole': '金字塔上层',
         'The Queen\'s Room': '女王蛛猎场',
         'The Shrine Of The Goetic': '神谕祭坛',
@@ -782,11 +797,15 @@ export default {
         'Arachne Eve': '아라크네',
         'Calofisteri': '칼로피스테리',
         'Forgall': '포르갈',
+        'Entanglement': '머리카락 포박',
         'Living Lock': '칼로피스테리의 머리카락',
-        'Ozma': '오즈마',
+        'Ozma(?!shade)': '오즈마',
+        'Ozmashade': '오즈마의 그림자',
         'Poison Mist': '독안개',
         'Shriveled Talon': '참수리연합 주검',
         'Singularity Fragment': '압축세계의 단편',
+        'Summoned Haagenti': '소환된 하겐티',
+        'Summoned Succubus': '소환된 서큐버스',
         'The Gloriole': '피라미드 상층부',
         'The Queen\'s Room': '거미 여왕의 사냥터',
         'The Shrine Of The Goetic': '신탁의 제단',

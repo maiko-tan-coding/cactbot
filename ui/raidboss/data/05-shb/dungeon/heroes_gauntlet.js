@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheHeroesGauntlet,
@@ -14,6 +15,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '4FCB', source: 'Voleur Spectral' }),
       netRegexJa: NetRegexes.startsUsing({ id: '4FCB', source: '幻光のシーフ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4FCB', source: '幻光盗贼' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '4FCB', source: '환상빛의 도적' }),
       condition: Conditions.caresAboutPhysical(),
       response: Responses.tankBuster(),
     },
@@ -30,6 +32,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '4FCC', source: 'Voleur Spectral', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '4FCC', source: '幻光のシーフ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4FCC', source: '幻光盗贼', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '4FCC', source: '환상빛의 도적', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
@@ -38,17 +41,28 @@ export default {
       id: 'Heroes Gauntlet Spectral Tether',
       netRegex: NetRegexes.tether({ id: '000C', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from tether marker',
           de: 'Weg von der Verbindung',
           fr: 'Éloignez-vous du marqueur lié',
-          ja: '線から離れ',
+          ja: '線から離れる',
           cn: '远离连线标志',
           ko: '이어진 표식으로부터 떨어지기',
         },
       },
+    },
+    {
+      id: 'Heroes Gauntlet Spectral White Mage Absolute Protect',
+      netRegex: NetRegexes.startsUsing({ id: '524D', source: 'Spectral White Mage' }),
+      netRegexDe: NetRegexes.startsUsing({ id: '524D', source: 'Phantom-Weißmagierin' }),
+      netRegexFr: NetRegexes.startsUsing({ id: '524D', source: 'Mage Blanc Spectral' }),
+      netRegexJa: NetRegexes.startsUsing({ id: '524D', source: '幻光の白魔道士' }),
+      netRegexCn: NetRegexes.startsUsing({ id: '524D', source: '幻光白魔法师' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '524D', source: '환상빛의 백마도사' }),
+      condition: (data) => data.CanSilence(),
+      response: Responses.interrupt(),
     },
     {
       id: 'Heroes Gauntlet Large Zombie Tether',
@@ -63,6 +77,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '4F5E', source: 'Nécromancienne Spectrale' }),
       netRegexJa: NetRegexes.startsUsing({ id: '4F5E', source: '幻光のネクロマンサー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4F5E', source: '幻光亡灵法师' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '4F5E', source: '환상빛의 강령술사' }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.tankBuster(),
     },
@@ -73,6 +88,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '4F60', source: 'Nécromancienne Spectrale', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '4F60', source: '幻光のネクロマンサー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '4F60', source: '幻光亡灵法师', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '4F60', source: '환상빛의 강령술사', capture: false }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
     },
@@ -83,6 +99,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '520C', source: 'Berserker Spectral', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '520C', source: '幻光のバーサーカー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '520C', source: '幻光狂战士', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '520C', source: '환상빛의 광전사', capture: false }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.aoe(),
     },
@@ -94,6 +111,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: ['520A', '520B'], source: 'Berserker Spectral', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: ['520A', '520B'], source: '幻光のバーサーカー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['520A', '520B'], source: '幻光狂战士', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: ['520A', '520B'], source: '환상빛의 광전사', capture: false }),
       response: Responses.awayFromFront(),
     },
     {
@@ -103,7 +121,8 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '5206', source: 'Berserker Spectral', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '5206', source: '幻光のバーサーカー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '5206', source: '幻光狂战士', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexKo: NetRegexes.startsUsing({ id: '5206', source: '환상빛의 광전사', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get in a crater',
@@ -122,6 +141,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: ['5202', '5203', '5204'], source: 'Berserker Spectral', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: ['5202', '5203', '5204'], source: '幻光のバーサーカー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['5202', '5203', '5204'], source: '幻光狂战士', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: ['5202', '5203', '5204'], source: '환상빛의 광전사', capture: false }),
       suppressSeconds: 5,
       response: Responses.knockback(),
     },
@@ -131,7 +151,7 @@ export default {
       // Otherwise they stack on the rock they drop.
       id: 'Heroes Gauntlet Wild Anguish Collect',
       netRegex: NetRegexes.headMarker({ id: '005D' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.anguish = data.anguish || [];
         data.anguish.push(matches.target);
       },
@@ -141,7 +161,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '005D' }),
       delaySeconds: 1,
       suppressSeconds: 5,
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.anguish.length > 1)
           return output.stackOnYourRock();
 
@@ -150,34 +170,18 @@ export default {
 
         return output.stackOn({ player: data.ShortName(matches.target) });
       },
-      run: function(data) {
-        delete data.anguish;
-      },
+      run: (data) => delete data.anguish,
       outputStrings: {
         stackOnYourRock: {
           en: 'Stack on your rock',
           de: 'Auf deinem Stein sammeln',
           fr: 'Packez-vous avec votre rocher',
-          ja: '自分の隕石と貼りつく',
+          ja: '自分の岩に貼りつく',
           cn: '与自己的石堆重合',
           ko: '돌과 같이 맞기',
         },
-        stackOnYou: {
-          en: 'Stack on YOU',
-          de: 'Auf DIR sammeln',
-          fr: 'Package sur VOUS',
-          ja: '自分にスタック',
-          cn: '集合点名',
-          ko: '쉐어징 대상자',
-        },
-        stackOn: {
-          en: 'Stack on ${player}',
-          de: 'Auf ${player} sammeln',
-          fr: 'Packez-vous sur ${player}',
-          ja: '${player}にスタック',
-          cn: '靠近${player}集合',
-          ko: '"${player}" 쉐어징',
-        },
+        stackOnYou: Outputs.stackOnYou,
+        stackOn: Outputs.stackOnPlayer,
       },
     },
     {
@@ -197,6 +201,7 @@ export default {
         'Spectral Berserker': 'Phantom-Berserker',
         'Spectral Necromancer': 'Phantom-Nekromantin',
         'Spectral Thief': 'Phantom-Dieb',
+        'Spectral White Mage': 'Phantom-Weißmagierin',
         'The Illuminated Plaza': 'Platz der Erleuchteten',
         'The Mount Argai Mines': 'Minen des Argai',
         'The Summer Ballroom': 'Ballsaal der Grasgrummel',
@@ -239,6 +244,7 @@ export default {
         'The Illuminated Plaza': 'Carré de l\'Aurore',
         'The Mount Argai Mines': 'Mines du mont Argai',
         'The Summer Ballroom': 'Bal des enfeuillés',
+        'Spectral White Mage': 'mage blanc spectral',
       },
       'replaceText': {
         'Absolute Dark II': 'Extra Ténèbres absolues',
@@ -278,6 +284,7 @@ export default {
         'The Illuminated Plaza': '大聖堂前広場',
         'The Mount Argai Mines': 'アルゲ鉱山',
         'The Summer Ballroom': '草人たちの踊り場',
+        'Spectral White Mage': '幻光の白魔道士',
       },
       'replaceText': {
         'Absolute Dark II': 'アブソリュートダーラ',
@@ -317,6 +324,7 @@ export default {
         'The Illuminated Plaza': '大圣堂前广场',
         'The Mount Argai Mines': '阿尔格矿山',
         'The Summer Ballroom': '草人的舞场',
+        'Spectral White Mage': '幻光白魔法师',
       },
       'replaceText': {
         'Absolute Dark II': '绝对昏暗',
@@ -342,6 +350,46 @@ export default {
         'Wild Anguish': '兽魂的苦痛',
         'Wild Rage': '兽魂的愤怒',
         'Wild Rampage': '兽魂的勇猛',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Chicken Knife': '치킨 나이프 던지기',
+        'Necrobomb': '사령 폭탄',
+        'Rubble': '잔해더미',
+        'Spectral Berserker': '환상빛의 광전사',
+        'Spectral Necromancer': '환상빛의 강령술사',
+        'Spectral Thief': '환상빛의 도적',
+        'The Illuminated Plaza': '대성당 앞 광장',
+        'The Mount Argai Mines': '아르게 광산',
+        'The Summer Ballroom': '풀인간의 무도회장',
+        'Spectral White Mage': '환상빛의 백마도사',
+      },
+      'replaceText': {
+        'Absolute Dark II': '앱솔루트 다라',
+        'Beastly Fury': '짐승의 격분',
+        'Chaos Storm': '혼돈의 폭풍',
+        'Chicken Knife': '치킨 나이프 던지기',
+        'Coward\'s Cunning': '겁쟁이의 일격',
+        '(?<!Shadow)Dash': '달음질',
+        'Dark Deluge': '검은 파도',
+        'Death Throes': '물귀신 작전',
+        'Falling Rock': '낙석',
+        'Necroburst': '사령 폭발',
+        'Necromancy': '강령술',
+        'Pain Mire': '고통의 수렁',
+        'Papercutter': '채썰기',
+        'Raging Slice': '성난 베기',
+        'Shadowdash': '분신 달음질',
+        'Spectral Dream': '환광삼단',
+        'Spectral Gust': '환광선풍',
+        'Spectral Whirlwind': '환광대선풍',
+        'Twisted Touch': '추악한 손길',
+        'Vacuum Blade': '진공 베기',
+        'Wild Anguish': '야수의 고통',
+        'Wild Rage': '야수의 분노',
+        'Wild Rampage': '야수의 격노',
       },
     },
   ],

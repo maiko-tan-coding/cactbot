@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O9S - Alphascape 1.0 Savage
 export default {
@@ -27,11 +28,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3172', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3172', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3172', source: '카오스', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.primordialCrust)
           return output.dieOnFrontBack();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (!data.primordialCrust)
           return output.sides();
       },
@@ -62,11 +63,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3173', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3173', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3173', source: '카오스', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.primordialCrust)
           return output.dieOnSides();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (!data.primordialCrust)
           return output.frontBack();
       },
@@ -107,11 +108,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '317D', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '317D', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '317D', source: '카오스', capture: false }),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.orbTethers();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.role === 'healer')
           return output.orbTethers();
       },
@@ -135,7 +136,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3186', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3186', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3186', source: '카오스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.phaseType !== 'enrage')
           data.phaseType = 'fire';
       },
@@ -144,17 +145,17 @@ export default {
       id: 'O9S Entropy Spread',
       netRegex: NetRegexes.gainsEffect({ effectId: '640' }),
       condition: Conditions.targetIsYou(),
-      preRun: function(data) {
+      preRun: (data) => {
         data.entropyCount = data.entropyCount || 0;
         data.entropyCount += 1;
       },
-      delaySeconds: function(data, matches) {
+      delaySeconds: (data, matches) => {
         // Warn dps earlier to stack.
         if (data.role !== 'tank' && data.role !== 'healer' && data.entropyCount === 2)
           return parseFloat(matches.duration) - 12;
         return parseFloat(matches.duration) - 5;
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.phaseType === 'enrage' || data.phaseType === 'orb' || data.entropyCount === 1)
           return output.spread();
         else if (data.role === 'tank' || data.role === 'healer')
@@ -163,19 +164,12 @@ export default {
         // DPS entropy #2
         return output.stackAndStayOut();
       },
-      run: function(data) {
+      run: (data) => {
         if (data.phaseType === 'orb' || data.entropyCount === 2)
           delete data.entropyCount;
       },
       outputStrings: {
-        spread: {
-          en: 'Spread',
-          de: 'Verteilen',
-          fr: 'Ecartez-vous',
-          ja: '散開',
-          cn: '分散',
-          ko: '산개',
-        },
+        spread: Outputs.spread,
         spreadAndStay: {
           en: 'Spread and Stay',
           de: 'Verteilen und bleiben',
@@ -197,10 +191,8 @@ export default {
     {
       id: 'O9S Entropy Avoid Hit',
       netRegex: NetRegexes.gainsEffect({ effectId: '640' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.phaseType === 'fire';
-      },
-      delaySeconds: function(data, matches) {
+      condition: (data, matches) => matches.target === data.me && data.phaseType === 'fire',
+      delaySeconds: (_data, matches) => {
         // Folks get either the 24 second or the 10 second.
         // So, delay for the opposite minus 5.
         const seconds = parseFloat(matches.duration);
@@ -210,7 +202,7 @@ export default {
         // Got 10 seconds (tank)
         return 19;
       },
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide Middle',
@@ -230,12 +222,10 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3180', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3180', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3180', source: '카오스', capture: false }),
-      condition: function(data) {
-        return data.phaseType === 'fire';
-      },
+      condition: (data) => data.phaseType === 'fire',
       // Each big bang has its own cast, so suppress.
       suppressSeconds: 1,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide Middle',
@@ -256,7 +246,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3187', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3187', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3187', source: '카오스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.phaseType !== 'enrage')
           data.phaseType = 'water';
       },
@@ -264,13 +254,11 @@ export default {
     {
       id: 'O9S Dynamic Fluid 1',
       netRegex: NetRegexes.gainsEffect({ effectId: '641', capture: false }),
-      condition: function(data) {
-        return data.phaseType === 'water';
-      },
+      condition: (data) => data.phaseType === 'water',
       delaySeconds: 5,
       suppressSeconds: 1,
       // T/H get 10s & DPS get 17s
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack Donut',
@@ -285,13 +273,11 @@ export default {
     {
       id: 'O9S Dynamic Fluid 2',
       netRegex: NetRegexes.gainsEffect({ effectId: '641', capture: false }),
-      condition: function(data) {
-        return data.phaseType === 'water';
-      },
+      condition: (data) => data.phaseType === 'water',
       // T/H get 10s & DPS get 17s
       delaySeconds: 12,
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack Donut',
@@ -306,13 +292,11 @@ export default {
     {
       id: 'O9S Dynamic Fluid 3',
       netRegex: NetRegexes.gainsEffect({ effectId: '641', capture: false }),
-      condition: function(data) {
-        return data.phaseType === 'enrage';
-      },
+      condition: (data) => data.phaseType === 'enrage',
       // enrage -> 6s
       delaySeconds: 1,
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack Donut',
@@ -328,7 +312,7 @@ export default {
       id: 'O9S Knock Down Marker',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: Conditions.targetIsYou(),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.phaseType === 'water')
           return output.dropOutside();
         else if (data.phaseType === 'wind')
@@ -362,7 +346,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3188', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3188', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3188', source: '카오스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.phaseType !== 'enrage')
           data.phaseType = 'wind';
       },
@@ -371,17 +355,13 @@ export default {
       id: 'O9S Headwind',
       netRegex: NetRegexes.gainsEffect({ effectId: '642' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.wind = 'head';
-      },
+      run: (data) => data.wind = 'head',
     },
     {
       id: 'O9S Tailwind',
       netRegex: NetRegexes.gainsEffect({ effectId: '643' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.wind = 'tail';
-      },
+      run: (data) => data.wind = 'tail',
     },
     {
       id: 'O9S Cyclone Knockback',
@@ -391,16 +371,14 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '318F', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '318F', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '318F', source: '카오스', capture: false }),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.wind === 'head')
           return output.backToTornado();
 
         if (data.wind === 'tail')
           return output.faceTheTornado();
       },
-      run: function(data) {
-        delete data.wind;
-      },
+      run: (data) => delete data.wind,
       outputStrings: {
         backToTornado: {
           en: 'Back to Tornado',
@@ -429,7 +407,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3189', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3189', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3189', source: '카오스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         if (data.phaseType !== 'enrage')
           data.phaseType = 'earth';
       },
@@ -437,11 +415,9 @@ export default {
     {
       id: 'O9S Accretion',
       netRegex: NetRegexes.gainsEffect({ effectId: '644', capture: false }),
-      condition: function(data) {
-        return data.role === 'healer';
-      },
+      condition: (data) => data.role === 'healer',
       suppressSeconds: 10,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.phaseType !== 'earth')
           return output.healAllToFull();
 
@@ -469,13 +445,9 @@ export default {
     {
       id: 'O9S Primordial Crust',
       netRegex: NetRegexes.gainsEffect({ effectId: '645' }),
-      condition: function(data, matches) {
-        return data.me === matches.target && data.phaseType !== 'orb';
-      },
-      infoText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.primordialCrust = true;
-      },
+      condition: (data, matches) => data.me === matches.target && data.phaseType !== 'orb',
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => data.primordialCrust = true,
       outputStrings: {
         text: {
           en: 'Die on next mechanic',
@@ -492,15 +464,13 @@ export default {
       netRegex: NetRegexes.gainsEffect({ effectId: '645' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: 30,
-      run: function(data) {
-        delete data.primordialCrust;
-      },
+      run: (data) => delete data.primordialCrust,
     },
     {
       id: 'O9S Earth Stack Marker',
       netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
       suppressSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stack with partner',
@@ -522,27 +492,19 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '318A', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '318A', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '318A', source: '카오스', capture: false }),
-      preRun: function(data) {
-        data.phaseType = 'orb';
-      },
+      preRun: (data) => data.phaseType = 'orb',
     },
     {
       id: 'O9S Orb Entropy',
       netRegex: NetRegexes.gainsEffect({ effectId: '640' }),
-      condition: function(data, matches) {
-        return matches.target !== data.me && data.phaseType === 'orb';
-      },
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.duration) - 3;
-      },
+      condition: (data, matches) => matches.target !== data.me && data.phaseType === 'orb',
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 3,
       suppressSeconds: 10,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.head === 'wind')
           return output.text();
       },
-      run: function(data) {
-        delete data.wind;
-      },
+      run: (data) => delete data.wind,
       outputStrings: {
         text: {
           en: 'Back to DPS',
@@ -557,13 +519,9 @@ export default {
     {
       id: 'O9S Orb Dynamic Fluid',
       netRegex: NetRegexes.gainsEffect({ effectId: '641' }),
-      condition: function(data, matches) {
-        return matches.target === data.me && data.phaseType === 'orb';
-      },
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.duration) - 5;
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data, matches) => matches.target === data.me && data.phaseType === 'orb',
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hit DPS with Water',
@@ -585,7 +543,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3186', source: 'カオス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3186', source: '卡奥斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3186', source: '카오스', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.blazeCount = data.blazeCount || 0;
         data.blazeCount++;
         if (data.blazeCount >= 3)

@@ -1,6 +1,6 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheForbiddenLandEurekaHydatos,
@@ -17,7 +17,7 @@ export default {
       id: 'BA Raiden Levinwhorl',
       regex: /Levinwhorl/,
       beforeSeconds: 10,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Shields and Mitigation',
@@ -34,7 +34,7 @@ export default {
       regex: /Explosive Impulse/,
       beforeSeconds: 10,
       suppressSeconds: 60,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Pop Eurekan Potions',
@@ -50,7 +50,7 @@ export default {
       id: 'BA Ozma Black Hole Warning',
       regex: /Black Hole/,
       beforeSeconds: 12,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Black Hole Soon',
@@ -92,9 +92,7 @@ export default {
       netRegexJa: NetRegexes.message({ line: '$1の封鎖まであと', capture: false }),
       netRegexCn: NetRegexes.message({ line: '距$1被封锁还有.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '15초 후에 $1(?:이|가) 봉쇄됩니다.*?', capture: false }),
-      run: function(data) {
-        data.sealed = true;
-      },
+      run: (data) => data.sealed = true,
     },
     {
       id: 'BA Clear Data',
@@ -104,7 +102,7 @@ export default {
       netRegexJa: NetRegexes.message({ line: '.*の封鎖が解かれた.*?', capture: false }),
       netRegexCn: NetRegexes.message({ line: '.*的封锁解除了.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '.*의 봉쇄가 해제되었습니다.*?', capture: false }),
-      run: function(data) {
+      run: (data) => {
         delete data.side;
         delete data.mythcall;
         delete data.clones;
@@ -123,9 +121,7 @@ export default {
       netRegexCn: NetRegexes.abilityFull({ id: '3956', source: '亚特', target: '[^:]+', capture: false }),
       netRegexKo: NetRegexes.abilityFull({ id: '3956', source: '아르트', target: '[^:]+', capture: false }),
       suppressSeconds: 1000,
-      run: function(data) {
-        data.side = 'west';
-      },
+      run: (data) => data.side = 'west',
     },
     {
       id: 'BA East Side',
@@ -136,9 +132,7 @@ export default {
       netRegexCn: NetRegexes.abilityFull({ id: '3957', source: '欧文', target: '[^:]+', capture: false }),
       netRegexKo: NetRegexes.abilityFull({ id: '3957', source: '오와인', target: '[^:]+', capture: false }),
       suppressSeconds: 1000,
-      run: function(data) {
-        data.side = 'east';
-      },
+      run: (data) => data.side = 'east',
     },
     {
       id: 'BA Art Mythcall',
@@ -148,12 +142,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3927', source: 'アルト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3927', source: '亚特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3927', source: '아르트', capture: false }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
-      run: function(data) {
-        data.mythcall = true;
-      },
+      condition: (data) => data.side === 'west',
+      run: (data) => data.mythcall = true,
     },
     {
       id: 'BA Art Tankbuster',
@@ -163,23 +153,19 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3934', source: 'アルト' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3934', source: '亚特' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3934', source: '아르트' }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
+      condition: (data) => data.side === 'west',
       response: Responses.tankBuster(),
     },
     {
       id: 'BA Art Orb Marker',
       netRegex: NetRegexes.headMarker({ id: '005C' }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
-      alarmText: function(data, matches, output) {
+      condition: (data) => data.side === 'west',
+      alarmText: (data, matches, output) => {
         if (data.me !== matches.target)
           return;
         return output.orbOnYou();
       },
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return;
         return output.awayFromOrbMarker();
@@ -189,7 +175,7 @@ export default {
           en: 'Away From Orb Marker',
           de: 'Weg vom Orb-Marker',
           fr: 'Éloignez-vous du marquage Orbe',
-          ja: '玉に離れ',
+          ja: '玉から離れる',
           cn: '远离点名',
           ko: '구슬 대상자에서 떨어지기',
         },
@@ -206,9 +192,7 @@ export default {
     {
       id: 'BA Art Piercing Dark Marker',
       netRegex: NetRegexes.headMarker({ id: '008B' }),
-      condition: function(data, matches) {
-        return data.side === 'west' && data.me === matches.target;
-      },
+      condition: (data, matches) => data.side === 'west' && data.me === matches.target,
       response: Responses.spread(),
     },
     {
@@ -219,9 +203,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3928', source: 'アルト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3928', source: '亚特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3928', source: '아르트', capture: false }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
+      condition: (data) => data.side === 'west',
       response: Responses.getOut(),
     },
     {
@@ -232,9 +214,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3929', source: 'アルト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3929', source: '亚特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3929', source: '아르트', capture: false }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
+      condition: (data) => data.side === 'west',
       response: Responses.getIn(),
     },
     {
@@ -245,9 +225,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3928', source: 'アルト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3928', source: '亚特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3928', source: '아르트', capture: false }),
-      condition: function(data) {
-        return data.side === 'west' && data.mythcall;
-      },
+      condition: (data) => data.side === 'west' && data.mythcall,
       delaySeconds: 3.5,
       response: Responses.getUnder(),
     },
@@ -259,11 +237,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3929', source: 'アルト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3929', source: '亚特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3929', source: '아르트', capture: false }),
-      condition: function(data) {
-        return data.side === 'west' && data.mythcall;
-      },
+      condition: (data) => data.side === 'west' && data.mythcall,
       delaySeconds: 3.5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Under Spears',
@@ -283,25 +259,19 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3945', source: 'オーウェン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3945', source: '欧文' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3945', source: '오와인' }),
-      condition: function(data) {
-        return data.side === 'west';
-      },
+      condition: (data) => data.side === 'west',
       response: Responses.tankBuster(),
     },
     {
       id: 'BA Owain Piercing Light Marker',
       netRegex: NetRegexes.headMarker({ id: '008B' }),
-      condition: function(data, matches) {
-        return data.side === 'east' && data.me === matches.target;
-      },
+      condition: (data, matches) => data.side === 'east' && data.me === matches.target,
       response: Responses.spread(),
     },
     {
       id: 'BA Owain Dorito Stack',
       netRegex: NetRegexes.headMarker({ id: '008B' }),
-      condition: function(data, matches) {
-        return data.side === 'east' && data.me === matches.target;
-      },
+      condition: (data, matches) => data.side === 'east' && data.me === matches.target,
       response: Responses.doritoStack(),
     },
     {
@@ -311,11 +281,9 @@ export default {
       netRegexFr: NetRegexes.dialog({ line: '[^:]*:Oui... Munderg, sens le feu embraser nos âmes.*?', capture: false }),
       netRegexJa: NetRegexes.dialog({ line: '[^:]*:白の妖槍「ムンジャルグ」、燃え上がれ！.*?', capture: false }),
       netRegexCn: NetRegexes.dialog({ line: '[^:]*:红颈妖枪，点燃一切.*?', capture: false }),
-      condition: function(data) {
-        return data.side === 'east';
-      },
-      alertText: (data, _, output) => output.getToIce(),
-      infoText: (data, _, output) => output.switchMagia(),
+      condition: (data) => data.side === 'east',
+      alertText: (_data, _matches, output) => output.getToIce(),
+      infoText: (_data, _matches, output) => output.switchMagia(),
       outputStrings: {
         switchMagia: {
           en: 'Switch Magia',
@@ -342,11 +310,9 @@ export default {
       netRegexFr: NetRegexes.dialog({ line: '[^:]*:C\'est bien, Munderg... Glace le sang de mes ennemis.*?', capture: false }),
       netRegexJa: NetRegexes.dialog({ line: '[^:]*:白の妖槍「ムンジャルグ」、震え凍れよ！.*?', capture: false }),
       netRegexCn: NetRegexes.dialog({ line: '[^:]*:红颈妖枪，冻结万物.*?', capture: false }),
-      condition: function(data) {
-        return data.side === 'east';
-      },
-      alertText: (data, _, output) => output.getToFire(),
-      infoText: (data, _, output) => output.switchMagia(),
+      condition: (data) => data.side === 'east',
+      alertText: (_data, _matches, output) => output.getToFire(),
+      infoText: (_data, _matches, output) => output.switchMagia(),
       outputStrings: {
         switchMagia: {
           en: 'Switch Magia',
@@ -374,9 +340,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3941', source: '白き手' }),
       netRegexCn: NetRegexes.ability({ id: '3941', source: '白手' }),
       netRegexKo: NetRegexes.ability({ id: '3941', source: '하얀 손' }),
-      condition: function(data, matches) {
-        return data.side === 'east' && data.me === matches.target;
-      },
+      condition: (data, matches) => data.side === 'east' && data.me === matches.target,
       response: Responses.doritoStack(),
     },
     {
@@ -387,9 +351,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '394D', source: 'オーウェン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '394D', source: '欧文', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '394D', source: '오와인', capture: false }),
-      condition: function(data) {
-        return data.side === 'east';
-      },
+      condition: (data) => data.side === 'east',
       response: Responses.getOut(),
     },
     {
@@ -400,9 +362,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3BFE', source: 'アーセナル・セントール' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3BFE', source: '兵武半人马' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3BFE', source: '무기고 켄타우로스' }),
-      condition: function(data) {
-        return data.CanSleep();
-      },
+      condition: (data) => data.CanSleep(),
       response: Responses.sleep(),
     },
     {
@@ -413,17 +373,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '387B', source: 'ライディーン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '387B', source: '莱丁' }),
       netRegexKo: NetRegexes.startsUsing({ id: '387B', source: '라이딘' }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.tankBuster(),
     },
     {
       id: 'BA Raiden Lancing Bolt',
       netRegex: NetRegexes.headMarker({ id: '008A' }),
-      condition: function(data, matches) {
-        return data.sealed && data.me === matches.target;
-      },
+      condition: (data, matches) => data.sealed && data.me === matches.target,
       response: Responses.spread(),
     },
     {
@@ -434,9 +390,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3868', source: 'ライディーン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3868', source: '莱丁', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3868', source: '라이딘', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.getOut(),
     },
     {
@@ -447,9 +401,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '386A', source: 'ライディーン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '386A', source: '莱丁', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '386A', source: '라이딘', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.getUnder(),
     },
     {
@@ -460,9 +412,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '387C', source: 'ライディーン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '387C', source: '莱丁', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '387C', source: '라이딘', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.getOut(),
     },
     {
@@ -473,9 +423,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '386C', source: 'ライディーン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '386C', source: '莱丁', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '386C', source: '라이딘', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.goLeft(),
     },
     {
@@ -486,9 +434,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '386B', source: 'ライディーン', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '386B', source: '莱丁', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '386B', source: '라이딘', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.goRight(),
     },
     {
@@ -499,9 +445,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '379A', source: 'アブソリュートヴァーチュー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '379A', source: '绝对的美德' }),
       netRegexKo: NetRegexes.startsUsing({ id: '379A', source: '절대미덕' }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.tankBuster(),
     },
     {
@@ -512,13 +456,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3787', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3787', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3787', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      infoText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.bracelets = 'dark';
-      },
+      condition: (data) => data.sealed,
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => data.bracelets = 'dark',
       outputStrings: {
         text: {
           en: 'Dark Bracelets',
@@ -538,13 +478,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3786', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3786', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3786', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      infoText: (data, _, output) => output.text(),
-      run: function(data) {
-        data.bracelets = 'light';
-      },
+      condition: (data) => data.sealed,
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => data.bracelets = 'light',
       outputStrings: {
         text: {
           en: 'Light Bracelets',
@@ -564,10 +500,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '378B', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '378B', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '378B', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: function(data, _, output) {
+      condition: (data) => data.sealed,
+      alertText: (data, _matches, output) => {
         if (!data.seenHostile) {
           if (data.bracelets === 'light')
             return output.awayFromLightCircles();
@@ -583,15 +517,13 @@ export default {
         if (data.bracelets === 'dark')
           return output.standByLightCircles();
       },
-      run: function(data) {
-        data.seenHostile = true;
-      },
+      run: (data) => data.seenHostile = true,
       outputStrings: {
         awayFromLightCircles: {
           en: 'Away From Light Circles',
           de: 'Weg von hellen Kreisen',
           fr: 'Éloignez-vous des cercles lumineux',
-          ja: '白リングに離れ',
+          ja: '白リングから離れる',
           cn: '远离白圈',
           ko: '밝은 원에서 떨어지기',
         },
@@ -599,14 +531,14 @@ export default {
           en: 'Away From Dark Circles',
           de: 'Weg von dunklen Kreisen',
           fr: 'Éloignez-vous des cercles ténèbreux',
-          ja: '黒リングに離れ',
+          ja: '黒リングから離れる',
           cn: '远离黑圈',
           ko: '어두운 원에서 떨어지기',
         },
         standByDarkCircles: {
           en: 'Stand By Dark Circles',
           de: 'Zu den dunklen Kreisen',
-          fr: 'Tenez-vous près des cercles ténèbreux',
+          fr: 'Placez-vous près des cercles ténèbreux',
           ja: '黒リングに近づく',
           cn: '靠近黑圈',
           ko: '어두운 원 옆에 서기',
@@ -614,7 +546,7 @@ export default {
         standByLightCircles: {
           en: 'Stand By Light Circles',
           de: 'zu den hellen Kreisen',
-          fr: 'Tenez-vous près des cercles lumineux',
+          fr: 'Placez-vous près des cercles lumineux',
           ja: '白リングに近づく',
           cn: '靠近白圈',
           ko: '밝은 원 옆에 서기',
@@ -629,10 +561,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3788', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3788', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3788', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: function(data, _, output) {
+      condition: (data) => data.sealed,
+      alertText: (data, _matches, output) => {
         if (data.bracelets === 'light')
           return output.dark();
 
@@ -667,10 +597,8 @@ export default {
       netRegex: NetRegexes.gameLog({ line: 'Relative Virtue gains the effect of Astral Essence.*?', capture: false }),
       netRegexDe: NetRegexes.gameLog({ line: 'Die Relative Tugend erhält den Effekt von.*?Arm der Lichts.*?', capture: false }),
       netRegexFr: NetRegexes.gameLog({ line: 'Vertu relative bénéficie de l\'effet.*?Bras de Lumière.*?', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      run: function(data) {
+      condition: (data) => data.sealed,
+      run: (data) => {
         // RV clones get buffs in the reverse order that they do their attacks in.
         data.clones = data.clones || [];
         data.clones.push('astral');
@@ -682,10 +610,8 @@ export default {
       netRegex: NetRegexes.gameLog({ line: 'Relative Virtue gains the effect of Umbral Essence.*?', capture: false }),
       netRegexDe: NetRegexes.gameLog({ line: 'Die Relative Tugend erhält den Effekt von.*?Arm der Dunkelheit.*?', capture: false }),
       netRegexFr: NetRegexes.gameLog({ line: 'Vertu relative bénéficie de l\'effet.*?Bras de Ténèbres.*?', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      run: function(data) {
+      condition: (data) => data.sealed,
+      run: (data) => {
         // RV clones get buffs in the reverse order that they do their attacks in.
         data.clones = data.clones || [];
         data.clones.push('umbral');
@@ -699,10 +625,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3797', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3797', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3797', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: function(data, _, output) {
+      condition: (data) => data.sealed,
+      alertText: (data, _matches, output) => {
         if (!data.clones)
           return;
         const wrists = data.clones.pop();
@@ -739,10 +663,8 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3790', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3790', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '3790', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.sealed,
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Orbs to Opposite Colors',
@@ -762,9 +684,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3798', source: 'アブソリュートヴァーチュー', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3798', source: '绝对的美德', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '3798', source: '절대미덕', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       response: Responses.killAdds(),
     },
     {
@@ -775,19 +695,13 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: ['37B3', '37A5', '379F'], capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: ['37B3', '37A5', '379F'], capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: ['37B3', '37A5', '379F'], capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      preRun: function(data) {
+      condition: (data) => data.sealed,
+      preRun: (data) => {
         data.blackHoleCount = data.blackHoleCount || 0;
         data.blackHoleCount++;
       },
-      alarmText: function(data, _, output) {
-        return output.blackHole({ num: data.blackHoleCount });
-      },
-      tts: function(data, _, output) {
-        return output.blackHoleTTS({ num: data.blackHoleCount });
-      },
+      alarmText: (data, _matches, output) => output.blackHole({ num: data.blackHoleCount }),
+      tts: (data, _matches, output) => output.blackHoleTTS({ num: data.blackHoleCount }),
       outputStrings: {
         blackHole: {
           en: 'Black Hole ${num} / 6',
@@ -820,10 +734,8 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '37A4', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '37A4', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '37A4', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.sealed,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Off the Platform',
@@ -843,11 +755,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '37A4', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '37A4', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '37A4', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       delaySeconds: 9,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread for Bleed',
@@ -867,16 +777,14 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '37B2', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '37B2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '37B2', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.sealed,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Go Far',
           de: 'Weit weg',
           fr: 'Éloignez-vous',
-          ja: '離れ',
+          ja: '離れる',
           cn: '远离',
           ko: '멀리가기',
         },
@@ -890,11 +798,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '37B2', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '37B2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '37B2', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       delaySeconds: 9,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         // FIXME: taking multiple autos probably means tanking,
         // so probably could figure this out automatically.
         if (data.role === 'tank')
@@ -929,16 +835,14 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '379E', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '379E', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '379E', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.sealed,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Close',
           de: 'Nah dran',
           fr: 'Rapprochez-vous',
-          ja: '近づいて',
+          ja: '近づく',
           cn: '靠近',
           ko: '가까이',
         },
@@ -952,17 +856,15 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'プロトオズマ', id: '379E', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '奥兹玛原型', id: '379E', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '프로토 오즈마', id: '379E', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       delaySeconds: 9,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         // FIXME: taking multiple autos probably means tanking,
         // so probably could figure this out automatically.
         if (data.role === 'tank')
           return output.offtanksGetOrbs();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.role !== 'tank')
           return output.stackAwayFromTank();
       },
@@ -971,7 +873,7 @@ export default {
           en: 'Stack Away From Tank',
           de: 'Weg vom Tank stacken',
           fr: 'Packez-vous loin du tank',
-          ja: 'タンクに離れて集合',
+          ja: 'タンクにから離れて集合',
           cn: '远离坦克集合',
           ko: '탱커에서 멀어지기',
         },
@@ -993,11 +895,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: ['オズマの影', 'プロトオズマの影'], id: '37A4', capture: false }),
       netRegexCn: NetRegexes.ability({ source: ['奥兹玛之影', '奥兹玛原型之影'], id: '37A4', capture: false }),
       netRegexKo: NetRegexes.ability({ source: ['오즈마의 그림자', '프로토 오즈마의 그림자'], id: '37A4', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       suppressSeconds: 1,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Off',
@@ -1017,11 +917,9 @@ export default {
       netRegexJa: NetRegexes.ability({ source: ['オズマの影', 'プロトオズマの影'], id: '37B2', capture: false }),
       netRegexCn: NetRegexes.ability({ source: ['奥兹玛之影', '奥兹玛原型之影'], id: '37B2', capture: false }),
       netRegexKo: NetRegexes.ability({ source: ['오즈마의 그림자', '프로토 오즈마의 그림자'], id: '37B2', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       suppressSeconds: 1,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Close',
@@ -1041,17 +939,15 @@ export default {
       netRegexJa: NetRegexes.ability({ source: ['オズマの影', 'プロトオズマの影'], id: '379E', capture: false }),
       netRegexCn: NetRegexes.ability({ source: ['奥兹玛之影', '奥兹玛原型之影'], id: '379E', capture: false }),
       netRegexKo: NetRegexes.ability({ source: ['오즈마의 그림자', '프로토 오즈마의 그림자'], id: '379E', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      condition: (data) => data.sealed,
       suppressSeconds: 1,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Go Far',
           de: 'Weit weg',
           fr: 'Éloignez-vous',
-          ja: '離れ',
+          ja: '離れる',
           cn: '远离',
           ko: '멀리',
         },
@@ -1059,15 +955,13 @@ export default {
     },
     {
       id: 'BA Ozma Adds',
-      netRegex: NetRegexes.ability({ source: 'Cloudlarker', id: '37B0', capture: false }),
-      netRegexDe: NetRegexes.ability({ source: 'Wolkenlauerer', id: '37B0', capture: false }),
+      netRegex: NetRegexes.ability({ source: 'Arsenal Urolith', id: '37B0', capture: false }),
+      netRegexDe: NetRegexes.ability({ source: 'Arsenal-Urolith', id: '37B0', capture: false }),
       netRegexFr: NetRegexes.ability({ source: 'Urolithe De L\'arsenal', id: '37B0', capture: false }),
-      netRegexJa: NetRegexes.ability({ source: 'クラウドラーカー', id: '37B0', capture: false }),
-      netRegexCn: NetRegexes.ability({ source: '翻云狮鹫', id: '37B0', capture: false }),
-      netRegexKo: NetRegexes.ability({ source: '구름 잠복자', id: '37B0', capture: false }),
-      condition: function(data) {
-        return data.sealed;
-      },
+      netRegexJa: NetRegexes.ability({ source: 'アーセナル・ウロリス', id: '37B0', capture: false }),
+      netRegexCn: NetRegexes.ability({ source: '兵武乌洛里石', id: '37B0', capture: false }),
+      netRegexKo: NetRegexes.ability({ source: '무기고 요결석', id: '37B0', capture: false }),
+      condition: (data) => data.sealed,
       delaySeconds: 2,
       suppressSeconds: 1,
       response: Responses.killAdds(),
@@ -1080,17 +974,13 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '37AA', source: 'プロトオズマ' }),
       netRegexCn: NetRegexes.ability({ id: '37AA', source: '奥兹玛原型' }),
       netRegexKo: NetRegexes.ability({ id: '37AA', source: '프로토 오즈마' }),
-      condition: function(data, matches) {
-        return data.sealed && data.me === matches.target;
-      },
+      condition: (data, matches) => data.sealed && data.me === matches.target,
       response: Responses.stopEverything(),
     },
     {
       id: 'BA Ozma Meteor',
       netRegex: NetRegexes.headMarker({ id: '0039' }),
-      condition: function(data, matches) {
-        return data.sealed && data.me === matches.target;
-      },
+      condition: (data, matches) => data.sealed && data.me === matches.target,
       response: Responses.meteorOnYou(),
     },
   ],
@@ -1098,11 +988,12 @@ export default {
     {
       'locale': 'de',
       'replaceSync': {
+        '7 minutes have elapsed since your last activity..*?': 'Seit deiner letzten Aktivität sind 7 Minuten vergangen.',
         'Absolute Virtue': 'Absolut(?:e|er|es|en) Tugend',
         'Arsenal Centaur': 'Arsenal-Zentaur',
         'Art': 'Art',
         'Ball Lightning': 'Elektrosphäre',
-        'Cloudlarker': 'Wolkenlauerer',
+        'Arsenal Urolith': 'Arsenal-Urolith',
         'Ivory Palm': 'weiß(?:e|er|es|en) Hand',
         'Orlasrach': 'Orlasrach',
         'Owain': 'Owain',
@@ -1124,6 +1015,7 @@ export default {
         'Relative Virtue gains the effect of Umbral Essence': 'Die Relative Tugend erhält den Effekt von.*?Arm der Dunkelheit',
       },
       'replaceText': {
+        '\\(Stack\\)': '(Sammeln)',
         'Acallam Na Senorach': 'Legendärer Lanzenwirbel',
         'Acceleration Bomb': 'Beschleunigungsbombe',
         'Adds': 'Adds',
@@ -1189,11 +1081,12 @@ export default {
     {
       'locale': 'fr',
       'replaceSync': {
+        '7 minutes have elapsed since your last activity..*?': 'Votre personnage est inactif depuis 7 minutes.*?',
         'Absolute Virtue': 'Vertu absolue',
         'Arsenal Centaur': 'Centaure de l\'Arsenal',
         'Art': 'Art',
         'Ball Lightning': 'Orbe de foudre',
-        'Cloudlarker': 'Urolithe de l\'Arsenal',
+        'Arsenal Urolith': 'Urolithe de l\'Arsenal',
         'Ivory Palm': 'Paume d\'ivoire',
         'Orlasrach': 'Orlasrach',
         'Owain': 'Owain',
@@ -1279,11 +1172,12 @@ export default {
     {
       'locale': 'ja',
       'replaceSync': {
+        '7 minutes have elapsed since your last activity..*?': '操作がない状態になってから7分が経過しました。.*?',
         'Absolute Virtue': 'アブソリュートヴァーチュー',
         'Arsenal Centaur': 'アーセナル・セントール',
         'Art': 'アルト',
         'Ball Lightning': '雷球',
-        'Cloudlarker': 'クラウドラーカー',
+        'Arsenal Urolith': 'アーセナル・ウロリス',
         'Ivory Palm': '白き手',
         'Orlasrach': 'オールラスラッハ',
         'Owain': 'オーウェン',
@@ -1369,11 +1263,12 @@ export default {
     {
       'locale': 'cn',
       'replaceSync': {
+        '7 minutes have elapsed since your last activity..*?': '已经7分钟没有进行任何操作.*?',
         'Absolute Virtue': '绝对的美德',
         'Arsenal Centaur': '兵武半人马',
         'Art': '亚特',
         'Ball Lightning': '闪电球',
-        'Cloudlarker': '翻云狮鹫',
+        'Arsenal Urolith': '兵武乌洛里石',
         'Ivory Palm': '白手',
         'Orlasrach': '烈焰金枪',
         'Owain': '欧文',
@@ -1461,11 +1356,12 @@ export default {
     {
       'locale': 'ko',
       'replaceSync': {
+        '7 minutes have elapsed since your last activity..*?': '7분 동안 아무 조작을 하지 않았습니다..*?',
         'Absolute Virtue': '절대미덕',
         'Arsenal Centaur': '무기고 켄타우로스',
         'Art': '아르트',
         'Ball Lightning': '전기 구체',
-        'Cloudlarker': '구름 잠복자',
+        'Arsenal Urolith': '무기고 요결석',
         'Ivory Palm': '하얀 손',
         'Orlasrach': '오를라스라흐',
         'Owain': '오와인',

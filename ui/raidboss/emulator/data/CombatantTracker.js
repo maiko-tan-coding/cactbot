@@ -1,7 +1,7 @@
-import Combatant from './Combatant.js';
-import CombatantJobSearch from './CombatantJobSearch.js';
-import CombatantState from './CombatantState.js';
-import PetNamesByLang from '../../../../resources/pet_names.js';
+import Combatant from './Combatant';
+import CombatantJobSearch from './CombatantJobSearch';
+import CombatantState from './CombatantState';
+import PetNamesByLang from '../../../../resources/pet_names';
 
 export default class CombatantTracker {
   constructor(logLines, language) {
@@ -20,15 +20,12 @@ export default class CombatantTracker {
   }
 
   initialize(logLines) {
-    const keyedLogLines = {};
     // First pass: Get list of combatants, figure out where they
-    // start at if possible, build our keyed log lines
+    // start at if possible
     for (let i = 0; i < logLines.length; ++i) {
       const line = logLines[i];
       this.firstTimestamp = Math.min(this.firstTimestamp, line.timestamp);
       this.lastTimestamp = Math.max(this.lastTimestamp, line.timestamp);
-
-      keyedLogLines[line.timestamp + '_' + i] = line;
 
       switch (line.hexEvent) {
       // Source/target events
@@ -44,14 +41,15 @@ export default class CombatantTracker {
         this.addCombatantFromLine(line);
         this.addCombatantFromTargetLine(line);
         break;
+      case '00':
+        // For 00 chat lines, don't ever generate combatant data from them
+        break;
 
       default:
         this.addCombatantFromLine(line);
         break;
       }
     }
-
-    const sortedTimestamps = Object.keys(keyedLogLines).sort();
 
     // Between passes: Create our initial combatant states
     for (const id in this.initialStates) {
@@ -71,8 +69,8 @@ export default class CombatantTracker {
 
     // Second pass: Analyze combatant information for tracking
     const eventTracker = {};
-    for (let i = 0; i < sortedTimestamps.length; ++i) {
-      const line = keyedLogLines[sortedTimestamps[i]];
+    for (let i = 0; i < logLines.length; ++i) {
+      const line = logLines[i];
       let state = this.extractStateFromLine(line);
       if (state) {
         eventTracker[line.id] = eventTracker[line.id] || 0;
@@ -135,7 +133,7 @@ export default class CombatantTracker {
     this.combatants[line.id].level = this.combatants[line.id].level || extractedState.level || null;
 
     if (line.abilityId && !this.combatants[line.id].job && !line.id.startsWith('4'))
-      this.combatants[line.id].job = CombatantJobSearch.getJob(line.abilityId);
+      this.combatants[line.id].job = CombatantJobSearch.getJob(parseInt(line.abilityId));
 
     if (this.combatants[line.id].job)
       this.combatants[line.id].job = this.combatants[line.id].job.toUpperCase();
@@ -166,17 +164,28 @@ export default class CombatantTracker {
 
     const state = {};
 
-    if (line.x !== undefined) state.posX = line.x;
-    if (line.y !== undefined) state.posY = line.y;
-    if (line.z !== undefined) state.posZ = line.z;
-    if (line.heading !== undefined) state.heading = line.heading;
-    if (line.targetable !== undefined) state.targetable = line.targetable;
-    if (line.hp !== undefined) state.HP = line.hp;
-    if (line.maxHp !== undefined) state.maxHP = line.maxHp;
-    if (line.mp !== undefined) state.MP = line.mp;
-    if (line.maxMp !== undefined) state.maxMP = line.maxMp;
-    if (line.jobName !== undefined) state.job = line.jobName;
-    if (line.level !== undefined) state.level = line.level;
+    if (line.x !== undefined)
+      state.posX = line.x;
+    if (line.y !== undefined)
+      state.posY = line.y;
+    if (line.z !== undefined)
+      state.posZ = line.z;
+    if (line.heading !== undefined)
+      state.heading = line.heading;
+    if (line.targetable !== undefined)
+      state.targetable = line.targetable;
+    if (line.hp !== undefined)
+      state.HP = line.hp;
+    if (line.maxHp !== undefined)
+      state.maxHP = line.maxHp;
+    if (line.mp !== undefined)
+      state.MP = line.mp;
+    if (line.maxMp !== undefined)
+      state.maxMP = line.maxMp;
+    if (line.jobName !== undefined)
+      state.job = line.jobName;
+    if (line.level !== undefined)
+      state.level = line.level;
 
     return state;
   }
@@ -187,14 +196,22 @@ export default class CombatantTracker {
 
     const state = {};
 
-    if (line.targetX !== undefined) state.posX = line.targetX;
-    if (line.targetY !== undefined) state.posY = line.targetY;
-    if (line.targetZ !== undefined) state.posZ = line.targetZ;
-    if (line.targetHeading !== undefined) state.heading = line.targetHeading;
-    if (line.targetHp !== undefined) state.HP = line.targetHp;
-    if (line.targetMaxHp !== undefined) state.maxHP = line.targetMaxHp;
-    if (line.targetMp !== undefined) state.MP = line.targetMp;
-    if (line.targetMaxMp !== undefined) state.maxMP = line.targetMaxMp;
+    if (line.targetX !== undefined)
+      state.posX = line.targetX;
+    if (line.targetY !== undefined)
+      state.posY = line.targetY;
+    if (line.targetZ !== undefined)
+      state.posZ = line.targetZ;
+    if (line.targetHeading !== undefined)
+      state.heading = line.targetHeading;
+    if (line.targetHp !== undefined)
+      state.HP = line.targetHp;
+    if (line.targetMaxHp !== undefined)
+      state.maxHP = line.targetMaxHp;
+    if (line.targetMp !== undefined)
+      state.MP = line.targetMp;
+    if (line.targetMaxMp !== undefined)
+      state.maxMP = line.targetMaxMp;
 
     return state;
   }

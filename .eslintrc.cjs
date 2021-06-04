@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-// RULES_DIR must be absolute so that eslint can be used programatically
+// RULES_DIR must be absolute so that eslint can be used programmatically
 // and still find the eslint/ plugin directory correctly.
 const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = path.join(__dirname, 'eslint');
@@ -15,13 +15,64 @@ module.exports = {
   },
   'overrides': [
     {
-      'files': ['**/*.cjs'],
+      'files': ['*.cjs'],
       'parserOptions': {
         'sourceType': 'script',
       },
     },
+    {
+      'files': ['*.ts'],
+      'parser': '@typescript-eslint/parser',
+      'plugins': ['@typescript-eslint', 'prefer-arrow'],
+      'parserOptions': {
+        'tsconfigRootDir': __dirname,
+        'project': ['./tsconfig.json'],
+      },
+      'extends': [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+      'rules': {
+        '@typescript-eslint/no-non-null-assertion': 2,
+        '@typescript-eslint/no-explicit-any': 2,
+        '@typescript-eslint/member-delimiter-style': ['error', {
+          'multiline': {
+            'delimiter': 'semi',
+            'requireLast': true,
+          },
+          'singleline': {
+            'delimiter': 'semi',
+            'requireLast': false,
+          },
+        }],
+        '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_\\w+' }],
+        'func-style': ['error', 'expression', { 'allowArrowFunctions': true }],
+        'object-shorthand': ['error', 'consistent'],
+        '@typescript-eslint/method-signature-style': ['error', 'property'],
+        '@typescript-eslint/explicit-module-boundary-types': ['error', { 'allowHigherOrderFunctions': false }],
+        '@typescript-eslint/consistent-type-assertions': [
+          'error', {
+            assertionStyle: 'as',
+            objectLiteralTypeAssertions: 'never',
+          },
+        ],
+      },
+    },
+    {
+      'files': ['**/oopsyraidsy/data/**/*', '**/raidboss/data/**/*'],
+      'rules': {
+        'no-unused-vars': ['error', { 'args': 'all', 'argsIgnorePattern': '^_\\w+' }],
+        'prefer-arrow/prefer-arrow-functions': 'warn',
+        'rulesdir/cactbot-output-strings': 'error',
+        'rulesdir/cactbot-timeline-triggers': 'error',
+        'rulesdir/cactbot-response-default-severities': 'error',
+      },
+    },
   ],
   'ignorePatterns': [
+    // Do not ignore dot files.  /o\
+    '!.*',
+    '.git/',
     'dist/',
     'plugin/',
     'publish/',
@@ -38,9 +89,22 @@ module.exports = {
     'plugin:import/errors',
   ],
   'plugins': [
+    'import',
     'rulesdir',
   ],
+  'settings': {
+    'import/resolver': {
+      'node': {
+        'extensions': ['.d.ts', '.ts', '.js'],
+      },
+      'typescript': {
+        'alwaysTryTypes': true,
+        'project': './tsconfig.json',
+      },
+    },
+  },
   'rules': {
+    'no-sequences': 'error',
     'arrow-spacing': [
       'error',
       {
@@ -96,7 +160,7 @@ module.exports = {
       'windows',
     ],
     'max-len': [
-      'error',
+      'warn',
       {
         'code': 100,
         'ignoreRegExpLiterals': true,
@@ -126,6 +190,7 @@ module.exports = {
     'no-undef': 'off',
     'no-unused-vars': 'off',
     'no-useless-escape': 'off',
+    'nonblock-statement-body-position': ['error', 'below'],
     'object-curly-newline': [
       'error',
       {
@@ -176,6 +241,7 @@ module.exports = {
       'error',
       'never',
     ],
+    'valid-jsdoc': 'off',
     'rulesdir/cactbot-locale-order': [
       'warn',
       ['en', 'de', 'fr', 'ja', 'cn', 'ko'],

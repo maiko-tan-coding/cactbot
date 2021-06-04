@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: rush hitting the crystal
 // TODO: adds not being killed
@@ -50,7 +50,6 @@ export default {
   },
   damageFail: {
     // Broken tether.
-    // TODO: add suppressSeconds to oopsy.
     'E8S Refulgent Fate': '4DA4',
     // Shared orb, correct is Bright Pulse (4D95)
     'E8S Blinding Pulse': '4D96',
@@ -60,7 +59,7 @@ export default {
       id: 'E8S Shining Armor',
       // Stun
       netRegex: NetRegexes.gainsEffect({ effectId: '95' }),
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'fail', blame: matches.target, text: matches.effect };
       },
     },
@@ -68,7 +67,7 @@ export default {
       // Interrupt
       id: 'E8S Stoneskin',
       abilityRegex: '4D85',
-      mistake: function(e, data) {
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
@@ -76,10 +75,8 @@ export default {
       // Protean
       id: 'E8S Path of Light',
       damageRegex: '4DA1',
-      condition: function(e) {
-        return e.type !== '15';
-      },
-      mistake: function(e) {
+      condition: (e) => e.type !== '15',
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },

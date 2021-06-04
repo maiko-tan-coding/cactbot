@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: stun call for True Heart sprint ability?
 
@@ -55,7 +55,7 @@ export default {
       netRegexJa: NetRegexes.addedCombatant({ name: 'シャノア', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '샤노아', capture: false }),
       netRegexCn: NetRegexes.addedCombatant({ name: '夏诺雅', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.phase = data.phase || 0;
         data.phase++;
       },
@@ -63,11 +63,11 @@ export default {
     {
       id: 'A7S Sizzlebeam',
       netRegex: NetRegexes.headMarker({ id: '0018' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.sizzlebeamOnYou();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (matches.target !== data.me)
           return output.sizzlebeamOn({ player: data.ShortName(matches.target) });
       },
@@ -99,7 +99,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ source: '만능의 퀵싱크스', id: '16F8', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '万事通 奎克辛克斯', id: '16F8', capture: false }),
       condition: Conditions.caresAboutAOE(),
-      response: Responses.aoe('info'),
+      response: Responses.aoe(),
     },
     {
       id: 'A7S Bomb Tether',
@@ -110,7 +110,7 @@ export default {
       netRegexKo: NetRegexes.tether({ source: '폭탄', id: '001F' }),
       netRegexCn: NetRegexes.tether({ source: '炸弹', id: '001F' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bomb Spread',
@@ -126,7 +126,7 @@ export default {
       id: 'A7S Jail Prey',
       netRegex: NetRegexes.headMarker({ id: '0029' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Jail Prey',
@@ -143,14 +143,14 @@ export default {
       // This does not include the initial tether, unfortunately.
       // This is another case of "added combatant with initial tether".
       netRegex: NetRegexes.tether({ source: 'Boomtype Magitek Gobwalker G-VII', id: '0011' }),
-      netRegexDe: NetRegexes.tether({ source: 'Gobumm-Stampfer Vii', id: '0011' }),
-      netRegexFr: NetRegexes.tether({ source: 'Gobblindé Magitek G-Vii Boumbardier', id: '0011' }),
-      netRegexJa: NetRegexes.tether({ source: 'Vii号ゴブリウォーカーB型', id: '0011' }),
-      netRegexKo: NetRegexes.tether({ source: 'Vii호 고블린워커 B형', id: '0011' }),
-      netRegexCn: NetRegexes.tether({ source: '爆破型7号哥布林战车', id: '0011' }),
+      netRegexDe: NetRegexes.tether({ source: 'Gob-Stampfer VII-L', id: '0011' }),
+      netRegexFr: NetRegexes.tether({ source: 'gobblindé magitek G-VII Lamineur', id: '0011' }),
+      netRegexJa: NetRegexes.tether({ source: 'VII号ゴブリウォーカーL型', id: '0011' }),
+      netRegexKo: NetRegexes.tether({ source: 'VII호 고블린워커 L형', id: '0011' }),
+      netRegexCn: NetRegexes.tether({ source: '7号哥布林战车L型', id: '0011' }),
       condition: Conditions.targetIsYou(),
       suppressSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Jail Tether',
@@ -170,9 +170,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'シュツルムドール', id: '16FE' }),
       netRegexKo: NetRegexes.startsUsing({ source: '인형 폭기병', id: '16FE' }),
       netRegexCn: NetRegexes.startsUsing({ source: '风暴人偶', id: '16FE' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
+      condition: (data) => data.CanStun(),
       response: Responses.stun(),
     },
     {
@@ -183,7 +181,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: '万能のクイックシンクス', id: '16F4', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '만능의 퀵싱크스', id: '16F4', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '万事通 奎克辛克斯', id: '16F4', capture: false }),
-      run: function(data) {
+      run: (data) => {
         delete data.grabbed;
         delete data.stickyloom;
       },
@@ -196,7 +194,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '万能のクイックシンクス', id: '15C0' }),
       netRegexKo: NetRegexes.ability({ source: '만능의 퀵싱크스', id: '15C0' }),
       netRegexCn: NetRegexes.ability({ source: '万事通 奎克辛克斯', id: '15C0' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.grabbed = data.grabbed || [];
         data.grabbed.push(matches.target);
       },
@@ -204,14 +202,12 @@ export default {
     {
       id: 'A7S Stickyloom',
       netRegex: NetRegexes.ability({ source: 'Boomtype Magitek Gobwalker G-VII', id: '16F2' }),
-      netRegexDe: NetRegexes.ability({ source: 'Gobumm-Stampfer Vii', id: '16F2' }),
-      netRegexFr: NetRegexes.ability({ source: 'Gobblindé Magitek G-Vii Boumbardier', id: '16F2' }),
-      netRegexJa: NetRegexes.ability({ source: 'Vii号ゴブリウォーカーB型', id: '16F2' }),
-      netRegexKo: NetRegexes.ability({ source: 'Vii호 고블린워커 B형', id: '16F2' }),
-      netRegexCn: NetRegexes.ability({ source: '爆破型7号哥布林战车', id: '16F2' }),
-      run: function(data, matches) {
-        data.stickyloom = matches.target;
-      },
+      netRegexDe: NetRegexes.ability({ source: 'Gob-Stampfer VII-L', id: '16F2' }),
+      netRegexFr: NetRegexes.ability({ source: 'gobblindé magitek G-VII Lamineur', id: '16F2' }),
+      netRegexJa: NetRegexes.ability({ source: 'VII号ゴブリウォーカーL型', id: '16F2' }),
+      netRegexKo: NetRegexes.ability({ source: 'VII호 고블린워커 L형', id: '16F2' }),
+      netRegexCn: NetRegexes.ability({ source: '7号哥布林战车L型', id: '16F2' }),
+      run: (data, matches) => data.stickyloom = matches.target,
     },
     {
       id: 'A7S Padlock',
@@ -221,13 +217,13 @@ export default {
       netRegexJa: NetRegexes.addedCombatant({ name: '錠前', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '자물쇠', capture: false }),
       netRegexCn: NetRegexes.addedCombatant({ name: '牢门的锁', capture: false }),
-      condition: function(data) {
+      condition: (data) => {
         if (!data.grabbed)
           return false;
         // If you're not in a jail, kill the padlock.
         return !data.grabbed.includes(data.me) && data.stickyloom !== data.me;
       },
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Break Padlock',
@@ -247,7 +243,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'シャノア', id: '15EC', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '샤노아', id: '15EC', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '夏诺雅', id: '15EC', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Heart',
@@ -263,7 +259,7 @@ export default {
       id: 'A7S Searing Wind',
       netRegex: NetRegexes.gainsEffect({ effectId: '178' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Searing Wind on YOU',
@@ -282,7 +278,7 @@ export default {
       'missingTranslations': true,
       'replaceSync': {
         'Bomb': 'Bombe',
-        'Boomtype Magitek Gobwalker G-VII': 'Gobumm-Stampfer VII',
+        'Boomtype Magitek Gobwalker G-VII': 'Gob-Stampfer VII-L',
         'Padlock': 'Vorhängeschloss',
         'Quickthinx Allthoughts': 'Denkfix',
         'Shanoa': 'Schwarz(?:e|er|es|en) Katze',
@@ -292,7 +288,7 @@ export default {
         'Big Doll': 'Große Puppe',
         'Bomb(?!(s|en))': 'Bombe',
         'Bombs': 'Bomben',
-        '(?<![Big|Small] )Doll': 'Puppe',
+        '(?<! )Doll': 'Puppe',
         'Flamethrower': 'Flammenwerfer',
         'Hammertime': 'Hammertime',
         'Jails': 'Gefängnisse',
@@ -314,7 +310,7 @@ export default {
       'missingTranslations': true,
       'replaceSync': {
         'Bomb': 'bombe',
-        'Boomtype Magitek Gobwalker G-VII': 'gobblindé magitek G-VII Boumbardier',
+        'Boomtype Magitek Gobwalker G-VII': 'gobblindé magitek G-VII Lamineur',
         'electrocution gallery': 'square d\'exécution publique',
         'Padlock': 'cadenas',
         'Quickthinx Allthoughts': 'Quickthinx le Cerveau',
@@ -335,7 +331,7 @@ export default {
       'missingTranslations': true,
       'replaceSync': {
         'Bomb': '爆弾',
-        'Boomtype Magitek Gobwalker G-VII': 'VII号ゴブリウォーカーB型',
+        'Boomtype Magitek Gobwalker G-VII': 'VII号ゴブリウォーカーL型',
         'Electrocution gallery': '公開処刑広場',
         'Frostbite': '凍傷',
         'Padlock': '錠前',
@@ -348,7 +344,7 @@ export default {
         'Big Doll': '大きいドール',
         'Bomb(?!s)': '爆弾',
         'Bombs': '爆弾',
-        '(?<![Big|Small] )Doll': 'ドール',
+        '(?<! )Doll': 'ドール',
         'Flamethrower': 'フレイムスロアー',
         'Hammertime': 'オシオキ',
         'Jails': '隔離部屋',
@@ -370,7 +366,7 @@ export default {
       'missingTranslations': true,
       'replaceSync': {
         'Bomb': '炸弹',
-        'Boomtype Magitek Gobwalker G-VII': '爆破型7号哥布林战车',
+        'Boomtype Magitek Gobwalker G-VII': 'VII호 고블린워커 L형',
         'Padlock': '牢门的锁',
         'Quickthinx Allthoughts': '万事通 奎克辛克斯',
         'Shanoa': '夏诺雅',
@@ -380,7 +376,7 @@ export default {
         'Big Doll': '大人偶',
         'Bomb(?!(s|en))': '炸弹',
         'Bombs': '炸弹',
-        '(?<![Big|Small] )Doll': '人偶',
+        '(?<! )Doll': '人偶',
         'Flamethrower': '火焰喷射器',
         'Hammertime': '惩戒',
         'Jails': '监狱',
@@ -402,7 +398,7 @@ export default {
       'missingTranslations': true,
       'replaceSync': {
         'Bomb': '폭탄',
-        'Boomtype Magitek Gobwalker G-VII': 'VII호 고블린워커 B형',
+        'Boomtype Magitek Gobwalker G-VII': '7号哥布林战车L型',
         'Padlock': '자물쇠',
         'Quickthinx Allthoughts': '만능의 퀵싱크스',
         'Shanoa': '샤노아',
@@ -414,7 +410,7 @@ export default {
         'Big Doll': '큰 인형',
         'Bomb(?!s)': '폭탄',
         'Bombs': '폭탄',
-        '(?<![Big|Small] )Doll': '인형',
+        '(?<! )Doll': '인형',
         'Flamethrower': '화염 방사',
         'Get Prey': '인형뽑기',
         'Get Tether': '밧줄',

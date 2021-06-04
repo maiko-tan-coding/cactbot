@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.CinderDrift,
@@ -11,7 +11,7 @@ export default {
       id: 'Ruby Magitek Meteor Behind',
       regex: /Magitek Meteor/,
       beforeSeconds: 4,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide Behind Meteor',
@@ -27,13 +27,13 @@ export default {
       id: 'Ruby Magitek Meteor Away',
       regex: /Burst/,
       beforeSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away From Meteor',
           de: 'Weg vom Meteor',
           fr: 'Éloignez-vous du météore',
-          ja: 'コメットから離れ',
+          ja: 'コメットから離れる',
           cn: '远离陨石',
           ko: '운석에게서 멀어지기',
         },
@@ -60,9 +60,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ルビーウェポン', id: '4AC7' }),
       netRegexCn: NetRegexes.startsUsing({ source: '红宝石神兵', id: '4AC7' }),
       netRegexKo: NetRegexes.startsUsing({ source: '루비 웨폰', id: '4AC7' }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -73,13 +71,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ルビーウェポン', id: '4A97', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '红宝石神兵', id: '4A97', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '루비 웨폰', id: '4A97', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away from Lines',
           de: 'Weg von den Linien',
           fr: 'En dehors des sillons',
-          ja: '線から離れ',
+          ja: '線から離れる',
           cn: '远离线',
           ko: '선 피하기',
         },
@@ -93,7 +91,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ルビーウェポン', id: '4A96', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '红宝石神兵', id: '4A96', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '루비 웨폰', id: '4A96', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get On Lines',
@@ -124,7 +122,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ source: '红宝石神兵', id: '4AC5' }),
       netRegexKo: NetRegexes.startsUsing({ source: '루비 웨폰', id: '4AC5' }),
       condition: Conditions.targetIsYou(),
-      response: Responses.stackMarkerOn('alert'),
+      response: Responses.stackMarkerOn(),
     },
     {
       id: 'Ruby High-Powered Homing Lasers',
@@ -164,7 +162,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ルビーウェポン', id: '4AA9', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '红宝石神兵', id: '4AA9', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '루비 웨폰', id: '4AA9', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Enrage!',
@@ -190,7 +188,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ネールの幻影', id: '4ABF' }),
       netRegexCn: NetRegexes.startsUsing({ source: '奈尔的幻影', id: '4ABF' }),
       netRegexKo: NetRegexes.startsUsing({ source: '넬의 환영', id: '4ABF' }),
-      condition: function(data, matches) {
+      condition: (data, matches) => {
         if (data.role !== 'healer' || data.role !== 'tank')
           return false;
         if (data.colors[data.me] === data.colors[matches.target])
@@ -203,13 +201,13 @@ export default {
       id: 'Ruby Bradamante',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid meteors with laser',
           de: 'Meteore mit Laser vermeiden',
           fr: 'Évitez les météores avec votre laser',
-          ja: 'レザーを避け',
+          ja: 'レザーを避ける',
           cn: '躲开激光点名',
           ko: '레이저 대상자 - 탱커 피하기',
         },

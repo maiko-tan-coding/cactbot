@@ -1,4 +1,4 @@
-import ZoneId from '../../../../../resources/zone_id.js';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.ThokAstThokExtreme,
@@ -12,6 +12,10 @@ export default {
         'Ravana': 'Ravana',
       },
       'replaceText': {
+        '\\(1st Double Prey\\)': '(1. Doppel-Markierung)',
+        '\\(2nd Double Prey\\)': '(2. Doppel-Markierung)',
+        '\\(Circles\\)': '(Kreise)',
+        '\\(Flames\\)': '(Flammen) ',
         'Atma-Linga': 'Atma-Linga',
         'Beetle Avatar': 'Käfer-Inkarnation',
         'Blades of Carnage and Liberation': 'Klingen des Gemetzels und der Befreiung',
@@ -109,7 +113,8 @@ export default {
         'Prelude to Liberation': '光焔【序】',
         'Scorpion Avatar': '光焔の化身',
         'Surpanakha': '徹甲散弾',
-        'Swift Liberation': '光焔【急】',
+        'Swift Liberation(?! Dash)': '光焔【急】',
+        'Swift Liberation Dash': '光焔【急】突進',
         'Tapasya': '鬼武神',
         'The Rose Of Conquest': '闘気爆砕',
         'The Rose Of Conviction': '闘気弾',

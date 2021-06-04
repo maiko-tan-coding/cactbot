@@ -66,9 +66,18 @@ jobs:
       run: msbuild /p:Configuration=Release /p:Platform=x64 plugin/Cactbot.sln
       shell: cmd
 
+    - name: Cache Dependencies
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
+
     - name: Install Node Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        npm install
+        npm ci --ignore-scripts
+
     - name: Build JavaScript UI Module Bundles
       run: |
         npm run build

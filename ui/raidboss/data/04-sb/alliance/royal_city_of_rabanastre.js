@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheRoyalCityOfRabanastre,
@@ -17,7 +17,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2633', source: '背德皇帝马提乌斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2633', source: '배덕의 황제 마티우스', capture: false }),
       delaySeconds: 11,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Aqua Spheres',
@@ -35,19 +35,19 @@ export default {
       id: 'Rab Mateus Breathless Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '595' }),
       condition: Conditions.targetIsYou(),
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.breathless === 6)
           return output.getInBubble();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.breathless >= 7)
           return output.breathless({ num: (data.breathless + 1) });
       },
-      tts: function(data, _, output) {
+      tts: (data, _matches, output) => {
         if (data.breathless === 6)
           return output.bubble();
       },
-      run: function(data) {
+      run: (data) => {
         data.breathless = data.breathless | 0;
         data.breathless++;
       },
@@ -82,9 +82,7 @@ export default {
       id: 'Rab Mateus Breathless Lose',
       netRegex: NetRegexes.losesEffect({ effectId: '595' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.breathless = 0;
-      },
+      run: (data) => data.breathless = 0,
     },
     {
       id: 'Rab Mateus Blizzard IV',
@@ -94,7 +92,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '263D', source: '背徳の皇帝マティウス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '263D', source: '背德皇帝马提乌斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '263D', source: '배덕의 황제 마티우스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move To Safe Spot',
@@ -125,13 +123,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '25CB', source: '統制者ハシュマリム', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '25CB', source: '统治者哈修马利姆', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '25CB', source: '통제자 하쉬말림', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move Away',
           de: 'Weg da',
           fr: 'Eloignez-vous',
-          ja: 'ハーマーから離れ',
+          ja: 'ハンマーから離れる',
           cn: '远离大锤落点',
           ko: '기둥으로부터 피하기',
         },
@@ -146,7 +144,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '25D4', source: '统治者哈修马利姆', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '25D4', source: '통제자 하쉬말림', capture: false }),
       delaySeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Golems',
@@ -166,7 +164,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: 'D10', source: 'アルケオキマイラ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: 'D10', source: '古奇美拉', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: 'D10', source: '원시 키마이라', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dragon Voice: Move In',
@@ -186,7 +184,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: ['D0F', '273B'], source: 'アルケオキマイラ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: ['D0F', '273B'], source: '古奇美拉', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['D0F', '273B'], source: '원시 키마이라', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Ram Voice: Move Out',
@@ -212,7 +210,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2676', source: '人馬王ロフォカレ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2676', source: '人马王洛弗卡勒', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2676', source: '인마왕 로포칼레', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Trample',
@@ -232,9 +230,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '冷血剣アルガス', id: '261A', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '冷血剑阿加斯', id: '261A', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '냉혈검 아르가스', id: '261A', capture: false }),
-      run: function(data) {
-        data.maskValue = true;
-      },
+      run: (data) => data.maskValue = true,
     },
     {
       id: 'Rab Argath Mask of Lies',
@@ -244,15 +240,13 @@ export default {
       netRegexJa: NetRegexes.ability({ source: '冷血剣アルガス', id: '2619', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '冷血剑阿加斯', id: '2619', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '냉혈검 아르가스', id: '2619', capture: false }),
-      run: function(data) {
-        data.maskValue = false;
-      },
+      run: (data) => data.maskValue = false,
     },
     {
       id: 'Rab Argath Command Scatter',
       netRegex: NetRegexes.headMarker({ id: '007B' }),
       condition: Conditions.targetIsYou(),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.maskValue)
           return output.move();
 
@@ -271,7 +265,7 @@ export default {
           en: 'Stop',
           de: 'Stopp',
           fr: 'Stop',
-          ja: '動かない',
+          ja: '動くな',
           cn: '不要动',
           ko: '멈추기',
         },
@@ -281,7 +275,7 @@ export default {
       id: 'Rab Argath Command Turn',
       netRegex: NetRegexes.headMarker({ id: '007C' }),
       condition: Conditions.targetIsYou(),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.maskValue)
           return output.lookAway();
 
@@ -300,7 +294,7 @@ export default {
           en: 'Look Towards',
           de: 'Anschauen',
           fr: 'Regardez le boss',
-          ja: 'ボスを見て',
+          ja: 'ボスを見る',
           cn: '面对BOSS',
           ko: '바라보기',
         },
@@ -312,6 +306,7 @@ export default {
       'locale': 'de',
       'missingTranslations': true,
       'replaceSync': {
+        'Archaeolion': 'Archaeolöwe',
         'Archaeodemon': 'Archaeodämon',
         'command tower': 'Kommandoturm',
         'I am Revelation': 'Seht die Offenbarung',
@@ -324,6 +319,7 @@ export default {
         'The heavens tremble in my wake': 'Mein Streitwagen donnert empor in luftige Höhen',
       },
       'replaceText': {
+        '\\(misdirect\\)': '(fehlgeleitet)',
         '--face--': '--Gesicht--',
         '--ice disappears--': '--Eis verschwindet--',
         '--invulnerable--': '--unverwundbar--',
@@ -385,6 +381,7 @@ export default {
         'Argath Thadalfus': 'Argath Thadalfus',
         'Hashmal, Bringer Of Order': 'Hashmal le Grand Ordonnateur',
         'Rofocale': 'Rofocale le Roi centaure',
+        'Archaeolion': 'archéochimère',
       },
       'replaceText': {
         'Blizzard IV': 'Giga Glace',
@@ -436,6 +433,7 @@ export default {
         'The Lesalia Garden Ruins': 'ルザリア円庭跡',
         'The Lesalia Temple Ruins': 'ルザリア神殿跡',
         'The Palace Square': '王宮前広場',
+        'Archaeolion': 'アルケオキマイラ',
       },
       'replaceText': {
         '--face--': '--向け--',
@@ -443,14 +441,16 @@ export default {
         '--invulnerable--': '--インヴィンシブル--',
         '--lock out--': '--ロックオン--',
         '--meteors--': '--メテオ--',
+        '\\(misdirect\\)': '(目押し)',
         'Aqua Sphere Adds': 'アクアスフィア',
         'Archaeodemon Adds': 'アルケオデーモン',
         'Azure Guard Adds': 'アズールガード',
-        'Blade, or putt putt': '不動無明剣／喪失の恐怖',
+        'Blade, or putt putt': '千手無双剣／喪失の恐怖',
         'Blizzard IV': 'ブリザジャ',
         'Chariot': '人馬戦車',
         'Coldblood': '冷血乱舞',
-        'Command Tower': '支配の塔',
+        'Command Tower(?! )': '支配の塔',
+        'Command Tower Add': '支配の塔',
         'Control Tower': '統制の塔',
         'Crippling Blow': '痛打',
         'Crush Helm': '星天爆撃打',
@@ -468,12 +468,14 @@ export default {
         'Heavenly Subjugation': '天将覇道撃',
         'Hole In One': 'ボスと貼りつく',
         'Ice Cone Phase': '氷だよ、氷！',
-        'Judgment': 'ジャッジメント',
+        'Judgment(?! Blade)': 'ジャッジメント',
+        'Judgment Blade': '不動無明剣',
         'Landwaster': 'ランドワスター',
         'Line AOEs': '直線AoE',
         'Maverick': '独立独行',
+        'Meteors': 'メテオ',
         'Pomp and Circumstance': '威風堂々',
-        'Putt putt, or Blade': 'ボスの居場所へ／外へ',
+        'Putt putt, or Blade': '喪失の恐怖／千手無双剣',
         'Quake IV': 'クエイジャ',
         'Rock Cutter': 'ロックカッター',
         'Royal Blood': '高貴なる血脈',
@@ -506,6 +508,7 @@ export default {
         'The Lesalia Garden Ruins': '勒萨利亚圆庭遗迹',
         'The Lesalia Temple Ruins': '勒萨利亚神殿遗迹',
         'The Palace Square': '王宫前广场',
+        'Archaeolion': '古奇美拉',
       },
       'replaceText': {
         '--face--': '--面对--',
@@ -581,6 +584,7 @@ export default {
         'The Lesalia Temple Ruins': '르잘리아 신전 옛터',
         'The Palace Square': '왕궁 광장',
         'The heavens tremble in my wake': '이것이 바로 빛나는 \'성석\'의 힘이다!',
+        'Archaeolion': '원시 키마이라',
       },
       'replaceText': {
         '--face--': '--얼굴--',

@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: could track people get hitting by markers they shouldn't
 // TODO: could track non-tanks getting hit by tankbusters, megaliths
@@ -35,17 +35,15 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '411E', source: 'タイタン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '411E', source: '泰坦' }),
       netRegexKo: NetRegexes.startsUsing({ id: '411E', source: '타이탄' }),
-      run: function(e, data, matches) {
+      run: (_e, data, matches) => {
         data.faultLineTarget = matches.target;
       },
     },
     {
       id: 'E4S Fault Line',
       damageRegex: '411E',
-      condition: function(e, data, matches) {
-        return data.faultLineTarget !== e.targetName;
-      },
-      mistake: function(e, data) {
+      condition: (e, data) => data.faultLineTarget !== e.targetName,
+      mistake: (e) => {
         return {
           type: 'fail',
           blame: e.targetName,

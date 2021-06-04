@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O2N - Deltascape 2.0 Normal
 export default {
@@ -20,22 +21,18 @@ export default {
       id: 'O2N Levitation Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '556' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.levitating = true;
-      },
+      run: (data) => data.levitating = true,
     },
     {
       id: 'O2N Levitation Lose',
       netRegex: NetRegexes.losesEffect({ effectId: '556' }),
       condition: Conditions.targetIsYou(),
-      run: function(data) {
-        data.levitating = false;
-      },
+      run: (data) => data.levitating = false,
     },
     {
       id: 'O2N Gravitational Manipulation Stack',
       netRegex: NetRegexes.headMarker({ id: '0071' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.stackMarkerOnYou();
 
@@ -45,30 +42,24 @@ export default {
         stackMarkerOnYou: {
           en: 'Stack marker on YOU',
           de: 'Sammeln Marker auf DIR',
+          fr: 'Package marqueur sur VOUS',
           ja: '自分に集合',
           cn: '集合点名',
           ko: '쉐어징 대상자',
         },
-        stackOn: {
-          en: 'Stack on ${player}',
-          de: 'Sammeln auf ${player}',
-          ja: '${player}に集合',
-          cn: '靠近${player}集合',
-          ko: '${player} 쉐어징',
-        },
+        stackOn: Outputs.stackOnPlayer,
       },
     },
     {
       id: 'O2N Gravitational Manipulation Float',
       netRegex: NetRegexes.headMarker({ id: '0071' }),
-      condition: function(data, matches) {
-        return !data.levitating && Conditions.targetIsNotYou()(data, matches);
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data, matches) => !data.levitating && Conditions.targetIsNotYou()(data, matches),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Levitate',
           de: 'Schweben',
+          fr: 'Lévitation',
           ja: '浮上',
           cn: '浮空',
           ko: '공중부양',
@@ -83,9 +74,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '250F', source: 'カタストロフィー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '250F', source: '灾变者' }),
       netRegexKo: NetRegexes.startsUsing({ id: '250F', source: '카타스트로피' }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -96,11 +85,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '24FF', source: 'カタストロフィー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '24FF', source: '灾变者', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '24FF', source: '카타스트로피', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: '-100 Gs: Go north/south',
           de: '-100G: Nach Norden/Süden',
+          fr: 'Gravité -100 : Allez au nord/sud',
           ja: '-100 G: 北/南へ',
           cn: '去北边/南边',
           ko: '중력 마이너스 100: 남/북쪽으로',
@@ -125,11 +115,11 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2512', source: 'カタストロフィー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2512', source: '灾变者', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2512', source: '카타스트로피', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (!data.levitating)
           return output.levitate();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.levitating)
           return output.earthquake();
       },
@@ -137,6 +127,7 @@ export default {
         earthquake: {
           en: 'Earthquake',
           de: 'Erdbeben',
+          fr: 'Grand séisme',
           ja: '地震',
           cn: '地震',
           ko: '대지진',
@@ -144,6 +135,7 @@ export default {
         levitate: {
           en: 'Levitate',
           de: 'Schweben',
+          fr: 'Lévitation',
           ja: '浮上',
           cn: '浮空',
           ko: '공중부양',
@@ -167,19 +159,20 @@ export default {
       condition: Conditions.targetIsYou(),
       delaySeconds: 5,
       suppressSeconds: 10,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (!data.levitating)
           return output.levitate();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.levitating)
           return output.sixFulmsUnder();
       },
-      tts: (data, _, output) => output.float(),
+      tts: (_data, _matches, output) => output.float(),
       outputStrings: {
         sixFulmsUnder: {
           en: '6 Fulms Under',
           de: 'Versinkend',
+          fr: 'Enfoncement',
           ja: '沈下',
           cn: '下陷',
           ko: '하강',
@@ -187,6 +180,7 @@ export default {
         levitate: {
           en: 'Levitate',
           de: 'Schweben',
+          fr: 'Lévitation',
           ja: '浮上',
           cn: '浮空',
           ko: '공중부양',
@@ -194,6 +188,7 @@ export default {
         float: {
           en: 'float',
           de: 'schweben',
+          fr: 'Flottez',
           ja: '浮上',
           cn: '浮空',
           ko: '공중부양',
@@ -208,15 +203,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2502', source: 'カタストロフィー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2502', source: '灾变者', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2502', source: '카타스트로피', capture: false }),
-      preRun: function(data) {
-        data.antiCounter = data.antiCounter || 0;
-      },
-      durationSeconds: function(data) {
+      preRun: (data) => data.antiCounter = data.antiCounter || 0,
+      durationSeconds: (data) => {
         if (data.antiCounter === 0 && data.levitating)
           return 3;
         return 8;
       },
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         // The first Antilight is always blue.
         if (data.antiCounter === 0) {
           // Players who are already floating should just get an info about Petrospheres.
@@ -231,13 +224,11 @@ export default {
 
         return output.dontLevitate();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.antiCounter === 0 && data.levitating)
           return output.antilight();
       },
-      run: function(data) {
-        data.antiCounter += 1;
-      },
+      run: (data) => data.antiCounter += 1,
       outputStrings: {
         antilight: {
           en: 'Antilight',
@@ -250,6 +241,7 @@ export default {
         levitate: {
           en: 'Levitate',
           de: 'Levitation',
+          fr: 'Lévitation',
           ja: '浮上',
           cn: '浮空',
           ko: '공중부양',
@@ -257,6 +249,7 @@ export default {
         goCenterAndDontLevitate: {
           en: 'Go center and don\'t levitate',
           de: 'Geh in die Mitte und nicht schweben',
+          fr: 'Allez au centre et pas de lévitation',
           ja: '中央に浮かばず集合',
           cn: '中间集合不要浮空',
           ko: '공중부양 하지않고 가운데로',
@@ -264,6 +257,7 @@ export default {
         dontLevitate: {
           en: 'Don\'t levitate',
           de: 'Nicht schweben',
+          fr: 'Pas de lévitation',
           ja: '浮上はしない',
           cn: '不要浮空',
           ko: '공중부양 하지않기',

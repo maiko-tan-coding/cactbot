@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
@@ -6,7 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace Cactbot {
   public class FFXIVProcessKo : FFXIVProcess {
     //
-    // for FFXIV KO version: 5.2
+    // for FFXIV KO version: 5.4
     //
     // Latest KO version can be found at:
     // https://www.ff14.co.kr/news/notice?category=3
@@ -42,8 +43,11 @@ namespace Cactbot {
       [FieldOffset(0xB0)]
       public Single rotation;
 
-      [FieldOffset(0x1898)]
+      [FieldOffset(0x1C4)]
       public CharacterDetails charDetails;
+
+      [FieldOffset(0x1977)]
+      public byte shieldPercentage;
     }
 
     [StructLayout(LayoutKind.Explicit)]
@@ -56,28 +60,25 @@ namespace Cactbot {
       public int max_hp;
 
       [FieldOffset(0x08)]
-      public int mp;
+      public short mp;
 
-      [FieldOffset(0x12)]
+      [FieldOffset(0x10)]
       public short gp;
 
-      [FieldOffset(0x14)]
+      [FieldOffset(0x12)]
       public short max_gp;
 
-      [FieldOffset(0x16)]
+      [FieldOffset(0x14)]
       public short cp;
 
-      [FieldOffset(0x18)]
+      [FieldOffset(0x16)]
       public short max_cp;
 
-      [FieldOffset(0x3E)]
+      [FieldOffset(0x1E)]
       public EntityJob job;
 
-      [FieldOffset(0x40)]
+      [FieldOffset(0x1F)]
       public byte level;
-
-      [FieldOffset(0x61)]
-      public short shieldPercentage;
     }
     public FFXIVProcessKo(ILogger logger) : base(logger) { }
 
@@ -86,8 +87,8 @@ namespace Cactbot {
 
     // A piece of code that reads the pointer to the list of all entities, that we
     // refer to as the charmap. The pointer is the 4 byte ?????????.
-    private static String kCharmapSignature = "574883EC??488B1D????????488BF233D2";
-    private static int kCharmapSignatureOffset = -9;
+    private static String kCharmapSignature = "48c1ea0381faa7010000????8bc2488d0d";
+    private static int kCharmapSignatureOffset = 0;
     // The signature finds a pointer in the executable code which uses RIP addressing.
     private static bool kCharmapSignatureRIP = true;
     // The pointer is to a structure as:
@@ -122,11 +123,26 @@ namespace Cactbot {
     private static bool kJobDataSignatureRIP = true;
 
     internal override void ReadSignatures() {
-      List<IntPtr> p = SigScan(kCharmapSignature, kCharmapSignatureOffset, kCharmapSignatureRIP);
-      if (p.Count != 1) {
+      List<IntPtr> p;
+
+      // TODO: for now, support multiple matches on charmap signature.
+      // This sig returns two matches that are identical for many, many characters.
+      // They both point to the same spot, so verify these have the same value.
+      p = SigScan(kCharmapSignature, kCharmapSignatureOffset, kCharmapSignatureRIP);
+      if (p.Count == 0) {
         logger_.LogError("Charmap signature found " + p.Count + " matches");
       } else {
-        player_ptr_addr_ = IntPtr.Add(p[0], kCharmapStructOffsetPlayer);
+        IntPtr player_ptr_value = IntPtr.Zero;
+        foreach (IntPtr ptr in p) {
+          IntPtr addr = IntPtr.Add(ptr, kCharmapStructOffsetPlayer);
+          IntPtr value = ReadIntPtr(addr);
+          if (player_ptr_value == IntPtr.Zero || player_ptr_value == value) {
+            player_ptr_value = value;
+            player_ptr_addr_ = addr;
+          } else {
+            logger_.LogError("Charmap signature found, but conflicting match");
+          }
+        }
       }
 
       p = SigScan(kJobDataSignature, kJobDataSignatureOffset, kJobDataSignatureRIP);
@@ -187,7 +203,7 @@ namespace Cactbot {
           // This doesn't exist in memory, so just send the right value.
           // As there are other versions that still have it, don't change the event.
           entity.max_mp = 10000;
-          entity.shield_value = mem.charDetails.shieldPercentage * entity.max_hp / 100;
+          entity.shield_value = mem.shieldPercentage * entity.max_hp / 100;
 
           if (IsGatherer(entity.job)) {
             entity.gp = mem.charDetails.gp;
@@ -413,13 +429,10 @@ namespace Cactbot {
       [FieldOffset(0x06)]
       public byte currentStep; // Number of steps executed in current Standard Step/Technical Step combo.
 
-      public string steps {
+      public string[] steps {
         get {
-          string _steps = step1 == Step.None ? "None" : step1.ToString();
-          _steps += step2 != Step.None ? ", " + step2.ToString() : "";
-          _steps += step3 != Step.None ? ", " + step3.ToString() : "";
-          _steps += step4 != Step.None ? ", " + step4.ToString() : "";
-          return _steps;
+          Step[] _steps = { step1, step2, step3, step4 };
+          return _steps.Select(s => s.ToString()).Where(s => s != "None").ToArray();
         }
       }
     };
@@ -615,7 +628,7 @@ namespace Cactbot {
 
       [FieldOffset(0x05)]
       public byte battery;
-      
+
       [FieldOffset(0x06)]
       public byte lastBatteryAmount;
 
@@ -623,13 +636,13 @@ namespace Cactbot {
       [FieldOffset(0x07)]
       private byte chargeTimerState;
 
-      public bool overheated {
+      public bool overheatActive {
         get {
           return (chargeTimerState & 0x1) == 1;
         }
       }
 
-      public bool queenActive {
+      public bool robotActive {
         get {
           return (chargeTimerState & 0x2) == 1;
         }
@@ -676,12 +689,10 @@ namespace Cactbot {
         }
       }
 
-      public string arcanums {
+      public string[] arcanums {
         get {
-          string _arcanums = arcanum_1 == Arcanum.None ? "None" : arcanum_1.ToString();
-          _arcanums += arcanum_2 != Arcanum.None ? ", " + arcanum_2.ToString() : "";
-          _arcanums += arcanum_3 != Arcanum.None ? ", " + arcanum_3.ToString() : "";
-          return _arcanums;
+          Arcanum[] _arcanums = { arcanum_1, arcanum_2, arcanum_3 };
+          return _arcanums.Select(a => a.ToString()).Where(a => a != "None").ToArray();
         }
       }
     };
@@ -690,7 +701,7 @@ namespace Cactbot {
     public struct SamuraiJobMemory {
       [FieldOffset(0x03)]
       public byte kenki;
-      
+
       [FieldOffset(0x04)]
       public byte meditationStacks;
 

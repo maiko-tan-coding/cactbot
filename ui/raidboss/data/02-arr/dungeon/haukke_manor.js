@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.HaukkeManor,
@@ -9,11 +9,11 @@ export default {
     {
       id: 'Haukke Normal Dark Mist Stun',
       netRegex: NetRegexes.startsUsing({ id: '2C1', source: ['Manor Maidservant', 'Manor Claviger', 'Lady Amandine'] }),
-      netRegexDe: NetRegexes.startsUsing({ id: '2C1', source: ['Hausmädchen', 'Schlüsselträgerin', 'Lady Amandine'] }),
+      netRegexDe: NetRegexes.startsUsing({ id: '2C1', source: ['Hausmädchen', 'Herrenhaus-Schlüsselträgerin', 'Lady Amandine'] }),
       netRegexFr: NetRegexes.startsUsing({ id: '2C1', source: ['Soubrette Du Manoir', 'Clavière Du Manoir', 'Dame Amandine'] }),
-      netRegexJa: NetRegexes.startsUsing({ id: '2C1', source: ['御用邸のメイド', '御用邸のクラヴィジャー', 'レディ・アマンディヌ'] }),
-      netRegexKo: NetRegexes.startsUsing({ id: '2C1', source: ['별궁의 하녀', '별궁 청지기', '레이디 아망딘'] }),
-      netRegexCn: NetRegexes.startsUsing({ id: '2C1', source: ['庄园的女仆', '庄园的女工', '阿芒迪娜女士'] }),
+      netRegexJa: NetRegexes.startsUsing({ id: '2C1', source: ['御用邸のメイド', '夫人付きクラヴィジャー', 'レディ・アマンディヌ'] }),
+      netRegexKo: NetRegexes.startsUsing({ id: '2C1', source: ['별궁의 하녀', '부인의 청지기', '레이디 아망딘'] }),
+      netRegexCn: NetRegexes.startsUsing({ id: '2C1', source: ['庄园的女仆', '随从女工', '阿芒迪娜女士'] }),
       condition: (data) => data.CanStun(),
       suppressSeconds: 2,
       response: Responses.stun('info'),
@@ -72,7 +72,7 @@ export default {
       netRegexJa: NetRegexes.message({ line: '不気味なランプが妖しく輝き始めた！', capture: false }),
       netRegexKo: NetRegexes.message({ line: '불길한 등불이 요사스러운 빛을 발합니다!', capture: false }),
       netRegexCn: NetRegexes.message({ line: '怪异的灯开始发出令人不安的光芒。', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Turn off Lamps',
@@ -88,7 +88,7 @@ export default {
       // Lady's Candle Spawn
       id: 'Haukke Normal Ladys Candle',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '425', capture: false }),
-      response: Responses.killAdds('info'),
+      response: Responses.killAdds(),
     },
     {
       // 2 Lady's Handmaiden and 1 Manor Sentry Spawn
@@ -98,7 +98,7 @@ export default {
       id: 'Haukke Normal Ladys Handmaiden',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '424', capture: false }),
       suppressSeconds: 2,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Kill Sentry',

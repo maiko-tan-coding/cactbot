@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheBurn,
@@ -22,7 +22,7 @@ export default {
       id: 'The Burn Hailfire',
       netRegex: NetRegexes.headMarker({ id: '0002', capture: false }),
       condition: (data) => !data.hedetet,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide behind crystal',
@@ -38,13 +38,13 @@ export default {
       id: 'The Burn Shardstrike',
       netRegex: NetRegexes.headMarker({ id: '0060' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread + Avoid Crystals',
           de: 'Verteilen + Kristall meiden',
-          fr: 'Écartez-vous & évitez les cristaux',
-          ja: '散開 + 水晶に避け',
+          fr: 'Dispersez-vous + évitez les cristaux',
+          ja: '散開 + 水晶を避ける',
           cn: '散开并远离水晶',
           ko: '산개 + 크리스탈 피하기',
         },
@@ -58,7 +58,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3191', source: 'ヘデテト', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3191', source: '赫德提特', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3191', source: '헤데테트', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide behind crystal',
@@ -119,7 +119,7 @@ export default {
       id: 'The Burn Aetherochemical Residue',
       netRegex: NetRegexes.headMarker({ id: '0002' }),
       condition: (data, matches) => data.me === matches.target && data.hedetet,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
@@ -136,7 +136,7 @@ export default {
       id: 'The Burn Throttle',
       netRegex: NetRegexes.addedCombatantFull({ npcNameId: '7670', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'In line with smoking drone',
@@ -157,13 +157,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '2D78', source: '石刃', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2D78', source: '암석 절단날', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Rock Biters',
           de: 'Felsbeißer meiden',
           fr: 'Évitez le trancheur de pierre',
-          ja: 'ロックカッターに避け',
+          ja: 'ロックカッターを避ける',
           cn: '躲开电锯',
           ko: '톱니바퀴 피하기',
         },
@@ -184,7 +184,7 @@ export default {
       // Also handles Chilling Aspiration, which is randomly targeted.
       id: 'The Burn Frost Breath',
       netRegex: NetRegexes.headMarker({ id: ['001A', '000E'] }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.puddleCleaveOnYou();
 
@@ -203,7 +203,7 @@ export default {
           en: 'Avoid marker cone',
           de: 'Kegel-Markierung ausweichen',
           fr: 'Évitez le marqueur de cône',
-          ja: 'マークに避け',
+          ja: 'マーカーを避ける',
           cn: '远离锥形点名',
           ko: '표식 피하기',
         },
@@ -218,7 +218,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3144', source: '雾龙', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3144', source: '안개 드래곤', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bait Star Explosions',
@@ -241,7 +241,7 @@ export default {
         'Rock Biter': 'Felsbeißer',
         'Mist Dragon': 'Nebeldrache',
         'Dim Crystal': 'trüber Kristall',
-        'Defective Drone': 'defekte Drohne',
+        'Defective Drone': 'defekt(?:e|er|es|en) Drohne',
         'Hedetet': 'Hedetet',
       },
       'replaceText': {

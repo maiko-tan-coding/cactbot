@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.BardamsMettle,
@@ -11,9 +11,7 @@ export default {
       id: 'Bardam\'s Mettle Feathercut',
       regex: /Feathercut/,
       beforeSeconds: 4,
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
   ],
@@ -22,13 +20,13 @@ export default {
       id: 'Bardam\'s Mettle Rush',
       netRegex: NetRegexes.tether({ id: '0039' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Run Away From Boss',
           de: 'Renn weg vom Boss',
           fr: 'Courez loin du boss',
-          ja: 'ボスに離れ',
+          ja: 'ボスから離れる',
           cn: '远离Boss',
           ko: '보스와 거리 벌리기',
         },
@@ -55,9 +53,7 @@ export default {
       netRegexJa: NetRegexes.message({ line: '.*物言わぬ語り部 will be sealed off.*?', capture: false }),
       netRegexCn: NetRegexes.message({ line: '.*无声的叙事者 will be sealed off.*?', capture: false }),
       netRegexKo: NetRegexes.message({ line: '.*말 없는 이야기꾼 will be sealed off.*?', capture: false }),
-      run: function(data) {
-        data.deadBardam = true;
-      },
+      run: (data) => data.deadBardam = true,
     },
     {
       id: 'Bardam\'s Mettle Empty Gaze',
@@ -77,12 +73,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '1F01', source: 'バルダムの巨像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '1F01', source: '巴儿达木巨像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '1F01', source: '바르담 조각상', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      suppressSeconds: 1,
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in a tower',
           de: 'Im Turm stehen',
-          fr: 'Tenez-vous dans une tour',
+          fr: 'Placez-vous dans une tour',
           ja: '塔を踏む',
           cn: '踩塔',
           ko: '장판 들어가기',
@@ -99,7 +96,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '257D', source: 'バルダムの巨像', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '257D', source: '巴儿达木巨像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '257D', source: '바르담 조각상', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      suppressSeconds: 1,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: '8x puddles on YOU',
@@ -119,10 +117,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2582', source: '落下地点' }),
       netRegexCn: NetRegexes.startsUsing({ id: '2582', source: '坠落地点' }),
       netRegexKo: NetRegexes.startsUsing({ id: '2582', source: '낙하지점' }),
-      delaySeconds: function(data, matches) {
-        return parseFloat(matches.castTime) - 7;
-      },
-      alertText: (data, _, output) => output.text(),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 7,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide behind boulder',
@@ -148,9 +144,7 @@ export default {
     {
       id: 'Bardam\'s Mettle Flutterfall',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
-      condition: function(data, matches) {
-        return data.me === matches.target && data.deadBardam;
-      },
+      condition: (data, matches) => data.me === matches.target && data.deadBardam,
       response: Responses.spread(),
     },
     {
@@ -167,7 +161,7 @@ export default {
       id: 'Bardam\'s Mettle Wingbeat You',
       netRegex: NetRegexes.headMarker({ id: '0010' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Knockback Laser on YOU',
@@ -183,13 +177,13 @@ export default {
       id: 'Bardam\'s Mettle Wingbeat Others',
       netRegex: NetRegexes.headMarker({ id: '0010' }),
       condition: Conditions.targetIsNotYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Laser',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
-          ja: 'ノックバックレザーに避け',
+          ja: 'ノックバックレーザーを避ける',
           cn: '躲避击退点名',
           ko: '날갯짓 피하기',
         },
@@ -207,7 +201,7 @@ export default {
         'Throwing Spear': 'Wurfspeer',
         'Star Shard': 'Sternensplitter',
         'Rebirth Of Bardam The Brave': 'Bardams Wiedergeburt',
-        'Looming Shadow': ' Lauernd(?:e|er|es|en) Schatten',
+        'Looming Shadow': 'Lauernd(?:e|er|es|en) Schatten',
         'Hunter Of Bardam': 'Bardams Jäger',
         'Corpsecleaner Eagle': 'Leichenputzer',
         'Garula': 'Garula',

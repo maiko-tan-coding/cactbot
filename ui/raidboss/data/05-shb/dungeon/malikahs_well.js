@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.MalikahsWell,
@@ -15,9 +15,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3CE5', source: 'グレーター・アルマジロ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3CE5', source: '大犰狳' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3CE5', source: '거대 아르마딜로' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -33,7 +31,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3CE7', source: 'グレーター・アルマジロ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3CE7', source: '大犰狳', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3CE7', source: '거대 아르마딜로', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Melee Knockback',
@@ -53,9 +51,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4188', source: 'パック・アルマジロ' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4188', source: '群落犰狳' }),
       netRegexKo: NetRegexes.startsUsing({ id: '4188', source: '무리 아르마딜로' }),
-      condition: function(data) {
-        return data.CanSilence();
-      },
+      condition: (data) => data.CanSilence(),
       response: Responses.interrupt('info'),
     },
     {
@@ -66,9 +62,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3CEB', source: 'ハイドロタロース' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3CEB', source: '水陆两用塔罗斯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3CEB', source: '수력 탈로스' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -107,6 +101,7 @@ export default {
     {
       'locale': 'de',
       'replaceSync': {
+        'Pack Armadillo': 'Rudel-Gürteltier',
         'Terminus': 'Drehscheibe',
         'Malikah\'s Gift': 'Malikahs Quelle',
         'Unquestioned Acceptance': 'Residenz der Großherzigkeit',
@@ -116,6 +111,7 @@ export default {
         'Rhapsodic Nail': 'Keil der Liebe',
       },
       'replaceText': {
+        'Pack Armadillo': 'Rudel-Gürteltier',
         'Stone Flail': 'Steindresche',
         'Head Toss': 'Kopfwurf',
         'Right Round': 'Rotation',
@@ -131,12 +127,13 @@ export default {
         'Breaking Wheel': 'Radbruch',
         'Crystal Nail': 'Kristallnagel',
         'Censure': 'Tadel',
-        'Armadillo': 'Armadillo',
+        '(?!<Pack )Armadillo': 'Armadillo',
       },
     },
     {
       'locale': 'fr',
       'replaceSync': {
+        'Pack Armadillo': 'Tatou Grégaire',
         'Amphibious Talos': 'Talos Amphibie',
         'Greater Armadillo': 'Grand Tatou',
         'Malikah\'s Gift': 'le Source de Malikah',
@@ -168,6 +165,7 @@ export default {
     {
       'locale': 'ja',
       'replaceSync': {
+        'Pack Armadillo': 'パック・アルマジロ',
         'Amphibious Talos': 'ハイドロタロース',
         'Greater Armadillo': 'グレーター・アルマジロ',
         'Malikah\'s Gift': 'マリカの水源',
@@ -199,6 +197,7 @@ export default {
     {
       'locale': 'ko',
       'replaceSync': {
+        'Pack Armadillo': '群落犰狳',
         'Terminus': '광차 종점',
         'Malikah\'s Gift': '말리카의 수원',
         'Unquestioned Acceptance': '시민 별장',
@@ -229,6 +228,7 @@ export default {
     {
       'locale': 'cn',
       'replaceSync': {
+        'Pack Armadillo': '무리 아르마딜로',
         'Terminus': '轨道车站',
         'Malikah\'s Gift': '马利卡水源',
         'Unquestioned Acceptance': '无偿离宫',

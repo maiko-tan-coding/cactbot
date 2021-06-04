@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Innocence Normal
 export default {
@@ -27,7 +27,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3E99', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3E99', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3E99', source: '이노센스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Look Away, Get Towers',
@@ -49,7 +49,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '3EDC', source: '이노센스', capture: false }),
       // 3 seconds cast time + 9.5 seconds until next sword.
       delaySeconds: 9.5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Swords!',
@@ -81,9 +81,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EA3', source: 'イノセンス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EA3', source: '无瑕灵君' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EA3', source: '이노센스' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -94,7 +92,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3EC7', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3EC7', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EC7', source: '이노센스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Charge',
@@ -114,7 +112,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '38FC', source: 'イノセンス', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '38FC', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '38FC', source: '이노센스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Line Stack',
@@ -130,7 +128,7 @@ export default {
       id: 'Inno Winged Drop Of Light',
       netRegex: NetRegexes.headMarker({ id: '008A' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Circle on YOU',
@@ -152,12 +150,12 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3EB1', source: '无瑕灵君', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3EB1', source: '이노센스', capture: false }),
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rotate Right',
           de: 'Rechts rum rotieren',
-          fr: 'Rotation vers la droite',
+          fr: 'Tournez vers la droite',
           ja: '時針回り',
           cn: '向右旋转',
           ko: '오른쪽으로 도세요',
@@ -284,6 +282,36 @@ export default {
         'Exalted Plumes': '羽化',
         'Drop Of Light': '落光',
         '--add Phase--': '--小怪--',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Sword of Condemnation': '단죄의 검',
+        'Innocence': '이노센스',
+      },
+      'replaceText': {
+        'Winged Reprobation': '단죄의 비상',
+        'Soul And Body': '영혼과 육신',
+        'Sinsphere': '죄의 구체',
+        'Shadowreaver': '그림자 강탈',
+        'Rightful Reprobation': '단죄의 선회',
+        'Righteous Bolt': '심판자의 번개',
+        '(?<! )Reprobation': '선회',
+        'Light Pillar': '빛의 기둥',
+        'Holy Trinity': '성 삼위일체',
+        'Guiding Light': '인도하는 빛',
+        'God Ray': '신의 광선',
+        'Flaming Sword': '회전 화염검',
+        'Beatific Vision': '지복직관',
+        'Realmrazer': '영토 지배자',
+        'Heavenly Host': '권력자의 한마디',
+        'Daybreak': '여명',
+        'Enthrall': '매혹의 눈',
+        'Exalted Wing': '고귀한 날개',
+        'Exalted Plumes': '탈피',
+        'Drop Of Light': '빛내림',
+        '--add Phase--': '--쫄 페이즈--',
       },
     },
   ],

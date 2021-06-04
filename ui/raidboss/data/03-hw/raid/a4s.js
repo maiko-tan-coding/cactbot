@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AlexanderTheBurdenOfTheFatherSavage,
@@ -12,18 +12,18 @@ export default {
       regex: /Hydrothermal Missile/,
       beforeSeconds: 5,
       suppressSeconds: 5,
-      response: Responses.tankCleave('info'),
+      response: Responses.tankCleave(),
     },
   ],
   triggers: [
     {
       id: 'A4S Discord Marker',
       netRegex: NetRegexes.headMarker({ id: '00AE' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.orbsOnYou();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.orbsOn({ player: data.ShortName(matches.target) });
       },
@@ -50,12 +50,8 @@ export default {
       // Stun Resistance.
       id: 'A4S Stun Leg',
       netRegex: NetRegexes.losesEffect({ effectId: '27' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
-      alertText: function(data, matches, output) {
-        return output.text({ name: matches.target });
-      },
+      condition: (data) => data.CanStun(),
+      alertText: (_data, matches, output) => output.text({ name: matches.target }),
       outputStrings: {
         text: {
           en: 'Stun ${name}',
@@ -87,13 +83,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'マニピュレーター', id: 'F5E', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '조종자', id: 'F5E', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '操纵者', id: 'F5E', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Laser Tethers',
           de: 'Laser Verbindungen',
           fr: 'Liens laser',
-          ja: 'レザー線',
+          ja: 'レーザー線',
           cn: '镭射连线',
           ko: '레이저 선',
         },
@@ -108,7 +104,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ source: '조종자', id: 'F64' }),
       netRegexCn: NetRegexes.startsUsing({ source: '操纵者', id: 'F64' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Nisi A on YOU',
@@ -129,7 +125,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ source: '조종자', id: 'F65' }),
       netRegexCn: NetRegexes.startsUsing({ source: '操纵者', id: 'F65' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Nisi B on YOU',

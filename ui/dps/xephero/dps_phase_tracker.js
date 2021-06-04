@@ -1,4 +1,4 @@
-import { LocaleRegex } from '../../../resources/translations.js';
+import { LocaleRegex } from '../../../resources/translations';
 
 const kTestPhaseStart = 'cactbot phase start';
 const kTestPhaseEnd = 'cactbot phase end';
@@ -226,7 +226,7 @@ export default class DpsPhaseTracker {
       setDPS(encounter.DURATION, encounter.DURATION, encounter);
     }
 
-    // Deliberately use end, as combatants aren't initally listed before
+    // Deliberately use end, as combatants aren't initially listed before
     // they've done any damage right when the fight starts.
     const combatant = {};
     for (const name in phaseEnd.Combatant) {

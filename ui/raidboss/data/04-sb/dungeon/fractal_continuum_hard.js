@@ -1,8 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Regexes from '../../../../../resources/regexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Regexes from '../../../../../resources/regexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheFractalContinuumHard,
@@ -27,7 +27,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2AE5', source: 'サーヴォ・ミノタウロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2AE5', source: '自控化弥诺陶洛斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2AE5', source: '자동제어 미노타우로스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'swipe',
@@ -47,7 +47,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '29A2', source: 'バイオ・ミノタウロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '29A2', source: '生化弥诺陶洛斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '29A2', source: '양산체 미노타우로스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'swipe',
@@ -67,7 +67,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '2AE4', source: 'サーヴォ・ミノタウロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '2AE4', source: '自控化弥诺陶洛斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '2AE4', source: '자동제어 미노타우로스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Swing',
@@ -87,7 +87,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '29A1', source: 'バイオ・ミノタウロス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '29A1', source: '生化弥诺陶洛斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '29A1', source: '양산체 미노타우로스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Swing',
@@ -107,7 +107,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '861', source: 'サーヴォ・キマイラ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '861', source: '自控化奇美拉', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '861', source: '자동제어 키마이라', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dragon\'s Voice',
@@ -127,7 +127,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '860', source: 'サーヴォ・キマイラ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '860', source: '自控化奇美拉', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '860', source: '자동제어 키마이라', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Ram\'s Voice',
@@ -147,7 +147,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '860', source: 'プロトキマイラ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '860', source: '原型奇美拉', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '860', source: '프로토 키마이라', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Ram\'s Voice',
@@ -204,7 +204,7 @@ export default {
       id: 'Fractal Hard Ratzon',
       netRegex: NetRegexes.headMarker({ id: '0046' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddle on YOU',
@@ -218,16 +218,14 @@ export default {
     {
       id: 'Fractal Hard Dischord Collect',
       netRegex: NetRegexes.headMarker({ id: ['004D', '004E'] }),
-      run: function(data, matches) {
-        data[matches.id] = matches.target;
-      },
+      run: (data, matches) => data[matches.id] = matches.target,
     },
     {
       id: 'Fractal Hard Dischord Resolve',
       netRegex: NetRegexes.headMarker({ id: ['004D', '004E'] }),
       condition: Conditions.targetIsYou(),
       delaySeconds: 0.5,
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         const partner = matches.id === '004D' ? '004E' : '004D';
         // If for some reason there is no partner, we get a vulnerability or bleed and are sad.
         if (!data[partner])
@@ -249,7 +247,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: ['004D', '004F'], capture: false }),
       delaySeconds: 2,
       suppressSeconds: 2,
-      run: function(data) {
+      run: (data) => {
         for (const el of ['004D', '004F'])
           delete data[el];
       },
@@ -269,7 +267,7 @@ export default {
       // it's better to just delay, since it's always a consistent 8 seconds
       // from the time effects are applied until the circles come up.
       delaySeconds: 8,
-      infoText: function(data, matches, output) {
+      infoText: (_data, matches, output) => {
         if (matches.effectId === '477')
           return output.standOnRedCircle();
 
@@ -354,6 +352,10 @@ export default {
         'This humanoid prototype can perfectly replicate': 'Als Referenz wurde die Kraft der Ikonen herangezogen',
         'Utilizing our data on Sophia': 'Nun folgt die Emulierung von Sophia',
         'Vocal Guidance System': 'Stimmleitsystem',
+        'Servomechanical Minotaur': 'servomechanisch(?:e|er|es|en) Minotaurus',
+        'Servomechanical Chimera': 'servomechanisch(?:e|er|es|en) Chimära',
+        'Proto-Chimera': 'Proto-Chimära',
+        'Biomanufactured Minotaur': 'Biotech-Minotaurus',
       },
       'replaceText': {
         'Aether Bend': 'Ätherbeugung',
@@ -394,6 +396,10 @@ export default {
         'This humanoid prototype can perfectly replicate': 'Ce modèle exceptionnel est basé sur les non moins exceptionnelles divinités guerrières',
         'Utilizing our data on Sophia': 'Quoi de mieux pour dominer les divinités guerrières que de retourner leur puissance contre elles?♪',
         'Vocal Guidance System': 'système de guidage vocal',
+        'Servomechanical Minotaur': 'minotaure servomécanique',
+        'Servomechanical Chimera': 'chimère servomécanique',
+        'Proto-Chimera': 'protochimère',
+        'Biomanufactured Minotaur': 'minotaure biologique',
       },
       'replaceText': {
         'Aether Bend': 'Diffraction éthérée',
@@ -434,6 +440,10 @@ export default {
         'This humanoid prototype can perfectly replicate': 'そこで考案されたのが、',
         'Utilizing our data on Sophia': '闘神の力を以て、闘神を征す♪',
         'Vocal Guidance System': '音声ガイダンス',
+        'Servomechanical Minotaur': 'サーヴォ・ミノタウロス',
+        'Servomechanical Chimera': 'サーヴォ・キマイラ',
+        'Proto-Chimera': 'プロトキマイラ',
+        'Biomanufactured Minotaur': 'バイオ・ミノタウロス',
       },
       'replaceText': {
         'Aether Bend': 'エーテルベント',
@@ -474,6 +484,10 @@ export default {
         'This humanoid prototype can perfectly replicate': '我们研究出了如何利用斗神力量的方法！',
         'Utilizing our data on Sophia': '利用斗神的力量去征服斗神！',
         'Vocal Guidance System': '语音向导',
+        'Servomechanical Minotaur': '自控化弥诺陶洛斯',
+        'Servomechanical Chimera': '自控化奇美拉',
+        'Proto-Chimera': '原型奇美拉',
+        'Biomanufactured Minotaur': '生化弥诺陶洛斯',
       },
       'replaceText': {
         'Aether Bend': '以太曲折',
@@ -514,6 +528,10 @@ export default {
         'This humanoid prototype can perfectly replicate': '그래서 투신의 힘을 이용하는',
         'Utilizing our data on Sophia': '투신의 힘으로 투신을 다스린다♪',
         'Vocal Guidance System': '음성 안내 시스템',
+        'Servomechanical Minotaur': '자동제어 미노타우로스',
+        'Servomechanical Chimera': '자동제어 키마이라',
+        'Proto-Chimera': '프로토 키마이라',
+        'Biomanufactured Minotaur': '양산체 미노타우로스',
       },
       'replaceText': {
         'Aether Bend': '에테르 굴절',

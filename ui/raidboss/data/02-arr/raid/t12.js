@@ -1,6 +1,6 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheFinalCoilOfBahamutTurn3,
@@ -25,13 +25,10 @@ export default {
       netRegexJa: NetRegexes.addedCombatant({ name: 'ベンヌ', capture: false }),
       netRegexCn: NetRegexes.addedCombatant({ name: '贝努鸟', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '벤누', capture: false }),
+      condition: (data) => data.phase <= 2,
       delaySeconds: 55,
       durationSeconds: 4.5,
-      infoText: (data, _, output) => {
-        if (data.phase >= 3)
-          return;
-        return output.text();
-      },
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bennu Soon',
@@ -64,7 +61,7 @@ export default {
           en: 'Away from ${player}',
           de: 'Weg von ${player}',
           fr: 'Éloignez-vous de ${player}',
-          ja: '${player}に離れ',
+          ja: '${player}から離れる',
           cn: '远离${player}',
           ko: '"${player}"에게서 멀어지기',
         },
@@ -86,7 +83,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: 'B8C', source: 'フェニックス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: 'B8C', source: '不死鸟', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: 'B8C', source: '피닉스', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Blackfire Spread',
@@ -102,7 +99,7 @@ export default {
       id: 'T12 Whitefire',
       netRegex: NetRegexes.headMarker({ id: '0020' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Whitefire on YOU',
@@ -118,13 +115,13 @@ export default {
       id: 'T12 Bluefire',
       netRegex: NetRegexes.headMarker({ id: '0021' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bluefire Away',
           de: 'Blaufeuer wegbringen',
           fr: 'Flamme bleue, éloignez-vous',
-          ja: '青碧の炎、離れ',
+          ja: '青碧の炎、離れる',
           cn: '蓝火远离',
           ko: '청벽의 불꽃 대상자',
         },
@@ -229,7 +226,7 @@ export default {
         'Flames Of Rebirth': '転生の炎',
         'Flames Of Unforgiveness': '煉獄の爆炎',
         'Fountain Of Fire': '霊泉の炎',
-        'Fountain Tick': '霊泉の炎: ',
+        'Fountain Tick ': '霊泉の炎: ',
         'Redfire Plume': '赤熱の炎柱',
         'Redfire(?! )': '紅蓮の炎',
         'Revelation': 'リヴァレーション',

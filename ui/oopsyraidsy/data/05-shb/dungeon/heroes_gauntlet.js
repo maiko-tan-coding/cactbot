@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: Berserker 2nd/3rd wild anguish should be shared with just a rock
 
@@ -30,9 +30,6 @@ export default {
     'THG Raging Slice 2': '520B', // Berserker line cleave
     'THG Wild Rage': '5203', // Berserker blue knockback puck
   },
-  damageFail: {
-    'THG Wild Rampage': '5207', // Berserker hide in a crater aoe
-  },
   shareWarn: {
     'THG Absolute Thunder IV': '5245', // headmarker aoe from blm
     'THG Moondiver': '5233', // headmarker aoe from drg
@@ -55,8 +52,17 @@ export default {
       // TODO: on the 2nd and 3rd time this should only be shared with a rock.
       // TODO: alternatively warn on taking one of these with a 472 Magic Vulnerability Up effect
       condition: (e) => e.type === '15',
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'warn', blame: matches.target, text: matches.ability };
+      },
+    },
+    {
+      id: 'THG Wild Rampage',
+      damageRegex: '5207',
+      // This is zero damage if you are in the crater.
+      condition: (e) => e.damage > 0,
+      mistake: (_e, _data, matches) => {
+        return { type: 'fail', blame: matches.target, text: matches.ability };
       },
     },
   ],

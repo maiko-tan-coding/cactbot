@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: Missing Growing tethers on boss 2.
 // (Maybe gather party member names on the previous TIIIIMBEEEEEER cast for comparison?)
@@ -24,21 +24,21 @@ export default {
     {
       id: 'Dohn Mheg Imp Choir',
       netRegex: NetRegexes.gainsEffect({ effectId: '46E' }),
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'warn', blame: matches.target, text: matches.effect };
       },
     },
     {
       id: 'Dohn Mheg Toad Choir',
       netRegex: NetRegexes.gainsEffect({ effectId: '1B7' }),
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'warn', blame: matches.target, text: matches.effect };
       },
     },
     {
       id: 'Dohn Mheg Fool\'s Tumble',
       netRegex: NetRegexes.gainsEffect({ effectId: '183' }),
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'warn', blame: matches.target, text: matches.effect };
       },
     },

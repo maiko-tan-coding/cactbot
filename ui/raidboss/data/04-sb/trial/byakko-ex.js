@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Byakko Extreme
 export default {
@@ -16,9 +16,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27DA', source: '白虎' }),
       netRegexCn: NetRegexes.startsUsing({ id: '27DA', source: '白虎' }),
       netRegexKo: NetRegexes.startsUsing({ id: '27DA', source: '백호' }),
-      condition: function(data, matches) {
-        return data.role === 'healer';
-      },
+      condition: (data) => data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -59,7 +57,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27DD', source: '白虎', target: '白虎', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '27DD', source: '白虎', target: '白虎', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27DD', source: '백호', target: '백호', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Distant Clap',
@@ -79,15 +77,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27E0', source: '白虎' }),
       netRegexCn: NetRegexes.startsUsing({ id: '27E0', source: '白虎' }),
       netRegexKo: NetRegexes.startsUsing({ id: '27E0', source: '백호' }),
-      condition: function(data, matches) {
-        return data.role === 'tank' && matches.target !== data.me;
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data, matches) => data.role === 'tank' && matches.target !== data.me,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Provoke Boss',
           de: 'Boss abspotten',
-          fr: 'Provoquez !',
+          fr: 'Provoquez le Boss !',
           ja: '挑発',
           cn: '挑衅',
           ko: '보스 도발',
@@ -102,11 +98,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27E0', source: '白虎' }),
       netRegexCn: NetRegexes.startsUsing({ id: '27E0', source: '白虎' }),
       netRegexKo: NetRegexes.startsUsing({ id: '27E0', source: '백호' }),
-      condition: function(data, matches) {
-        return data.role === 'tank' && matches.target === data.me;
-      },
+      condition: (data, matches) => data.role === 'tank' && matches.target === data.me,
       delaySeconds: 12,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Provoke Boss',
@@ -126,7 +120,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27F9', source: '白帝', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '27F9', source: '白帝', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27F9', source: '하얀 제왕', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.roarCount = data.roarCount || 0;
         data.roarCount += 1;
       },
@@ -140,7 +134,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '27F9', source: '白帝', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27F9', source: '하얀 제왕', capture: false }),
       delaySeconds: 14,
-      alarmText: function(data, _, output) {
+      alarmText: (data, _matches, output) => {
         if (data.roarCount !== 2)
           return;
 
@@ -162,7 +156,7 @@ export default {
       id: 'ByaEx Bubble',
       netRegex: NetRegexes.headMarker({ id: '0065' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drop bubble outside',
@@ -178,7 +172,7 @@ export default {
       id: 'ByaEx Ominous Wind',
       netRegex: NetRegexes.gainsEffect({ effectId: '5C9' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Pink bubble',
@@ -194,7 +188,7 @@ export default {
       id: 'ByaEx Puddle Marker',
       netRegex: NetRegexes.headMarker({ id: '0004' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddles on YOU',
@@ -210,13 +204,13 @@ export default {
       id: 'ByaEx G100',
       netRegex: NetRegexes.headMarker({ id: '0057' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get away',
           de: 'Weg da',
           fr: 'Éloignez-vous',
-          ja: '離れ',
+          ja: '離れる',
           cn: '远离',
           ko: '멀리가기',
         },
@@ -231,7 +225,7 @@ export default {
       netRegexJa: NetRegexes.dialog({ line: '[^:]*:駆けろ、我が半身ッ！歯向かう者どもに、牙と爪を突き立ててやれ！.*?', capture: false }),
       netRegexKo: NetRegexes.dialog({ line: '[^:]*:달려라! 나의 반신이여! 맞서는 자들에게 이빨과 발톱을 찔러넣어라!.*?', capture: false }),
       condition: (data) => data.role === 'tank',
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tiger Add',
@@ -251,7 +245,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27E2', source: '白虎', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '27E2', source: '白虎', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27E2', source: '백호', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.stakeCount = data.stakeCount || 0;
         data.stakeCount += 1;
       },
@@ -265,9 +259,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '27E2', source: '白虎', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27E2', source: '백호', capture: false }),
       delaySeconds: 20,
-      run: function(data) {
-        delete data.stakeCount;
-      },
+      run: (data) => delete data.stakeCount,
     },
     {
       id: 'ByaEx Highest Stakes',
@@ -277,9 +269,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '27E2', source: '白虎', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '27E2', source: '白虎', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '27E2', source: '백호', capture: false }),
-      infoText: function(data, _, output) {
-        return output.text({ num: data.stakeCount });
-      },
+      infoText: (data, _matches, output) => output.text({ num: data.stakeCount }),
       outputStrings: {
         text: {
           en: 'Stack #${num}',
@@ -321,10 +311,10 @@ export default {
         'TP Orbs': 'TP Orbs',
         'Tiger Cleave': 'Tiger Cleave',
         'Unrelenting Anguish': 'Pandämonium',
-        'leap middle': 'Sprung in die Mitte',
-        'leap north': 'Sprung nach Norden',
-        'tiger lands': 'Tiger landet',
-        'tiger untargetable': 'Tiger nicht anvisierbar',
+        '--leap middle--': '--Sprung in die Mitte--',
+        '--leap north--': '--Sprung nach Norden--',
+        '--tiger lands--': '--Tiger landet--',
+        '--tiger untargetable--': '--Tiger nicht anvisierbar--',
       },
     },
     {

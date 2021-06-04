@@ -1,8 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Outputs from '../../../../../resources/outputs.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: ageless serpent knockback
 // TODO: add tank lightning cleave stuff
@@ -18,12 +18,12 @@ import ZoneId from '../../../../../resources/zone_id.js';
 // burnout = burnt strike lightning out
 // shining blade = burnt strike light bait
 
-const boundOfFaithFireTetherResponse = (data, _, output) => {
+const boundOfFaithFireTetherResponse = (data, _matches, output) => {
   // cactbot-builtin-response
   output.responseOutputStrings = {
     stackOnYou: Outputs.stackOnYou,
     stackOnPlayer: Outputs.stackOnPlayer,
-    unknownTarget: Outputs.unknownTarget,
+    unknownTarget: Outputs.unknown,
   };
 
   const targets = Object.keys(data.tethers || {});
@@ -34,7 +34,7 @@ const boundOfFaithFireTetherResponse = (data, _, output) => {
   return { alertText: output.stackOnPlayer({ player: data.ShortName(targets[0]) }) };
 };
 
-const boundOfFaithLightningTetherResponse = (data, _, output) => {
+const boundOfFaithLightningTetherResponse = (data, _matches, output) => {
   // cactbot-builtin-response
   output.responseOutputStrings = {
     onYou: {
@@ -53,7 +53,7 @@ const boundOfFaithLightningTetherResponse = (data, _, output) => {
       cn: '雷点${player}',
       ko: '"${player}" 번개징 대상자',
     },
-    unknownTarget: Outputs.unknownTarget,
+    unknownTarget: Outputs.unknown,
   };
 
   const targets = Object.keys(data.tethers || {});
@@ -64,12 +64,12 @@ const boundOfFaithLightningTetherResponse = (data, _, output) => {
   return { infoText: output.tetherInfo({ player: target }) };
 };
 
-const boundOfFaithHolyTetherResponse = (data, _, output) => {
+const boundOfFaithHolyTetherResponse = (data, _matches, output) => {
   // cactbot-builtin-response
   output.responseOutputStrings = {
     awayFromGroup: Outputs.awayFromGroup,
     awayFromPlayer: Outputs.awayFromPlayer,
-    unknownTarget: Outputs.unknownTarget,
+    unknownTarget: Outputs.unknown,
   };
 
   const targets = Object.keys(data.tethers || {});
@@ -90,7 +90,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5663', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5663', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5663', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5663', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5663', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Partner Stacks',
@@ -108,7 +110,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5666', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5666', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5666', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5666', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5666', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Spread',
@@ -126,7 +130,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5668', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5668', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5668', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5668', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5668', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Holy Groups',
@@ -144,7 +150,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5652', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5652', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5652', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5652', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5652', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Line Cleave -> Knockback',
@@ -162,7 +170,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5654', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5654', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5654', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5654', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5654', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Line Cleave -> Out',
@@ -180,12 +190,14 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5656', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5656', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5656', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5656', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5656', capture: false }),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Line Cleave + Bait',
           de: 'Linien AoE -> Ködern',
-          fr: 'AoE en ligne + Attirez',
+          fr: 'AoE en ligne -> Déposez au sol',
           ja: '直線範囲 -> AoE誘導',
           cn: '直线 -> 放光点名',
           ko: '직선 장판 + 장판 유도',
@@ -212,6 +224,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5658', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5658', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5658', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5658', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5658', capture: false }),
       response: boundOfFaithFireTetherResponse,
     },
     {
@@ -220,6 +234,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '565B', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '565B', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '565B', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '565B', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '565B', capture: false }),
       response: boundOfFaithLightningTetherResponse,
     },
     {
@@ -228,6 +244,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '565F', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '565F', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '565F', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '565F', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '565F', capture: false }),
       response: boundOfFaithHolyTetherResponse,
     },
     {
@@ -240,6 +258,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Abbild Des Fusionierten Ascians', id: '5682' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Double Du Sabreur De Destins', id: '5682' }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカーの幻影', id: '5682' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士的幻影', id: '5682' }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커의 환영', id: '5682' }),
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -309,6 +329,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Abbild Des Fusionierten Ascians', id: '5BC5' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Double Du Sabreur De Destins', id: '5BC5' }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカーの幻影', id: '5BC5' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士的幻影', id: '5BC5' }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커의 환영', id: '5BC5' }),
       response: (data, matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
@@ -371,6 +393,9 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '56A4', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '56A4', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '56A4', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '56A4', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '56A4', capture: false }),
+
 
       condition: Conditions.caresAboutAOE(),
       response: Responses.bigAoe(),
@@ -381,6 +406,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '56A2' }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '56A2' }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '56A2' }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '56A2' }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '56A2' }),
       condition: Conditions.caresAboutMagical(),
       response: Responses.tankBusterSwap(),
     },
@@ -390,9 +417,12 @@ export default {
       netRegexDe: NetRegexes.gainsEffect({ source: 'Fusioniert(?:e|er|es|en) Ascian', effectId: '993' }),
       netRegexFr: NetRegexes.gainsEffect({ source: 'Sabreur De Destins', effectId: '993' }),
       netRegexJa: NetRegexes.gainsEffect({ source: 'フェイトブレイカー', effectId: '993' }),
+      netRegexCn: NetRegexes.gainsEffect({ source: '绝命战士', effectId: '993' }),
+      netRegexKo: NetRegexes.gainsEffect({ source: '페이트브레이커', effectId: '993' }),
+
       condition: Conditions.targetIsYou(),
-      delaySeconds: (data, matches) => parseFloat(matches.duration) - 4,
-      alertText: (data, _, output) => output.awayFromGroup(),
+      delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
+      alertText: (_data, _matches, output) => output.awayFromGroup(),
       outputStrings: {
         awayFromGroup: Outputs.awayFromGroup,
       },
@@ -403,8 +433,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '566A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '566A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '566A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '566A', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '566A', capture: false }),
       durationSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
@@ -422,8 +454,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '566B', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '566B', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '566B', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '566B', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '566B', capture: false }),
       durationSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
@@ -441,8 +475,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5675', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5675', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5675', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5675', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5675', capture: false }),
       durationSeconds: 17,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
@@ -460,8 +496,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5676', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5676', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5676', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5676', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5676', capture: false }),
       durationSeconds: 17,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
@@ -479,8 +517,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '566E', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '566E', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '566E', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '566E', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '566E', capture: false }),
       durationSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fire: Go to Blue',
@@ -498,8 +538,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '566F', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '566F', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '566F', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '566F', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '566F', capture: false }),
       durationSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Lightning: Go to Red',
@@ -507,7 +549,7 @@ export default {
           fr: 'Éclair : Allez sur le Rouge',
           ja: '雷: 安置は赤',
           cn: '雷：去红门',
-          ko: '화염: 빨강으로',
+          ko: '번개: 빨강으로',
         },
       },
     },
@@ -517,8 +559,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5677', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5677', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5677', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5677', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5677', capture: false }),
       durationSeconds: 16,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Fire: Knockback To Red -> Go Blue',
@@ -536,8 +580,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5678', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5678', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5678', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5678', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5678', capture: false }),
       durationSeconds: 16,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Lightning: Knockback To Blue -> Go Red',
@@ -555,8 +601,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '568A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '568A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '568A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '568A', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '568A', capture: false }),
       durationSeconds: 12,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Partner Stacks -> Line Cleave -> Knockback -> Stack',
@@ -574,6 +622,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '568A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '568A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '568A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '568A', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '568A', capture: false }),
       delaySeconds: 16.5,
       response: boundOfFaithFireTetherResponse,
     },
@@ -583,8 +633,10 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5692', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5692', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5692', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5692', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5692', capture: false }),
       durationSeconds: 12,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Spread -> Line Cleave -> Out -> Tank Cleaves',
@@ -602,6 +654,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '5692', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '5692', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '5692', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '5692', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '5692', capture: false }),
       delaySeconds: 16.5,
       response: boundOfFaithLightningTetherResponse,
     },
@@ -611,13 +665,15 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '569A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '569A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '569A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '569A', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '569A', capture: false }),
       durationSeconds: 12,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Protean -> Holy Groups -> Line Cleave -> Bait -> Away',
           de: 'Himmelsrichtung -> Sanctus Gruppen -> Linien AoE -> Ködern -> Weg',
-          fr: 'Position -> Groupes -> AoE en ligne -> Attirez -> Éloignez-vous',
+          fr: 'Position -> Groupes -> AoE en ligne -> Déposez au sol -> Éloignez-vous',
           ja: '8方向散開 -> 3方向頭割り -> 直線範囲 -> AoE誘導 -> 離れる',
           cn: '八方 -> 光三向分摊 -> 直线 -> 放光点名 -> 离开',
           ko: '8산개 -> 홀리 그룹 쉐어 -> 직선 장판 -> 장판 유도 -> 피하기',
@@ -630,6 +686,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ source: 'Fusioniert(?:e|er|es|en) Ascian', id: '569A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Sabreur De Destins', id: '569A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: 'フェイトブレイカー', id: '569A', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ source: '绝命战士', id: '569A', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ source: '페이트브레이커', id: '569A', capture: false }),
       delaySeconds: 16.5,
       response: boundOfFaithHolyTetherResponse,
     },
@@ -655,7 +713,6 @@ export default {
         'Burnout': 'Brandentladung',
         'Burnt Strike': 'Brandschlag',
         'Cycle Of Faith': 'Mehrfache Vergeltung',
-        'Cycle of Faith': 'Mehrfache Vergeltung',
         'Elemental Break': 'Elementarbruch',
         'Floating Fetters': 'Schwebende Fesseln',
         'Mortal Burn Mark': 'Brandmal der Sterblichen',
@@ -695,7 +752,6 @@ export default {
         'Burnout': 'Combustion totale',
         'Burnt Strike': 'Frappe brûlante',
         'Cycle Of Faith': 'Multi-taillade magique',
-        'Cycle of Faith': 'Multi-taillade magique',
         'Elemental Break': 'Rupture élémentaire',
         'Floating Fetters': 'Entraves flottantes',
         'Mortal Burn Mark': 'Marque de conflagration',
@@ -734,7 +790,6 @@ export default {
         'Burnout': 'バーンアウト',
         'Burnt Strike': 'バーンストライク',
         'Cycle Of Faith': '魔装連続剣',
-        'Cycle of Faith': '魔装連続剣',
         'Elemental Break': 'エレメンタルブレイク',
         'Floating Fetters': '浮遊拘束',
         'Mortal Burn Mark': '大爆印',
@@ -751,6 +806,82 @@ export default {
         'Solemn Charge': 'チャージスラスト',
         'Sundered Sky': '堕獄絶技',
         'Turn Of The Heavens': '転輪召',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Demi-Gukumatz': '亚灵羽蛇',
+        'Fatebreaker\'s image': '绝命战士的幻影',
+        'Fatebreaker(?!\'s image)': '绝命战士',
+        'Halo of Flame': '焰之光轮',
+      },
+      'replaceText': {
+        'Ageless Serpent': '龙头龙尾',
+        'Blastburn': '火燃爆',
+        'Blasting Zone': '爆破领域',
+        'Bound Of Faith': '罪壤刺',
+        'Bow Shock': '弓形冲波',
+        'Brightfire': '光炎',
+        '(?<!Mortal )Burn Mark': '爆印',
+        'Burnished Glory': '光焰圆光',
+        'Burnout': '雷燃爆',
+        'Burnt Strike': '燃烧击',
+        'Cycle Of Faith': '魔装连续剑',
+        'Elemental Break': '元素破',
+        'Floating Fetters': '浮游拘束',
+        'Mortal Burn Mark': '大爆印',
+        'Powder Mark': '爆印铭刻',
+        'Prismatic Deception': '棱光幻影',
+        'Resonant Winds': '魔旋风',
+        'Resounding Crack': '魔乱流',
+        'Right Of The Heavens': '四天召唤',
+        'Shifting Sky': '至天绝技',
+        'Shining Blade': '光明之刃',
+        'Sinsight': '罪光',
+        'Sinsmite': '罪雷',
+        'Sinsmoke': '罪炎',
+        'Solemn Charge': '急冲刺',
+        'Sundered Sky': '堕狱绝技',
+        'Turn Of The Heavens': '光轮召唤',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Demi-Gukumatz': '데미구쿠마츠',
+        'Fatebreaker\'s image': '페이트브레이커의 환영',
+        'Fatebreaker(?!\'s image)': '페이트브레이커',
+        'Halo of Flame': '화염 빛무리',
+      },
+      'replaceText': {
+        'Ageless Serpent': '용두용미',
+        'Blastburn': '연소 폭발',
+        'Blasting Zone': '발파 지대',
+        'Bound Of Faith': '죄의 소일 일격',
+        'Bow Shock': '원형충격파',
+        'Brightfire': '광염',
+        '(?<!Mortal )Burn Mark': '폭인',
+        'Burnished Glory': '광염광배',
+        'Burnout': '완전 연소',
+        'Burnt Strike': '연소 공격',
+        'Cycle Of Faith': '마장 연속검',
+        'Elemental Break': '원소 파괴',
+        'Floating Fetters': '부유 구속',
+        'Mortal Burn Mark': '대폭인',
+        'Powder Mark': '폭인각',
+        'Prismatic Deception': '분광 은신',
+        'Resonant Winds': '마선풍',
+        'Resounding Crack': '마난류',
+        'Right Of The Heavens': '사천 소환',
+        'Shifting Sky': '지천절기',
+        'Shining Blade': '빛나는 칼날',
+        'Sinsight': '죄의 빛',
+        'Sinsmite': '죄의 번개',
+        'Sinsmoke': '죄의 화염',
+        'Solemn Charge': '돌진격',
+        'Sundered Sky': '타옥절기',
+        'Turn Of The Heavens': '빛무리 소환',
       },
     },
   ],

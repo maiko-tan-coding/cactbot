@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: some sort of warning about extra tank damage during bow phase?
 // TODO: should the post-staff "spread" happen unconditionally prior to marker?
@@ -23,7 +23,7 @@ export default {
       id: 'ShivaEx Icebrand',
       regex: /Icebrand/,
       beforeSeconds: 5,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Party Share Tankbuster',
@@ -52,7 +52,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'シヴァ', id: '995', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '시바', id: '995', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '希瓦', id: '995', capture: false }),
-      response: (data, _, output) => {
+      response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           staffTankSwap: {
@@ -90,7 +90,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'シヴァ', id: '993', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '시바', id: '993', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '希瓦', id: '993', capture: false }),
-      response: (data, _, output) => {
+      response: (data, _matches, output) => {
         // cactbot-builtin-response
         output.responseOutputStrings = {
           swordTankSwap: {
@@ -186,7 +186,7 @@ export default {
     {
       id: 'ShivaEx Whiteout',
       netRegex: NetRegexes.startsUsing({ id: 'BEC', capture: false }),
-      response: Responses.getIn('alert'),
+      response: Responses.getIn(),
     },
     {
       id: 'ShivaEx Diamond Dust',
@@ -217,7 +217,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '001A' }),
       condition: Conditions.targetIsYou(),
       // Responses.knockback does not quite give the 'laser cleave' aspect here.
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Knockback Laser on YOU',
@@ -233,13 +233,13 @@ export default {
       id: 'ShivaEx Avalanche Marker Other',
       netRegex: NetRegexes.headMarker({ id: '001A' }),
       condition: Conditions.targetIsNotYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Laser',
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
-          ja: 'アバランチに避け',
+          ja: 'アバランチを避ける',
           cn: '躲避击退激光',
           ko: '레이저 피하기',
         },
@@ -298,7 +298,6 @@ export default {
       'replaceText': {
         '\\(circle\\)': '(Kreis)',
         '\\(cross\\)': '(Kreuz)',
-        '--frozen--': '--eingefroren--',
         'Absolute Zero': 'Absoluter Nullpunkt',
         'Avalanche': 'Lawine',
         'Diamond Dust': 'Diamantenstaub',
@@ -327,7 +326,6 @@ export default {
         '\\?': ' ?',
         '\\(circle\\)': '(cercle)',
         '\\(cross\\)': '(croix)',
-        '--frozen--': '--gelé--',
         'Absolute Zero': 'Zéro absolu',
         'Avalanche': 'Avalanche',
         'Diamond Dust': 'Poussière de diamant',
@@ -356,7 +354,6 @@ export default {
         '\\?': ' ?',
         '\\(circle\\)': '(輪)',
         '\\(cross\\)': '(十字)',
-        '--frozen--': '--凍結--',
         'Absolute Zero': '絶対零度',
         'Avalanche': 'アバランチ',
         'Diamond Dust': 'ダイアモンドダスト',
@@ -384,7 +381,6 @@ export default {
       'replaceText': {
         '\\(circle\\)': '(圆)',
         '\\(cross\\)': '(十字)',
-        '--frozen--': '--冻结--',
         'Absolute Zero': '绝对零度',
         'Avalanche': '雪崩',
         'Diamond Dust': '钻石星尘',
@@ -412,7 +408,6 @@ export default {
       'replaceText': {
         '\\(circle\\)': '(원형)',
         '\\(cross\\)': '(십자)',
-        '--frozen--': '--동결--',
         'Absolute Zero': '절대영도',
         'Avalanche': '눈사태',
         'Diamond Dust': '다이아몬드 더스트',

@@ -177,8 +177,12 @@ namespace Cactbot {
       var initDone = false;
 
       var configFile = "ui/config/config.html";
+      var distFolder = "dist/";
       var dir = new VersionChecker(this).GetCactbotDirectory();
-      var url = Path.GetFullPath(Path.Combine(dir, configFile));
+      var url = Path.GetFullPath(Path.Combine(dir, distFolder, configFile));
+      // Attempt to use the local webpack override, otherwise fall back to default path
+      if (!File.Exists(url))
+        url = Path.GetFullPath(Path.Combine(dir, configFile));
 
       control.VisibleChanged += (o, e) => {
         if (initDone)
@@ -345,7 +349,7 @@ namespace Cactbot {
       //   OverlayPluginApi is usually injected after the overlay is done loading while an overlay that's reloaded or
       //   loaded later on will see the OverlayPluginApi before the page has loaded.
       // * The overlay JavaScript sets up the initial event handlers and calls the cactbotLoadUser handler through
-      //   getUserConfigLocation. These actions are queued by the JS implementation in common.js until OverlayPluginApi
+      //   getUserConfigLocation. These actions are queued by the JS implementation in overlay_plugin_api.js until OverlayPluginApi
       //   (or the WebSocket) is available. Once it is, the event subscriptions and handler calls are transmitted.
       // * OverlayPlugin stores the event subscriptions and executes the C# handlers which in this case means
       //   FetchUserFiles is called. That method loads the user files and returns them. The result is now transmitted
@@ -481,7 +485,13 @@ namespace Cactbot {
       // There's also a win api function we could call, but that's a bit gross.
       // However, this is an easy case where filename is known to be rooted in top_dir,
       // so use this hacky solution for now.  Hi, ngld.
-      return filename.Replace(top_dir, "");
+      string initial = filename;
+      filename = filename.Replace(top_dir, "");
+      // top_dir may or may not have a trailing slash, so remove that as well.
+      // user_config.js expects filenames to not have a beginning slash.
+      while (filename[0] == '\\' || filename[0] == '/')
+        filename = filename.Substring(1);
+      return filename;
     }
 
     private Dictionary<string, string> GetLocalUserFiles(string config_dir, string overlay_name) {

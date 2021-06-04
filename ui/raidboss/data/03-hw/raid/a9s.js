@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AlexanderTheEyesOfTheCreatorSavage,
@@ -17,7 +17,7 @@ export default {
     {
       id: 'A9S Power Generator',
       regex: /Power Generator/,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         return {
           1: output.oneEachNWSE(),
           2: output.twoNW(),
@@ -68,7 +68,7 @@ export default {
       id: 'A9S Alarum',
       regex: /Alarum/,
       delaySeconds: 1,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         return {
           5: output.southeast(),
           6: output.southwest(),
@@ -101,7 +101,7 @@ export default {
       id: 'A9S Bomb Explosion',
       regex: /Explosion/,
       beforeSeconds: 7,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bombs Soon',
@@ -123,7 +123,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'リファビッシャー', id: '1A38', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '废品翻新装置', id: '1A38', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '재생자', id: '1A38', capture: false }),
-      run: function(data) {
+      run: (data) => {
         data.stockpileCount = data.stockpileCount || 0;
         data.stockpileCount++;
       },
@@ -136,12 +136,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'リファビッシャー', id: '1A3C', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '废品翻新装置', id: '1A3C', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '재생자', id: '1A3C', capture: false }),
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.mainTank === data.me)
           return;
         return output.getBehind();
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.mainTank !== data.me)
           return;
         return output.scraplineOnYou();
@@ -173,12 +173,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'リファビッシャー', id: '1A3D', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '废品翻新装置', id: '1A3D', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '재생자', id: '1A3D', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in Alarum Puddle',
           de: 'In Alarm Fläche stehen',
-          fr: 'Tenez-vous dans la zone de l\'Alarum',
+          fr: 'Placez-vous dans la zone de l\'Alarum',
           ja: '紫色の沼に入る',
           cn: '站进紫色圈圈',
           ko: '경보기 장판 밟기',
@@ -189,7 +189,7 @@ export default {
       id: 'A9S Scrap Rock',
       netRegex: NetRegexes.headMarker({ id: '0017' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Rock on YOU',
@@ -206,7 +206,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '0017', capture: false }),
       delaySeconds: 5,
       suppressSeconds: 1,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Hide Fully Behind Rock',
@@ -239,16 +239,14 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'リファビッシャー', id: '1AFE' }),
       netRegexCn: NetRegexes.ability({ source: '废品翻新装置', id: '1AFE' }),
       netRegexKo: NetRegexes.ability({ source: '재생자', id: '1AFE' }),
-      run: function(data, matches) {
-        data.mainTank = matches.target;
-      },
+      run: (data, matches) => data.mainTank = matches.target,
     },
     {
       id: 'A9S Power Generator Add Tether',
       netRegex: NetRegexes.tether({ id: '0011', capture: false }),
 
       suppressSeconds: 30,
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         // Some of the last phases have multiple options.
         // This is an old fight, so just pick one for people.
         return {
@@ -267,7 +265,7 @@ export default {
           en: 'Adds to NE Lava',
           de: 'Adds in NO Lava',
           fr: 'Adds dans la lave NE',
-          ja: '北東にパワージェネレーターを倒す',
+          ja: '北東でパワージェネレーターを倒す',
           cn: '拉小怪到东北击杀',
           ko: '쫄을 북동쪽 용암으로',
         },
@@ -275,7 +273,7 @@ export default {
           en: 'Adds to SE Lava',
           de: 'Adds in SO Lava',
           fr: 'Adds dans la lave SE',
-          ja: '南東にパワージェネレーターを倒す',
+          ja: '南東でパワージェネレーターを倒す',
           cn: '拉小怪到东南击杀',
           ko: '쫄을 남동쪽 용암으로',
         },
@@ -283,7 +281,7 @@ export default {
           en: 'Adds to SW Lava',
           de: 'Adds in SW Lava',
           fr: 'Adds dans la lave SO',
-          ja: '南西にパワージェネレーターを倒す',
+          ja: '南西でパワージェネレーターを倒す',
           cn: '拉小怪到西南击杀',
           ko: '쫄을 남서쪽 용암으로',
         },
@@ -291,7 +289,7 @@ export default {
           en: 'Adds to NW Lava',
           de: 'Adds in NW Lava',
           fr: 'Adds dans la lave NO',
-          ja: '北西にパワージェネレーターを倒す',
+          ja: '北西でパワージェネレーターを倒す',
           cn: '拉小怪到西北击杀',
           ko: '쫄을 북서쪽 용암으로',
         },
@@ -344,6 +342,10 @@ export default {
         'The Cranial Plate': 'pont nasal',
       },
       'replaceText': {
+        '\\(NE/SW\\)': '(NE/SO)',
+        '\\(NW\\)': '(NO)',
+        '\\(NW/SE\\)': '(NO/SE)',
+        '\\(SW\\)': '(SO)',
         '(?<!Double )Scrapline': 'Corde à ferraille',
         '(?<!Scrap )Bomb(?!e)': 'Bombe',
         '--rocks fall--': '--chute des rochers--',
@@ -383,6 +385,7 @@ export default {
         'Acid Rain': '酸性雨',
         'Alarum': 'アラーム',
         '(?<!Scrap )Bomb': '爆弾',
+        'Double Scrapline': 'ダブルラリアット',
         'Explosion': '爆発',
         'Full-Metal Faust Add': '雑魚: フルアーマー・ファウスト',
         'Heat Shielding Reassembly': '装甲再生',
@@ -396,7 +399,8 @@ export default {
         'Scrap Bomb': 'スクラップボム',
         'Scrap Burst': 'スクラップバースト',
         'Scrap Storm': 'スクラップストーム',
-        'Scrap(?! )': 'スクラップパンチ',
+        'Scrap(?! |line)': 'スクラップパンチ',
+        '(?<! )Scrapline': 'スクラップラリアット',
         'Stockpile': '吸収',
       },
     },

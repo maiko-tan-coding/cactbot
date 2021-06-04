@@ -1,6 +1,6 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O11N - Alphascape 3.0
 export default {
@@ -11,10 +11,8 @@ export default {
       id: 'O11N Blaster',
       regex: /Blaster/,
       beforeSeconds: 3,
-      condition: function(data) {
-        return data.role === 'tank';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tank Tether',
@@ -54,9 +52,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '328[13]', source: '欧米茄', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '328[13]', source: '오메가', capture: false }),
       delaySeconds: 15,
-      run: function(data) {
-        delete data.lastWasStarboard;
-      },
+      run: (data) => delete data.lastWasStarboard,
     },
     {
       id: 'O11N Starboard Cannon 1',
@@ -66,13 +62,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '328[12]', source: 'オメガ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '328[12]', source: '欧米茄', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '328[12]', source: '오메가', capture: false }),
-      condition: function(data) {
-        return data.lastWasStarboard === undefined;
-      },
+      condition: (data) => data.lastWasStarboard === undefined,
       response: Responses.goLeft(),
-      run: function(data) {
-        data.lastWasStarboard = true;
-      },
+      run: (data) => data.lastWasStarboard = true,
     },
     {
       id: 'O11N Larboard Cannon 1',
@@ -82,13 +74,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '328[34]', source: 'オメガ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '328[34]', source: '欧米茄', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '328[34]', source: '오메가', capture: false }),
-      condition: function(data) {
-        return data.lastWasStarboard === undefined;
-      },
+      condition: (data) => data.lastWasStarboard === undefined,
       response: Responses.goRight(),
-      run: function(data) {
-        data.lastWasStarboard = false;
-      },
+      run: (data) => data.lastWasStarboard = false,
     },
     {
       id: 'O11N Starboard Cannon 2',
@@ -98,10 +86,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3282', source: 'オメガ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3282', source: '欧米茄', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3282', source: '오메가', capture: false }),
-      condition: function(data) {
-        return data.lastWasStarboard !== undefined;
-      },
-      alertText: function(data, _, output) {
+      condition: (data) => data.lastWasStarboard !== undefined,
+      alertText: (data, _matches, output) => {
         if (data.lastWasStarboard)
           return output.moveLeft();
 
@@ -134,10 +120,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3284', source: 'オメガ', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3284', source: '欧米茄', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3284', source: '오메가', capture: false }),
-      condition: function(data) {
-        return data.lastWasStarboard !== undefined;
-      },
-      alertText: function(data, _, output) {
+      condition: (data) => data.lastWasStarboard !== undefined,
+      alertText: (data, _matches, output) => {
         if (data.lastWasStarboard)
           return output.stayRight();
 

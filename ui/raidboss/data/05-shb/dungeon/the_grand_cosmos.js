@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheGrandCosmos,
@@ -15,9 +15,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4769', source: '宮殿の隠者' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4769', source: '宫殿的隐者' }),
       netRegexKo: NetRegexes.startsUsing({ id: '4769', source: '궁전의 은자' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -51,13 +49,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '476B', source: '宫殿的隐者', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '476B', source: '궁전의 은자', capture: false }),
       delaySeconds: 8,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Brooms',
           de: 'Besen ausweichen',
           fr: 'Évitez les balais',
-          ja: 'ほうきを避け',
+          ja: 'ほうきを避ける',
           cn: '躲扫把',
           ko: '빗자루 피하기',
         },
@@ -105,7 +103,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '471E', source: 'リャナンシー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '471E', source: '凉南希', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '471E', source: '랴난시', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'put seeds on dirt',
@@ -125,9 +123,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '4931', source: '幻影騎士ハモンス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '4931', source: '幻影骑士哈蒙斯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '4931', source: '환영기사 하몬스' }),
-      condition: function(data) {
-        return data.CanStun();
-      },
+      condition: (data) => data.CanStun(),
       response: Responses.stun('info'),
     },
     {
@@ -162,13 +158,13 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '0019' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: 4,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dodge Crosses',
           de: 'Den Kreuzen ausweichen',
           fr: 'Esquivez les croix',
-          ja: '十字を避け',
+          ja: '十字を避ける',
           cn: '躲避交叉',
           ko: '십자 장판 피하기',
         },
@@ -185,7 +181,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '00C3' }),
       condition: Conditions.targetIsYou(),
       delaySeconds: 5.5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Touch Furniture',
@@ -221,10 +217,10 @@ export default {
       id: 'Cosmos Fire\'s Domain',
       netRegex: NetRegexes.headMarker({ id: '003[2345]' }),
       condition: Conditions.targetIsYou(),
-      preRun: function(data) {
+      preRun: (data) => {
         data.firesDomain = (data.firesDomain || 0) + 1;
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.firesDomain === 1)
           return output.pointTetherAwayFromFurniture();
 
@@ -235,7 +231,7 @@ export default {
           en: 'Point Tether Away From Furniture',
           de: 'Verbindung weg von der Einrichtung zeigen',
           fr: 'Pointez le lien éloigné des meubles',
-          ja: '調度品を当たらないように',
+          ja: '調度品に当たらないように',
           cn: '连线不要打到家具',
           ko: '징: 장판이 가구에 닿지 않게 하기',
         },
@@ -254,6 +250,8 @@ export default {
     {
       'locale': 'de',
       'replaceSync': {
+        'Ser Hamonth': 'Sir Hamonth',
+        'Lover\'s Ring': 'Keim Des Geliebten',
         'Enslaved Love': 'versklavt(?:e|er|es|en) Liebhaber',
         'Leannan Sith': 'Leanan Sidhe',
         'Lugus': 'Lugus',
@@ -291,6 +289,8 @@ export default {
     {
       'locale': 'fr',
       'replaceSync': {
+        'Ser Hamonth': 'Sire Hamonth',
+        'Lover\'s Ring': 'Bague De L\'Amoureux',
         'Enslaved Love': 'Amour Asservi',
         'Leannan Sith': 'Leannan Sith',
         'Lugus': 'Lugus',
@@ -328,6 +328,8 @@ export default {
     {
       'locale': 'ja',
       'replaceSync': {
+        'Ser Hamonth': '幻影騎士ハモンス',
+        'Lover\'s Ring': 'ラヴァーズリング',
         'Enslaved Love': 'エンスレイブド・ラヴ',
         'Leannan Sith': 'リャナンシー',
         'Lugus': 'ルゴス',
@@ -365,6 +367,8 @@ export default {
     {
       'locale': 'cn',
       'replaceSync': {
+        'Ser Hamonth': '幻影骑士哈蒙斯',
+        'Lover\'s Ring': '恋人之戒',
         'Enslaved Love': '被奴役的爱',
         'Leannan Sith': '凉南希',
         'Lugus': '卢格斯',
@@ -402,6 +406,8 @@ export default {
     {
       'locale': 'ko',
       'replaceSync': {
+        'Ser Hamonth': '환영기사 하몬스',
+        'Lover\'s Ring': '연인의 반지',
         'Enslaved Love': '예속된 사랑',
         'Leannan Sith': '랴난시',
         'Lugus': '루구스',

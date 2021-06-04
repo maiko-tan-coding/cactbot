@@ -1,55 +1,61 @@
+import { callOverlayHandler, addOverlayListener, removeOverlayListener, setCallOverlayHandlerOverride } from '../../../../resources/overlay_plugin_api';
+
 export default class RaidEmulatorOverlayApiHook {
   constructor(emulator) {
     this.emulator = emulator;
-    this.originalDispatch = window.dispatchOverlayEvent;
-    this.originalAdd = window.addOverlayListener;
-    this.originalRemove = window.removeOverlayListener;
-    this.originalCall = window.callOverlayHandler;
-    this.timestampOffset = 0;
+    this.originalCall = setCallOverlayHandlerOverride(this.call.bind(this));
+    this.currentLogTime = 0;
 
-    window.dispatchOverlayEvent = this.dispatch.bind(this);
-    window.addOverlayListener = this.add.bind(this);
-    window.removeOverlayListener = this.remove.bind(this);
-    window.callOverlayHandler = this.call.bind(this);
-
-    emulator.on('tick', (timestampOffset) => {
-      this.timestampOffset = timestampOffset;
+    emulator.on('tick', (currentLogTime) => {
+      this.currentLogTime = currentLogTime;
     });
-    emulator.on('preSeek currentEncounterChanged', (timestampOffset) => {
-      this.timestampOffset = 0;
+    emulator.on('preSeek', (currentLogTime) => {
+      this.currentLogTime = 0;
     });
-  }
-
-  dispatch(msg) {
-    return this.originalDispatch(msg);
-  }
-
-  add(event, cb) {
-    return this.originalAdd(event, cb);
-  }
-
-  remove(event, cb) {
-    return this.originalRemove(event, cb);
+    emulator.on('preCurrentEncounterChanged', (encounter) => {
+      this.currentLogTime = 0;
+      encounter.on('analyzeLine', (log) => {
+        this.currentLogTime = log.timestamp;
+      });
+    });
   }
 
   call(msg) {
     if (msg.call === 'getCombatants') {
+      const tracker = this.emulator.currentEncounter.encounter.combatantTracker;
+      const timestamp = this.currentLogTime;
       return new Promise((res) => {
         const combatants = [];
-        const tracker = this.emulator.currentEncounter.encounter.combatantTracker;
-        const timestamp = this.emulator.currentEncounter.encounter.startTimestamp +
-          this.timestampOffset;
+        const hasIds = msg.ids !== undefined && msg.ids.length > 0;
+        const hasNames = msg.names !== undefined && msg.names.length > 0;
 
-        for (const id in tracker.combatants) {
-          const combatant = tracker.combatants[id];
+        for (const [id, combatant] of Object.entries(tracker.combatants)) {
           // nextSignificantState is a bit inefficient but given that this isn't run every tick
           // we can afford to be a bit inefficient for readability's sake
-          const combatantState = combatant.nextSignificantState(timestamp);
-          if (msg.ids && msg.ids.includes(id))
+          const combatantState = {
+            ID: combatant.id,
+            Name: combatant.name,
+            Level: combatant.level,
+            Job: combatant.job,
+            ...combatant.nextSignificantState(timestamp).toPluginState(),
+          };
+          if (!hasIds && !hasNames)
             combatants.push(combatantState);
-          else if (msg.names && msg.names.includes(tracker.combatants[id].name))
+          else if (hasIds && msg.ids.includes(parseInt(id, 16)))
+            combatants.push(combatantState);
+          else if (hasNames && msg.names.includes(tracker.combatants[id].name))
             combatants.push(combatantState);
         }
+        // @TODO: Move this to track properly on the Combatant object
+        combatants.forEach((c) => {
+          const lines = this.emulator.currentEncounter.encounter.logLines
+            .filter((l) => l.decEvent === 3 && l.id === c.ID);
+          if (lines.length > 0) {
+            c.OwnerID = parseInt(lines[0].ownerId);
+            c.BNpcNameID = parseInt(lines[0].npcNameId);
+            c.BNpcID = parseInt(lines[0].npcBaseId);
+          }
+        });
         res({
           combatants: combatants,
         });

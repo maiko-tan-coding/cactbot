@@ -1,8 +1,9 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Regexes from '../../../../../resources/regexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Regexes from '../../../../../resources/regexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
+import Outputs from '../../../../../resources/outputs';
 
 const diveDirections = {
   unknown: {
@@ -13,70 +14,14 @@ const diveDirections = {
     cn: '?',
     ko: '?',
   },
-  north: {
-    en: 'N',
-    de: 'N',
-    fr: 'N',
-    ja: '北',
-    cn: '北',
-    ko: '북',
-  },
-  northeast: {
-    en: 'NE',
-    de: 'NO',
-    fr: 'NE',
-    ja: '北東',
-    cn: '东北',
-    ko: '북동',
-  },
-  east: {
-    en: 'E',
-    de: 'O',
-    fr: 'E',
-    ja: '東',
-    cn: '东',
-    ko: '동',
-  },
-  southeast: {
-    en: 'SE',
-    de: 'SO',
-    fr: 'SE',
-    ja: '東南',
-    cn: '南東',
-    ko: '남동',
-  },
-  south: {
-    en: 'S',
-    de: 'S',
-    fr: 'S',
-    ja: '南',
-    cn: '南',
-    ko: '남',
-  },
-  southwest: {
-    en: 'SW',
-    de: 'SW',
-    fr: 'SO',
-    ja: '南西',
-    cn: '西南',
-    ko: '남서',
-  },
-  west: {
-    en: 'W',
-    de: 'W',
-    fr: 'O',
-    ja: '西',
-    cn: '西',
-    ko: '서',
-  },
-  northwest: {
-    en: 'NW',
-    de: 'NW',
-    fr: 'NO',
-    ja: '北西',
-    cn: '西北',
-    ko: '북서',
-  },
+  north: Outputs.dirN,
+  northeast: Outputs.dirNE,
+  east: Outputs.dirE,
+  southeast: Outputs.dirSE,
+  south: Outputs.dirS,
+  southwest: Outputs.dirSW,
+  west: Outputs.dirW,
+  northwest: Outputs.dirNW,
 };
 
 export default {
@@ -94,7 +39,7 @@ export default {
       id: 'T9 Dalamud Dive',
       regex: /Dalamud Dive/,
       beforeSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Dive on Main Tank',
@@ -110,7 +55,7 @@ export default {
       id: 'T9 Super Nova',
       regex: /Super Nova x3/,
       beforeSeconds: 4,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bait Super Novas Outside',
@@ -128,9 +73,9 @@ export default {
       id: 'T9 Raven Blight You',
       netRegex: NetRegexes.gainsEffect({ effectId: '1CA' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: (data, matches) => matches.duration - 5,
+      delaySeconds: (_data, matches) => matches.duration - 5,
       durationSeconds: 5,
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Blight on YOU',
@@ -146,7 +91,7 @@ export default {
       id: 'T9 Raven Blight Not You',
       netRegex: NetRegexes.gainsEffect({ effectId: '1CA' }),
       condition: Conditions.targetIsNotYou(),
-      delaySeconds: (data, matches) => matches.duration - 5,
+      delaySeconds: (_data, matches) => matches.duration - 5,
       durationSeconds: 5,
       infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
       outputStrings: {
@@ -190,14 +135,7 @@ export default {
           cn: '分摊点名',
           ko: '쉐어징 대상자',
         },
-        stackOn: {
-          en: 'Stack on ${player}',
-          de: 'Sammeln auf ${player}',
-          fr: 'Packez-vous sur ${player}',
-          ja: '${player}と頭割り',
-          cn: '靠近${player}分摊',
-          ko: '"${player}" 쉐어징',
-        },
+        stackOn: Outputs.stackOnPlayer,
       },
     },
     {
@@ -219,7 +157,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '7F5', source: '卫月巨像', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '7F5', source: '달라가브 골렘', capture: false }),
       condition: (data) => data.CanSilence(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Silence Blue Golem',
@@ -239,7 +177,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '83B', source: 'ネール・デウス・ダーナス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '83B', source: '奈尔·神·达纳斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '83B', source: '넬 데우스 다르누스', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Heavensfall',
@@ -255,7 +193,7 @@ export default {
       id: 'T9 Garotte Twist Gain',
       netRegex: NetRegexes.gainsEffect({ effectId: '1CE' }),
       condition: (data, matches) => data.me === matches.target && !data.garotte,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       run: (data) => data.garotte = true,
       outputStrings: {
         text: {
@@ -277,7 +215,7 @@ export default {
       netRegexCn: NetRegexes.ability({ id: '7FA', source: '美拉西迪亚幽龙', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '7FA', source: '메라시디아의 유령', capture: false }),
       condition: (data) => data.garotte,
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Cleanse Garotte',
@@ -401,7 +339,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '7E6', source: '奈尔·神·达纳斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '7E6', source: '넬 데우스 다르누스', capture: false }),
       durationSeconds: 12,
-      infoText: (data, _, output) => output.marks({
+      infoText: (data, _matches, output) => output.marks({
         dir1: output[data.naelMarks[0]](),
         dir2: output[data.naelMarks[1]](),
       }),
@@ -485,7 +423,7 @@ export default {
       netRegexCn: NetRegexes.ability({ source: '雷翼', id: '7FD' }),
       netRegexKo: NetRegexes.ability({ source: '번개날개', id: '7FD' }),
       condition: Conditions.targetIsYou(),
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Thunder on YOU',
@@ -503,7 +441,7 @@ export default {
       delaySeconds: 3,
       durationSeconds: 6,
       suppressSeconds: 20,
-      infoText: (data, _, output) => output.safeZone({ dir: output[data.safeZone]() }),
+      infoText: (data, _matches, output) => output.safeZone({ dir: output[data.safeZone]() }),
       outputStrings: {
         ...diveDirections,
         safeZone: {
@@ -593,11 +531,6 @@ export default {
         'Stardust': 'Sternenstaub',
         'Super Nova': 'Supernova',
         'Thermionic Beam': 'Thermionischer Strahl',
-        '\\(East\\)': '(Osten)',
-        '\\(In\\)': '(Rein)',
-        '\\(North\\)': '(Norden)',
-        '\\(Out\\)': '(Raus)',
-        '\\(South\\)': '(Süden)',
       },
     },
     {
@@ -638,11 +571,6 @@ export default {
         'Stardust': 'Poussière d\'étoile',
         'Super Nova': 'Supernova',
         'Thermionic Beam': 'Rayon thermoïonique',
-        '\\(East\\)': '(Est)',
-        '\\(In\\)': '(Intérieur)',
-        '\\(North\\)': '(Nord)',
-        '\\(Out\\)': '(Extérieur)',
-        '\\(South\\)': '(Sud)',
       },
     },
     {
@@ -675,6 +603,7 @@ export default {
         'Heavensfall': '天地崩壊',
         'Iron Chariot': 'アイアンチャリオット',
         'Lunar Dynamo': 'ルナダイナモ',
+        '(?<= )Mark(?= \\w)': 'マーク',
         'Megaflare': 'メガフレア',
         'Meteor Stream': 'メテオストリーム',
         'Raven Dive': 'レイヴンダイブ',
@@ -683,11 +612,6 @@ export default {
         'Stardust': 'スターダスト',
         'Super Nova': 'スーパーノヴァ',
         'Thermionic Beam': 'サーミオニックビーム',
-        '\\(East\\)': '(東))',
-        '\\(In\\)': '(中)',
-        '\\(North\\)': '(北)',
-        '\\(Out\\)': '(外)',
-        '\\(South\\)': '(南)',
       },
     },
     {
@@ -728,11 +652,6 @@ export default {
         'Stardust': '星尘',
         'Super Nova': '超新星',
         'Thermionic Beam': '热离子光束',
-        '\\(East\\)': '(东)',
-        '\\(In\\)': '(内)',
-        '\\(North\\)': '(北)',
-        '\\(Out\\)': '(外)',
-        '\\(South\\)': '(南)',
       },
     },
     {
@@ -775,11 +694,6 @@ export default {
         'Thermionic Beam': '열전자 광선',
         'Mark A': 'A징',
         'Mark B': 'B징',
-        '\\(East\\)': '(동)',
-        '\\(South\\)': '(남)',
-        '\\(North\\)': '(북)',
-        '\\(In\\)': '(안)',
-        '\\(Out\\)': '(밖)',
       },
     },
   ],

@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheNavelHard,
@@ -25,7 +25,7 @@ export default {
       id: 'TitanHm Rock Buster',
       regex: /Rock Buster/,
       beforeSeconds: 6,
-      response: Responses.tankCleave('info'),
+      response: Responses.tankCleave(),
     },
     {
       id: 'TitanHm Tumult',

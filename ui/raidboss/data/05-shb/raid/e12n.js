@@ -1,8 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Outputs from '../../../../../resources/outputs.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // EDEN'S PROMISE: ETERNITY
 // E12 NORMAL
@@ -112,6 +112,8 @@ export default {
       netRegexDe: NetRegexes.ability({ id: '4B48', source: 'Edens Verheißung', capture: false }),
       netRegexFr: NetRegexes.ability({ id: '4B48', source: 'Promesse D\'Éden', capture: false }),
       netRegexJa: NetRegexes.ability({ id: '4B48', source: 'プロミス・オブ・エデン', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '4B48', source: '伊甸之约', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '4B48', source: '에덴의 약속', capture: false }),
       run: (data) => data.seenIntermission = true,
     },
     {
@@ -120,6 +122,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ id: '5872', source: 'Edens Verheißung', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '5872', source: 'Promesse D\'Éden', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '5872', source: 'プロミス・オブ・エデン', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5872', source: '伊甸之约', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5872', source: '에덴의 약속', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
@@ -129,6 +133,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ id: '5873', source: 'Edens Verheißung' }),
       netRegexFr: NetRegexes.startsUsing({ id: '5873', source: 'Promesse D\'Éden' }),
       netRegexJa: NetRegexes.startsUsing({ id: '5873', source: 'プロミス・オブ・エデン' }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5873', source: '伊甸之约' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5873', source: '에덴의 약속' }),
       response: Responses.tankCleave(),
     },
     {
@@ -153,8 +159,10 @@ export default {
       netRegexDe: NetRegexes.ability({ id: '586E', source: 'Mega-Bomber-Brocken', capture: false }),
       netRegexFr: NetRegexes.ability({ id: '586E', source: 'Méga Bombo Rocher', capture: false }),
       netRegexJa: NetRegexes.ability({ id: '586E', source: 'メガ・ボムボルダー', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '586E', source: '巨型爆破岩石', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '586E', source: '거대 바위폭탄', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         // Whichever direction has two  Titanic Bombs, the safe spot is opposite.
         let safe;
         if (data.bombs[0].north === data.bombs[1].north)
@@ -163,8 +171,8 @@ export default {
           safe = data.bombs[0].east ? 'west' : 'east';
         return output[safe]();
       },
-      outputStrings: bombOutputStrings,
       run: (data) => delete data.bombs,
+      outputStrings: bombOutputStrings,
     },
     {
       id: 'E12N Boulders Explosion',
@@ -172,8 +180,10 @@ export default {
       netRegexDe: NetRegexes.ability({ id: '586F', source: 'Mega-Bomber-Brocken', capture: false }),
       netRegexFr: NetRegexes.ability({ id: '586F', source: 'Méga Bombo Rocher', capture: false }),
       netRegexJa: NetRegexes.ability({ id: '586F', source: 'メガ・ボムボルダー', capture: false }),
+      netRegexCn: NetRegexes.ability({ id: '586F', source: '巨型爆破岩石', capture: false }),
+      netRegexKo: NetRegexes.ability({ id: '586F', source: '거대 바위폭탄', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move to last explosions',
@@ -197,7 +207,7 @@ export default {
         if (data.me === matches.target)
           return output.stackOnYou();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.stacks.length === 1)
           return;
         const names = data.stacks.map((x) => data.ShortName(x)).sort();
@@ -233,6 +243,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ id: '5864', source: 'Edens Verheißung', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '5864', source: 'Promesse D\'Éden', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '5864', source: 'プロミス・オブ・エデン', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5864', source: '伊甸之约', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5864', source: '에덴의 약속', capture: false }),
       condition: Conditions.caresAboutAOE(),
       response: Responses.aoe(),
     },
@@ -242,6 +254,8 @@ export default {
       netRegexDe: NetRegexes.startsUsing({ id: '5864', source: 'Edens Verheißung', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ id: '5864', source: 'Promesse D\'Éden', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ id: '5864', source: 'プロミス・オブ・エデン', capture: false }),
+      netRegexCn: NetRegexes.startsUsing({ id: '5864', source: '伊甸之约', capture: false }),
+      netRegexKo: NetRegexes.startsUsing({ id: '5864', source: '에덴의 약속', capture: false }),
       delaySeconds: 1, // Avoiding collision with the spread call
       response: Responses.stopMoving('alert'),
     },
@@ -264,7 +278,7 @@ export default {
       netRegex: NetRegexes.startsUsing({ id: ['4E2C', '585B', '5861'], capture: false }),
       preRun: (data) => data.tethers = data.tethers.sort(),
       delaySeconds: 0.5, // Tethers should be first in the log, but let's be SURE
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         if (data.tethers.length !== 2)
           return;
         // Leviathan's mechanics aren't easily described in a single word,
@@ -277,7 +291,7 @@ export default {
           safespot2: output[data.tethers[1]](),
         });
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.tethers.length === 2)
           return;
         return output[data.tethers[0]]();
@@ -405,6 +419,82 @@ export default {
         'Stock': 'ストック',
         'Temporary Current': 'テンポラリーカレント',
         'Under The Weight': '大地の重圧',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        '(?<!Titanic )Bomb Boulder': '爆破岩石',
+        'Chiseled Sculpture': '被创造的男性',
+        'Eden\'s Promise': '伊甸之约',
+        'Titanic Bomb Boulder': '巨型爆破岩石',
+      },
+      'replaceText': {
+        'Cast': '释放',
+        'Classical Sculpture': '创造巨兵',
+        'Conflag Strike': '瞬燃强袭',
+        'Diamond Dust': '钻石星尘',
+        'Earth Shaker': '大地摇动',
+        'Earthen Fury': '大地之怒',
+        'Eternal Oblivion': '永恒忘却',
+        'Explosion': '爆炸',
+        'Ferostorm': '凶猛风暴',
+        'Formless Judgment': '天罚波动',
+        'Frigid Stone': '冰石',
+        'Ice Floe': '浮冰',
+        'Impact': '冲击',
+        'Initialize Recall': '回想记忆',
+        'Judgment Jolt': '制裁之界雷',
+        'Junction Shiva': '融合：希瓦',
+        'Junction Titan': '融合：泰坦',
+        'Laser Eye': '激射眼',
+        'Maleficium': '邪法',
+        'Obliteration': '灭迹',
+        'Palm Of Temperance': '拒绝之手',
+        'Paradise Lost': '失乐园',
+        'Rapturous Reach': '愉悦之手',
+        'Release': '施放',
+        'Stock': '储存',
+        'Temporary Current': '临时洋流',
+        'Under The Weight': '大地的重压',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        '(?<!Titanic )Bomb Boulder': '바위폭탄',
+        'Chiseled Sculpture': '창조된 남자',
+        'Eden\'s Promise': '에덴의 약속',
+        'Titanic Bomb Boulder': '거대 바위폭탄',
+      },
+      'replaceText': {
+        'Cast': '발현',
+        'Classical Sculpture': '거병 창조',
+        'Conflag Strike': '대화재',
+        'Diamond Dust': '다이아몬드 더스트',
+        'Earth Shaker': '요동치는 대지',
+        'Earthen Fury': '대지의 분노',
+        'Eternal Oblivion': '영원한 망각',
+        'Explosion': '폭산',
+        'Ferostorm': '사나운 폭풍',
+        'Formless Judgment': '천벌 파동',
+        'Frigid Stone': '얼음돌',
+        'Ice Floe': '유빙',
+        'Impact': '충격',
+        'Initialize Recall': '기억 상기',
+        'Judgment Jolt': '심판의 계뢰',
+        'Junction Shiva': '접속: 시바',
+        'Junction Titan': '접속: 타이탄',
+        'Laser Eye': '광선안',
+        'Maleficium': '마녀의 사술',
+        'Obliteration': '말소',
+        'Palm Of Temperance': '거절의 손',
+        'Paradise Lost': '실낙원',
+        'Rapturous Reach': '열락의 손',
+        'Release': '기억 방출',
+        'Stock': '기억 보존',
+        'Temporary Current': '순간 해류',
+        'Under The Weight': '대지의 중압',
       },
     },
   ],

@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O5N - Sigmascape 1.0 Normal
 export default {
@@ -17,9 +17,7 @@ export default {
       netRegexJa: NetRegexes.removingCombatant({ name: '魔列車', capture: false }),
       netRegexCn: NetRegexes.removingCombatant({ name: '魔列车', capture: false }),
       netRegexKo: NetRegexes.removingCombatant({ name: '마열차', capture: false }),
-      run: function(data) {
-        data.StopCombat();
-      },
+      run: (data) => data.StopCombat(),
     },
 
     {
@@ -56,7 +54,7 @@ export default {
       id: 'O5N Diabolic Light',
       netRegex: NetRegexes.headMarker({ id: '0001' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Light',
@@ -72,7 +70,7 @@ export default {
       id: 'O5N Diabolic Wind',
       netRegex: NetRegexes.headMarker({ id: '0046' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Wind',

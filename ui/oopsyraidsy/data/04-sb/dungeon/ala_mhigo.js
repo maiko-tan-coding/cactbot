@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AlaMhigo,
@@ -35,7 +35,7 @@ export default {
       id: 'Ala Mhigo Art Of The Swell',
       // Damage Down
       netRegex: NetRegexes.gainsEffect({ effectId: '2B8' }),
-      mistake: function(e, data, matches) {
+      mistake: (e) => {
         return { type: 'warn', blame: e.target, text: e.effect };
       },
     },

@@ -1,6 +1,7 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Suzaku Extreme
 export default {
@@ -25,19 +26,10 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '32DC', source: '朱雀', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '32DC', source: '朱雀', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '32DC', source: '주작', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
-      alertText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
-        text: {
-          en: 'Tank Buster',
-          de: 'Tankbuster',
-          fr: 'Tank buster',
-          ja: 'タンクバスター',
-          cn: '死刑',
-          ko: '탱버',
-        },
+        text: Outputs.tankBuster,
       },
     },
     {
@@ -48,7 +40,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '32DA', source: '朱雀', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '32DA', source: '朱雀', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '32DA', source: '주작', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Out',
@@ -68,7 +60,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '32DB', source: '朱雀', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '32DB', source: '朱雀', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '32DB', source: '주작', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get In',

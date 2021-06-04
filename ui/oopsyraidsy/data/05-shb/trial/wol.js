@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: Radiant Braver is 4F16/4F17(x2), shouldn't get hit by both?
 // TODO: Radiant Desperado is 4F18/4F19, shouldn't get hit by both?
@@ -31,10 +31,8 @@ export default {
     {
       id: 'WOL True Walking Dead',
       netRegex: NetRegexes.gainsEffect({ effectId: '38E' }),
-      delaySeconds: function(e, data, matches) {
-        return parseFloat(matches.duration) - 0.5;
-      },
-      deathReason: function(e, data, matches) {
+      delaySeconds: (_e, _data, matches) => parseFloat(matches.duration) - 0.5,
+      deathReason: (e, _data, matches) => {
         return { type: 'fail', name: e.target, reason: matches.effect };
       },
     },

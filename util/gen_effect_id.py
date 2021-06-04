@@ -8,7 +8,10 @@ import os
 
 # Maybe this should be called Status like the table, but everything else
 # says gain/lose effects.
-_EFFECTS_OUTPUT_FILE = "effect_id.js"
+_EFFECTS_OUTPUT_FILE = "effect_id.ts"
+
+# TODO: add renaming?
+# Almagest: 563
 
 # There are a looooot of duplicate effect names in pvp, and it's impossible
 # to differentiate other than manually.  There's also older effects that
@@ -24,6 +27,7 @@ known_mapping = {
     "Brotherhood": "1185",
     "Embolden": "1297",
     "Technical Finish": "1822",
+    "Sheltron": "1856",
     "Lord of Crowns": "1876",
     "Lady of Crowns": "1877",
     "Divination": "1878",
@@ -45,6 +49,16 @@ known_mapping = {
     "Windbite": "129",
     "Venomous Bite": "124",
     "Flourishing Fan Dance": "1820",
+    "Higanbana": "1228",
+    "Wildfire": "861",
+    "Chain Stratagem": "1221",
+    "Vulnerability Up": "638",
+}
+
+# These custom name of effect will not be checked, but you'd better make it clean.
+# Use this only when you need to handle different effects with a same name.
+custom_mapping = {
+    "EmboldenSelf": "1239",
 }
 
 
@@ -85,6 +99,10 @@ def make_effect_map(table):
         if name not in found_names:
             print_error("missing", name, known_mapping, raw_name)
 
+    # Add custom effect name for necessary duplicates.
+    for raw_name, id in custom_mapping.items():
+        map[raw_name] = id
+
     # Store ids as hex.
     return {k: format(int(v), "X") for k, v in map.items()}
 
@@ -93,9 +111,11 @@ if __name__ == "__main__":
     table = csv_util.get_intl_table("Status", ["#", "Name", "Icon", "PartyListPriority"])
 
     writer = coinach.CoinachWriter(verbose=True)
-    writer.write(
-        os.path.join("resources", _EFFECTS_OUTPUT_FILE),
-        os.path.basename(os.path.abspath(__file__)),
-        "EffectId",
-        make_effect_map(table),
+    writer.writeTypeScript(
+        filename=os.path.join("resources", _EFFECTS_OUTPUT_FILE),
+        scriptname=os.path.basename(os.path.abspath(__file__)),
+        header=None,
+        type=None,
+        as_const=True,
+        data=make_effect_map(table),
     )

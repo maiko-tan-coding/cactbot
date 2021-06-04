@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AlexanderTheSoulOfTheCreator,
@@ -12,7 +13,7 @@ export default {
       regex: /Divine Judgment/,
       beforeSeconds: 5,
       suppressSeconds: 9999, // Let's not spam tanks if they are unlucky enough to see enrage.
-      alarmText: (data, _, output) => output.text(),
+      alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Limit break now!',
@@ -64,11 +65,9 @@ export default {
       id: 'A12N Aggravated Assault',
       netRegex: NetRegexes.headMarker({ id: '0010' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       // If the user is targeted for Assault, we need to ensure the stack trigger knows.
-      run: function(data) {
-        data.assault = true;
-      },
+      run: (data) => data.assault = true,
       outputStrings: {
         text: {
           en: 'Spread (Don\'t Stack!)',
@@ -85,7 +84,7 @@ export default {
       id: 'A12N Heat And Solidarity',
       netRegex: NetRegexes.headMarker({ id: '003E' }),
       delaySeconds: 0.5,
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         // If the user was targeted for Assault, they shouldn't stack.
         // Unfortunately, Assault comes after the Shared Sentence marker in the log,
         // so we have to use the collect + delay construction to make calls.
@@ -96,26 +95,10 @@ export default {
 
         return output.stackOn({ player: data.ShortName(matches.target) });
       },
-      run: function(data) {
-        delete data.assault;
-      },
+      run: (data) => delete data.assault,
       outputStrings: {
-        stackOnYou: {
-          en: 'Stack on YOU',
-          de: 'Auf DIR sammeln',
-          fr: 'Package sur VOUS',
-          ja: '自分にスタック',
-          cn: '集合点名',
-          ko: '쉐어징 대상자',
-        },
-        stackOn: {
-          en: 'Stack on ${player}',
-          de: 'Auf ${player} sammeln',
-          fr: 'Packez-vous sur ${player}',
-          ja: '${player}にスタック',
-          cn: '靠近 ${player}集合',
-          ko: '"${player}" 쉐어징',
-        },
+        stackOnYou: Outputs.stackOnYou,
+        stackOn: Outputs.stackOnPlayer,
       },
     },
     {
@@ -126,13 +109,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'アレキサンダー・プライム', id: '1AE5', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '至尊亚历山大', id: '1AE5', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '알렉산더 프라임', id: '1AE5', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Lasers',
           de: 'Laser',
           fr: 'Lasers',
-          ja: 'レザー',
+          ja: 'レーザー',
           cn: '十字圣礼',
           ko: '십자 성례',
         },
@@ -147,7 +130,7 @@ export default {
       netRegexCn: NetRegexes.tether({ source: '亚历山大', id: '0036' }),
       netRegexKo: NetRegexes.tether({ source: '알렉산더', id: '0036' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Puddle Tether on YOU',

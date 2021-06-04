@@ -1,18 +1,16 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AnamnesisAnyder,
   timelineFile: 'anamnesis_anyder.txt',
-  timelineTriggers: [
-  ],
   triggers: [
     {
       id: 'AnAnyder Fetid Fang',
       netRegex: NetRegexes.startsUsing({ source: 'Unknown', id: ['4B69', '4B72'] }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Unbekannt(?:e|er|es|en)', id: ['4B69', '4B72'] }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Abscheulich(?:e|er|es|en) Monstrum', id: ['4B69', '4B72'] }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Inconnu', id: ['4B69', '4B72'] }),
       netRegexJa: NetRegexes.startsUsing({ source: '正体不明', id: ['4B69', '4B72'] }),
       netRegexCn: NetRegexes.startsUsing({ source: '不明物体', id: ['4B69', '4B72'] }),
@@ -23,20 +21,20 @@ export default {
     {
       id: 'AnAnyder Scrutiny',
       netRegex: NetRegexes.startsUsing({ source: 'Unknown', id: '4E25', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Unbekannt(?:e|er|es|en)', id: '4E25', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Abscheulich(?:e|er|es|en) Monstrum', id: '4E25', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Inconnu', id: '4E25', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '正体不明', id: '4E25', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '不明物体', id: '4E25', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '정체불명', id: '4E25', capture: false }),
       delaySeconds: 3,
       durationSeconds: 7,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Arrow',
           de: 'Pfeil ausweichen',
           fr: 'Évitez la flèche',
-          ja: '矢印を避け',
+          ja: '矢印を避ける',
           cn: '躲箭头',
           ko: '화살표 피하기',
         },
@@ -45,7 +43,7 @@ export default {
     {
       id: 'AnAnyder Inscrutability',
       netRegex: NetRegexes.startsUsing({ source: 'Unknown', id: '4B6A', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Unbekannt(?:e|er|es|en)', id: '4B6A', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Abscheulich(?:e|er|es|en) Monstrum', id: '4B6A', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Inconnu', id: '4B6A', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '正体不明', id: '4B6A', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '不明物体', id: '4B6A', capture: false }),
@@ -56,7 +54,7 @@ export default {
     {
       id: 'AnAnyder Luminous Ray',
       netRegex: NetRegexes.startsUsing({ source: 'Unknown', id: '4E2[67]', capture: false }),
-      netRegexDe: NetRegexes.startsUsing({ source: 'Unbekannt(?:e|er|es|en)', id: '4E2[67]', capture: false }),
+      netRegexDe: NetRegexes.startsUsing({ source: 'Abscheulich(?:e|er|es|en) Monstrum', id: '4E2[67]', capture: false }),
       netRegexFr: NetRegexes.startsUsing({ source: 'Inconnu', id: '4E2[67]', capture: false }),
       netRegexJa: NetRegexes.startsUsing({ source: '正体不明', id: '4E2[67]', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '不明物体', id: '4E2[67]', capture: false }),
@@ -149,13 +147,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'ルクスィー・ディーマ', id: '4B84', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ source: '鲁克嘶·蒂母', id: '4B84', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ source: '루크쉬 디마', id: '4B84', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid Hands',
           de: 'Händen ausweichen',
           fr: 'Évitez les mains',
-          ja: '手を避け',
+          ja: '手を避ける',
           cn: '躲手',
           ko: '손 피하기',
         },
@@ -168,7 +166,7 @@ export default {
       'replaceSync': {
         'Sinister Bubble': 'Finster(?:e|er|es|en) Blase',
         'Rukshs Dheem': 'Rukshs Dheem',
-        'Unknown': 'Unbekannt(?:e|er|es|en)',
+        'Unknown': 'Abscheulich(?:e|er|es|en) Monstrum',
         'Kyklops': 'Kyklops',
         'Depth Grip': 'Hand des Ozeans',
         'Katharsis': 'Platz der Katharsis',

@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheFinalCoilOfBahamutTurn4,
@@ -26,7 +26,7 @@ export default {
       // Only the first two gigas are phase changes, the rest are in final phase.
       condition: (data) => !(data.gigaflare > 1),
       sound: 'Long',
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.gigaflare)
           return output.text();
       },
@@ -86,7 +86,7 @@ export default {
       id: 'T13 Megaflare Share',
       netRegex: NetRegexes.headMarker({ id: '0027' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Megaflare Stack',
@@ -113,7 +113,7 @@ export default {
       netRegexCn: NetRegexes.tether({ id: '0004', target: '至尊巴哈姆特' }),
       netRegexKo: NetRegexes.tether({ id: '0004', target: '바하무트 프라임' }),
       condition: (data, matches) => data.me === matches.source,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tempest Tether on YOU',
@@ -169,7 +169,6 @@ export default {
         'The Storm of Meracydia': 'Sturm von Meracydia',
       },
       'replaceText': {
-        '\\(center\\)': '(mitte)',
         'Akh Morn': 'Akh Morn',
         'Blood': 'Blut',
         'Dark Aether': 'Dunkeläther',
@@ -202,7 +201,6 @@ export default {
         'The Storm of Meracydia': 'Tempête De Méracydia',
       },
       'replaceText': {
-        '\\(center\\)': '(centre)',
         'Akh Morn': 'Akh Morn',
         '(?<! )Blood Add': 'Add Sang',
         'Blood, Pain Adds': 'Adds Sang, Douleur',
@@ -241,7 +239,6 @@ export default {
         'The Storm of Meracydia': 'メラシディアン・ストーム',
       },
       'replaceText': {
-        '\\(center\\)': '(中)',
         'Akh Morn': 'アク・モーン',
         '(?<! )Blood Add': '雑魚: ブラッド',
         'Blood, Pain Adds': '雑魚: ブラッド + ペイン',
@@ -255,10 +252,11 @@ export default {
         'Gigaflare': 'ギガフレア',
         '2x Gust Adds': '雑魚: 2x ガスト',
         '3x Gust Adds': '雑魚: 3x ガスト',
+        '(?<= )Marker': 'マーカー',
         'MF Pepperoni': 'メガ: AoE',
         'MF Share': 'メガ: 頭割り',
         'MF Spread': 'メガ: 散開',
-        'MF Tower': 'メガ: 塔',
+        'MF Tower(\\(s\\))?': 'メガ: 塔',
         'Megaflare': 'メガフレア',
         '(?<! )Pain Add': '雑魚: ペイン',
         'Rage Of Bahamut': '龍神の咆吼',
@@ -278,7 +276,6 @@ export default {
         'The Storm of Meracydia': '美拉西迪亚的怒雨',
       },
       'replaceText': {
-        '\\(center\\)': '(中央)',
         'Akh Morn': '死亡轮回',
         '(?<! )Blood Add': '血仇出现',
         'Blood, Pain Adds': '血仇, 苦痛出现',

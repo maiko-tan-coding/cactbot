@@ -1,15 +1,16 @@
-import UserConfig from '../../resources/user_config.js';
-import ZoneInfo from '../../resources/zone_info.js';
-import contentList from '../../resources/content_list.js';
+import { callOverlayHandler } from '../../resources/overlay_plugin_api';
+import Regexes from '../../resources/regexes';
+import UserConfig from '../../resources/user_config';
+import ZoneInfo from '../../resources/zone_info';
+import contentList from '../../resources/content_list';
 
 // Load other config files
-import './general_config.js';
-import '../eureka/eureka_config.js';
-import '../jobs/jobs_config.js';
-import '../oopsyraidsy/oopsyraidsy_config.js';
-import '../radar/radar_config.js';
-import '../raidboss/raidboss_config.js';
-import '../../resources/common.js';
+import './general_config';
+import '../eureka/eureka_config';
+import '../jobs/jobs_config';
+import '../oopsyraidsy/oopsyraidsy_config';
+import '../radar/radar_config';
+import '../raidboss/raidboss_config';
 
 const Options = {};
 let gConfig = null;
@@ -96,6 +97,13 @@ const kPrefixToCategory = {
     cn: '暗影之逆焰 (5.x)',
     ko: '칠흑의 반역자 (5.x)',
   },
+  'user': {
+    en: 'User Triggers',
+    de: 'Benutzer Trigger',
+    fr: 'Triggers personnalisés',
+    ja: 'ユーザートリガー',
+    cn: '自定义触发器',
+  },
 };
 
 // Translating data subfolders to encounter type.
@@ -162,7 +170,7 @@ const kDirectoryToCategory = {
 // TODO: use ZoneId to get this
 const fileNameToTitle = (filename) => {
   // Strip directory and extension.
-  const file = filename.replace(/^.*\//, '').replace('.js', '');
+  const file = filename.replace(/^.*\//, '').replace(/\.[jt]s/g, '');
   // Remove non-name characters (probably).
   const name = file.replace(/[_-]/g, ' ');
   // Capitalize the first letter of every word.
@@ -482,10 +490,10 @@ export default class CactbotConfigurator {
     parent.appendChild(div);
   }
 
-  processFiles(files) {
+  processFiles(files, userTriggerSets) {
     const map = {};
     for (const filename in files) {
-      if (!filename.endsWith('.js'))
+      if (!filename.endsWith('.js') && !filename.endsWith('.ts'))
         continue;
 
       let prefixKey = '00-misc';
@@ -517,15 +525,54 @@ export default class CactbotConfigurator {
           title = this.translate(zoneInfo.name);
       }
 
-      const fileKey = filename.replace(/\//g, '-').replace(/.js$/, '');
+      const fileKey = filename.replace(/\//g, '-').replace(/.[jt]s$/, '');
       map[fileKey] = {
         filename: filename,
         fileKey: fileKey,
         prefixKey: prefixKey,
-        typeKey: typeKey,
         prefix: this.translate(kPrefixToCategory[prefixKey]),
+        section: this.translate(kPrefixToCategory[prefixKey]),
         type: this.translate(kDirectoryToCategory[typeKey]),
         title: title,
+        triggerSet: triggerSet,
+        zoneId: zoneId,
+      };
+    }
+
+    const userMap = {};
+    let userFileIdx = 0;
+    for (const triggerSet of userTriggerSets || []) {
+      if (!triggerSet)
+        continue;
+      const fileKey = `user/${triggerSet.filename}/${userFileIdx++}`;
+
+      // cactbot triggers all use zoneId, but user triggers in the wild
+      // may also use zoneRegex or also have errors and not have either.
+      let title = '???';
+      let zoneId = 'undefined';
+      if ('zoneId' in triggerSet) {
+        zoneId = triggerSet.zoneId;
+        // Use the translatable zone info name, if possible.
+        const zoneInfo = ZoneInfo[zoneId];
+        if (zoneInfo)
+          title = this.translate(zoneInfo.name);
+      } else if ('zoneRegex' in triggerSet) {
+        // zoneRegex can be a localized object.
+        let zoneRegex = this.translate(triggerSet.zoneRegex);
+        if (typeof zoneRegex === 'string')
+          zoneRegex = Regexes.parse(zoneRegex);
+        if (zoneRegex instanceof RegExp)
+          title = `/${zoneRegex.source}/`;
+      }
+
+      userMap[fileKey] = {
+        filename: triggerSet.filename,
+        fileKey: fileKey,
+        prefixKey: 'user',
+        prefix: this.translate(kPrefixToCategory['user']),
+        section: triggerSet.filename,
+        title: title,
+        type: null,
         triggerSet: triggerSet,
         zoneId: zoneId,
       };
@@ -561,6 +608,10 @@ export default class CactbotConfigurator {
     const sortedMap = {};
     for (const key of sortedEntries)
       sortedMap[key] = map[key];
+
+    // Tack on user triggers at the end in the order they were eval'd.
+    for (const key in userMap)
+      sortedMap[key] = userMap[key];
 
     return sortedMap;
   }

@@ -1,7 +1,8 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Titania Extreme
 export default {
@@ -57,15 +58,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D45', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D45', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D45', source: '티타니아', capture: false }),
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.seenMistRune)
           return output.inOutThenWaterPositions();
 
         return output.waterPositions();
       },
-      run: function(data) {
-        data.seenMistRune = true;
-      },
+      run: (data) => data.seenMistRune = true,
       outputStrings: {
         inOutThenWaterPositions: {
           en: 'In/Out, then Water Positions',
@@ -95,15 +94,13 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '3D47', source: '티타니아', capture: false }),
       // You have 16.5 seconds until the first stack damage.
       delaySeconds: 8.5,
-      alertText: function(data, _, output) {
+      alertText: (data, _matches, output) => {
         if (data.seenFlameRune)
           return output.stackMaybeRotate();
 
         return output.stackPositions();
       },
-      run: function(data) {
-        data.seenFlameRune = true;
-      },
+      run: (data) => data.seenFlameRune = true,
       outputStrings: {
         stackMaybeRotate: {
           en: 'Stack (maybe rotate?)',
@@ -141,7 +138,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '42D7', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '42D7', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '42D7', source: '티타니아', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Wait For Tethers In Center',
@@ -172,7 +169,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3D42', source: 'パック', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3D42', source: '帕克', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '3D42', source: '요정의 권속', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Diagonal Knockback Soon',
@@ -192,9 +189,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D2C', source: 'ティターニア' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D2C', source: '缇坦妮雅' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D2C', source: '티타니아' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -205,10 +200,8 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D2C', source: 'ティターニア' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D2C', source: '缇坦妮雅' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D2C', source: '티타니아' }),
-      condition: function(data) {
-        return data.role !== 'tank' && data.role !== 'healer';
-      },
-      response: Responses.tankCleave('info'),
+      condition: (data) => data.role !== 'tank' && data.role !== 'healer',
+      response: Responses.tankCleave(),
     },
     {
       id: 'TitaniaEx Frost Rune 1',
@@ -218,7 +211,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D2A', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D2A', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D2A', source: '티타니아', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Middle, Shiva Circles',
@@ -260,7 +253,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D2E', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D2E', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D2E', source: '티타니아', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Roots',
@@ -297,16 +290,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D37', source: 'パック', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D37', source: '帕克', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D37', source: '요정의 권속', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank';
-      },
-      preRun: function(data) {
+      condition: (data) => data.role === 'tank',
+      preRun: (data) => {
         data.pummelCount = data.pummelCount || 0;
         data.pummelCount++;
       },
-      infoText: function(data, _, output) {
-        return output.text({ num: data.pummelCount });
-      },
+      infoText: (data, _matches, output) => output.text({ num: data.pummelCount }),
       outputStrings: {
         text: {
           en: 'Pummel ${num}',
@@ -323,7 +312,7 @@ export default {
       netRegex: NetRegexes.headMarker({ id: '008D' }),
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
-      run: function(data) {
+      run: (data) => {
         data.bomb = data.bomb || {};
         data.bomb[data.me] = true;
       },
@@ -336,15 +325,13 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3D3F', source: 'ピーズブロッサム', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3D3F', source: '豌豆花', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '3D3F', source: '콩나무', capture: false }),
-      run: function(data) {
-        delete data.bomb;
-      },
+      run: (data) => delete data.bomb,
     },
     {
       id: 'TitaniaEx Adds Stack',
       netRegex: NetRegexes.headMarker({ id: '00A1' }),
       delaySeconds: 0.25,
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.stackOnYou();
 
@@ -355,22 +342,8 @@ export default {
         return output.stackOn({ player: data.ShortName(matches.target) });
       },
       outputStrings: {
-        stackOnYou: {
-          en: 'Stack on YOU',
-          de: 'Auf DIR sammeln',
-          fr: 'Package sur VOUS',
-          ja: '自分に集合',
-          cn: '集合点名',
-          ko: '쉐어징 대상자',
-        },
-        stackOn: {
-          en: 'Stack on ${player}',
-          de: 'Auf ${player} sammeln',
-          fr: 'Package sur ${player}',
-          ja: '${player}にスタック',
-          cn: '靠近 ${player}集合',
-          ko: '"${player}"에게 모이기',
-        },
+        stackOnYou: Outputs.stackOnYou,
+        stackOn: Outputs.stackOnPlayer,
       },
     },
     {
@@ -382,7 +355,7 @@ export default {
       netRegexCn: NetRegexes.tether({ id: '0054', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.tether({ id: '0054', source: '티타니아', capture: false }),
       suppressSeconds: 60,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Initial Thunder Tether',
@@ -402,16 +375,10 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '3D29', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.ability({ id: '3D29', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.ability({ id: '3D29', source: '티타니아', capture: false }),
-      preRun: function(data) {
-        data.thunderCount = data.thunderCount || 1;
-      },
+      preRun: (data) => data.thunderCount = data.thunderCount || 1,
       suppressSeconds: 1,
-      infoText: function(data, _, output) {
-        return output.text({ num: data.thunderCount });
-      },
-      run: function(data) {
-        data.thunderCount++;
-      },
+      infoText: (data, _matches, output) => output.text({ num: data.thunderCount }),
+      run: (data) => data.thunderCount++,
       outputStrings: {
         text: {
           en: 'Thunder ${num}',
@@ -431,9 +398,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D32', source: 'ティターニア', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D32', source: '缇坦妮雅', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D32', source: '티타니아', capture: false }),
-      run: function(data) {
-        delete data.thunderCount;
-      },
+      run: (data) => delete data.thunderCount,
     },
   ],
   timelineReplace: [

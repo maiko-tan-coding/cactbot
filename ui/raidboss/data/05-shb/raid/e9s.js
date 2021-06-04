@@ -1,8 +1,10 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import Outputs from '../../../../../resources/outputs.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import { callOverlayHandler } from '../../../../../resources/overlay_plugin_api';
+
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import Outputs from '../../../../../resources/outputs';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: Add N/S E/W callout to Rejuvenating Balm
 
@@ -61,58 +63,67 @@ const summonDirectionOutputStrings = {
     en: 'NNE',
     de: 'NNO',
     fr: 'NNE',
-    ja: '北北東',
+    ja: '北北東(1時)',
+    cn: '上偏右(北偏东)',
+    ko: '1시',
   },
   ENE: {
     en: 'ENE',
     de: 'ONO',
     fr: 'ENE',
-    ja: '東北東',
+    ja: '東北東(2時)',
+    cn: '右偏上(东偏北)',
+    ko: '2시',
   },
   ESE: {
     en: 'ESE',
     de: 'OSO',
     fr: 'ESE',
-    ja: '東南東',
+    ja: '東南東(4時)',
+    cn: '右偏下(东偏南)',
+    ko: '4시',
   },
   SSE: {
     en: 'SSE',
     de: 'SSO',
     fr: 'SSE',
-    ja: '南南東',
+    ja: '南南東(5時)',
+    cn: '下偏右(南偏东)',
+    ko: '5시',
   },
   SSW: {
     en: 'SSW',
     de: 'SSW',
     fr: 'SSO',
-    ja: '南南西',
+    ja: '南南西(7時)',
+    cn: '下偏左(南偏西)',
+    ko: '7시',
   },
   WSW: {
     en: 'WSW',
     de: 'WSW',
     fr: 'OSO',
-    ja: '西南西',
+    ja: '西南西(8時)',
+    cn: '左偏下(西偏南)',
+    ko: '8시',
   },
   WNW: {
     en: 'WNW',
     de: 'WNW',
     fr: 'ONO',
-    ja: '西北西',
+    ja: '西北西(10時)',
+    cn: '左偏上(西偏北)',
+    ko: '10시',
   },
   NNW: {
     en: 'NNW',
     de: 'NNW',
     fr: 'NNO',
-    ja: '北北西',
+    ja: '北北西(11時)',
+    cn: '上偏左(北偏西)',
+    ko: '11시',
   },
-  unknown: {
-    en: '???',
-    de: '???',
-    fr: '???',
-    ja: '???',
-    cn: '???',
-    ko: '???',
-  },
+  unknown: Outputs.unknown,
 };
 
 const convertBossHeadingToClonePosition = (boss) => {
@@ -193,7 +204,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: ['5B45', '55FB'], source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['5B45', '55FB'], source: '어둠의 구름', capture: false }),
       durationSeconds: (data) => data.phase === 'empty' ? 8 : 4,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: { text: artOfDarknessOutputStrings.protean },
     },
     {
@@ -205,7 +216,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: ['5B46', '55FE'], source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: ['5B46', '55FE'], source: '어둠의 구름', capture: false }),
       durationSeconds: (data) => data.phase === 'empty' ? 8 : 4,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: { text: artOfDarknessOutputStrings.stackWithPartner },
     },
     {
@@ -217,7 +228,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '5623', source: '暗黑之云' }),
       netRegexKo: NetRegexes.startsUsing({ id: '5623', source: '어둠의 구름' }),
       durationSeconds: 4,
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.tankBusterOnYou();
 
@@ -227,7 +238,7 @@ export default {
         if (data.role === 'healer')
           return output.tankBusters({ player: data.ShortName(matches.target) });
       },
-      infoText: function(data, _, output) {
+      infoText: (data, _matches, output) => {
         if (data.role !== 'tank' && data.role !== 'healer')
           return output.avoidLaser();
       },
@@ -240,7 +251,7 @@ export default {
           de: 'Laser ausweichen',
           fr: 'Évitez le laser',
           ja: 'レーザー注意',
-          cn: '躲避击退激光',
+          cn: '躲避死刑激光',
           ko: '레이저 피하기',
         },
       },
@@ -266,7 +277,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '5907', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5907', source: '어둠의 구름', capture: false }),
       delaySeconds: 3,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Place Bramble',
@@ -297,7 +308,7 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '5618', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5618', source: '어둠의 구름', capture: false }),
       durationSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Away From Tethered Walls',
@@ -331,7 +342,7 @@ export default {
           data.phaserOutputs = ['out', 'healerStacks', 'sides'];
       },
       durationSeconds: 15,
-      infoText: (data, _, output) => data.phaserOutputs.map((key) => output[key]()).join(' -> '),
+      infoText: (data, _matches, output) => data.phaserOutputs.map((key) => output[key]()).join(' -> '),
       run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
@@ -344,7 +355,8 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '561[23]', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '561[23]', source: '어둠의 구름', capture: false }),
       delaySeconds: 7,
-      alertText: (data, _, output) => output[data.phaserOutputs.shift()](),
+      alertText: (data, _matches, output) => output[data.phaserOutputs[0]](),
+      run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
     {
@@ -356,7 +368,8 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '561[23]', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '561[23]', source: '어둠의 구름', capture: false }),
       delaySeconds: 12,
-      alertText: (data, _, output) => output[data.phaserOutputs.shift()](),
+      alertText: (data, _matches, output) => output[data.phaserOutputs[0]](),
+      run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
     {
@@ -374,7 +387,7 @@ export default {
           data.phaserOutputs = ['sides', 'healerStacks', 'out'];
       },
       durationSeconds: 15,
-      infoText: (data, _, output) => data.phaserOutputs.map((key) => output[key]()).join(' -> '),
+      infoText: (data, _matches, output) => data.phaserOutputs.map((key) => output[key]()).join(' -> '),
       run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
@@ -387,7 +400,8 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '560[DE]', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '560[DE]', source: '어둠의 구름', capture: false }),
       delaySeconds: 8,
-      alertText: (data, _, output) => output[data.phaserOutputs.shift()](),
+      alertText: (data, _matches, output) => output[data.phaserOutputs[0]](),
+      run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
     {
@@ -399,7 +413,8 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '560[DE]', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '560[DE]', source: '어둠의 구름', capture: false }),
       delaySeconds: 12,
-      alertText: (data, _, output) => output[data.phaserOutputs.shift()](),
+      alertText: (data, _matches, output) => output[data.phaserOutputs[0]](),
+      run: (data) => data.phaserOutputs.shift(),
       outputStrings: phaserOutputStrings,
     },
     {
@@ -413,7 +428,12 @@ export default {
       // The fight goes Second Art -> Third Art -> Second Art, so we want
       // to have this cleaned up before the second Second Art Of Darkness
       preRun: (data) => delete data.finalArtOfDarkness,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => {
+        data.artOfDarkness = [];
+        if (!data.artOfDarknessIdMap)
+          data.artOfDarknessExpected = 'right';
+      },
       outputStrings: {
         text: {
           en: 'Start Left',
@@ -423,11 +443,6 @@ export default {
           cn: '左侧开始',
           ko: '왼쪽에서 시작',
         },
-      },
-      run: (data) => {
-        data.artOfDarkness = [];
-        if (!data.artOfDarknessIdMap)
-          data.artOfDarknessExpected = 'right';
       },
     },
     {
@@ -441,7 +456,12 @@ export default {
       // The fight goes Second Art -> Third Art -> Second Art, so we want
       // to have this cleaned up before the second Second Art Of Darkness
       preRun: (data) => delete data.finalArtOfDarkness,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => {
+        data.artOfDarkness = [];
+        if (!data.artOfDarknessIdMap)
+          data.artOfDarknessExpected = 'left';
+      },
       outputStrings: {
         text: {
           en: 'Start Right',
@@ -451,11 +471,6 @@ export default {
           cn: '右侧开始',
           ko: '오른쪽에서 시작',
         },
-      },
-      run: (data) => {
-        data.artOfDarkness = [];
-        if (!data.artOfDarknessIdMap)
-          data.artOfDarknessExpected = 'left';
       },
     },
     {
@@ -521,14 +536,15 @@ export default {
       },
       preRun: (data, matches) => data.artOfDarkness.push(data.artOfDarknessIdMap[matches.id]),
       durationSeconds: (data) => data.finalArtOfDarkness ? 16 : 9,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         // Perform the callout now, regardless if it's The Second or Third Art Of Darkness
+        const callout = data.artOfDarkness.slice();
         if (data.finalArtOfDarkness)
-          data.artOfDarkness.push(data.finalArtOfDarkness);
-        return data.artOfDarkness.map((key) => output[key]()).join(' -> ');
+          callout.push(data.finalArtOfDarkness);
+        return callout.map((key) => output[key]()).join(' -> ');
       },
-      outputStrings: artOfDarknessOutputStrings,
       run: (data) => delete data.artOfDarkness,
+      outputStrings: artOfDarknessOutputStrings,
     },
     {
       id: 'E9S Empty Plane',
@@ -551,7 +567,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '55F0', source: '暗闇の雲', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '55F0', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '55F0', source: '어둠의 구름', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tile Positions',
@@ -567,8 +583,8 @@ export default {
       id: 'E9S Curse Of Darkness',
       netRegex: NetRegexes.gainsEffect({ effectId: '953' }),
       condition: Conditions.targetIsYou(),
-      delaySeconds: (_, matches) => matches.duration - 3,
-      alertText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
+      delaySeconds: (_data, matches) => matches.duration - 3,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Face Laser Out',
@@ -601,11 +617,11 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '5A95', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5A95', source: '어둠의 구름', capture: false }),
       durationSeconds: 8,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         if (!data.summon)
           return output.text();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.summon)
           return output.text();
       },
@@ -620,11 +636,11 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '5A96', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5A96', source: '어둠의 구름', capture: false }),
       durationSeconds: 8,
-      alertText: (data, _, output) => {
+      alertText: (data, _matches, output) => {
         if (!data.summon)
           return output.text();
       },
-      infoText: (data, _, output) => {
+      infoText: (data, _matches, output) => {
         if (data.summon)
           return output.text();
       },
@@ -664,7 +680,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '5603', source: '暗闇の雲', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '5603', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5603', source: '어둠의 구름', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => {
+        data.artOfDarkness = [];
+        // Add this once we've seen the second charge to call out sooner.
+        data.finalArtOfDarkness = 'goRight';
+      },
       outputStrings: {
         text: {
           en: 'Start Left',
@@ -675,11 +696,6 @@ export default {
           ko: '왼쪽에서 시작',
         },
       },
-      run: (data) => {
-        data.artOfDarkness = [];
-        // Add this once we've seen the second charge to call out sooner.
-        data.finalArtOfDarkness = 'goRight';
-      },
     },
     {
       id: 'E9S The Third Art Of Darkness Left',
@@ -689,7 +705,12 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '5604', source: '暗闇の雲', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '5604', source: '暗黑之云', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '5604', source: '어둠의 구름', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
+      run: (data) => {
+        data.artOfDarkness = [];
+        // Add this once we've seen the second charge to call out sooner.
+        data.finalArtOfDarkness = 'goLeft';
+      },
       outputStrings: {
         text: {
           en: 'Start Right',
@@ -699,11 +720,6 @@ export default {
           cn: '右侧开始',
           ko: '오른쪽에서 시작',
         },
-      },
-      run: (data) => {
-        data.artOfDarkness = [];
-        // Add this once we've seen the second charge to call out sooner.
-        data.finalArtOfDarkness = 'goLeft';
       },
     },
     {
@@ -716,7 +732,7 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '5620', source: '어둠의 구름', capture: false }),
       delaySeconds: 6,
       durationSeconds: 6,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Towers',
@@ -745,6 +761,7 @@ export default {
       netRegexFr: NetRegexes.startsUsing({ id: '561[EF]', source: 'Nuée de Ténèbres' }),
       netRegexJa: NetRegexes.startsUsing({ id: '561[EF]', source: '幻影の雲' }),
       netRegexCn: NetRegexes.startsUsing({ id: '561[EF]', source: '幻影之云' }),
+      netRegexKo: NetRegexes.startsUsing({ id: '561[EF]', source: '환영의 구름' }),
       suppressSeconds: 1,
       promise: async (data) => {
         const cloudOfDarknessLocaleNames = {
@@ -756,7 +773,7 @@ export default {
           ko: '어둠의 구름',
         };
 
-        const bossData = await window.callOverlayHandler({
+        const bossData = await callOverlayHandler({
           call: 'getCombatants',
           names: [cloudOfDarknessLocaleNames[data.parserLang]],
         });
@@ -774,13 +791,14 @@ export default {
 
         const cloneOfDarknessLocaleNames = {
           en: 'Clone Of Darkness',
-          de: 'Klon der Dunkelheit',
+          de: 'Klon Der Dunkelheit',
           fr: 'Nuée de Ténèbres',
           ja: '幻影の雲',
           cn: '幻影之云',
+          ko: '환영의 구름',
         };
 
-        const cloneData = await window.callOverlayHandler({
+        const cloneData = await callOverlayHandler({
           call: 'getCombatants',
           names: [cloneOfDarknessLocaleNames[data.parserLang]],
         });
@@ -797,15 +815,21 @@ export default {
         const [clone1, clone2] = data.clones;
         return output[calculateSummonSafeZone(data.boss, clone1, clone2, matches.id)]();
       },
-      outputStrings: summonDirectionOutputStrings,
       run: (data) => delete data.summon,
+      outputStrings: summonDirectionOutputStrings,
     },
   ],
   timelineReplace: [
     {
+      'locale': 'en',
+      'replaceText': {
+        'The Art Of Darkness(?! \\\\())': 'Art Of Dark (Clock/Stacks)',
+      },
+    },
+    {
       'locale': 'de',
       'replaceSync': {
-        'Hypercharged Cloud': 'pulsierend(?:e|er|es|en) Wolke',
+        'Clone Of Darkness': 'Klon der Dunkelheit',
         'Cloud Of Darkness': 'Wolke der Dunkelheit',
       },
       'replaceText': {
@@ -815,9 +839,7 @@ export default {
         'Summon': 'Rufen',
         'Rejuvenating Balm': 'Aktivierte Kugel',
         'Particle Concentration': 'Wellenkugel',
-        '(?<!(Full-Perimeter|Ground-Razing) )Particle Beam': 'Partikelstrahl',
         'Obscure Woods': 'Finsterer Wald',
-        'Hypercharged Dispersal': 'Elektrisierte Zerstreuung',
         'Hypercharged Condensation': 'Elektrisierte Kondensation',
         'Ground-Razing Particle Beam': 'Radialer Partikelstrahl',
         'Full-Perimeter Particle Beam': 'Partikelstrahl-Beschuss',
@@ -833,22 +855,19 @@ export default {
     {
       'locale': 'fr',
       'replaceSync': {
-        'Hypercharged Cloud': 'nuage palpitant',
+        'Clone Of Darkness': 'Nuée de Ténèbres',
         'Cloud Of Darkness': 'Nuage de Ténèbres',
       },
       'replaceText': {
         '\\(L/R\\)': '(G/D)',
-        '\\(P/S\\)': '(Po/Pa)',
         'The Third Art Of Darkness': 'Arts ténébreux triple',
         'The Second Art Of Darkness': 'Arts ténébreux double',
-        'The Art Of Darkness': 'Arts ténébreux',
+        'The Art Of Darkness(?! \\\\())': 'Arts ténébreux (Pos/Packs)',
         'Summon': 'Invocation',
         'Rejuvenating Balm': 'Tir vivifiant',
         'Particle Concentration': 'Rayon sphérique',
         'Phaser Unlimited': 'Faisceau de particules bondissant',
-        '(?<!(Full-Perimeter|Ground-Razing) )Particle Beam': 'Rayon explosif',
         'Obscure Woods': 'Forêt obscure',
-        'Hypercharged Dispersal': 'Dissipation',
         'Hypercharged Condensation': 'Aspiration particulaire',
         'Ground-Razing Particle Beam': 'Faisceau de particules radiant',
         'Full-Perimeter Particle Beam': 'Faisceau de particules balayant',
@@ -862,7 +881,7 @@ export default {
     {
       'locale': 'ja',
       'replaceSync': {
-        'Hypercharged Cloud': '波動雲',
+        'Clone Of Darkness': '幻影の雲',
         'Cloud Of Darkness': '暗闇の雲',
       },
       'replaceText': {
@@ -873,9 +892,7 @@ export default {
         'Rejuvenating Balm': '活性弾',
         'Phaser Unlimited': '跳躍波動砲',
         'Particle Concentration': '波動球',
-        '(?<!(Full-Perimeter|Ground-Razing) )Particle Beam': '波動爆発',
         'Obscure Woods': '暗黒森林',
-        'Hypercharged Dispersal': '被吸収',
         'Hypercharged Condensation': '波動雲吸引',
         'Ground-Razing Particle Beam': '放射式 波動砲',
         'Full-Perimeter Particle Beam': '掃射式 波動砲',
@@ -892,6 +909,72 @@ export default {
         'Anti-Air Particle Beam': '高射式 波動砲',
         'Aetherosynthesis': '生気吸収',
         '\\(L/R\\)': '(左/右)',
+      },
+    },
+    {
+      'locale': 'cn',
+      'replaceSync': {
+        'Clone Of Darkness': '幻影之云',
+        'Cloud Of Darkness': '暗黑之云',
+      },
+      'replaceText': {
+        'The Third Art Of Darkness': '三重暗之战技',
+        'The Second Art Of Darkness': '二重暗之战技',
+        'The Art Of Darkness': '暗之战技',
+        'Summon': '召唤',
+        'Rejuvenating Balm': '活性弹',
+        'Phaser Unlimited': '跳跃波动炮',
+        'Particle Concentration': '波动球',
+        'Obscure Woods': '暗黑森林',
+        'Hypercharged Condensation': '吸引波动云',
+        'Ground-Razing Particle Beam': '放射式波动炮',
+        'Full-Perimeter Particle Beam': '扫射式波动炮',
+        'Flood Of Obscurity': '暗之泛滥：暗黑森林',
+        'Flood Of Emptiness': '暗之泛滥：暗黑天空',
+        'Empty Plane': '暗黑天空',
+        'Devouring Dark': '暗黑侵蚀',
+        'Deluge Of Darkness': '暗之大泛滥',
+        'Dark-Energy Particle Beam': '诅咒式波动炮',
+        'Condensed Wide-Angle Particle Beam': '广角式高输出波动炮',
+        'Condensed Anti-Air Particle Beam': '高射式高输出波动炮',
+        'Bad Vibrations': '强震动',
+        'Anti-Air Phaser Unlimited': '零式高射式跳跃波动炮',
+        'Anti-Air Particle Beam': '高射式波动炮',
+        'Aetherosynthesis': '吸收生命',
+        '\\(L/R\\)': '(左/右)',
+      },
+    },
+    {
+      'locale': 'ko',
+      'replaceSync': {
+        'Clone Of Darkness': '환영의 구름',
+        'Cloud Of Darkness': '어둠의 구름',
+      },
+      'replaceText': {
+        'The Third Art Of Darkness': '어둠의 전투술: 삼중',
+        'The Second Art Of Darkness': '어둠의 전투술: 이중',
+        'The Art Of Darkness': '어둠의 전투술',
+        'Summon': '소환',
+        'Rejuvenating Balm': '활성탄',
+        'Phaser Unlimited': '도약파동포 0식',
+        'Particle Concentration': '파동구',
+        'Obscure Woods': '암흑의 숲',
+        'Hypercharged Condensation': '파동운 흡인',
+        'Ground-Razing Particle Beam': '방사식 파동포',
+        'Full-Perimeter Particle Beam': '소사식 파동포',
+        'Flood Of Obscurity': '어둠의 범람: 암흑의 숲',
+        'Flood Of Emptiness': '어둠의 범람: 암흑의 하늘',
+        'Empty Plane': '암흑의 하늘',
+        'Devouring Dark': '어둠의 침식',
+        'Deluge Of Darkness': '어둠의 대범람',
+        'Dark-Energy Particle Beam': '저주식 파동포',
+        'Condensed Wide-Angle Particle Beam': '광각식 고출력 파동포',
+        'Condensed Anti-Air Particle Beam': '고공식 고출력 파동포',
+        'Bad Vibrations': '강력한 진동',
+        'Anti-Air Phaser Unlimited': '고공식 도약파동포 0식',
+        'Anti-Air Particle Beam': '고공식 파동포',
+        'Aetherosynthesis': '생기 흡수',
+        '\\(L/R\\)': '(좌/우)',
       },
     },
   ],

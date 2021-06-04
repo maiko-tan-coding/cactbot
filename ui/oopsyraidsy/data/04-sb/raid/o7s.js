@@ -1,4 +1,4 @@
-import ZoneId from '../../../../../resources/zone_id.js';
+import ZoneId from '../../../../../resources/zone_id';
 
 // O7S - Sigmascape 3.0 Savage
 export default {
@@ -14,7 +14,7 @@ export default {
     {
       id: 'O7S Stoneskin',
       abilityRegex: '2AB5',
-      mistake: function(e, data) {
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },

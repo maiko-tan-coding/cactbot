@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheTwinning,
@@ -15,9 +15,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DBC', source: '量産型カーリア' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DBC', source: '量产型卡利亚' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DBC', source: '양산형 칼리아' }),
-      condition: function(data) {
-        return data.CanStun() || data.CanSilence();
-      },
+      condition: (data) => data.CanStun() || data.CanSilence(),
       response: Responses.stun(),
     },
     {
@@ -28,9 +26,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DC0', source: 'ヴァイタライズ・レプトイド' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DC0', source: '活力化爬虫半人马' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DC0', source: '활성된 파충류' }),
-      condition: function(data) {
-        return data.CanStun() || data.CanSilence();
-      },
+      condition: (data) => data.CanStun() || data.CanSilence(),
       response: Responses.interrupt(),
     },
     {
@@ -41,9 +37,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DBA', source: 'サーヴォ・ミノタウロス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DBA', source: '自控化弥诺陶洛斯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DBA', source: '자동제어 미노타우로스' }),
-      condition: function(data) {
-        return data.CanSilence();
-      },
+      condition: (data) => data.CanSilence(),
       response: Responses.interrupt(),
     },
     {
@@ -51,7 +45,7 @@ export default {
       id: 'Twinning Impact + Pounce',
       netRegex: NetRegexes.headMarker({ id: ['003[2-5]', '005A'], capture: false }),
       suppressSeconds: 10,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Spread (avoid cages)',
@@ -97,9 +91,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DED', source: 'ミトリダテス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DED', source: '米特里达梯' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DED', source: '미트리다테스' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -123,13 +115,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3DF8', source: '泰空', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DF8', source: '타이쿤', capture: false }),
       suppressSeconds: 15,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'cardinal lasers',
           de: 'Himmelrichtungs-Lasers',
           fr: 'Lasers cardinaux',
-          ja: '十字レザー',
+          ja: '十字レーザー',
           cn: '正点激光',
           ko: '십자 레이저',
         },
@@ -144,13 +136,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3DF2', source: '泰空', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DF2', source: '타이쿤', capture: false }),
       suppressSeconds: 15,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'outer lasers',
           de: 'Lasers am Rand',
           fr: 'Lasers extérieurs',
-          ja: '外周レザー',
+          ja: '外周レーザー',
           cn: '外侧激光',
           ko: '외곽 레이저',
         },
@@ -164,9 +156,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3DFB', source: 'タイクーン' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3DFB', source: '泰空' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3DFB', source: '타이쿤' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {

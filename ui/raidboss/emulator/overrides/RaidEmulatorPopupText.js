@@ -1,4 +1,4 @@
-import StubbedPopupText from '../overrides/StubbedPopupText.js';
+import StubbedPopupText from '../overrides/StubbedPopupText';
 
 export default class RaidEmulatorPopupText extends StubbedPopupText {
   constructor(options, timelineLoader, raidbossFileData) {
@@ -18,20 +18,20 @@ export default class RaidEmulatorPopupText extends StubbedPopupText {
     this.audioDebugTextDuration = 2000;
   }
 
-  async doUpdate(timestampOffset) {
-    this.emulatedOffset = timestampOffset;
+  async doUpdate(currentLogTime) {
+    this.emulatedOffset = currentLogTime;
     for (const t of this.scheduledTriggers) {
-      const remaining = t.expires - timestampOffset;
+      const remaining = t.expires - currentLogTime;
       if (remaining <= 0) {
         t.resolver();
         await t.promise;
       }
     }
     this.scheduledTriggers = this.scheduledTriggers.filter((t) => {
-      return t.expires - timestampOffset > 0;
+      return t.expires - currentLogTime > 0;
     });
     this.displayedText = this.displayedText.filter((t) => {
-      const remaining = t.expires - timestampOffset;
+      const remaining = t.expires - currentLogTime;
       if (remaining > 0) {
         t.element.querySelector('.popup-text-remaining').textContent = '(' + (remaining / 1000).toFixed(1) + ')';
         return true;
@@ -41,36 +41,48 @@ export default class RaidEmulatorPopupText extends StubbedPopupText {
     });
   }
 
+  OnLog(logs) {
+    for (const l of logs) {
+      const log = l.properCaseConvertedLine || l.convertedLine;
+      const currentTime = l.timestamp;
+      if (log.includes('00:0038:cactbot wipe'))
+        this.SetInCombat(false);
+
+      for (const trigger of this.triggers) {
+        const r = log.match(trigger.localRegex);
+        if (r)
+          this.OnTrigger(trigger, r, currentTime);
+      }
+    }
+  }
+
+  OnNetLog(logs) {
+    for (const l of logs) {
+      const log = l.networkLine;
+      const currentTime = l.timestamp;
+      for (const trigger of this.netTriggers) {
+        const r = log.match(trigger.localNetRegex);
+        if (r)
+          this.OnTrigger(trigger, r, currentTime);
+      }
+    }
+  }
+
   bindTo(emulator) {
     this.emulator = emulator;
     emulator.on('emitLogs', (event) => {
-      this.OnLog({
-        detail: {
-          logs: event.logs.map((a) => a.properCaseConvertedLine || a.convertedLine),
-        },
-      });
-      event.logs.forEach((l) => {
-        this.OnNetLog({
-          rawLine: l.networkLine,
-        });
-      });
+      this.OnLog(event.logs);
+      this.OnNetLog(event.logs);
     });
-    emulator.on('tick', async (timestampOffset) => {
-      await this.doUpdate(timestampOffset);
+    emulator.on('tick', async (currentLogTime) => {
+      await this.doUpdate(currentLogTime);
     });
     emulator.on('midSeek', async (line) => {
-      await this.doUpdate(line.offset);
+      await this.doUpdate(line.timestamp);
     });
     emulator.on('preSeek', (time) => {
       this.seeking = true;
-      for (const i of this.scheduledTriggers)
-        i.rejecter();
-
-      this.scheduledTriggers = [];
-      this.displayedText = this.displayedText.filter((t) => {
-        t.element.remove();
-        return false;
-      });
+      this._emulatorReset();
     });
     emulator.on('postSeek', async (time) => {
       // This is a hacky fix for audio still playing during seek
@@ -79,14 +91,7 @@ export default class RaidEmulatorPopupText extends StubbedPopupText {
       }, 5);
     });
     emulator.on('currentEncounterChanged', () => {
-      for (const i of this.scheduledTriggers)
-        i.rejecter();
-
-      this.scheduledTriggers = [];
-      this.displayedText = this.displayedText.filter((t) => {
-        t.element.remove();
-        return false;
-      });
+      this._emulatorReset();
       this.OnChangeZone({
         zoneName: emulator.currentEncounter.encounter.encounterZoneName,
         zoneID: parseInt(emulator.currentEncounter.encounter.encounterZoneId, 16),
@@ -94,9 +99,21 @@ export default class RaidEmulatorPopupText extends StubbedPopupText {
     });
   }
 
-  _createTextFor(text, textType, lowerTextKey, duration) {
+  _emulatorReset() {
+    for (const i of this.scheduledTriggers)
+      i.rejecter();
+
+    this.scheduledTriggers = [];
+    this.displayedText = this.displayedText.filter((t) => {
+      t.element.remove();
+      return false;
+    });
+    this.triggerSuppress = [];
+  }
+
+  _createTextFor(triggerHelper, text, textType, lowerTextKey, duration) {
     const textElementClass = textType + '-text';
-    const e = this._makeTextElement(text, textElementClass);
+    const e = this._makeTextElement(triggerHelper, text, textElementClass);
     this.addDisplayText(e, this.emulatedOffset + (duration * 1000));
   }
 
@@ -121,27 +138,27 @@ export default class RaidEmulatorPopupText extends StubbedPopupText {
     return ret;
   }
 
-  _playAudioFile(url, volume) {
+  _playAudioFile(triggerHelper, url, volume) {
     if (![this.options.InfoSound, this.options.AlertSound, this.options.AlarmSound]
       .includes(url)) {
-      const div = this._makeTextElement(url, 'audio-file');
+      const div = this._makeTextElement(triggerHelper, url, 'audio-file');
       this.addDisplayText(div, this.emulatedOffset + this.audioDebugTextDuration);
     }
     if (this.seeking)
       return;
 
-    super._playAudioFile(url, volume);
+    super._playAudioFile(triggerHelper, url, volume);
   }
   ttsSay(ttsText) {
     if (this.seeking)
       return;
 
-    const div = this._makeTextElement(ttsText, 'tts-text');
+    const div = this._makeTextElement(triggerHelper, ttsText, 'tts-text');
     this.addDisplayText(div, this.emulatedOffset + this.audioDebugTextDuration);
     super.ttsSay(ttsText);
   }
 
-  _makeTextElement(text, className) {
+  _makeTextElement(triggerHelper, text, className) {
     const $ret = this.$textElementTemplate.cloneNode(true);
     $ret.classList.add(className);
     $ret.querySelector('.popup-text').textContent = text;

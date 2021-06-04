@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Shiva Hard
 export default {
@@ -24,7 +24,7 @@ export default {
     {
       id: 'ShivaHm Diamond Dust',
       netRegex: NetRegexes.ability({ id: '98A' }),
-      run: function(data) {
+      run: (data) => {
         data.seenDiamondDust = true;
       },
     },
@@ -33,12 +33,12 @@ export default {
       // Shiva also uses ability 9A3 on you, but it has the untranslated name
       // 透明：シヴァ：凍結レクト：ノックバック用. So, use the effect instead for free translation.
       netRegex: NetRegexes.gainsEffect({ effectId: '1E7' }),
-      condition: function(e, data, matches) {
+      condition: (_e, data) => {
         // The intermission also gets this effect, so only a mistake after that.
         // Unlike extreme, this has the same 20 second duration as the intermission.
         return data.seenDiamondDust;
       },
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'fail', blame: matches.target, text: matches.effect };
       },
     },

@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.SohmAlHard,
@@ -34,7 +34,7 @@ export default {
       // Warns if players step into the lava puddles. There is unfortunately no direct damage event.
       id: 'SohmAlHm Burns',
       netRegex: NetRegexes.gainsEffect({ effectId: '11C' }),
-      mistake: function(e, data, matches) {
+      mistake: (_e, _data, matches) => {
         return { type: 'warn', blame: matches.target, text: matches.effect };
       },
     },

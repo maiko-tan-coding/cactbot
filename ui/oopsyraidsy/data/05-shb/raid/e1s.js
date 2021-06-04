@@ -1,4 +1,4 @@
-import ZoneId from '../../../../../resources/zone_id.js';
+import ZoneId from '../../../../../resources/zone_id';
 
 // TODO: failing to interrupt Mana Boost (3D8D)
 // TODO: failing to pass healer debuff?
@@ -22,20 +22,16 @@ export default {
     {
       id: 'E1S Fire/Thunder III',
       damageRegex: '44FB',
-      condition: function(e, data) {
-        return e.type !== '15';
-      },
-      mistake: function(e, data) {
+      condition: (e) => e.type !== '15',
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
     {
       id: 'E1S Pure Beam Single',
       damageRegex: '3D81',
-      condition: function(e, data) {
-        return e.type !== '15';
-      },
-      mistake: function(e, data) {
+      condition: (e) => e.type !== '15',
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
@@ -43,10 +39,8 @@ export default {
       id: 'E1S Tank Lasers',
       // Vice Of Vanity
       damageRegex: '44F1',
-      condition: function(e, data) {
-        return e.type !== '15';
-      },
-      mistake: function(e, data) {
+      condition: (e) => e.type !== '15',
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },
@@ -54,10 +48,8 @@ export default {
       id: 'E1S DPS Puddles',
       // Vice Of Apathy
       damageRegex: '44F2',
-      condition: function(e, data) {
-        return e.type !== '15';
-      },
-      mistake: function(e, data) {
+      condition: (e) => e.type !== '15',
+      mistake: (e) => {
         return { type: 'fail', blame: e.targetName, text: e.abilityName };
       },
     },

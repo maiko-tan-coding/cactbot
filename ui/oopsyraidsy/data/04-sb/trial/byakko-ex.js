@@ -1,4 +1,4 @@
-import ZoneId from '../../../../../resources/zone_id.js';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Byakko Extreme
 export default {
@@ -24,10 +24,8 @@ export default {
       // Pink bubble collision
       id: 'ByaEx Ominous Wind',
       damageRegex: '27EC',
-      condition: function(e, data) {
-        return data.IsPlayerId(e.targetId);
-      },
-      mistake: function(e, data) {
+      condition: (e, data) => data.IsPlayerId(e.targetId),
+      mistake: (e) => {
         return {
           type: 'warn',
           blame: e.targetName,

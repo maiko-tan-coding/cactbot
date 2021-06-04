@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.MtGulg,
@@ -15,9 +15,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '41AF', source: 'フォーギヴン・プレジュディス' }),
       netRegexCn: NetRegexes.startsUsing({ id: '41AF', source: '得到宽恕的偏见' }),
       netRegexKo: NetRegexes.startsUsing({ id: '41AF', source: '면죄된 편견' }),
-      condition: function(data) {
-        return data.CanStun() || data.CanSilence();
-      },
+      condition: (data) => data.CanStun() || data.CanSilence(),
       response: Responses.interrupt('info'),
     },
     {
@@ -28,7 +26,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '41AB', source: 'フォーギヴン・アンビション', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '41AB', source: '得到宽恕的奢望', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '41AB', source: '면죄된 야망', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Ambition Tail Smash',
@@ -48,9 +46,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3CFB', source: 'フォーギヴン・クルエルティー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3CFB', source: '得到宽恕的残忍' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3CFB', source: '면죄된 잔혹' }),
-      condition: function(data, matches) {
-        return matches.target === data.me || data.role === 'healer';
-      },
+      condition: (data, matches) => matches.target === data.me || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -61,13 +57,13 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '41B2', source: 'フォーギヴン・クルエルティー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '41B2', source: '得到宽恕的残忍', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '41B2', source: '면죄된 잔혹', capture: false }),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Frontal Laser',
           de: 'Frontaler Laser',
           fr: 'Laser frontal',
-          ja: 'ボス前方レザー',
+          ja: 'ボス前方レーザー',
           cn: '面前激光',
           ko: '정면 레이저 공격',
         },
@@ -93,13 +89,13 @@ export default {
       netRegexCn: NetRegexes.startsUsing({ id: '3D00', source: '得到宽恕的残忍', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D00', source: '면죄된 잔혹', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'dodge wind cones',
           de: 'Wind-Fächerflächen ausweichen',
           fr: 'Esquivez les cônes de vent',
-          ja: '風の楔から離れ',
+          ja: '風の楔から離れる',
           cn: '躲风锥',
           ko: '부채꼴 공격 피하기',
         },
@@ -136,9 +132,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D09', source: 'フォーギヴン・ウィムズィー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D09', source: '得到宽恕的无常' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D09', source: '면죄된 변덕' }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -149,7 +143,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D0F', source: 'フォーギヴン・ウィムズィー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D0F', source: '得到宽恕的无常', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D0F', source: '면죄된 변덕', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get Towers',
@@ -201,9 +195,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D12', source: 'フォーギヴン・オブセニティー' }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D12', source: '得到宽恕的猥亵' }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D12', source: '면죄된 외설' }),
-      condition: function(data) {
-        return data.role === 'tank' || data.role === 'healer';
-      },
+      condition: (data) => data.role === 'tank' || data.role === 'healer',
       response: Responses.tankBuster(),
     },
     {
@@ -214,7 +206,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '3D18', source: 'フォーギヴン・オブセニティー', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '3D18', source: '得到宽恕的猥亵', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '3D18', source: '면죄된 외설', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'max melee range',
@@ -241,6 +233,9 @@ export default {
     {
       'locale': 'de',
       'replaceSync': {
+        'Forgiven Revelry': 'Geläutert(?:e|er|es|en) Prasserei',
+        'Forgiven Ambition': 'Geläutert(?:e|er|es|en) Begierde',
+        'Forgiven Prejudice': 'Geläutert(?:e|er|es|en) Voreingenommenheit',
         'Forgiven Obscenity': 'geläutert(?:e|er|es|en) Unzucht',
         'Forgiven Cruelty': 'geläutert(?:e|er|es|en) Grausamkeit',
         'Forgiven Whimsy': 'geläutert(?:e|er|es|en) Gereiztheit',
@@ -277,6 +272,9 @@ export default {
     {
       'locale': 'fr',
       'replaceSync': {
+        'Forgiven Revelry': 'Orgie Pardonnée',
+        'Forgiven Ambition': 'Ambition Pardonnée',
+        'Forgiven Prejudice': 'Préjugé Pardonné',
         'Brightsphere': 'Sphère incandescente',
         'Forgiven Cruelty': 'Cruauté Pardonnée',
         'Forgiven Obscenity': 'Obscénité Pardonnée',
@@ -313,6 +311,9 @@ export default {
     {
       'locale': 'ja',
       'replaceSync': {
+        'Forgiven Revelry': 'フォーギヴン・レヴェルリー',
+        'Forgiven Ambition': 'フォーギヴン・アンビション',
+        'Forgiven Prejudice': 'フォーギヴン・プレジュディス',
         'Brightsphere': 'ブライトスフィア',
         'Forgiven Cruelty': 'フォーギヴン・クルエルティー',
         'Forgiven Obscenity': 'フォーギヴン・オブセニティー',
@@ -349,6 +350,9 @@ export default {
     {
       'locale': 'ko',
       'replaceSync': {
+        'Forgiven Revelry': '得到宽恕的放纵',
+        'Forgiven Ambition': '得到宽恕的奢望',
+        'Forgiven Prejudice': '得到宽恕的偏见',
         'Forgiven Obscenity': '면죄된 외설',
         'Forgiven Cruelty': '면죄된 잔혹',
         'Forgiven Whimsy': '면죄된 변덕',
@@ -385,6 +389,9 @@ export default {
     {
       'locale': 'cn',
       'replaceSync': {
+        'Forgiven Revelry': '면죄된 환락',
+        'Forgiven Ambition': '면죄된 야망',
+        'Forgiven Prejudice': '면죄된 편견',
         'Forgiven Obscenity': '得到宽恕的猥亵',
         'Forgiven Cruelty': '得到宽恕的残忍',
         'Forgiven Whimsy': '得到宽恕的无常',

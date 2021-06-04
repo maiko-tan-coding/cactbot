@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.AlexanderTheArmOfTheFatherSavage,
@@ -26,11 +26,9 @@ export default {
       id: 'A3S Hand of Stuff',
       regex: /Hand of Prayer\/Parting/,
       beforeSeconds: 5,
-      condition: function(data) {
-        return data.role === 'tank' || data.job === 'BLU';
-      },
+      condition: (data) => data.role === 'tank' || data.job === 'BLU',
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Move Bosses',
@@ -48,7 +46,7 @@ export default {
       id: 'A3S Sluice',
       netRegex: NetRegexes.headMarker({ id: '001A' }),
       condition: Conditions.targetIsYou(),
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Sluice on YOU',
@@ -64,7 +62,7 @@ export default {
       id: 'A3S Digititis Tank',
       netRegex: NetRegexes.headMarker({ id: '0025' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Tank Debuff',
@@ -80,7 +78,7 @@ export default {
       id: 'A3S Digititis Healer',
       netRegex: NetRegexes.headMarker({ id: '0022' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Healer Debuff',
@@ -96,7 +94,7 @@ export default {
       id: 'A3S Digititis Damage',
       netRegex: NetRegexes.headMarker({ id: '0024' }),
       condition: Conditions.targetIsYou(),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Damage Debuff',
@@ -116,7 +114,7 @@ export default {
       netRegexJa: NetRegexes.ability({ source: ['リキッドハンド', 'リビングリキッド'], id: 'F09', capture: false }),
       netRegexCn: NetRegexes.ability({ source: ['活水之手', '有生命活水'], id: 'F09', capture: false }),
       netRegexKo: NetRegexes.ability({ source: ['액체 손', '살아있는 액체'], id: 'F09', capture: false }),
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Burn Higher HP Hand',
@@ -137,7 +135,7 @@ export default {
       netRegexCn: NetRegexes.tether({ id: '0005', target: '有生命活水' }),
       netRegexKo: NetRegexes.tether({ id: '0005', target: '살아있는 액체' }),
       condition: (data, matches) => matches.source === data.me,
-      alertText: (data, _, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Drainage on YOU',
@@ -157,11 +155,9 @@ export default {
       netRegexJa: NetRegexes.tether({ id: '0005', target: 'リビングリキッド', capture: false }),
       netRegexCn: NetRegexes.tether({ id: '0005', target: '有生命活水', capture: false }),
       netRegexKo: NetRegexes.tether({ id: '0005', target: '살아있는 액체', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank';
-      },
+      condition: (data) => data.role === 'tank',
       suppressSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Get drainage tether',
@@ -176,7 +172,7 @@ export default {
     {
       id: 'A3S Ferrofluid Tether',
       netRegex: NetRegexes.tether({ id: '0026' }),
-      run: function(data, matches) {
+      run: (data, matches) => {
         data.ferroTether = data.ferroTether || {};
         data.ferroTether[matches.source] = matches.target;
         data.ferroTether[matches.target] = matches.source;
@@ -185,8 +181,8 @@ export default {
     {
       id: 'A3S Ferrofluid Signs',
       netRegex: NetRegexes.headMarker({ id: ['0030', '0031'] }),
-      run: function(data, matches) {
-        data.ferroMarker = data.ferroMarker || [];
+      run: (data, matches) => {
+        data.ferroMarker = data.ferroMarker || {};
         data.ferroMarker[matches.target] = matches.id;
       },
     },
@@ -199,9 +195,9 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ source: 'リビングリキッド', id: 'F01' }),
       netRegexCn: NetRegexes.startsUsing({ source: '有生命活水', id: 'F01' }),
       netRegexKo: NetRegexes.startsUsing({ source: '살아있는 액체', id: 'F01' }),
-      alertText: function(data, matches, output) {
+      alertText: (data, matches, output) => {
         data.ferroTether = data.ferroTether || {};
-        data.ferroMarker = data.ferroMarker || [];
+        data.ferroMarker = data.ferroMarker || {};
         const partner = data.ferroTether[data.me];
         const marker1 = data.ferroMarker[data.me];
         const marker2 = data.ferroMarker[partner];
@@ -226,7 +222,7 @@ export default {
           en: 'Attract: away from ${player}',
           de: 'Anziehung: weg von ${player}',
           fr: 'Attraction : Eloignez-vous de ${player}',
-          ja: '異なる極: ${player}に離れ',
+          ja: '異なる極: ${player}から離れる',
           cn: '异极：远离${player}',
           ko: '자력: ${player}와 떨어지기',
         },
@@ -252,12 +248,8 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'リキッドレイジ', id: 'F1A' }),
       netRegexCn: NetRegexes.ability({ source: '活水之怒', id: 'F1A' }),
       netRegexKo: NetRegexes.ability({ source: '분노한 액체', id: 'F1A' }),
-      condition: function(data) {
-        return data.CanCleanse();
-      },
-      alertText: function(data, matches, output) {
-        return output.text({ player: data.ShortName(matches.target) });
-      },
+      condition: (data) => data.CanCleanse(),
+      alertText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
       outputStrings: {
         text: {
           en: 'Throttle on ${player}',
@@ -272,11 +264,11 @@ export default {
     {
       id: 'A3S Fluid Claw',
       netRegex: NetRegexes.headMarker({ id: '0010' }),
-      alarmText: function(data, matches, output) {
+      alarmText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.clawOnYou();
       },
-      infoText: function(data, matches, output) {
+      infoText: (data, matches, output) => {
         if (data.me !== matches.target)
           return output.clawOn({ player: data.ShortName(matches.target) });
       },
@@ -308,16 +300,14 @@ export default {
       netRegexJa: NetRegexes.ability({ source: 'リビングリキッド', id: 'F1B', capture: false }),
       netRegexCn: NetRegexes.ability({ source: '有生命活水', id: 'F1B', capture: false }),
       netRegexKo: NetRegexes.ability({ source: '살아있는 액체', id: 'F1B', capture: false }),
-      condition: function(data) {
-        return data.role === 'tank' || data.job === 'BLU';
-      },
-      infoText: (data, _, output) => output.text(),
+      condition: (data) => data.role === 'tank' || data.job === 'BLU',
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Embolus: Move Boss',
           de: 'Pfropfen: Boss bewegen',
           fr: 'Caillot : Déplacez le boss',
-          ja: 'エンボラス: ボスを引き離れ',
+          ja: 'エンボラス: ボスを引いて離れる',
           cn: '水球出现：拉走BOSS',
           ko: '물구슬: 보스 주차 옮기기',
         },
@@ -346,7 +336,7 @@ export default {
         'Fluid Swing': 'Flüssiger Schwung',
         'Gear Lubricant': 'Getriebeschmiermittel',
         'Hand Of Pain': 'Qualhand',
-        'Hand Of Prayer': 'Betende Hand',
+        'Hand Of Prayer/Parting': 'Betende/Scheidende Hand',
         'Hydromorph': 'Hydromorphose',
         'Magnetism': 'Magnetismus',
         'Piston Lubricant': 'Kolbenschmiermittel',

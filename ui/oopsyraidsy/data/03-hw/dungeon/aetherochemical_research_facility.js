@@ -1,5 +1,5 @@
-import NetRegexes from '../../../../../resources/netregexes.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import NetRegexes from '../../../../../resources/netregexes';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Aetherochemical Research Facility
 export default {
@@ -41,7 +41,7 @@ export default {
     {
       id: 'ARF Petrifaction',
       netRegex: NetRegexes.gainsEffect({ effectId: '01' }),
-      mistake: function(e, data, matches) {
+      mistake: (e) => {
         return { type: 'warn', blame: e.target, text: e.effect };
       },
     },

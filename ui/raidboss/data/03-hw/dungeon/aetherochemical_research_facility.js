@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 // Aetherochemical Research Facility
 export default {
@@ -12,18 +12,14 @@ export default {
       id: 'Facility Bastardbluss',
       regex: /Bastardbluss/,
       beforeSeconds: 4,
-      condition: function(data) {
-        return data.role === 'healer' || data.role === 'tank';
-      },
+      condition: (data) => data.role === 'healer' || data.role === 'tank',
       response: Responses.tankBuster(),
     },
     {
       id: 'Facility Hood Swing',
       regex: /Hood Swing/,
       beforeSeconds: 4,
-      condition: function(data) {
-        return data.role === 'healer' || data.role === 'tank';
-      },
+      condition: (data) => data.role === 'healer' || data.role === 'tank',
       response: Responses.tankBuster(),
     },
     {
@@ -48,7 +44,7 @@ export default {
       netRegexJa: NetRegexes.startsUsing({ id: '10EB', source: 'ハルマキス', capture: false }),
       netRegexCn: NetRegexes.startsUsing({ id: '10EB', source: '赫鲁玛奇斯', capture: false }),
       netRegexKo: NetRegexes.startsUsing({ id: '10EB', source: '하르마키스', capture: false }),
-      response: Responses.lookAway('info'),
+      response: Responses.lookAway(),
     },
     {
       id: 'Facility Inertia Stream',
@@ -58,7 +54,7 @@ export default {
       netRegexJa: NetRegexes.ability({ id: '10ED', source: 'ハルマキス' }),
       netRegexCn: NetRegexes.ability({ id: '10ED', source: '赫鲁玛奇斯' }),
       netRegexKo: NetRegexes.ability({ id: '10ED', source: '하르마키스' }),
-      condition: function(data) {
+      condition: (data) => {
         // Tanks technically shouldn't assist with this mechanic
         return data.role !== 'tank';
       },
@@ -106,13 +102,13 @@ export default {
       netRegexKo: NetRegexes.startsUsing({ id: '1105', source: '아씨엔 프라임' }),
       // The cast is ~10s, but it takes about 2s for correct execution to register
       // 6s to execute is *usually* enough time
-      delaySeconds: (data, matches) => parseFloat(matches.castTime) - 6,
-      alertText: (data, _, output) => output.text(),
+      delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 6,
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Stand in dark portal',
           de: 'Im dunklen Portal stehen',
-          fr: 'Tenez-vous dans un portail noir',
+          fr: 'Placez-vous dans un portail noir',
           ja: '黒い玉に入る',
           cn: '进入黑洞',
           ko: '검은 포탈에 들어가기',
@@ -128,13 +124,13 @@ export default {
       netRegexCn: NetRegexes.addedCombatant({ name: '混沌晶球', capture: false }),
       netRegexKo: NetRegexes.addedCombatant({ name: '혼돈의 구체', capture: false }),
       suppressSeconds: 5,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Avoid your orb--pop others\'',
           de: 'Weiche deinem Orb aus - löse die Orbs der anderen aus',
           fr: 'Évitez votre orbe, éclatez les autres',
-          ja: '自分の玉に避け、他人の玉を砕ける',
+          ja: '自分の玉を避け、他人の玉を砕く',
           cn: '躲开自己的球，去撞别人的球',
           ko: '내 구체는 피하고, 다른 구체 터트리기',
         },
@@ -266,6 +262,7 @@ export default {
         'Regula van Hydrus': 'レグラ・ヴァン・ヒュドルス',
       },
       'replaceText': {
+        '(?<= )Appears': '出現',
         'Aetherochemical Grenado': '魔導榴弾',
         'Ancient Circle': 'エンシェントリング',
         'Ancient Eruption': 'エンシェントエラプション',

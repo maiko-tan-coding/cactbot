@@ -1,7 +1,7 @@
-import Conditions from '../../../../../resources/conditions.js';
-import NetRegexes from '../../../../../resources/netregexes.js';
-import { Responses } from '../../../../../resources/responses.js';
-import ZoneId from '../../../../../resources/zone_id.js';
+import Conditions from '../../../../../resources/conditions';
+import NetRegexes from '../../../../../resources/netregexes';
+import { Responses } from '../../../../../resources/responses';
+import ZoneId from '../../../../../resources/zone_id';
 
 export default {
   zoneId: ZoneId.TheNavelExtreme,
@@ -32,7 +32,7 @@ export default {
       id: 'TitanEx Gaoler Adds',
       regex: /Gaoler Adds/,
       beforeSeconds: 1,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Gaoler Adds',
@@ -48,7 +48,7 @@ export default {
       id: 'TitanEx Double Weight',
       regex: /Weight Of The Land 1/,
       beforeSeconds: 4,
-      infoText: (data, _, output) => output.text(),
+      infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Double Weight',
@@ -82,6 +82,7 @@ export default {
           fr: 'Geôle sur VOUS',
           ja: '自分にジェイル',
           cn: '石牢点名',
+          ko: '돌감옥 대상자',
         },
         jails: {
           en: 'Jails',
@@ -117,9 +118,7 @@ export default {
         '\\(all\\)': '(alle)',
         '\\(clock\\)': '(Uhrzeiger)',
         '\\(one side\\)': '(eine Seite)',
-        '\\(row 1\\)': '(Reihe 1)',
-        '\\(row 2\\)': '(Reihe 2)',
-        '\\(row 3\\)': '(Reihe 3)',
+        '\\(row (\\\d)\\)': '(Reihe $1)',
         'Burst': 'Einschlag',
         'Bury': 'Begraben',
         'Earthen Fury': 'Gaias Zorn',
