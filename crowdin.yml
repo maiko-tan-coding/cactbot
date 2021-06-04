@@ -1,5 +1,5 @@
 files:
   - source: /README.md
-    translation: /docs/%locale_with_underscore%/%original_file_name%
+    translation: /docs/%locale%/%original_file_name%
   - source: /docs/*.md
-    translation: /docs/%locale_with_underscore%/%original_file_name%
+    translation: /docs/%locale%/%original_file_name%
