@@ -41,7 +41,7 @@
 
 名稱旁邊帶有鈴鐺(🔔) 的設置項的觸發器輸出文本是可以被覆蓋的。 舉個例子，假設有一個🔔onTarget欄位，其文字為 `死刑點${player}`。 當某人接到死刑技能時，這個字符串將出現在熒幕上（或通過tts播報）。 `${player}` 是一個將由觸發器動態設置的引數。 任何類似於 `${param}` 的字符串都是動態引數。
 
-比如，您可以將這個文字更改為 `${player} 即將死亡！`。 或者，也許您不關心誰是目標，那麼您可以將其改為 `死刑` 以使文字更加簡短。 如果您想撤消自己的更改，只需清空文字框即可。
+比如，您可以將這個文字更改為 `${player} 即將死亡！ `。 或者，也許您不關心誰是目標，那麼您可以將其改為 `死刑` 以使文字更加簡短。 如果您想撤消自己的更改，只需清空文字框即可。
 
 但這個方式有一定的限制。 例如，您無法更改邏輯。 而且在大多數情況下，您無法使 `tts` 的播報與 `alarmText` 不同。 您無法新增更多的引數。 如果您想要對觸發器做出更加複雜的覆蓋操作， 那麼您需要檢視 [Raidboss觸發器自定義](#overriding-raidboss-triggers) 小節。
 
@@ -100,11 +100,13 @@ cactbot將按照字母順序優先載入user資料夾中的子資料夾裡的檔
 
 您可以透過使用者自定義js檔案(例如 `user/raidboss.js` 或 `user/raidboss/` 目錄下的任意`.js` 檔案)自定義觸發器行為。 您可以修改輸出文字、適用職業、文字顯示的時間等等。
 
+You can see readable JavaScript versions of all of the cactbot triggers in this branch: <https://github.com/quisquous/cactbot/tree/triggers> This is the preferred reference to use for viewing, copying, and pasting. Triggers in the main branch or shipped in a cactbot release are often in unreadable bundles or are TypeScript which is not supported in user folders.
+
 在您的raidboss模組使用者自定義js檔案中， `Options.Triggers` 是一個存放了觸發器集合的列表。 您可以透過此變數新增新觸發器，或修改已有的觸發器。 若使用者檔案中存在與現有觸發器 (cactbot官方提供的) 相同id的觸發器，則會將後者其覆蓋。
 
-在您修改觸發器前，我們推薦閱讀 [觸發器指南](RaidbossGuide.md) 以瞭解各觸發器的諸多屬性的含義。
-
 一般來說，你需要將形如以下的程式碼塊加入到你的使用者自定義js檔案(例如 `user/raidboss.js`)中：
+
+您需要將以下的程式碼貼上至您的使用者自定義js檔案底部。
 
 ```javascript
 Options.Triggers.push({
@@ -120,7 +122,7 @@ Options.Triggers.push({
 });
 ```
 
-最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [該檔案](../resources/zone_id.ts) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌視窗將會輸出警告資訊。 然後複製觸發器文本並粘貼至此， 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
+最簡單的定制觸發器方式是直接複製上面那一大塊程式碼粘貼到此檔案再進行修改。 您可以修改 `zoneId` 一行為您想要觸發器響應的區域id，這一行通常位於cactbot觸發器檔案的頂部。 [該檔案](../resources/zone_id.ts) 列出了所有可用的區域id。 若您定義了錯誤的id，OverlayPlugin的日誌視窗將會輸出警告資訊。 Then, [copy the trigger text](https://github.com/quisquous/cactbot/tree/triggers) into this block. 按您的喜好進行修改。 當你改完所有你想改的觸發器後， 重載raidboss懸浮窗以應用更改。
 
 **注意**：此方式會將原觸發器完全移除，因此請在修改時不要刪除任何邏輯。 此外，觸發器均採用JavaScript編寫，因此必須採用標準JavaScript語法。 若您不是程式設計師，您需要格外注意編輯方法。
 
@@ -132,7 +134,7 @@ Options.Triggers.push({
 
 其中一種調整方式是編輯觸發器的輸出。 您可以在 [ui/raidboss/data/04-sb/ultimate/unending_coil_ultimate.js](https://github.com/quisquous/cactbot/blob/triggers/04-sb/ultimate/unending_coil_ultimate.js#:~:text=UCU%20Nael%20Fireball%201) 中找到原本的 fireball #1 觸發器。
 
-您需要將以下的程式碼貼上至您的使用者自定義js檔案底部。
+此處還刪除了英語以外的語言。
 
 ```javascript
 Options.Triggers.push({
@@ -171,7 +173,7 @@ Options.Triggers.push({
 
 我們需要修改 `condition` 函式(function)。 由於此處的id與內建的 `General Provoke` 觸發器一致，因此會覆蓋同名的內建觸發器。
 
-您需要將以下的程式碼貼上至您的使用者自定義js檔案底部。
+當然，您也可以直接刪除整個 `condition` 函式， 這是因為沒有condition的觸發器在匹配到正則時永遠會執行。
 
 ```javascript
 Options.Triggers.push({
@@ -201,13 +203,13 @@ Options.Triggers.push({
 });
 ```
 
-當然，您也可以直接刪除整個 `condition` 函式， 這是因為沒有condition的觸發器在匹配到正則時永遠會執行。
+您也可以用同樣的辦法新增您的自定義觸發器。
 
 ### 例3：添加自定義觸發器
 
-您也可以用同樣的辦法新增您的自定義觸發器。
-
 這是一個示例觸發器，當您中了“Forked Lightning”效果時，會在1秒後顯示“Get out!!!”。
+
+我們推薦閱讀 [觸發器指南](RaidbossGuide.md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../ui/raidboss/data) 中現有的觸發器程式碼。
 
 ```javascript
 Options.Triggers.push([
@@ -216,7 +218,7 @@ Options.Triggers.push([
     triggers: [
       {
         // 這是一個自定義的id，因此不會覆蓋任何現有的觸發器。
-        id: 'Personal Forked Lightning',
+      id: 'Personal Forked Lightning',
         regex: Regexes.gainsEffect({ effect: 'Forked Lightning' }),
         condition: (data, matches) => { return matches.target === data.me; },
         delaySeconds: 1,
@@ -231,21 +233,21 @@ Options.Triggers.push([
 ]);
 ```
 
-我們推薦閱讀 [觸發器指南](RaidbossGuide.md) 以瞭解如何撰寫cactbot的觸發器， 當然您也可以直接看 [ui/raidboss/data](../ui/raidboss/data) 中現有的觸發器程式碼。
+自定義時間軸與 [自定義觸發器](#overriding-raidboss-triggers) 差不多。
 
 ## Raidboss時間軸自定義
-
-自定義時間軸與 [自定義觸發器](#overriding-raidboss-triggers) 差不多。
 
 自定義時間軸的步驟如下：
 
 1) 複製原有的時間軸文字檔案內容至您的使用者資料夾
 
+1) 在 user/raidboss.js 中新增程式碼
+
     例如，您可以複製
     [ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt](../ui/raidboss/data/05-shb/ultimate/the_epic_of_alexander.txt)
     至 `user/the_epic_of_alexander.txt`。
 
-1) 在 user/raidboss.js 中新增程式碼
+1) 按您的喜好編輯您自己的時間軸檔案
 
     如同我們新增觸發器一樣，您依舊需要定義 `zoneId`、 `overrideTimelineFile: true`，
     以及定義文字檔名稱的`timelineFile` 屬性。
@@ -258,8 +260,9 @@ Options.Triggers.push([
     });
     ```
 
-    （假設您已經做完了第一步，並且該文本檔案的名稱為 `user/the_epic_of_alexander.txt` ）
 
+    （假設您已經做完了第一步，並且該文本檔案的名稱為 `user/the_epic_of_alexander.txt` ）
+    
     設置 `overrideTimelineFile: true` 是為了告訴cactbot將內置的時間軸完全替換為您添加的檔案。
 
 1) 按您的喜好編輯您自己的時間軸檔案
@@ -286,7 +289,21 @@ Options.PlayerNicks = {
 };
 ```
 
-**警告**：使用者資料夾中的檔案會靜默覆蓋cactbot使用者介面的同名選項。 該行為可能會造成一些困惑，因此您應當直接通過使用者介面設置這些變量， 僅當使用者介面不提供設置方法時採用此方式覆蓋預設行為。
+**警告**：使用者資料夾中的檔案會靜默覆蓋cactbot使用者介面的同名選項。 該行為可能會造成一些困惑，因此您應當直接通過使用者介面設置這些變量， 僅當使用者介面不提供設置方法時採用此方式覆蓋默認行為。
+
+## 使用者檔案的除錯
+
+User files are `eval`'d in JavaScript, and thus cannot `import` in the same way that built-in trigger files do. User javascript files have access to the following globals:
+
+- [Conditions](../resources/conditions.ts)
+- [ContentType](../resources/content_type.ts)
+- [NetRegexes](../resources/netregexes.ts)
+- [Regexes](../resources/regexes.ts)
+- [Responses](../resources/responses.ts)
+- [Outputs](../resources/outputs.ts)
+- [Util](../resources/util.ts)
+- [ZoneId](../resources/zone_id.ts)
+- [ZoneInfo](../resources/zone_info.ts)
 
 ## 使用者檔案的除錯
 
@@ -294,7 +311,7 @@ Options.PlayerNicks = {
 
 您可以在 ACT -> Plugins -> OverlayPlugin.dll 找到位於該視窗的底部的OverlayPlugin日誌視窗，它是一個自動滾動的文字視窗。
 
-當執行錯誤時，錯誤資訊會顯示在此處。
+當運行錯誤時，錯誤信息會顯示在此處。
 
 ### 檢查檔案是否載入
 
@@ -304,7 +321,7 @@ Options.PlayerNicks = {
 
 確認您的使用者檔案是否正常載入。
 
-檔名的列印順序就是它們的載入順序。
+此處有一個例子：
 
 ### 檢查檔案是否有錯誤
 
