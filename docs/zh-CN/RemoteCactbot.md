@@ -4,13 +4,13 @@
 
 本文档推荐使用OverlayPlugin内置的端口转发功能实现。 端口转发可以为连接的每个人提供定制触发器。 此方式同样支持让他人实时查看dps数据，或是其他类型的悬浮窗。
 
-## Alternatives
+## 备用方案
 
 另一种方式是使用 [discord bot plugin](https://github.com/Makar8000/ACT-Discord-Triggers/wiki/First-Time-Setup-Guide)。 Discord Bot可以播放cactbot的所有语音提示给其他队友。
 
-For cactbot, this is less great because many cactbot triggers are personalized and it is not meant to be a generalized "raid caller" even if it sort of works that way. 而且，当前cactbot的音频不能通过该插件播放。
+但这种方法并不完美，因为cactbot的很多触发器是定制化的， 即便算是勉强能用，但并不能作为通用的“Raid提示”。 而且，当前cactbot的音频不能通过该插件播放。
 
-If a single discord tts raidcaller is what you are really looking for, [Triggernometry](https://github.com/Aho-Senpai/Aho-Triggers/blob/main/Triggernometry/Docs/FAQ.md#discord-callouts-ready) will be a better fit than cactbot for what you are trying to do.
+若您只是需要一个Discord TTS提示，我们推荐使用 [Triggernometry](https://github.com/Aho-Senpai/Aho-Triggers/blob/main/Triggernometry/Docs/FAQ.md#discord-callouts-ready)，将比cactbot更适合您的场景。
 
 ## 端口转发概述
 
