@@ -17,6 +17,7 @@ export interface BuffInfo {
     cooldown?: number;
     sharesCooldownWith?: string[];
     hide?: boolean;
+    stack?: number;
 }
 export interface Aura {
     addCallback: () => void;

@@ -229,6 +229,7 @@ declare const data: {
     readonly CausticBite: "4B0";
     readonly CetaceousSpeed: "A09";
     readonly ChainOfPurgatory: "24D";
+    readonly ChainStratagem: "4C5";
     readonly ChainsOfMemory: "65B";
     readonly Chaos: "204";
     readonly ChaoticCyclone: "81E";
@@ -405,6 +406,7 @@ declare const data: {
     readonly ElementalHarmony: "633";
     readonly Elevated: "54E";
     readonly Embolden: "511";
+    readonly EmboldenSelf: "4D7";
     readonly EmergencyTactics: "318";
     readonly EmpoweredKetu: "502";
     readonly EmpoweredRahu: "501";
@@ -1303,6 +1305,7 @@ declare const data: {
     readonly Voidblood: "310";
     readonly Voidbound: "1D4";
     readonly Vril: "50A";
+    readonly VulnerabilityUp: "27E";
     readonly WalkingDead: "32B";
     readonly WanderersFate: "97E";
     readonly WanderersMinuet: "7D9";
