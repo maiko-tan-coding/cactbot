@@ -48,30 +48,30 @@ export default {
 
 **zoneRegex**: 用于匹配区域名称的正则表达式(匹配ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
-**damageWarn** and **damageFail**: An object contains properties like `'trigger id': 'damage action id'`, which provides an easy way to apply triggers via damage action id (in hex). When a player was hit by these action, a message (default to action name) would be shown.
+**damageWarn** 和 **damageFail**: 一个包含了形如 `'trigger id': 'damage action id'` 的属性的对象， 可提供一种更简便的编写监控 (十六进制) 的技能id的触发器的方式。 当这些技能击中玩家时，会显示一条默认为技能名称的信息。
 
-**damageWarn** shows the message as `warn`, and **damageFail** shows it as `fail`.
+**damageWarn** 中的技能会显示为 `warn` 级别， 而 **damageFail** 则是 `fail`。
 
-**gainsEffectWarn** and **gainsEffectFail**: Just like **damageWarn** and **damageFail**, but triggered when hit by an effect (id in hex).
+**gainsEffectWarn** 和 **gainsEffectFail**: 与 **damageWarn** 和 **damageFail** 类似，但此处触发条件是玩家受到特定(十六进制)id的效果。
 
-**shareWarn** and **shareFail**: Just like **damageWarn** and **damageFail**, triggered when multiple players share damage which should only be on one player.
+**shareWarn** 与 **shareFail**: 与 **damageWarn** 和 **damageFail**，但此处触发条件时玩家应该单吃的技能击中了多人。
 
-**triggers**: An array of triggers in the trigger set. See below for the format of each of individual triggers.
+**triggers**: 包含触发器的数组。 有关每个触发器的格式，请参见下文。
 
 ## 触发器结构
 
-Each trigger is an object with the following fields.  All fields are optional.
+触发器的字段如下所示，  所有字段均为可选项。
 
-* `id`: a string representing this trigger, for use in disabling triggers.  See [oopsyraidsy-example.js](../users/oopsyraidsy-example.js).
-* `condition`: function returning bool for whether or not to run this trigger.
-* `regex`: regex matching the whole line.
-* `damageRegex`: regex that will only match the ids of abilities that do damage.
-* `healRegex`: regex that only matches the ids of healing abilities.
-* `gainsEffectRegex`: regex that matches gaining effects by name.
-* `losesEffectRegex`: regex that matches loses any effects by name.
-* `abilityRegex`: regex that matches the ids of any type of ability.
-* `collectSeconds`: float (or function returning float)
-* `delaySeconds`: float (or function returning float) for how long to wait before executing this trigger.  Ignored if `collectSeconds > 0`.
+* `id`: 字符串，用于识别与禁用触发器。  参见 [oopsyraidsy-example.js](../users/oopsyraidsy-example.js)。
+* `condition`: 函数，返回一个布尔值，表示该触发器是否应当运行。
+* `regex`: 正则表达式，匹配日志行。
+* `damageRegex`: 正则表达式，仅匹配造成伤害的技能id。
+* `healRegex`: 正则表达式，仅匹配造成治疗的技能id。
+* `gainsEffectRegex`: 正则表达式，仅匹配获得的效果名称。
+* `gainsEffectRegex`: 正则表达式，仅匹配失效的效果名称。
+* `abilityRegex`: 正则表达式，匹配任意技能id。
+* `collectSeconds`: 浮点数 (或返回浮点数的函数)。
+* `delaySeconds`: 浮点数 (或返回浮点数的函数)，在正则成功匹配后经过多长时间运行该触发器。  当 `collectSeconds > 0` 时忽略该参数。
 * `suppressSeconds`: float (or function returning float) for how long to ignore future matches to this trigger (including additional collection).
 * `deathReason`: overrides the reason that a player died if the player dies without taking any more damage.  This is for things that kill you without an obvious log line, e.g. forgetting to clear Beyond Death.
 * `mistake`: returns a single mistake or an array of mistakes to add to the live list.  See below for the `mistake` format.
