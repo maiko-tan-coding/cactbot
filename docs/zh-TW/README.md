@@ -18,56 +18,56 @@
 
 cactbot是一個ACT懸浮窗，可為[Final Fantasy XIV](http://www.finalfantasyxiv.com/)提供戰鬥輔助。 該項目是 [ngld的OverlayPlugin](https://github.com/ngld/OverlayPlugin) 的懸浮窗外掛程式，而OverlayPlugin是 [Advanced Combat Tracker](http://advancedcombattracker.com/)的外掛程式。
 
-cactbot provides these modules:
+cactbot提供以下模組：
 
-* raidboss: built-in timelines and triggers:
+* raidboss: 内置時間軸和觸發器
 
-![timeline screenshot](screenshots/promo_raidboss_timeline.png) ![triggers screenshot](screenshots/promo_raidboss_triggers.png)
+![timeline screenshot](../../screenshots/promo_raidboss_timeline.png) ![triggers screenshot](../../screenshots/promo_raidboss_triggers.png)
 
-* oopsyraidsy: mistake and death reporting
+* oopsyraidsy: 錯誤和死亡報告
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![oopsy screenshot](../../screenshots/promo_oopsy.png)
 
-* jobs: condensed gauges with buff and proc tracking
+* jobs: 用於增益與觸發監控的緊凑型職業介面
 
-![rdm jobs screenshot](screenshots/promo_jobs.png)
+![rdm jobs screenshot](../../screenshots/promo_jobs.png)
 
-* eureka: Eureka NM tracking map
+* eureka: 優雷卡NM監控地圖
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![eureka screenshot](../../screenshots/promo_eureka.png)
 
-* fisher: Fishing cast time tracking
+* fisher: 捕魚垂釣時間監控
 
-![fisher screenshot](screenshots/promo_fishing.png)
+![fisher screenshot](../../screenshots/promo_fishing.png)
 
-* radar: hunt mob directions, puller notifications
+* radar: 通知狩獵怪方向及開怪信息
 
-![radar screenshot](screenshots/promo_radar.png)
+![radar screenshot](../../screenshots/promo_radar.png)
 
-* dps: extra features for dps meters
+* dps: 提供更多功能的dps懸浮窗
 
-![xephero screenshot](screenshots/xephero.png)
+![xephero screenshot](../../screenshots/xephero.png)
 
-### Video Examples
+### 視頻示例
 
-* [O4S raidboss + monk jobs](https://www.twitch.tv/videos/209562337)
-* [O3S spellblade callouts](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
+* [O4S raidboss + jobs武僧懸浮窗](https://www.twitch.tv/videos/209562337)
+* [O3S spellblade提示](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
 
 ## 安裝
 
-### Dependencies
+### 依賴項
 
-Install [.NET Framework](https://www.microsoft.com/net/download/framework) version 4.6.1 or above.
+安裝 [.NET Framework](https://www.microsoft.com/net/download/framework) 4.6.1或以上版本。
 
-You must have [DirectX 11](http://imgur.com/TjcnjmG) enabled for Final Fantasy XIV.
+您必須啓用Final Fantasy XIV的 [DirectX 11](http://imgur.com/TjcnjmG) 選項。
 
-Install the 64-bit version of [Advanced Combat Tracker](http://advancedcombattracker.com/), if you have not already.
+如果尚未安裝64位元的 [Advanced Combat Tracker](http://advancedcombattracker.com/)，請安裝。
 
-### Install FFXIV ACT Plugin
+### 安裝FFXIV ACT解析外掛
 
-If you have just installed ACT, then you will be presented with a startup wizard. To get to the startup wizard otherwise, click on `Options` and then click on `Show Startup Wizard`.
+如果您剛剛安裝了 ACT, 那麼您會看到一個啟動向導。 否則，您需要通過單擊 `Options` ， 然後單擊 `Show Startup Wizard` 啟動啟動向導。
 
-![startup wizard screenshot](screenshots/ffxiv_plugin_show_startup_wizard.png)
+![startup wizard screenshot](../../screenshots/ffxiv_plugin_show_startup_wizard.png)
 
 In the startup wizard, select `FFXIV Parsing Plugin` and then click the `Download/Enable Plugin` button. This will download `%APPDATA%Advanced Combat Tracker\Plugins\FFXIV_ACT_Plugin.dll` and enable it in the list of plugins.
 
@@ -268,7 +268,7 @@ When mistakes are made that are avoidable, oopsy logs warning (:warning:) and fa
 
 Mistake triggers are specified for individual fights in the [ui/oopsyraidsy/data](ui/oopsyraidsy/data) folder.
 
-![oopsy screenshot](screenshots/promo_oopsy.png)
+![oopsy screenshot](../../screenshots/promo_oopsy.png)
 
 ### [jobs](ui/jobs) module
 
@@ -318,7 +318,7 @@ It currently does not read the tracker information directly.  However, if you cl
 
 If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
 
-![eureka screenshot](screenshots/promo_eureka.png)
+![eureka screenshot](../../screenshots/promo_eureka.png)
 
 ### [radar](ui/radar) module
 
@@ -330,7 +330,7 @@ There are options to show who pulled the mob, as well as to configure the displa
 
 See the `cactbot/user/radar-example.js` for more options.
 
-![radar screenshot](screenshots/promo_radar.png)
+![radar screenshot](../../screenshots/promo_radar.png)
 
 ### [fisher](ui/fisher) module
 
@@ -338,7 +338,7 @@ To use this module, point cactbot at **ui/fisher/fisher.html** or use the `Cactb
 
 When you cast your line at a fishing hole, this module keeps track of when you reel in particular fish so that you know what you might be getting when you hook it.
 
-![fishing screenshot](screenshots/promo_fishing.png)
+![fishing screenshot](../../screenshots/promo_fishing.png)
 
 Cast times are currently only logged as you fish, so there won't be any data until you've caught each fish. Green bars represent light tugs, yellow is a medium tug and red bars are legendary/heavy tugs.
 
@@ -352,7 +352,7 @@ cactbot can be used with any dps meter overlay designed for OverlayPlugin's mini
 
 The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for miniparse, with the additional ability to do per-phase dps tracking, displayed in additional columns. In the screenshot below the phases are named B1, B2, B3.  These autogenerate from dungeon bosses, but could be used to differentiate raid fight phases.
 
-![xephero screenshot](screenshots/xephero.png)
+![xephero screenshot](../../screenshots/xephero.png)
 
 The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
 
