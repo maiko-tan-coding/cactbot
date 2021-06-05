@@ -44,9 +44,9 @@ export default {
 
 ### 触发器集合属性
 
-**zoneId**: A shortened name for the zone to use these triggers in. The set of id names can be found in [zone_id.ts](../resources/zone_id.ts). 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex之一(但二者不能并存)。
+**zoneId**: 区域名缩写，用于规定触发器的适用范围。 这些区域名缩写可以在 [zone_id.ts](../resources/zone_id.ts) 文件中找到。 我们倾向于使用该属性，而非zoneRegex。 每个触发器集合都必须包含zoneId或zoneRegex之一(但二者不能并存)。
 
-**zoneRegex**: A regular expression that matches against the zone name (coming from ACT). 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
+**zoneRegex**: 用于匹配区域名称的正则表达式(匹配ACT读取的区域名)。 当正则表达式匹配到当前的区域名，则该集合中的触发器会应用于该区域。
 
 **damageWarn** and **damageFail**: An object contains properties like `'trigger id': 'damage action id'`, which provides an easy way to apply triggers via damage action id (in hex). When a player was hit by these action, a message (default to action name) would be shown.
 
