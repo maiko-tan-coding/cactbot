@@ -72,14 +72,14 @@ export default {
 * `abilityRegex`: 正则表达式，匹配任意技能id。
 * `collectSeconds`: 浮点数 (或返回浮点数的函数)。
 * `delaySeconds`: 浮点数 (或返回浮点数的函数)，在正则成功匹配后经过多长时间运行该触发器。  当 `collectSeconds > 0` 时忽略该参数。
-* `suppressSeconds`: float (or function returning float) for how long to ignore future matches to this trigger (including additional collection).
-* `deathReason`: overrides the reason that a player died if the player dies without taking any more damage.  This is for things that kill you without an obvious log line, e.g. forgetting to clear Beyond Death.
-* `mistake`: returns a single mistake or an array of mistakes to add to the live list.  See below for the `mistake` format.
-* `run`: function that just runs, but does not return anything
+* `suppressSeconds`: 浮点数 (或返回浮点数的函数)，在正则匹配成功后的多长时间内不再匹配。
+* `deathReason`: 若玩家没有受到除当前技能外的更多伤害下死亡，则以该字符串的内容作为死亡原因。  这个变量的设置是为了在没有足够的日志行信息的情况下准确显示死亡原因，如忘记消除超越死亡debuff。
+* `mistake`: 返回错误内容或包含错误内容的列表，将会被添加到实时列表中。  请参阅下方的`mistake`格式。
+* `run`: 函数，仅运行但不返回任何内容。
 
-### `mistake` format
+### `mistake` 格式
 
-* `type` is the icon: pull, warn, fail, potion, death, wipe (:arrow_forward::warning::no_entry_sign::cocktail::skull::toilet:).
+* `type` 图标，分别为：pull、warn、fail、potion、death、wipe (:arrow_forward::warning::no_entry_sign::cocktail::skull::toilet:).
 * `name` is an optional full player name to list as this mistake happening to.  This will prepend their name in the live list.
 * `blame` is an optional full player name (or array of full player names) to blame for this mistake.  If `name` is not specified, then the `name` will be the `blame` player.
 * `text` is an optional reason for the mistake.  It will be prepended by the blamed player's short name (if it exists).
