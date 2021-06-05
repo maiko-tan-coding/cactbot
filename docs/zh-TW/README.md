@@ -1,22 +1,22 @@
-# cactbot (ffxiv raiding overlay)
+# cactbot (FFXIV raid 懸浮窗)
 
 <img align="right" src="https://raw.githubusercontent.com/quisquous/cactbot/main/screenshots/cactbot-logo-320x320.png" />
 
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/quisquous/cactbot/Test/main)](https://github.com/quisquous/cactbot/actions?query=workflow%3ATest+branch%3Amain) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/quisquous/cactbot?color=brightgreen&sort=semver)](https://github.com/quisquous/cactbot/releases/latest)
 
-🌎 [**English**] [[简体中文](docs/zh-CN/README.md)] [[한국어](docs/ko-KR/README.md)]
+🌎 [**English**] [[简体中文](docs/zh-CN/README.md)] [[繁體中文](./zh-TW/README.md)] [[한국어](docs/ko-KR/README.md)]
 
-1. [About](#about)
-1. [Installing](#installing)
-1. [Building From Source](#building-from-source)
-1. [UI Module Overview](#ui-module-overview)
-1. [Troubleshooting](#troubleshooting)
+1. [關於](#about)
+1. [安裝](#installing)
+1. [從源代碼構建](#building-from-source)
+1. [UI 模組概述](#ui-module-overview)
+1. [故障排除](#troubleshooting)
 1. [Cactbot自訂教學](#cactbot-customization)
-1. [Supported Languages](#supported-languages)
+1. [支持語言](#supported-languages)
 
-## About
+## 關於
 
-cactbot is an ACT overlay that provides raiding tools for [Final Fantasy XIV](http://www.finalfantasyxiv.com/). This project is an overlay plugin for [ngld's OverlayPlugin](https://github.com/ngld/OverlayPlugin) which itself is a plugin for [Advanced Combat Tracker](http://advancedcombattracker.com/).
+cactbot是一個ACT懸浮窗，可為[Final Fantasy XIV](http://www.finalfantasyxiv.com/)提供戰鬥輔助。 該項目是 [ngld的OverlayPlugin](https://github.com/ngld/OverlayPlugin) 的懸浮窗外掛程式，而OverlayPlugin是 [Advanced Combat Tracker](http://advancedcombattracker.com/)的外掛程式。
 
 cactbot provides these modules:
 
@@ -53,7 +53,7 @@ cactbot provides these modules:
 * [O4S raidboss + monk jobs](https://www.twitch.tv/videos/209562337)
 * [O3S spellblade callouts](https://clips.twitch.tv/StrangeHungryGarageShadyLulu)
 
-## Installing
+## 安裝
 
 ### Dependencies
 
@@ -374,7 +374,7 @@ This module is just an onscreen test of cactbot variables and is not meant to be
 
 ![test screenshot](screenshots/test.png)
 
-## Troubleshooting
+## 故障排除
 
 A general FAQ can be found [here](docs/FAQ-Troubleshooting.md) containing solutions to common Cactbot issues.
 
@@ -396,7 +396,7 @@ It is recommended that you do most of your configuration via this control panel 
 
 See [this documentation](docs/CactbotCustomization.md#user-folder-config-overrides) for more details about user javascript and css files.
 
-## Supported Languages
+## 支持語言
 
 cactbot is tested and works with the current international (English, German, French, Japanese) version, the current Chinese version, and the current Korean version. Some translations are still a work in progress.
 
