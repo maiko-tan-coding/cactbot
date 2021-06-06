@@ -974,7 +974,7 @@ declare const data: {
     readonly Reverse: "3F5";
     readonly RightArmOperational: "46A";
     readonly RightArmReassembly: "467";
-    readonly RightEye: "5AD";
+    readonly RightEye: "776";
     readonly RightUnseen: "6AB";
     readonly RightWithThee: "8C3";
     readonly Riled: "47A";
