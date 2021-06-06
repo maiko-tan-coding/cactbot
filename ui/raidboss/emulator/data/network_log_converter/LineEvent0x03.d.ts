@@ -1,11 +1,11 @@
-import LineEvent from './LineEvent';
+import LineEvent, { LineEventJobLevel, LineEventSource } from './LineEvent';
 import LogRepository from './LogRepository';
-export declare class LineEvent0x03 extends LineEvent {
+export declare class LineEvent0x03 extends LineEvent implements LineEventSource, LineEventJobLevel {
     readonly id: string;
     readonly name: string;
     readonly jobIdHex: string;
-    readonly jobIdDec: number;
-    readonly jobName: string;
+    readonly jobId: number;
+    readonly job: string;
     readonly levelString: string;
     readonly level: number;
     readonly ownerId: string;
@@ -13,13 +13,13 @@ export declare class LineEvent0x03 extends LineEvent {
     readonly worldName: string;
     readonly npcNameId: string;
     readonly npcBaseId: string;
-    readonly currentHp: number;
+    readonly hp: number;
     readonly maxHpString: string;
     readonly maxHp: number;
-    readonly currentMp: number;
+    readonly mp: number;
     readonly maxMpString: string;
     readonly maxMp: number;
-    readonly currentTp: number;
+    readonly tp: number;
     readonly maxTp: number;
     readonly xString: string;
     readonly x: number;
@@ -28,6 +28,8 @@ export declare class LineEvent0x03 extends LineEvent {
     readonly zString: string;
     readonly z: number;
     readonly heading: number;
+    readonly isSource = true;
+    readonly isJobLevel = true;
     constructor(repo: LogRepository, line: string, parts: string[]);
 }
 export declare class LineEvent03 extends LineEvent0x03 {

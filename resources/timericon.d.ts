@@ -57,4 +57,9 @@ export default class TimerIcon extends HTMLElement {
     reset(): void;
     advance(): void;
 }
+declare global {
+    interface HTMLElementTagNameMap {
+        'timer-icon': TimerIcon;
+    }
+}
 //# sourceMappingURL=timericon.d.ts.map

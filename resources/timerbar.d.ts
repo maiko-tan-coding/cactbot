@@ -66,4 +66,9 @@ export default class TimerBar extends HTMLElement {
     show(): void;
     hide(): void;
 }
+declare global {
+    interface HTMLElementTagNameMap {
+        'timer-bar': TimerBar;
+    }
+}
 //# sourceMappingURL=timerbar.d.ts.map

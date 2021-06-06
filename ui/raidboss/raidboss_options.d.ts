@@ -35,6 +35,7 @@ declare type RaidbossNonConfigOptions = {
     Triggers: unknown;
     PlayerNameOverride: string | null;
     IsRemoteRaidboss: boolean;
+    TransformTts: (text: string) => string;
 };
 declare const defaultRaidbossConfigOptions: {
     Debug: boolean;
