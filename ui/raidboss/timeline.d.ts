@@ -1,6 +1,6 @@
 import { RaidbossOptions } from './raidboss_options';
 import { LogEvent } from 'types/event';
-import { TimelineTrigger } from 'types/trigger';
+import { LooseTimelineTrigger } from 'types/trigger';
 declare type Replacement = {
     locale: string;
     replaceSync: {
@@ -47,7 +47,7 @@ export declare type Sync = {
 };
 declare type AddTimerCallback = (fightNow: number, durationEvent: Event, channeling: boolean) => void;
 declare type PopupTextCallback = (text: string) => void;
-declare type TriggerCallback = (trigger: TimelineTrigger, matches: RegExpExecArray | null) => void;
+declare type TriggerCallback = (trigger: LooseTimelineTrigger, matches: RegExpExecArray | null) => void;
 export declare class Timeline {
     private options;
     private perTriggerAutoConfig;
@@ -75,7 +75,7 @@ export declare class Timeline {
     private triggerCallback;
     private syncTimeCallback;
     private updateTimer;
-    constructor(text: string, replacements: Replacement[], triggers: TimelineTrigger[], styles: Style[], options: RaidbossOptions);
+    constructor(text: string, replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[], options: RaidbossOptions);
     private GetReplacedHelper;
     private GetReplacedText;
     private GetReplacedSync;
@@ -153,13 +153,13 @@ export declare class TimelineController {
     SetPopupTextInterface(popupText: PopupText): void;
     SetInCombat(inCombat: boolean): void;
     OnLogEvent(e: LogEvent): void;
-    SetActiveTimeline(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: TimelineTrigger[], styles: Style[]): void;
+    SetActiveTimeline(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[]): void;
     IsReady(): boolean;
 }
 export declare class TimelineLoader {
     private timelineController;
     constructor(timelineController: TimelineController);
-    SetTimelines(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: TimelineTrigger[], styles: Style[]): void;
+    SetTimelines(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[]): void;
     IsReady(): boolean;
     StopCombat(): void;
 }
