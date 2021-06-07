@@ -104,6 +104,7 @@ export declare const kAbility: {
     readonly Demolish: "42";
     readonly Bootshine: "35";
     readonly FourPointFury: "4059";
+    readonly Brotherhood: "1CE4";
     readonly TrueThrust: "4B";
     readonly RaidenThrust: "405F";
     readonly VorpalThrust: "4E";
@@ -120,6 +121,7 @@ export declare const kAbility: {
     readonly Jump: "5C";
     readonly LanceCharge: "55";
     readonly DragonSight: "1CE6";
+    readonly BattleLitany: "DE5";
     readonly SpinningEdge: "8C0";
     readonly GustSlash: "8C2";
     readonly AeolianEdge: "8CF";
@@ -147,6 +149,7 @@ export declare const kAbility: {
     readonly KaeshiSetsugekka: "4066";
     readonly HissatsuGuren: "1D48";
     readonly HissatsuSenei: "4061";
+    readonly BattleVoice: "76";
     readonly SplitShot: "B32";
     readonly SlugShot: "B34";
     readonly CleanShot: "B39";
@@ -169,6 +172,7 @@ export declare const kAbility: {
     readonly TripleTechnicalFinish: "3F43";
     readonly DoubleTechnicalFinish: "3F42";
     readonly SingleTechnicalFinish: "3F41";
+    readonly TechnicalFinish: "3E84";
     readonly StandardStep: "3E7D";
     readonly TechnicalStep: "3E7E";
     readonly Flourish: "3E8D";
@@ -186,6 +190,7 @@ export declare const kAbility: {
     readonly EnergySiphon: "407E";
     readonly DreadwyrmTrance: "DFD";
     readonly FirebirdTrance: "40A5";
+    readonly Devotion: "1D1A";
     readonly Verstone: "1D57";
     readonly Verfire: "1D56";
     readonly Veraero: "1D53";
