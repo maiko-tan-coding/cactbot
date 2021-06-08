@@ -1,4 +1,4 @@
-import { Lang } from 'types/global';
+import { Lang } from 'resources/languages';
 declare class TTSItem {
     readonly text: string;
     readonly item: SpeechSynthesisUtterance;

@@ -1,4 +1,4 @@
-import { Lang, NonEnLang } from 'types/global';
+import { Lang, NonEnLang } from 'resources/languages';
 export declare const syncKeys: {
     seal: string;
     unseal: string;

@@ -1,4 +1,4 @@
-import { Lang } from '../../types/global';
+import { Lang } from '../../resources/languages';
 declare type LangMapping = {
     [lang in Lang]: {
         [id: string]: string | string[];

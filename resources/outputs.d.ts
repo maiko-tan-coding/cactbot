@@ -671,16 +671,16 @@ declare const _default: {
         readonly cn: "右下(东南)";
         readonly ko: "남동";
     };
-    readonly num0: Record<import("../types/global").Lang, string>;
-    readonly num1: Record<import("../types/global").Lang, string>;
-    readonly num2: Record<import("../types/global").Lang, string>;
-    readonly num3: Record<import("../types/global").Lang, string>;
-    readonly num4: Record<import("../types/global").Lang, string>;
-    readonly num5: Record<import("../types/global").Lang, string>;
-    readonly num6: Record<import("../types/global").Lang, string>;
-    readonly num7: Record<import("../types/global").Lang, string>;
-    readonly num8: Record<import("../types/global").Lang, string>;
-    readonly num9: Record<import("../types/global").Lang, string>;
+    readonly num0: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num1: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num2: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num3: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num4: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num5: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num6: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num7: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num8: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
+    readonly num9: Record<"en" | "de" | "fr" | "ja" | "cn" | "ko", string>;
 };
 export default _default;
 //# sourceMappingURL=outputs.d.ts.map

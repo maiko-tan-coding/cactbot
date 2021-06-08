@@ -1,4 +1,4 @@
-import { Lang } from '../types/global';
+import { Lang } from './languages';
 declare type PetData = {
     [name in Lang]: readonly string[];
 };
