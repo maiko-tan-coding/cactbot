@@ -19,7 +19,9 @@ export declare class LineEvent0x18 extends LineEvent implements LineEventSource 
     readonly heading: number;
     readonly isSource = true;
     constructor(repo: LogRepository, line: string, parts: string[]);
-    static showEffectNamesFor: Record<string, string>;
+    static showEffectNamesFor: {
+        [effectId: string]: string;
+    };
 }
 export declare class LineEvent24 extends LineEvent0x18 {
 }

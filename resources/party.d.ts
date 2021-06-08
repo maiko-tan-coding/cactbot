@@ -6,8 +6,12 @@ export default class PartyTracker {
     partyIds_: string[];
     allianceNames_: string[];
     allianceIds_: string[];
-    nameToRole_: Record<string, Role>;
-    idToName_: Record<string, string>;
+    nameToRole_: {
+        [name: string]: Role;
+    };
+    idToName_: {
+        [id: string]: string;
+    };
     roleToPartyNames_: Record<Role, string[]>;
     onPartyChanged(e: {
         party: Party[];
