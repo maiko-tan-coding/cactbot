@@ -1,6 +1,6 @@
 import { RaidbossOptions } from './raidboss_options';
-import { LogEvent } from 'types/event';
-import { LooseTimelineTrigger } from 'types/trigger';
+import { LogEvent } from '../../types/event';
+import { LooseTimelineTrigger } from '../../types/trigger';
 declare type Replacement = {
     locale: string;
     replaceSync: {
@@ -112,7 +112,7 @@ interface PopupText {
     Trigger: TriggerCallback;
 }
 export declare class TimelineUI {
-    private options;
+    protected options: RaidbossOptions;
     private init;
     private lang;
     private root;
@@ -123,7 +123,7 @@ export declare class TimelineUI {
     private expireTimers;
     private debugElement;
     private debugFightTimer;
-    private timeline;
+    protected timeline: Timeline | null;
     private popupText?;
     constructor(options: RaidbossOptions);
     protected Init(): void;

@@ -24,6 +24,7 @@ export default class Encounter {
     language: Lang;
     constructor(encounterDay: string, encounterZoneId: string, encounterZoneName: string, logLines: LineEvent[]);
     initialize(): void;
+    get initialTimestamp(): number;
     shouldPersistFight(): boolean;
     upgrade(version: number): boolean;
 }

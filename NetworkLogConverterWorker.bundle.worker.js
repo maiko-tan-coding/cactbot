@@ -3519,6 +3519,9 @@ class Encounter {
             this.playbackOffset = firstLine.offset;
         this.startStatus = [...startStatuses].sort().join(', ');
     }
+    get initialTimestamp() {
+        return this.startTimestamp + this.initialOffset;
+    }
     shouldPersistFight() {
         return isValidTimestamp(this.firstPlayerAbility) && isValidTimestamp(this.firstEnemyAbility);
     }

@@ -1,5 +1,5 @@
-import { PlayerChangedRet } from 'types/event';
-import { Lang } from 'resources/languages';
+import { PlayerChangedRet } from '../types/event';
+import { Lang } from '../resources/languages';
 declare type PlayerChangedDetail = {
     detail: PlayerChangedRet;
 };

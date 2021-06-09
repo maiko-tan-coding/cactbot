@@ -1,7 +1,7 @@
 import Combatant from './Combatant';
 import CombatantState from './CombatantState';
 import LineEvent, { LineEventSource, LineEventTarget } from './network_log_converter/LineEvent';
-import { Lang } from 'resources/languages';
+import { Lang } from '../../../../resources/languages';
 export default class CombatantTracker {
     language: Lang;
     firstTimestamp: number;

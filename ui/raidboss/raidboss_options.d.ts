@@ -1,5 +1,5 @@
 import { BaseOptions } from '../../types/data';
-import { TriggerAutoConfig } from 'types/trigger';
+import { TriggerAutoConfig } from '../../types/trigger';
 declare type PerTriggerOption = Partial<{
     TextAlert: boolean;
     SoundAlert: boolean;

@@ -1,4 +1,4 @@
-import { Lang } from 'resources/languages';
+import { Lang } from '../../../resources/languages';
 declare type DataType = {
     [key: string]: any;
 } | null;
