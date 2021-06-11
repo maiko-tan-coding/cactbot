@@ -1,16 +1,18 @@
 import { RaidbossOptions } from './raidboss_options';
 import { LogEvent } from '../../types/event';
 import { LooseTimelineTrigger } from '../../types/trigger';
-declare type Replacement = {
+import { PopupTextGenerator } from './popup-text';
+export declare type TimelineReplacement = {
     locale: string;
-    replaceSync: {
-        [key: string]: string;
+    missingTranslations?: boolean;
+    replaceSync?: {
+        [regexString: string]: string;
     };
-    replaceText: {
-        [key: string]: string;
+    replaceText?: {
+        [timelineText: string]: string;
     };
 };
-declare type Style = {
+declare type TimelineStyle = {
     style: {
         [key: string]: string;
     };
@@ -75,7 +77,7 @@ export declare class Timeline {
     private triggerCallback;
     private syncTimeCallback;
     private updateTimer;
-    constructor(text: string, replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[], options: RaidbossOptions);
+    constructor(text: string, replacements: TimelineReplacement[], triggers: LooseTimelineTrigger[], styles: TimelineStyle[], options: RaidbossOptions);
     private GetReplacedHelper;
     private GetReplacedText;
     private GetReplacedSync;
@@ -96,20 +98,13 @@ export declare class Timeline {
     protected _ScheduleUpdate(fightNow: number): void;
     _OnUpdateTimer(currentTime: number): void;
     SetAddTimer(c: AddTimerCallback | null): void;
-    SetRemoveTimer(c: ((e: Event, expired: boolean) => void) | null): void;
+    SetRemoveTimer(c: ((e: Event, expired: boolean, force?: boolean) => void) | null): void;
     SetShowInfoText(c: PopupTextCallback | null): void;
     SetShowAlertText(c: PopupTextCallback | null): void;
     SetShowAlarmText(c: PopupTextCallback | null): void;
     SetSpeakTTS(c: PopupTextCallback | null): void;
     SetTrigger(c: TriggerCallback | null): void;
     SetSyncTime(c: ((fightNow: number, running: boolean) => void) | null): void;
-}
-interface PopupText {
-    Info: PopupTextCallback;
-    Alert: PopupTextCallback;
-    Alarm: PopupTextCallback;
-    TTS: PopupTextCallback;
-    Trigger: TriggerCallback;
 }
 export declare class TimelineUI {
     protected options: RaidbossOptions;
@@ -128,11 +123,11 @@ export declare class TimelineUI {
     constructor(options: RaidbossOptions);
     protected Init(): void;
     protected AddDebugInstructions(): void;
-    SetPopupTextInterface(popupText: PopupText): void;
+    SetPopupTextInterface(popupText: PopupTextGenerator): void;
     SetTimeline(timeline: Timeline | null): void;
     protected OnAddTimer(fightNow: number, e: Event, channeling: boolean): void;
     private OnTimerExpiresSoon;
-    protected OnRemoveTimer(e: Event, expired: boolean): void;
+    protected OnRemoveTimer(e: Event, expired: boolean, force?: boolean): void;
     private OnShowInfoText;
     private OnShowAlertText;
     private OnShowAlarmText;
@@ -150,16 +145,16 @@ export declare class TimelineController {
     constructor(options: RaidbossOptions, ui: TimelineUI, raidbossDataFiles: {
         [filename: string]: string;
     });
-    SetPopupTextInterface(popupText: PopupText): void;
+    SetPopupTextInterface(popupText: PopupTextGenerator): void;
     SetInCombat(inCombat: boolean): void;
     OnLogEvent(e: LogEvent): void;
-    SetActiveTimeline(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[]): void;
+    SetActiveTimeline(timelineFiles: string[], timelines: string[], replacements: TimelineReplacement[], triggers: LooseTimelineTrigger[], styles: TimelineStyle[]): void;
     IsReady(): boolean;
 }
 export declare class TimelineLoader {
     private timelineController;
     constructor(timelineController: TimelineController);
-    SetTimelines(timelineFiles: string[], timelines: string[], replacements: Replacement[], triggers: LooseTimelineTrigger[], styles: Style[]): void;
+    SetTimelines(timelineFiles: string[], timelines: string[], replacements: TimelineReplacement[], triggers: LooseTimelineTrigger[], styles: TimelineStyle[]): void;
     IsReady(): boolean;
     StopCombat(): void;
 }

@@ -1,18 +1,27 @@
-import { BaseOptions } from '../../types/data';
-import { TriggerAutoConfig } from '../../types/trigger';
-declare type PerTriggerOption = Partial<{
+import { BaseOptions, RaidbossData } from '../../types/data';
+import { LooseTrigger, MatchesAny, TriggerAutoConfig, TriggerField, TriggerOutput } from '../../types/trigger';
+export declare type PerTriggerOption = Partial<{
     TextAlert: boolean;
     SoundAlert: boolean;
     SpeechAlert: boolean;
     GroupSpeechAlert: boolean;
     SoundOverride: string;
     VolumeOverride: number;
-    Condition: unknown;
-    InfoText: unknown;
-    AlertText: unknown;
-    AlarmText: unknown;
-    TTSText: unknown;
+    Condition: TriggerField<RaidbossData, boolean>;
+    InfoText: TriggerOutput<RaidbossData, MatchesAny>;
+    AlertText: TriggerOutput<RaidbossData, MatchesAny>;
+    AlarmText: TriggerOutput<RaidbossData, MatchesAny>;
+    TTSText: TriggerOutput<RaidbossData, MatchesAny>;
 }>;
+export declare type PerTriggerAutoConfig = {
+    [triggerId: string]: TriggerAutoConfig;
+};
+export declare type PerTriggerOptions = {
+    [triggerId: string]: PerTriggerOption;
+};
+export declare type DisabledTriggers = {
+    [triggerId: string]: boolean;
+};
 declare type RaidbossNonConfigOptions = {
     PlayerNicks: {
         [gameName: string]: string;
@@ -23,16 +32,10 @@ declare type RaidbossNonConfigOptions = {
     LongSound: string;
     PullSound: string;
     AudioAllowed: boolean;
-    DisabledTriggers: {
-        [triggerId: string]: boolean;
-    };
-    PerTriggerAutoConfig: {
-        [triggerId: string]: TriggerAutoConfig;
-    };
-    PerTriggerOptions: {
-        [triggerId: string]: PerTriggerOption;
-    };
-    Triggers: unknown;
+    DisabledTriggers: DisabledTriggers;
+    PerTriggerAutoConfig: PerTriggerAutoConfig;
+    PerTriggerOptions: PerTriggerOptions;
+    Triggers: LooseTrigger[];
     PlayerNameOverride: string | null;
     IsRemoteRaidboss: boolean;
     TransformTts: (text: string) => string;
