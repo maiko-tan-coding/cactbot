@@ -4,7 +4,7 @@ declare type StartMap = {
         next: StartMap;
     };
 };
-declare type ComboCallback = (id?: string) => void;
+export declare type ComboCallback = (id?: string) => void;
 export default class ComboTracker {
     comboTimer?: number;
     comboBreakers: readonly string[];

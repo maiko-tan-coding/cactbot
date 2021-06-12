@@ -12961,176 +12961,169 @@ const regexSet = new RegexSet();
 const LocaleRegex = regexSet.localeRegex;
 const LocaleNetRegex = regexSet.localeNetRegex;
 
-;// CONCATENATED MODULE: ./ui/jobs/utils.js
+// EXTERNAL MODULE: ./resources/not_reached.ts
+var not_reached = __webpack_require__(509);
+;// CONCATENATED MODULE: ./ui/jobs/utils.ts
 
 
 
 
 
 
-const getLocaleRegex = (locale, regexes) => regexes[locale] || regexes['en'];
-
+const getLocaleRegex = (locale, regexes) => { var _a; return (_a = regexes[locale]) !== null && _a !== void 0 ? _a : regexes['en']; };
 class RegexesHolder {
-  constructor(lang, playerName) {
-    this.StatsRegex = regexes/* default.statChange */.Z.statChange();
-
-    this.YouGainEffectRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({ target: playerName });
-    this.YouLoseEffectRegex = netregexes/* default.losesEffect */.Z.losesEffect({ target: playerName });
-    this.YouUseAbilityRegex = netregexes/* default.ability */.Z.ability({ source: playerName });
-    this.AnybodyAbilityRegex = netregexes/* default.ability */.Z.ability();
-    this.MobGainsEffectRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({ targetId: '4.{7}' });
-    this.MobLosesEffectRegex = netregexes/* default.losesEffect */.Z.losesEffect({ targetId: '4.{7}' });
-    this.MobGainsEffectFromYouRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({ targetId: '4.{7}', source: playerName });
-    this.MobLosesEffectFromYouRegex = netregexes/* default.losesEffect */.Z.losesEffect({ targetId: '4.{7}', source: playerName });
-    // use of GP Potion
-    this.cordialRegex = regexes/* default.ability */.Z.ability({ source: playerName, id: '20(017FD|F5A3D|F844F|0420F|0317D)' });
-
-    const getCurrentRegex = getLocaleRegex.bind(this, lang);
-    this.countdownStartRegex = getCurrentRegex(LocaleRegex.countdownStart);
-    this.countdownCancelRegex = getCurrentRegex(LocaleRegex.countdownCancel);
-    this.craftingStartRegexes = [
-      LocaleRegex.craftingStart,
-      LocaleRegex.trialCraftingStart,
-    ].map(getCurrentRegex);
-    this.craftingFinishRegexes = [
-      LocaleRegex.craftingFinish,
-      LocaleRegex.trialCraftingFinish,
-    ].map(getCurrentRegex);
-    this.craftingStopRegexes = [
-      LocaleRegex.craftingFail,
-      LocaleRegex.craftingCancel,
-      LocaleRegex.trialCraftingFail,
-      LocaleRegex.trialCraftingCancel,
-    ].map(getCurrentRegex);
-  }
+    constructor(lang, playerName) {
+        this.StatsRegex = regexes/* default.statChange */.Z.statChange();
+        this.YouGainEffectRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({ target: playerName });
+        this.YouLoseEffectRegex = netregexes/* default.losesEffect */.Z.losesEffect({ target: playerName });
+        this.YouUseAbilityRegex = netregexes/* default.ability */.Z.ability({ source: playerName });
+        this.AnybodyAbilityRegex = netregexes/* default.ability */.Z.ability();
+        this.MobGainsEffectRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({ targetId: '4.{7}' });
+        this.MobLosesEffectRegex = netregexes/* default.losesEffect */.Z.losesEffect({ targetId: '4.{7}' });
+        this.MobGainsEffectFromYouRegex = netregexes/* default.gainsEffect */.Z.gainsEffect({
+            targetId: '4.{7}',
+            source: playerName,
+        });
+        this.MobLosesEffectFromYouRegex = netregexes/* default.losesEffect */.Z.losesEffect({
+            targetId: '4.{7}',
+            source: playerName,
+        });
+        // use of GP Potion
+        this.cordialRegex = regexes/* default.ability */.Z.ability({
+            source: playerName,
+            id: '20(017FD|F5A3D|F844F|0420F|0317D)',
+        });
+        const getCurrentRegex = getLocaleRegex.bind(this, lang);
+        this.countdownStartRegex = getCurrentRegex(LocaleRegex.countdownStart);
+        this.countdownCancelRegex = getCurrentRegex(LocaleRegex.countdownCancel);
+        this.craftingStartRegexes = [
+            LocaleRegex.craftingStart,
+            LocaleRegex.trialCraftingStart,
+        ].map(getCurrentRegex);
+        this.craftingFinishRegexes = [
+            LocaleRegex.craftingFinish,
+            LocaleRegex.trialCraftingFinish,
+        ].map(getCurrentRegex);
+        this.craftingStopRegexes = [
+            LocaleRegex.craftingFail,
+            LocaleRegex.craftingCancel,
+            LocaleRegex.trialCraftingFail,
+            LocaleRegex.trialCraftingCancel,
+        ].map(getCurrentRegex);
+    }
 }
-
-function doesJobNeedMPBar(job) {
-  return util/* default.isCasterDpsJob */.Z.isCasterDpsJob(job) || util/* default.isHealerJob */.Z.isHealerJob(job) || kMeleeWithMpJobs.includes(job);
-}
-
+const doesJobNeedMPBar = (job) => util/* default.isCasterDpsJob */.Z.isCasterDpsJob(job) || util/* default.isHealerJob */.Z.isHealerJob(job) || kMeleeWithMpJobs.includes(job);
 // Source: http://theoryjerks.akhmorning.com/guide/speed/
-function calcGCDFromStat(bars, stat, actionDelay) {
-  // default calculates for a 2.50s recast
-  actionDelay = actionDelay || 2500;
-
-  // If stats haven't been updated, use a reasonable default value.
-  if (stat === 0)
-    return actionDelay / 1000;
-
-
-  let type1Buffs = 0;
-  let type2Buffs = 0;
-  if (bars.job === 'BLM') {
-    type1Buffs += bars.speedBuffs.circleOfPower ? 15 : 0;
-  } else if (bars.job === 'WHM') {
-    type1Buffs += bars.speedBuffs.presenceOfMind ? 20 : 0;
-  } else if (bars.job === 'SAM') {
-    if (bars.speedBuffs.shifu) {
-      if (bars.level > 77)
-        type1Buffs += 13;
-      else
-        type1Buffs += 10;
+const calcGCDFromStat = (bars, stat, actionDelay = 2500) => {
+    // If stats haven't been updated, use a reasonable default value.
+    if (stat === 0)
+        return actionDelay / 1000;
+    let type1Buffs = 0;
+    let type2Buffs = 0;
+    if (bars.job === 'BLM') {
+        type1Buffs += bars.speedBuffs.circleOfPower ? 15 : 0;
     }
-  }
-
-  if (bars.job === 'NIN') {
-    type2Buffs += bars.speedBuffs.huton ? 15 : 0;
-  } else if (bars.job === 'MNK') {
-    type2Buffs += 5 * bars.speedBuffs.lightningStacks;
-  } else if (bars.job === 'BRD') {
-    type2Buffs += 4 * bars.speedBuffs.paeonStacks;
-    switch (bars.speedBuffs.museStacks) {
-    case 1:
-      type2Buffs += 1;
-      break;
-    case 2:
-      type2Buffs += 2;
-      break;
-    case 3:
-      type2Buffs += 4;
-      break;
-    case 4:
-      type2Buffs += 12;
-      break;
+    else if (bars.job === 'WHM') {
+        type1Buffs += bars.speedBuffs.presenceOfMind ? 20 : 0;
     }
-  }
-  // TODO: this probably isn't useful to track
-  const astralUmbralMod = 100;
-
-  const gcdMs = Math.floor(1000 - Math.floor(130 * (stat - kLevelMod[bars.level][0]) /
-    kLevelMod[bars.level][1])) * actionDelay / 1000;
-  const a = (100 - type1Buffs) / 100;
-  const b = (100 - type2Buffs) / 100;
-  const gcdC = Math.floor(Math.floor((a * b) * gcdMs / 10) * astralUmbralMod / 100);
-  return gcdC / 100;
-}
-
-function computeBackgroundColorFrom(element, classList) {
-  const div = document.createElement('div');
-  const classes = classList.split('.');
-  for (let i = 0; i < classes.length; ++i)
-    div.classList.add(classes[i]);
-  element.appendChild(div);
-  const color = window.getComputedStyle(div).backgroundColor;
-  element.removeChild(div);
-  return color;
-}
-
-function makeAuraTimerIcon(name, seconds, opacity, iconWidth, iconHeight, iconText,
-    barHeight, textHeight, textColor, borderSize, borderColor, barColor, auraIcon) {
-  const div = document.createElement('div');
-  div.style.opacity = opacity;
-
-  const icon = document.createElement('timer-icon');
-  icon.width = iconWidth;
-  icon.height = iconHeight;
-  icon.bordersize = borderSize;
-  icon.textcolor = textColor;
-  div.appendChild(icon);
-
-  const barDiv = document.createElement('div');
-  barDiv.style.position = 'relative';
-  barDiv.style.top = iconHeight;
-  div.appendChild(barDiv);
-
-  if (seconds >= 0) {
-    const bar = document.createElement('timer-bar');
-    bar.width = iconWidth;
-    bar.height = barHeight;
-    bar.fg = barColor;
-    bar.duration = seconds;
-    barDiv.appendChild(bar);
-  }
-
-  if (textHeight > 0) {
-    const text = document.createElement('div');
-    text.classList.add('text');
-    text.style.width = iconWidth;
-    text.style.height = textHeight;
-    text.style.overflow = 'hidden';
-    text.style.fontSize = textHeight - 1;
-    text.style.whiteSpace = 'pre';
-    text.style.position = 'relative';
-    text.style.top = iconHeight;
-    text.style.fontFamily = 'arial';
-    text.style.fontWeight = 'bold';
-    text.style.color = textColor;
-    text.style.textShadow = '-1px 0 3px black, 0 1px 3px black, 1px 0 3px black, 0 -1px 3px black';
-    text.style.paddingBottom = textHeight / 4;
-
-    text.innerText = name;
-    div.appendChild(text);
-  }
-
-  if (iconText)
-    icon.text = iconText;
-  icon.bordercolor = borderColor;
-  icon.icon = auraIcon;
-  icon.duration = seconds;
-
-  return div;
-}
+    else if (bars.job === 'SAM') {
+        if (bars.speedBuffs.shifu) {
+            if (bars.level > 77)
+                type1Buffs += 13;
+            else
+                type1Buffs += 10;
+        }
+    }
+    if (bars.job === 'NIN') {
+        type2Buffs += bars.speedBuffs.huton ? 15 : 0;
+    }
+    else if (bars.job === 'MNK') {
+        type2Buffs += 5 * bars.speedBuffs.lightningStacks;
+    }
+    else if (bars.job === 'BRD') {
+        type2Buffs += 4 * bars.speedBuffs.paeonStacks;
+        switch (bars.speedBuffs.museStacks) {
+            case 1:
+                type2Buffs += 1;
+                break;
+            case 2:
+                type2Buffs += 2;
+                break;
+            case 3:
+                type2Buffs += 4;
+                break;
+            case 4:
+                type2Buffs += 12;
+                break;
+        }
+    }
+    // TODO: this probably isn't useful to track
+    const astralUmbralMod = 100;
+    const mod = kLevelMod[bars.level];
+    if (!mod)
+        throw new not_reached/* UnreachableCode */.$();
+    const gcdMs = Math.floor(1000 - Math.floor(130 * (stat - mod[0]) / mod[1])) * actionDelay / 1000;
+    const a = (100 - type1Buffs) / 100;
+    const b = (100 - type2Buffs) / 100;
+    const gcdC = Math.floor(Math.floor((a * b) * gcdMs / 10) * astralUmbralMod / 100);
+    return gcdC / 100;
+};
+const computeBackgroundColorFrom = (element, classList) => {
+    const div = document.createElement('div');
+    classList.split('.').forEach((item) => {
+        div.classList.add(item);
+    });
+    element.appendChild(div);
+    const color = window.getComputedStyle(div).backgroundColor;
+    element.removeChild(div);
+    return color;
+};
+const makeAuraTimerIcon = (name, seconds, opacity, iconWidth, iconHeight, iconText, barHeight, textHeight, textColor, borderSize, borderColor, barColor, auraIcon) => {
+    const div = document.createElement('div');
+    div.style.opacity = opacity.toString();
+    const icon = document.createElement('timer-icon');
+    icon.width = iconWidth.toString();
+    icon.height = iconHeight.toString();
+    icon.bordersize = borderSize.toString();
+    icon.textcolor = textColor;
+    div.appendChild(icon);
+    const barDiv = document.createElement('div');
+    barDiv.style.position = 'relative';
+    barDiv.style.top = iconHeight.toString();
+    div.appendChild(barDiv);
+    if (seconds >= 0) {
+        const bar = document.createElement('timer-bar');
+        bar.width = iconWidth.toString();
+        bar.height = barHeight.toString();
+        bar.fg = barColor;
+        bar.duration = seconds.toString();
+        barDiv.appendChild(bar);
+    }
+    if (textHeight > 0) {
+        const text = document.createElement('div');
+        text.classList.add('text');
+        text.style.width = iconWidth.toString();
+        text.style.height = textHeight.toString();
+        text.style.overflow = 'hidden';
+        text.style.fontSize = (textHeight - 1).toString();
+        text.style.whiteSpace = 'pre';
+        text.style.position = 'relative';
+        text.style.top = iconHeight.toString();
+        text.style.fontFamily = 'arial';
+        text.style.fontWeight = 'bold';
+        text.style.color = textColor;
+        text.style.textShadow = '-1px 0 3px black, 0 1px 3px black, 1px 0 3px black, 0 -1px 3px black';
+        text.style.paddingBottom = (textHeight / 4).toString();
+        text.innerText = name;
+        div.appendChild(text);
+    }
+    if (iconText)
+        icon.text = iconText;
+    icon.bordercolor = borderColor;
+    icon.icon = auraIcon;
+    icon.duration = seconds.toString();
+    return div;
+};
 
 ;// CONCATENATED MODULE: ./ui/jobs/buff_tracker.ts
 
@@ -14212,235 +14205,218 @@ function war_reset(bars) {
     war_resetFunc(bars);
 }
 
-;// CONCATENATED MODULE: ./ui/jobs/components/drk.js
+;// CONCATENATED MODULE: ./ui/jobs/components/drk.ts
 
 
-
-let drk_resetFunc = null;
+let drk_resetFunc = (_bars) => undefined;
 let tid1;
 let tid2;
 let tid3;
-
-function drk_setup(bars) {
-  const bloodBox = bars.addResourceBox({
-    classList: ['drk-color-blood'],
-  });
-
-  const darksideBox = bars.addProcBox({
-    fgColor: 'drk-color-darkside',
-    threshold: 10,
-  });
-
-  bars.onJobDetailUpdate((jobDetail) => {
-    const blood = jobDetail.blood;
-    if (bloodBox.innerText === blood)
-      return;
-    bloodBox.innerText = blood;
-    const p = bloodBox.parentNode;
-    if (blood < 50) {
-      p.classList.add('low');
-      p.classList.remove('mid');
-    } else if (blood < 90) {
-      p.classList.remove('low');
-      p.classList.add('mid');
-    } else {
-      p.classList.remove('low');
-      p.classList.remove('mid');
-    }
-
-    const oldSeconds = parseFloat(darksideBox.duration) - parseFloat(darksideBox.elapsed);
-    const seconds = jobDetail.darksideMilliseconds / 1000.0;
-    if (!darksideBox.duration || seconds > oldSeconds) {
-      darksideBox.duration = 0;
-      darksideBox.duration = seconds;
-    }
-  });
-
-  const comboTimer = bars.addTimerBar({
-    id: 'drk-timers-combo',
-    fgColor: 'combo-color',
-  });
-
-  bars.onCombo((skill) => {
-    comboTimer.duration = 0;
-    if (bars.combo.isFinalSkill)
-      return;
-    if (skill)
-      comboTimer.duration = 15;
-  });
-
-  const bloodWeapon = bars.addProcBox({
-    id: 'drk-procs-bloodweapon',
-    fgColor: 'drk-color-bloodweapon',
-  });
-  bars.onUseAbility(kAbility.BloodWeapon, () => {
-    bloodWeapon.duration = 0;
-    bloodWeapon.duration = 10;
-    bloodWeapon.threshold = 10;
-    bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon.active');
-    tid1 = setTimeout(() => {
-      bloodWeapon.duration = 50;
-      bloodWeapon.threshold = bars.gcdSkill * 2;
-      bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon');
-    }, 10000);
-  });
-
-  const delirium = bars.addProcBox({
-    id: 'drk-procs-delirium',
-    fgColor: 'drk-color-delirium',
-  });
-  bars.onUseAbility(kAbility.Delirium, () => {
-    delirium.duration = 0;
-    delirium.duration = 10 + 0.5;
-    delirium.threshold = 20;
-    delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium.active');
-    tid2 = setTimeout(() => {
-      delirium.duration = 80 - 0.5;
-      delirium.threshold = bars.gcdSkill * 2;
-      delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium');
-    }, 10000);
-  });
-
-  const livingShadow = bars.addProcBox({
-    id: 'drk-procs-livingshadow',
-    fgColor: 'drk-color-livingshadow',
-  });
-  bars.onUseAbility(kAbility.LivingShadow, () => {
-    livingShadow.duration = 0;
-    livingShadow.duration = 24;
-    livingShadow.threshold = 24;
-    livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow.active');
-    tid3 = setTimeout(() => {
-      livingShadow.duration = 96;
-      livingShadow.threshold = bars.gcdSkill * 4;
-      livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow');
-    }, 24000);
-  });
-
-  drk_resetFunc = (bars) => {
-    comboTimer.duration = 0;
-    bloodWeapon.duration = 0;
-    bloodWeapon.threshold = bars.gcdSkill * 2;
-    bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon');
-    delirium.duration = 0;
-    delirium.threshold = bars.gcdSkill * 2;
-    delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium');
-    livingShadow.duration = 0;
-    livingShadow.threshold = bars.gcdSkill * 4;
-    livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow');
-    darksideBox.duration = 0;
-    clearTimeout(tid1);
-    clearTimeout(tid2);
-    clearTimeout(tid3);
-  };
-}
-
-function drk_reset(bars) {
-  if (drk_resetFunc)
+const drk_setup = (bars) => {
+    const bloodBox = bars.addResourceBox({
+        classList: ['drk-color-blood'],
+    });
+    const darksideBox = bars.addProcBox({
+        fgColor: 'drk-color-darkside',
+        threshold: 10,
+    });
+    bars.onJobDetailUpdate((jobDetail) => {
+        var _a, _b;
+        const blood = jobDetail.blood;
+        if (bloodBox.innerText === blood.toString())
+            return;
+        bloodBox.innerText = blood.toString();
+        const p = bloodBox.parentNode;
+        if (blood < 50) {
+            p.classList.add('low');
+            p.classList.remove('mid');
+        }
+        else if (blood < 90) {
+            p.classList.remove('low');
+            p.classList.add('mid');
+        }
+        else {
+            p.classList.remove('low');
+            p.classList.remove('mid');
+        }
+        const oldSeconds = parseFloat((_a = darksideBox.duration) !== null && _a !== void 0 ? _a : '0') - parseFloat(darksideBox.elapsed);
+        const seconds = jobDetail.darksideMilliseconds / 1000.0;
+        if ((_b = !darksideBox.duration) !== null && _b !== void 0 ? _b : seconds > oldSeconds) {
+            darksideBox.duration = '0';
+            darksideBox.duration = seconds.toString();
+        }
+    });
+    const comboTimer = bars.addTimerBar({
+        id: 'drk-timers-combo',
+        fgColor: 'combo-color',
+    });
+    bars.onCombo((skill) => {
+        comboTimer.duration = '0';
+        if (bars.combo.isFinalSkill)
+            return;
+        if (skill)
+            comboTimer.duration = '15';
+    });
+    const bloodWeapon = bars.addProcBox({
+        id: 'drk-procs-bloodweapon',
+        fgColor: 'drk-color-bloodweapon',
+    });
+    bars.onUseAbility(kAbility.BloodWeapon, () => {
+        bloodWeapon.duration = '0';
+        bloodWeapon.duration = '10';
+        bloodWeapon.threshold = '10';
+        bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon.active');
+        tid1 = setTimeout(() => {
+            bloodWeapon.duration = '50';
+            bloodWeapon.threshold = (bars.gcdSkill * 2).toString();
+            bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon');
+        }, 10000);
+    });
+    const delirium = bars.addProcBox({
+        id: 'drk-procs-delirium',
+        fgColor: 'drk-color-delirium',
+    });
+    bars.onUseAbility(kAbility.Delirium, () => {
+        delirium.duration = '0';
+        delirium.duration = '10.5';
+        delirium.threshold = '20';
+        delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium.active');
+        tid2 = setTimeout(() => {
+            delirium.duration = '79.5';
+            delirium.threshold = (bars.gcdSkill * 2).toString();
+            delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium');
+        }, 10000);
+    });
+    const livingShadow = bars.addProcBox({
+        id: 'drk-procs-livingshadow',
+        fgColor: 'drk-color-livingshadow',
+    });
+    bars.onUseAbility(kAbility.LivingShadow, () => {
+        livingShadow.duration = '0';
+        livingShadow.duration = '24';
+        livingShadow.threshold = '24';
+        livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow.active');
+        tid3 = setTimeout(() => {
+            livingShadow.duration = '96';
+            livingShadow.threshold = (bars.gcdSkill * 4).toString();
+            livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow');
+        }, 24000);
+    });
+    drk_resetFunc = (bars) => {
+        comboTimer.duration = '0';
+        bloodWeapon.duration = '0';
+        bloodWeapon.threshold = (bars.gcdSkill * 2).toString();
+        bloodWeapon.fg = computeBackgroundColorFrom(bloodWeapon, 'drk-color-bloodweapon');
+        delirium.duration = '0';
+        delirium.threshold = (bars.gcdSkill * 2).toString();
+        delirium.fg = computeBackgroundColorFrom(delirium, 'drk-color-delirium');
+        livingShadow.duration = '0';
+        livingShadow.threshold = (bars.gcdSkill * 4).toString();
+        livingShadow.fg = computeBackgroundColorFrom(livingShadow, 'drk-color-livingshadow');
+        darksideBox.duration = '0';
+        clearTimeout(tid1);
+        clearTimeout(tid2);
+        clearTimeout(tid3);
+    };
+};
+const drk_reset = (bars) => {
     drk_resetFunc(bars);
-}
+};
 
-;// CONCATENATED MODULE: ./ui/jobs/components/gnb.js
+;// CONCATENATED MODULE: ./ui/jobs/components/gnb.ts
 
 
-
-let gnb_resetFunc = null;
+let gnb_resetFunc = (_bars) => undefined;
 let gnb_tid1;
-
-function gnb_setup(bars) {
-  const cartridgeBox = bars.addResourceBox({
-    classList: ['gnb-color-cartridge'],
-  });
-
-  const noMercyBox = bars.addProcBox({
-    id: 'gnb-procs-nomercy',
-    fgColor: 'gnb-color-nomercy',
-  });
-  bars.onUseAbility(kAbility.NoMercy, () => {
-    noMercyBox.duration = 0;
-    noMercyBox.duration = 20;
-    noMercyBox.threshold = 1000;
-    noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy.active');
-    gnb_tid1 = setTimeout(() => {
-      noMercyBox.duration = 40;
-      noMercyBox.threshold = bars.gcdSkill + 1;
-      noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy');
-    }, 20000);
-  });
-
-  const bloodfestBox = bars.addProcBox({
-    id: 'gnb-procs-bloodfest',
-    fgColor: 'gnb-color-bloodfest',
-  });
-  bars.onUseAbility(kAbility.Bloodfest, () => {
-    bloodfestBox.duration = 0;
-    bloodfestBox.duration = 90;
-  });
-
-  bars.onStatChange('GNB', () => {
-    gnashingFangBox.valuescale = bars.gcdSkill;
-    gnashingFangBox.threshold = bars.gcdSkill * 3;
-    noMercyBox.valuescale = bars.gcdSkill;
-    bloodfestBox.valuescale = bars.gcdSkill;
-    bloodfestBox.threshold = bars.gcdSkill * 2 + 1;
-  });
-  // Combos
-  const gnashingFangBox = bars.addProcBox({
-    id: 'gnb-procs-gnashingfang',
-    fgColor: 'gnb-color-gnashingfang',
-  });
-  const comboTimer = bars.addTimerBar({
-    id: 'gnb-timers-combo',
-    fgColor: 'combo-color',
-  });
-  const cartridgeComboTimer = bars.addTimerBar({
-    id: 'gnb-timers-cartridgecombo',
-    fgColor: 'gnb-color-gnashingfang',
-  });
-  bars.onUseAbility(kAbility.GnashingFang, () => {
-    gnashingFangBox.duration = 0;
-    gnashingFangBox.duration = calcGCDFromStat(bars, bars.skillSpeed, 30000);
-    cartridgeComboTimer.duration = 0;
-    cartridgeComboTimer.duration = 15;
-  });
-  bars.onUseAbility(kAbility.SavageClaw, () => {
-    cartridgeComboTimer.duration = 0;
-    cartridgeComboTimer.duration = 15;
-  });
-  bars.onUseAbility(kAbility.WickedTalon, () => cartridgeComboTimer.duration = 0);
-  bars.onCombo((skill) => {
-    comboTimer.duration = 0;
-    cartridgeComboTimer.duration = 0;
-    if (bars.combo.isFinalSkill)
-      return;
-    if (skill)
-      comboTimer.duration = 15;
-  });
-
-  bars.onJobDetailUpdate((jobDetail) => {
-    cartridgeBox.innerText = jobDetail.cartridges;
-    if (jobDetail.cartridges === 2)
-      cartridgeBox.parentNode.classList.add('full');
-    else
-      cartridgeBox.parentNode.classList.remove('full');
-  });
-
-  gnb_resetFunc = (bars) => {
-    noMercyBox.duration = 0;
-    noMercyBox.threshold = bars.gcdSkill + 1;
-    noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy');
-    bloodfestBox.duration = 0;
-    gnashingFangBox.duration = 0;
-    cartridgeComboTimer.duration = 0;
-    comboTimer.duration = 0;
-    clearTimeout(gnb_tid1);
-  };
-}
-
-function gnb_reset(bars) {
-  if (gnb_resetFunc)
+const gnb_setup = (bars) => {
+    const cartridgeBox = bars.addResourceBox({
+        classList: ['gnb-color-cartridge'],
+    });
+    const noMercyBox = bars.addProcBox({
+        id: 'gnb-procs-nomercy',
+        fgColor: 'gnb-color-nomercy',
+    });
+    bars.onUseAbility(kAbility.NoMercy, () => {
+        noMercyBox.duration = '0';
+        noMercyBox.duration = '20';
+        noMercyBox.threshold = '1000';
+        noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy.active');
+        gnb_tid1 = setTimeout(() => {
+            noMercyBox.duration = '40';
+            noMercyBox.threshold = (bars.gcdSkill + 1).toString();
+            noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy');
+        }, 20000);
+    });
+    const bloodfestBox = bars.addProcBox({
+        id: 'gnb-procs-bloodfest',
+        fgColor: 'gnb-color-bloodfest',
+    });
+    bars.onUseAbility(kAbility.Bloodfest, () => {
+        bloodfestBox.duration = '0';
+        bloodfestBox.duration = '90';
+    });
+    bars.onStatChange('GNB', () => {
+        gnashingFangBox.valuescale = bars.gcdSkill.toString();
+        gnashingFangBox.threshold = (bars.gcdSkill * 3).toString();
+        noMercyBox.valuescale = bars.gcdSkill.toString();
+        bloodfestBox.valuescale = bars.gcdSkill.toString();
+        bloodfestBox.threshold = (bars.gcdSkill * 2 + 1).toString();
+    });
+    // Combos
+    const gnashingFangBox = bars.addProcBox({
+        id: 'gnb-procs-gnashingfang',
+        fgColor: 'gnb-color-gnashingfang',
+    });
+    const comboTimer = bars.addTimerBar({
+        id: 'gnb-timers-combo',
+        fgColor: 'combo-color',
+    });
+    const cartridgeComboTimer = bars.addTimerBar({
+        id: 'gnb-timers-cartridgecombo',
+        fgColor: 'gnb-color-gnashingfang',
+    });
+    bars.onUseAbility(kAbility.GnashingFang, () => {
+        gnashingFangBox.duration = '0';
+        gnashingFangBox.duration = calcGCDFromStat(bars, bars.skillSpeed, 30000).toString();
+        cartridgeComboTimer.duration = '0';
+        cartridgeComboTimer.duration = '15';
+    });
+    bars.onUseAbility(kAbility.SavageClaw, () => {
+        cartridgeComboTimer.duration = '0';
+        cartridgeComboTimer.duration = '15';
+    });
+    bars.onUseAbility(kAbility.WickedTalon, () => {
+        cartridgeComboTimer.duration = '0';
+    });
+    bars.onCombo((skill) => {
+        comboTimer.duration = '0';
+        cartridgeComboTimer.duration = '0';
+        if (bars.combo.isFinalSkill)
+            return;
+        if (skill)
+            comboTimer.duration = '15';
+    });
+    bars.onJobDetailUpdate((jobDetail) => {
+        cartridgeBox.innerText = jobDetail.cartridges.toString();
+        if (jobDetail.cartridges === 2)
+            cartridgeBox.parentNode.classList.add('full');
+        else
+            cartridgeBox.parentNode.classList.remove('full');
+    });
+    gnb_resetFunc = (bars) => {
+        noMercyBox.duration = '0';
+        noMercyBox.threshold = (bars.gcdSkill + 1).toString();
+        noMercyBox.fg = computeBackgroundColorFrom(noMercyBox, 'gnb-color-nomercy');
+        bloodfestBox.duration = '0';
+        gnashingFangBox.duration = '0';
+        cartridgeComboTimer.duration = '0';
+        comboTimer.duration = '0';
+        clearTimeout(gnb_tid1);
+    };
+};
+const gnb_reset = (bars) => {
     gnb_resetFunc(bars);
-}
+};
 
 ;// CONCATENATED MODULE: ./ui/jobs/components/whm.js
 
