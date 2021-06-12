@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 760:
+/***/ 152:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -31,7 +31,7 @@
 
 /***/ }),
 
-/***/ 873:
+/***/ 5:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -70,13 +70,13 @@ const data = {
 
 /***/ }),
 
-/***/ 641:
+/***/ 381:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (/* binding */ NetRegexes)
 /* harmony export */ });
-/* harmony import */ var _regexes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(911);
+/* harmony import */ var _regexes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(201);
 
 // Differences from Regexes:
 // * may have more fields
@@ -515,7 +515,7 @@ NetRegexes.flagTranslationsNeeded = false;
 
 /***/ }),
 
-/***/ 509:
+/***/ 500:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -539,7 +539,7 @@ class UnreachableCode extends Error {
 
 /***/ }),
 
-/***/ 970:
+/***/ 273:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1263,7 +1263,7 @@ const numberToOutputString = function (n) {
 
 /***/ }),
 
-/***/ 511:
+/***/ 906:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -1443,7 +1443,7 @@ const init = () => {
 
 /***/ }),
 
-/***/ 911:
+/***/ 201:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -2117,14 +2117,14 @@ class Regexes {
 
 /***/ }),
 
-/***/ 667:
+/***/ 163:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "n3": () => (/* binding */ Responses)
 /* harmony export */ });
 /* unused harmony exports builtInResponseStr, triggerFunctions, triggerTextOutputFunctions, triggerOutputFunctions, severityMap */
-/* harmony import */ var _outputs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(970);
+/* harmony import */ var _outputs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(273);
 // This is meant to be used in a trigger as such:
 // {
 //   id: 'Some tankbuster',
@@ -2564,23 +2564,23 @@ console.assert(responseMapTypeAssertion);
 
 /***/ }),
 
-/***/ 633:
+/***/ 970:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _overlay_plugin_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(511);
-/* harmony import */ var _not_reached__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(509);
-/* harmony import */ var _conditions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(760);
-/* harmony import */ var _content_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(873);
-/* harmony import */ var _netregexes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(641);
-/* harmony import */ var _regexes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(911);
-/* harmony import */ var _responses__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(667);
-/* harmony import */ var _outputs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(970);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(556);
-/* harmony import */ var _zone_id__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(248);
-/* harmony import */ var _zone_info__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(524);
+/* harmony import */ var _overlay_plugin_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(906);
+/* harmony import */ var _not_reached__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(500);
+/* harmony import */ var _conditions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(152);
+/* harmony import */ var _content_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _netregexes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(381);
+/* harmony import */ var _regexes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(201);
+/* harmony import */ var _responses__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(163);
+/* harmony import */ var _outputs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(273);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(779);
+/* harmony import */ var _zone_id__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(438);
+/* harmony import */ var _zone_info__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(810);
 
 
 // TODO:
@@ -2991,7 +2991,7 @@ if (typeof document !== 'undefined') {
 
 /***/ }),
 
-/***/ 556:
+/***/ 779:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -3101,7 +3101,7 @@ const Util = {
 
 /***/ }),
 
-/***/ 248:
+/***/ 438:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -3578,7 +3578,7 @@ const data = {
 
 /***/ }),
 
-/***/ 524:
+/***/ 810:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -11046,7 +11046,7 @@ var __webpack_exports__ = {};
 (() => {
 
 // EXTERNAL MODULE: ./resources/overlay_plugin_api.ts
-var overlay_plugin_api = __webpack_require__(511);
+var overlay_plugin_api = __webpack_require__(906);
 ;// CONCATENATED MODULE: ./resources/effect_id.ts
 // Auto-generated from gen_effect_id.py
 // DO NOT EDIT THIS FILE DIRECTLY
@@ -12419,15 +12419,15 @@ const data = {
 /* harmony default export */ const effect_id = (data);
 
 // EXTERNAL MODULE: ./resources/content_type.ts
-var content_type = __webpack_require__(873);
+var content_type = __webpack_require__(5);
 // EXTERNAL MODULE: ./resources/user_config.ts
-var user_config = __webpack_require__(633);
+var user_config = __webpack_require__(970);
 // EXTERNAL MODULE: ./resources/util.ts
-var util = __webpack_require__(556);
+var util = __webpack_require__(779);
 // EXTERNAL MODULE: ./resources/zone_info.ts
-var zone_info = __webpack_require__(524);
+var zone_info = __webpack_require__(810);
 // EXTERNAL MODULE: ./resources/zone_id.ts
-var zone_id = __webpack_require__(248);
+var zone_id = __webpack_require__(438);
 ;// CONCATENATED MODULE: ./ui/jobs/constants.ts
 
 const kMeleeWithMpJobs = ['PLD', 'DRK'];
@@ -12812,9 +12812,9 @@ const kLevelMod = [[0, 0],
     [372, 2790], [374, 2910], [376, 3034], [378, 3164], [380, 3300]];
 
 // EXTERNAL MODULE: ./resources/netregexes.ts
-var netregexes = __webpack_require__(641);
+var netregexes = __webpack_require__(381);
 // EXTERNAL MODULE: ./resources/regexes.ts
-var regexes = __webpack_require__(911);
+var regexes = __webpack_require__(201);
 ;// CONCATENATED MODULE: ./resources/translations.ts
 
 
@@ -12962,7 +12962,7 @@ const LocaleRegex = regexSet.localeRegex;
 const LocaleNetRegex = regexSet.localeNetRegex;
 
 // EXTERNAL MODULE: ./resources/not_reached.ts
-var not_reached = __webpack_require__(509);
+var not_reached = __webpack_require__(500);
 ;// CONCATENATED MODULE: ./ui/jobs/utils.ts
 
 
@@ -14068,6 +14068,7 @@ function setup(bars) {
 
   const goreBox = bars.addProcBox({
     fgColor: 'pld-color-gore',
+    notifyWhenExpired: true,
   });
 
   bars.onCombo((skill) => {
@@ -14140,6 +14141,7 @@ function war_setup(bars) {
 
   const eyeBox = bars.addProcBox({
     fgColor: 'war-color-eye',
+    notifyWhenExpired: true,
   });
 
   const comboTimer = bars.addTimerBar({
@@ -14435,6 +14437,7 @@ function whm_setup(bars) {
   const diaBox = bars.addProcBox({
     id: 'whm-procs-dia',
     fgColor: 'whm-color-dia',
+    notifyWhenExpired: true,
   });
   const assizeBox = bars.addProcBox({
     id: 'whm-procs-assize',
@@ -14543,6 +14546,7 @@ function sch_setup(bars) {
   const bioBox = bars.addProcBox({
     id: 'sch-procs-bio',
     fgColor: 'sch-color-bio',
+    notifyWhenExpired: true,
   });
 
   const aetherflowBox = bars.addProcBox({
@@ -14639,6 +14643,7 @@ function ast_setup(bars) {
   const combustBox = bars.addProcBox({
     id: 'ast-procs-combust',
     fgColor: 'ast-color-combust',
+    notifyWhenExpired: true,
   });
 
   const drawBox = bars.addProcBox({
@@ -14881,6 +14886,7 @@ function drg_setup(bars) {
   const disembowelBox = bars.addProcBox({
     id: 'drg-procs-disembowel',
     fgColor: 'drg-color-disembowel',
+    notifyWhenExpired: true,
   });
   bars.onCombo((skill) => {
     if (skill === kAbility.Disembowel) {
@@ -15167,6 +15173,7 @@ function sam_setup(bars) {
   const shifu = bars.addProcBox({
     id: 'sam-procs-shifu',
     fgColor: 'sam-color-shifu',
+    notifyWhenExpired: true,
   });
   bars.onYouGainEffect(effect_id.Shifu, (id, matches) => {
     shifu.duration = 0;
@@ -15181,6 +15188,7 @@ function sam_setup(bars) {
   const jinpu = bars.addProcBox({
     id: 'sam-procs-jinpu',
     fgColor: 'sam-color-jinpu',
+    notifyWhenExpired: true,
   });
   bars.onYouGainEffect(effect_id.Jinpu, (id, matches) => {
     jinpu.duration = 0;
@@ -15206,6 +15214,7 @@ function sam_setup(bars) {
   const higanbana = bars.addProcBox({
     id: 'sam-procs-higanbana',
     fgColor: 'sam-color-higanbana',
+    notifyWhenExpired: true,
   });
   bars.onMobGainsEffectFromYou(effect_id.Higanbana, () => {
     higanbana.duration = 0;
@@ -15259,10 +15268,12 @@ function brd_setup(bars) {
   const causticBiteBox = bars.addProcBox({
     id: 'brd-procs-causticbite',
     fgColor: 'brd-color-causticbite',
+    notifyWhenExpired: true,
   });
   const stormBiteBox = bars.addProcBox({
     id: 'brd-procs-stormbite',
     fgColor: 'brd-color-stormbite',
+    notifyWhenExpired: true,
   });
   // Iron jaws just refreshes these effects by gain once more,
   // so it doesn't need to be handled separately.
@@ -15721,6 +15732,7 @@ function blm_setup(bars) {
     id: 'blm-dot-thunder',
     fgColor: 'blm-color-dot',
     threshold: 4,
+    notifyWhenExpired: true,
   });
   const thunderProc = bars.addProcBox({
     id: 'blm-procs-thunder',
@@ -15881,11 +15893,13 @@ function smn_setup(bars) {
   const miasmaBox = bars.addProcBox({
     id: 'smn-procs-miasma',
     fgColor: 'smn-color-miasma',
+    notifyWhenExpired: true,
   });
 
   const bioSmnBox = bars.addProcBox({
     id: 'smn-procs-biosmn',
     fgColor: 'smn-color-biosmn',
+    notifyWhenExpired: true,
   });
 
   const energyDrainBox = bars.addProcBox({
@@ -16498,6 +16512,15 @@ user_config/* default.registerOptions */.Z.registerOptions('jobs', {
             },
             type: 'float',
             default: 0.8,
+        },
+        {
+            id: 'NotifyExpiredProcsInCombat',
+            name: {
+                en: 'Flash procs boxes of inactive dots/etc. up to n times while in combat. (-1: disabled, 0: infinite)',
+                de: 'Dot/etc. boxen blinken bis zu n mal wenn im Kampf und dot ist nicht aktiv. (-1: deaktiviert, 0: ohne Limit)',
+            },
+            type: 'integer',
+            default: -1,
         },
     ],
 });
@@ -17813,6 +17836,7 @@ class TimerBox extends HTMLElement {
         this._hideTimer = null;
         clearTimeout((_b = this._timer) !== null && _b !== void 0 ? _b : 0);
         this._timer = null;
+        this.classList.remove('expired');
         this._start = new Date().getTime();
         this.advance();
     }
@@ -17823,6 +17847,7 @@ class TimerBox extends HTMLElement {
             // Sets the attribute to 0 so users can see the counter is done, and
             // if they set the same duration again it will count.
             this._duration = 0;
+            this.classList.add('expired');
             if (this._hideAfter > 0)
                 this._hideTimer = window.setTimeout(this.hide.bind(this), this._hideAfter);
             else if (this._hideAfter === 0)
@@ -18637,6 +18662,16 @@ class Bars {
     this.contentType = 0;
     this.isPVPZone = false;
     this.crafting = false;
+
+    this.updateProcBoxNotifyRepeat();
+  }
+
+  updateProcBoxNotifyRepeat() {
+    if (this.options.NotifyExpiredProcsInCombat >= 0) {
+      const repeats = this.options.NotifyExpiredProcsInCombat === 0 ? 'infinite' : this.options.NotifyExpiredProcsInCombat;
+
+      document.documentElement.style.setProperty('--proc-box-notify-repeat', repeats);
+    }
   }
 
   get gcdSkill() {
@@ -18929,6 +18964,7 @@ class Bars {
     fgColor,
     threshold,
     scale,
+    notifyWhenExpired,
   }) {
     const elementId = this.job.toLowerCase() + '-procs';
 
@@ -18955,6 +18991,8 @@ class Bars {
       timerBox.id = id;
       timerBox.classList.add('timer-box');
     }
+    if (notifyWhenExpired)
+      timerBox.classList.add('notify-when-expired');
     return timerBox;
   }
 
@@ -19076,6 +19114,21 @@ class Bars {
       this.o.healthBar.fg = computeBackgroundColorFrom(this.o.healthBar, 'hp-color.mid');
     else
       this.o.healthBar.fg = computeBackgroundColorFrom(this.o.healthBar, 'hp-color');
+  }
+
+  _updateProcBoxNotifyState() {
+    if (this.options.NotifyExpiredProcsInCombat >= 0) {
+      const boxes = document.getElementsByClassName('proc-box');
+      for (const box of boxes) {
+        if (this.inCombat) {
+          box.classList.add('in-combat');
+          for (const child of box.children)
+            child.classList.remove('expired');
+        } else {
+          box.classList.remove('in-combat');
+        }
+      }
+    }
   }
 
   _updateMPTicker() {
@@ -19248,6 +19301,7 @@ class Bars {
     this._updateOpacity();
     this._updateFoodBuff();
     this._updateMPTicker();
+    this._updateProcBoxNotifyState();
   }
 
   _onChangeZone(e) {
@@ -19381,6 +19435,7 @@ class Bars {
       this._updateJob();
       // On reload, we need to set the opacity after setting up the job bars.
       this._updateOpacity();
+      this._updateProcBoxNotifyState();
       // Set up the buff tracker after the job bars are created.
       this.buffTracker = new BuffTracker(
           this.options, this.me, this.o.leftBuffsList, this.o.rightBuffsList, this.partyTracker);

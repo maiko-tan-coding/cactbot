@@ -1,1 +1,0 @@
-{"version":3,"file":"weather_rate.d.ts","sourceRoot":"","sources":["../../resources/weather_rate.ts"],"names":[],"mappings":"AAGA,aAAK,eAAe,GAAG;IACrB,CAAC,MAAM,EAAE,MAAM,GAAG;QAChB,QAAQ,CAAC,KAAK,EAAE,MAAM,EAAE,CAAC;QACzB,QAAQ,CAAC,QAAQ,EAAE,MAAM,EAAE,CAAC;KAC7B,CAAC;CACH,CAAC;AAEF,QAAA,MAAM,IAAI,EAAE,eA+pDX,CAAC;AAEF,eAAe,IAAI,CAAC"}

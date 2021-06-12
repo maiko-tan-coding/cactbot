@@ -1,1 +1,0 @@
-{"version":3,"file":"ParseLine.d.ts","sourceRoot":"","sources":["../../../../../../ui/raidboss/emulator/data/network_log_converter/ParseLine.ts"],"names":[],"mappings":"AAAA,OAAO,SAAS,MAAM,aAAa,CAAC;AAyBpC,OAAO,aAAa,MAAM,iBAAiB,CAAC;AAE5C,MAAM,CAAC,OAAO,OAAO,SAAS;IAC5B,MAAM,CAAC,KAAK,CAAC,IAAI,EAAE,aAAa,EAAE,IAAI,EAAE,MAAM,GAAG,SAAS,GAAG,SAAS;CAkGvE"}
