@@ -847,6 +847,9 @@ const coverage = {
         'timeline': {
             'hasFile': true,
         },
+        'oopsy': {
+            'num': 3,
+        },
     },
     '241': {
         'triggers': {
@@ -2328,7 +2331,7 @@ const coverageTotals = {
                 },
                 '4': {
                     'raidboss': 8,
-                    'oopsy': 6,
+                    'oopsy': 7,
                     'total': 27,
                 },
                 '5': {
@@ -2344,7 +2347,7 @@ const coverageTotals = {
             },
             'overall': {
                 'raidboss': 22,
-                'oopsy': 6,
+                'oopsy': 7,
                 'total': 92,
             },
         },
@@ -2464,7 +2467,7 @@ const coverageTotals = {
         },
         '4': {
             'raidboss': 40,
-            'oopsy': 27,
+            'oopsy': 28,
             'total': 76,
         },
         '5': {
@@ -2480,7 +2483,7 @@ const coverageTotals = {
     },
     'overall': {
         'raidboss': 158,
-        'oopsy': 90,
+        'oopsy': 91,
         'total': 271,
     },
 };

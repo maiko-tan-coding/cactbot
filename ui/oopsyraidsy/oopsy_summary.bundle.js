@@ -11298,8 +11298,8 @@ var user_config = __webpack_require__(970);
 var zone_id = __webpack_require__(438);
 // EXTERNAL MODULE: ./resources/zone_info.ts
 var zone_info = __webpack_require__(810);
-// EXTERNAL MODULE: ./ui/oopsyraidsy/data/oopsy_manifest.txt + 95 modules
-var oopsy_manifest = __webpack_require__(384);
+// EXTERNAL MODULE: ./ui/oopsyraidsy/data/oopsy_manifest.txt + 96 modules
+var oopsy_manifest = __webpack_require__(184);
 ;// CONCATENATED MODULE: ./ui/oopsyraidsy/oopsyraidsy_config.js
 
 
