@@ -14527,32 +14527,31 @@ class PopupTextGenerator {
     constructor(popupText) {
         this.popupText = popupText;
     }
-    Info(text) {
+    Info(text, currentTime) {
         this.popupText.OnTrigger({
             infoText: text,
             tts: text,
-        }, null, Date.now());
+        }, null, currentTime);
     }
-    Alert(text) {
+    Alert(text, currentTime) {
         this.popupText.OnTrigger({
             alertText: text,
             tts: text,
-        }, null, Date.now());
+        }, null, currentTime);
     }
-    Alarm(text) {
+    Alarm(text, currentTime) {
         this.popupText.OnTrigger({
             alarmText: text,
             tts: text,
-        }, null, Date.now());
+        }, null, currentTime);
     }
-    TTS(text) {
+    TTS(text, currentTime) {
         this.popupText.OnTrigger({
             infoText: text,
             tts: text,
-        }, null, Date.now());
+        }, null, currentTime);
     }
-    Trigger(trigger, matches) {
-        const currentTime = +new Date();
+    Trigger(trigger, matches, currentTime) {
         this.popupText.OnTrigger(trigger, matches, currentTime);
     }
 }
@@ -15705,23 +15704,23 @@ class Timeline {
                 break;
             if (t.type === 'info') {
                 if (this.showInfoTextCallback)
-                    this.showInfoTextCallback(t.text);
+                    this.showInfoTextCallback(t.text, this.timebase);
             }
             else if (t.type === 'alert') {
                 if (this.showAlertTextCallback)
-                    this.showAlertTextCallback(t.text);
+                    this.showAlertTextCallback(t.text, this.timebase);
             }
             else if (t.type === 'alarm') {
                 if (this.showAlarmTextCallback)
-                    this.showAlarmTextCallback(t.text);
+                    this.showAlarmTextCallback(t.text, this.timebase);
             }
             else if (t.type === 'tts') {
                 if (this.speakTTSCallback)
-                    this.speakTTSCallback(t.text);
+                    this.speakTTSCallback(t.text, this.timebase);
             }
             else if (t.type === 'trigger') {
                 if (this.triggerCallback)
-                    this.triggerCallback(t.trigger, t.matches);
+                    this.triggerCallback(t.trigger, t.matches, this.timebase);
             }
             ++this.nextText;
         }
@@ -15997,25 +15996,25 @@ class TimelineUI {
             removeBar();
         }
     }
-    OnShowInfoText(text) {
+    OnShowInfoText(text, currentTime) {
         if (this.popupText)
-            this.popupText.Info(text);
+            this.popupText.Info(text, currentTime);
     }
-    OnShowAlertText(text) {
+    OnShowAlertText(text, currentTime) {
         if (this.popupText)
-            this.popupText.Alert(text);
+            this.popupText.Alert(text, currentTime);
     }
-    OnShowAlarmText(text) {
+    OnShowAlarmText(text, currentTime) {
         if (this.popupText)
-            this.popupText.Alarm(text);
+            this.popupText.Alarm(text, currentTime);
     }
-    OnSpeakTTS(text) {
+    OnSpeakTTS(text, currentTime) {
         if (this.popupText)
-            this.popupText.TTS(text);
+            this.popupText.TTS(text, currentTime);
     }
-    OnTrigger(trigger, matches) {
+    OnTrigger(trigger, matches, currentTime) {
         if (this.popupText)
-            this.popupText.Trigger(trigger, matches);
+            this.popupText.Trigger(trigger, matches, currentTime);
     }
     OnSyncTime(fightNow, running) {
         if (!this.options.Debug || !this.debugElement)
