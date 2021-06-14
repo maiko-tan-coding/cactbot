@@ -13017,19 +13017,14 @@ user_config/* default.registerOptions */.Z.registerOptions('eureka', {
 
 
 
-
-
-
-
 const bunnyLabel = {
   en: 'Bunny',
   de: 'Hase',
   fr: 'Lapin',
   ja: 'うさぎ',
   cn: '兔子',
-  ko: '토끼',
+  ko: '토끼'
 };
-
 const Options = {
   Debug: false,
   PopSound: '../../resources/sounds/freesound/sonar.ogg',
@@ -13042,6 +13037,7 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' for ' + Math.ceil(min) + 'm';
         }
+
         return ' for ???';
       },
       de: (nowMs, stopTime) => {
@@ -13049,6 +13045,7 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' für ' + Math.ceil(min) + 'min';
         }
+
         return ' für ???';
       },
       fr: (nowMs, stopTime) => {
@@ -13056,6 +13053,7 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' pour ' + Math.ceil(min) + ' min ';
         }
+
         return ' pour ???';
       },
       ja: (nowMs, stopTime) => {
@@ -13063,6 +13061,7 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' 終わるまであと ' + Math.ceil(min) + ' 分 ';
         }
+
         return ' 終わるまであと ???';
       },
       cn: (nowMs, stopTime) => {
@@ -13070,6 +13069,7 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '分钟后结束';
         }
+
         return ' ??? 分钟';
       },
       ko: (nowMs, stopTime) => {
@@ -13077,8 +13077,9 @@ const Options = {
           const min = (stopTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '분 동안';
         }
+
         return ' ??? 동안';
-      },
+      }
     },
     weatherIn: {
       en: (nowMs, startTime) => {
@@ -13086,6 +13087,7 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' in ' + Math.ceil(min) + 'm';
         }
+
         return ' in ???';
       },
       de: (nowMs, startTime) => {
@@ -13093,6 +13095,7 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' in ' + Math.ceil(min) + 'min';
         }
+
         return ' in ???';
       },
       fr: (nowMs, startTime) => {
@@ -13100,6 +13103,7 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' dans ' + Math.ceil(min) + ' min ';
         }
+
         return ' dans ???';
       },
       ja: (nowMs, startTime) => {
@@ -13107,6 +13111,7 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' あと ' + Math.ceil(min) + ' 分 ';
         }
+
         return ' あと ???';
       },
       cn: (nowMs, startTime) => {
@@ -13114,6 +13119,7 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '分钟后';
         }
+
         return ' ??? 后';
       },
       ko: (nowMs, startTime) => {
@@ -13121,28 +13127,29 @@ const Options = {
           const min = (startTime - nowMs) / 1000 / 60;
           return ' ' + Math.ceil(min) + '분 후';
         }
+
         return ' ??? 후';
-      },
+      }
     },
     timeFor: {
-      en: (dayNightMin) => {
+      en: dayNightMin => {
         return ' for ' + dayNightMin + 'm';
       },
-      de: (dayNightMin) => {
+      de: dayNightMin => {
         return ' für ' + dayNightMin + 'min';
       },
-      fr: (dayNightMin) => {
+      fr: dayNightMin => {
         return ' pour ' + dayNightMin + ' min ';
       },
-      ja: (dayNightMin) => {
+      ja: dayNightMin => {
         return ' ' + dayNightMin + '分';
       },
-      cn: (dayNightMin) => {
+      cn: dayNightMin => {
         return ' ' + dayNightMin + '分钟';
       },
-      ko: (dayNightMin) => {
+      ko: dayNightMin => {
         return ' ' + dayNightMin + '분 동안';
-      },
+      }
     },
     minute: {
       en: 'm',
@@ -13150,8 +13157,8 @@ const Options = {
       fr: ' min ',
       ja: '分',
       cn: '分',
-      ko: '분',
-    },
+      ko: '분'
+    }
   },
   Regex: {
     // de, fr, ja languages all share the English regexes here.
@@ -13160,20 +13167,20 @@ const Options = {
       'gFlagRegex': regexes/* default.parse */.Z.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:Eureka (?:Anemos|Pagos|Pyros|Hydatos)|Bozjan Southern Front|Zadnor) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': regexes/* default.parse */.Z.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': regexes/* default.parse */.Z.parse(/00:00..:(.*)NMs on cooldown: (\S.*\))/),
-      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)m\)/),
+      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)m\)/)
     },
     cn: {
       'gFlagRegex': regexes/* default.parse */.Z.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:常风之地|恒冰之地|涌火之地|丰水之地) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': regexes/* default.parse */.Z.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': regexes/* default.parse */.Z.parse(/00:00..:(.*)冷却中的NM: (\S.*\))/),
-      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)分(钟*)\)/),
+      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)分(钟*)\)/)
     },
     ko: {
       'gFlagRegex': regexes/* default.parse */.Z.parse(/00:00(?:38:|..:[^:]*:)(.*)\ue0bb(?:에우레카: (?:아네모스|파고스|피로스|히다토스) 지대|남부 보즈야 전선) \( (\y{Float})\s*, (\y{Float}) \)(.*$)/),
       'gTrackerRegex': regexes/* default.parse */.Z.parse(/(?:https:\/\/)?ffxiv-eureka\.com\/([\w-]{6})(?:[^\w-]|$)/),
       'gImportRegex': regexes/* default.parse */.Z.parse(/00:00..:(.*)토벌한 마물: (\S.*\))/),
-      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)분\)/),
-    },
+      'gTimeRegex': regexes/* default.parse */.Z.parse(/(.*) \((\d*)분\)/)
+    }
   },
   ZoneInfo: {
     // Fate IDs
@@ -13183,7 +13190,6 @@ const Options = {
     // Pagos:   https://xivapi.com/search?indexes=Fate&filters=ID>=1351,ID<=1369&columns=Description,Name,Url
     // Pyros:   https://xivapi.com/search?indexes=Fate&filters=ID>=1388,ID<=1408&columns=Description,Name,Url
     // Hydatos: https://xivapi.com/search?indexes=Fate&filters=ID>=1412,ID<=1425&columns=Description,Name,Url
-
     // Bozja
     // Southern Front: https://xivapi.com/search?indexes=Fate&filters=ID%3E=1597,ID%3C=1628&columns=Description,Name,Url
     // Zadnor: https://xivapi.com/search?indexes=Fate&filters=ID%3E=1717,ID%3C=1742&columns=Description,Name,Url
@@ -13205,7 +13211,7 @@ const Options = {
         fr: 'Élémentaire Anemos',
         ja: 'アネモス・エレメンタル',
         cn: '常风元灵',
-        ko: '아네모스 정령',
+        ko: '아네모스 정령'
       },
       nms: {
         sabo: {
@@ -13215,7 +13221,7 @@ const Options = {
             fr: 'Pampa',
             ja: 'サボ',
             cn: '仙人掌',
-            ko: '사보텐더',
+            ko: '사보텐더'
           },
           trackerName: {
             en: 'Sabo',
@@ -13223,11 +13229,11 @@ const Options = {
             fr: 'Pampa',
             ja: 'サボテン',
             cn: '仙人掌',
-            ko: '사보',
+            ko: '사보'
           },
           x: 13.9,
           y: 21.9,
-          fateID: 1332,
+          fateID: 1332
         },
         lord: {
           label: {
@@ -13236,7 +13242,7 @@ const Options = {
             fr: 'Seigneur',
             ja: 'ロード',
             cn: '章鱼',
-            ko: '문어',
+            ko: '문어'
           },
           trackerName: {
             en: 'Lord',
@@ -13244,11 +13250,11 @@ const Options = {
             fr: 'Seigneur',
             ja: 'ロード',
             cn: '章鱼',
-            ko: '대왕',
+            ko: '대왕'
           },
           x: 29.7,
           y: 27.1,
-          fateID: 1348,
+          fateID: 1348
         },
         teles: {
           label: {
@@ -13257,7 +13263,7 @@ const Options = {
             fr: 'Teles',
             ja: 'テレス',
             cn: '鸟',
-            ko: '텔레스',
+            ko: '텔레스'
           },
           trackerName: {
             en: 'Teles',
@@ -13265,11 +13271,11 @@ const Options = {
             fr: 'Teles',
             ja: 'テレス',
             cn: '鸟',
-            ko: '텔레스',
+            ko: '텔레스'
           },
           x: 25.6,
           y: 27.4,
-          fateID: 1333,
+          fateID: 1333
         },
         emperor: {
           label: {
@@ -13278,7 +13284,7 @@ const Options = {
             fr: 'Empereur',
             ja: 'アネモス',
             cn: '蜻蜓',
-            ko: '잠자리',
+            ko: '잠자리'
           },
           trackerName: {
             en: 'Emperor',
@@ -13286,11 +13292,11 @@ const Options = {
             fr: 'Empereur',
             ja: 'エンペラ',
             cn: '蜻蜓',
-            ko: '황제',
+            ko: '황제'
           },
           x: 17.2,
           y: 22.2,
-          fateID: 1328,
+          fateID: 1328
         },
         callisto: {
           label: {
@@ -13299,7 +13305,7 @@ const Options = {
             fr: 'Callisto',
             ja: 'カリスト',
             cn: '熊',
-            ko: '칼리스토',
+            ko: '칼리스토'
           },
           trackerName: {
             en: 'Callisto',
@@ -13307,12 +13313,12 @@ const Options = {
             fr: 'Callisto',
             ja: 'カリスト',
             cn: '熊',
-            ko: '칼리스토',
+            ko: '칼리스토'
           },
           // 25.5, 22.3 from the tracker, but collides with number
           x: 26.2,
           y: 22.0,
-          fateID: 1344,
+          fateID: 1344
         },
         number: {
           label: {
@@ -13321,7 +13327,7 @@ const Options = {
             fr: 'Number',
             ja: 'ナンバーズ',
             cn: '群偶',
-            ko: '넘버즈',
+            ko: '넘버즈'
           },
           trackerName: {
             en: 'Number',
@@ -13329,12 +13335,12 @@ const Options = {
             fr: 'Number',
             ja: 'ナンバ',
             cn: '群偶',
-            ko: '넘버즈',
+            ko: '넘버즈'
           },
           // 23.5, 22.7 from the tracker, but collides with callisto
           x: 23.5,
           y: 23.4,
-          fateID: 1347,
+          fateID: 1347
         },
         jaha: {
           label: {
@@ -13343,7 +13349,7 @@ const Options = {
             fr: 'Jahann',
             ja: 'ジャハ',
             cn: '台风',
-            ko: '자하남',
+            ko: '자하남'
           },
           trackerName: {
             en: 'Jaha',
@@ -13351,12 +13357,12 @@ const Options = {
             fr: 'Jahann',
             ja: 'ジャハ',
             cn: '台风',
-            ko: '자하남',
+            ko: '자하남'
           },
           x: 17.7,
           y: 18.6,
           fateID: 1345,
-          weather: 'Gales',
+          weather: 'Gales'
         },
         amemet: {
           label: {
@@ -13365,7 +13371,7 @@ const Options = {
             fr: 'Amemet',
             ja: 'アミメット',
             cn: '暴龙',
-            ko: '아메메트',
+            ko: '아메메트'
           },
           trackerName: {
             en: 'Amemet',
@@ -13373,11 +13379,11 @@ const Options = {
             fr: 'Amemet',
             ja: 'アミメ',
             cn: '暴龙',
-            ko: '아메메트',
+            ko: '아메메트'
           },
           x: 15.0,
           y: 15.6,
-          fateID: 1334,
+          fateID: 1334
         },
         caym: {
           label: {
@@ -13386,7 +13392,7 @@ const Options = {
             fr: 'Caym',
             ja: 'カイム',
             cn: '盖因',
-            ko: '카임',
+            ko: '카임'
           },
           trackerName: {
             en: 'Caym',
@@ -13394,11 +13400,11 @@ const Options = {
             fr: 'Caym',
             ja: 'カイム',
             cn: '盖因',
-            ko: '카임',
+            ko: '카임'
           },
           x: 13.8,
           y: 12.5,
-          fateID: 1335,
+          fateID: 1335
         },
         bomb: {
           label: {
@@ -13407,7 +13413,7 @@ const Options = {
             fr: 'Bomba',
             ja: 'ボンバ',
             cn: '举高高',
-            ko: '봄바딜',
+            ko: '봄바딜'
           },
           trackerName: {
             en: 'Bomba',
@@ -13415,12 +13421,12 @@ const Options = {
             fr: 'Bomba',
             ja: 'ボンバ',
             cn: '举高高',
-            ko: '봄바',
+            ko: '봄바'
           },
           x: 28.3,
           y: 20.4,
           fateID: 1336,
-          time: 'Night',
+          time: 'Night'
         },
         serket: {
           label: {
@@ -13429,7 +13435,7 @@ const Options = {
             fr: 'Serket',
             ja: 'セルケト',
             cn: '蝎子',
-            ko: '전갈',
+            ko: '전갈'
           },
           trackerName: {
             en: 'Serket',
@@ -13437,11 +13443,11 @@ const Options = {
             fr: 'Serket',
             ja: 'セルケト',
             cn: '蝎子',
-            ko: '세르케트',
+            ko: '세르케트'
           },
           x: 24.8,
           y: 17.9,
-          fateID: 1339,
+          fateID: 1339
         },
         juli: {
           label: {
@@ -13450,7 +13456,7 @@ const Options = {
             fr: 'Julika',
             ja: 'ジュリカ',
             cn: '魔界花',
-            ko: '줄리카',
+            ko: '줄리카'
           },
           trackerName: {
             en: 'Julika',
@@ -13458,11 +13464,11 @@ const Options = {
             fr: 'Julika',
             ja: 'ジュリカ',
             cn: '魔界花',
-            ko: '줄리카',
+            ko: '줄리카'
           },
           x: 21.9,
           y: 15.6,
-          fateID: 1346,
+          fateID: 1346
         },
         rider: {
           label: {
@@ -13471,7 +13477,7 @@ const Options = {
             fr: 'Cavalier',
             ja: 'ライダー',
             cn: '白骑士',
-            ko: '기수',
+            ko: '기수'
           },
           trackerName: {
             en: 'Rider',
@@ -13479,12 +13485,12 @@ const Options = {
             fr: 'Cavalier',
             ja: 'ライダー',
             cn: '白骑士',
-            ko: '기수',
+            ko: '기수'
           },
           x: 20.3,
           y: 13.0,
           fateID: 1343,
-          time: 'Night',
+          time: 'Night'
         },
         poly: {
           label: {
@@ -13493,7 +13499,7 @@ const Options = {
             fr: 'Poly',
             ja: 'ポリ',
             cn: '独眼',
-            ko: '외눈',
+            ko: '외눈'
           },
           trackerName: {
             en: 'Poly',
@@ -13501,11 +13507,11 @@ const Options = {
             fr: 'Poly',
             ja: 'ポリュ',
             cn: '独眼',
-            ko: '폴리',
+            ko: '폴리'
           },
           x: 26.4,
           y: 14.3,
-          fateID: 1337,
+          fateID: 1337
         },
         strider: {
           label: {
@@ -13514,7 +13520,7 @@ const Options = {
             fr: 'Trotteur',
             ja: 'シームルグ',
             cn: '阔步西牟鸟',
-            ko: '즈',
+            ko: '즈'
           },
           trackerName: {
             en: 'Strider',
@@ -13522,11 +13528,11 @@ const Options = {
             fr: 'Trotteur',
             ja: 'シムルグ',
             cn: '祖',
-            ko: '시무르그',
+            ko: '시무르그'
           },
           x: 28.6,
           y: 13.0,
-          fateID: 1342,
+          fateID: 1342
         },
         hazmat: {
           label: {
@@ -13535,7 +13541,7 @@ const Options = {
             fr: 'Hazmat',
             ja: 'ハズマット',
             cn: '极其危险物质',
-            ko: '하즈마트',
+            ko: '하즈마트'
           },
           trackerName: {
             en: 'Hazmat',
@@ -13543,11 +13549,11 @@ const Options = {
             fr: 'Hazmat',
             ja: 'ハズマ',
             cn: '爆弹',
-            ko: '하즈마트',
+            ko: '하즈마트'
           },
           x: 35.3,
           y: 18.3,
-          fateID: 1341,
+          fateID: 1341
         },
         fafnir: {
           label: {
@@ -13556,7 +13562,7 @@ const Options = {
             fr: 'Fafnir',
             ja: 'ファヴニル',
             cn: '法夫纳',
-            ko: '파프니르',
+            ko: '파프니르'
           },
           trackerName: {
             en: 'Fafnir',
@@ -13564,12 +13570,12 @@ const Options = {
             fr: 'Fafnir',
             ja: 'ファヴ',
             cn: '法夫纳',
-            ko: '파프니르',
+            ko: '파프니르'
           },
           x: 35.5,
           y: 21.5,
           fateID: 1331,
-          time: 'Night',
+          time: 'Night'
         },
         amarok: {
           label: {
@@ -13578,7 +13584,7 @@ const Options = {
             fr: 'Amarok',
             ja: 'アマロック',
             cn: '阿玛洛克',
-            ko: '아마록',
+            ko: '아마록'
           },
           trackerName: {
             en: 'Amarok',
@@ -13586,11 +13592,11 @@ const Options = {
             fr: 'Amarok',
             ja: 'アマロ',
             cn: '狗',
-            ko: '아마록',
+            ko: '아마록'
           },
           x: 7.6,
           y: 18.2,
-          fateID: 1340,
+          fateID: 1340
         },
         lama: {
           label: {
@@ -13599,7 +13605,7 @@ const Options = {
             fr: 'Lama',
             ja: 'ラマ',
             cn: '拉玛什图',
-            ko: '라마슈투',
+            ko: '라마슈투'
           },
           trackerName: {
             en: 'Lamashtu',
@@ -13607,13 +13613,13 @@ const Options = {
             fr: 'Lamashtu',
             ja: 'ラマシュ',
             cn: '嫂子',
-            ko: '라마슈투',
+            ko: '라마슈투'
           },
           // 7.7, 23.3 from the tracker but mobs are farther south.
           x: 7.7,
           y: 25.3,
           fateID: 1338,
-          time: 'Night',
+          time: 'Night'
         },
         pazu: {
           label: {
@@ -13622,7 +13628,7 @@ const Options = {
             fr: 'Pazuzu',
             ja: 'パズズ',
             cn: '帕祖祖',
-            ko: '파주주',
+            ko: '파주주'
           },
           trackerName: {
             en: 'Paz',
@@ -13630,14 +13636,14 @@ const Options = {
             fr: 'Pazuzu',
             ja: 'パズズ',
             cn: 'Pzz',
-            ko: '파주주',
+            ko: '파주주'
           },
           x: 7.4,
           y: 21.7,
           fateID: 1329,
-          weather: 'Gales',
-        },
-      },
+          weather: 'Gales'
+        }
+      }
     },
     [zone_id/* default.TheForbiddenLandEurekaPagos */.Z.TheForbiddenLandEurekaPagos]: {
       mapImage: 'pagos.png',
@@ -13655,7 +13661,7 @@ const Options = {
         fr: 'Élémentaire Pagos',
         ja: 'パゴス・エレメンタル',
         cn: '恒冰元灵',
-        ko: '파고스 정령',
+        ko: '파고스 정령'
       },
       nms: {
         northbunny: {
@@ -13664,7 +13670,7 @@ const Options = {
           y: 21.5,
           fateID: 1368,
           bunny: true,
-          respawnMinutes: 8,
+          respawnMinutes: 8
         },
         southbunny: {
           label: bunnyLabel,
@@ -13672,7 +13678,7 @@ const Options = {
           y: 27.5,
           fateID: 1367,
           bunny: true,
-          respawnMinutes: 8,
+          respawnMinutes: 8
         },
         snowqueen: {
           label: {
@@ -13681,7 +13687,7 @@ const Options = {
             fr: 'Reine',
             ja: '女王',
             cn: '周冬雨',
-            ko: '눈의 여왕',
+            ko: '눈의 여왕'
           },
           trackerName: {
             en: 'Queen',
@@ -13689,11 +13695,11 @@ const Options = {
             fr: 'Reine',
             ja: '女王',
             cn: '周冬雨',
-            ko: '눈 여왕',
+            ko: '눈 여왕'
           },
           x: 21.5,
           y: 26.5,
-          fateID: 1351,
+          fateID: 1351
         },
         taxim: {
           label: {
@@ -13702,7 +13708,7 @@ const Options = {
             fr: 'Taxim',
             ja: 'タキシム',
             cn: '读书人',
-            ko: '텍심',
+            ko: '텍심'
           },
           trackerName: {
             en: 'Taxim',
@@ -13710,12 +13716,12 @@ const Options = {
             fr: 'Taxim',
             ja: 'タキシム',
             cn: '读书人',
-            ko: '텍심',
+            ko: '텍심'
           },
           x: 25.5,
           y: 28.3,
           fateID: 1369,
-          time: 'Night',
+          time: 'Night'
         },
         ashdragon: {
           label: {
@@ -13724,7 +13730,7 @@ const Options = {
             fr: 'Dragon',
             ja: 'ドラゴン',
             cn: '灰烬龙',
-            ko: '용',
+            ko: '용'
           },
           trackerName: {
             en: 'Dragon',
@@ -13732,11 +13738,11 @@ const Options = {
             fr: 'Dragon',
             ja: 'アッシュ',
             cn: '灰烬龙',
-            ko: '잿더미 용',
+            ko: '잿더미 용'
           },
           x: 29.7,
           y: 30.0,
-          fateID: 1353,
+          fateID: 1353
         },
         glavoid: {
           label: {
@@ -13745,7 +13751,7 @@ const Options = {
             fr: 'Graboïde',
             ja: 'グラヴォイド',
             cn: '魔虫',
-            ko: '지렁이',
+            ko: '지렁이'
           },
           trackerName: {
             en: 'Glavoid',
@@ -13753,11 +13759,11 @@ const Options = {
             fr: 'Graboïde',
             ja: 'グラヴォ',
             cn: '魔虫',
-            ko: '그라보이드',
+            ko: '그라보이드'
           },
           x: 33.0,
           y: 28.0,
-          fateID: 1354,
+          fateID: 1354
         },
         anapos: {
           label: {
@@ -13766,7 +13772,7 @@ const Options = {
             fr: 'Anapos',
             ja: 'アナポ',
             cn: '安娜波',
-            ko: '아나포',
+            ko: '아나포'
           },
           trackerName: {
             en: 'Anapos',
@@ -13774,12 +13780,12 @@ const Options = {
             fr: 'Anapos',
             ja: 'アナポ',
             cn: '安娜波',
-            ko: '아나포',
+            ko: '아나포'
           },
           x: 33.0,
           y: 21.5,
           fateID: 1355,
-          weather: 'Fog',
+          weather: 'Fog'
         },
         hakutaku: {
           label: {
@@ -13788,7 +13794,7 @@ const Options = {
             fr: 'Haku',
             ja: 'ハクタク',
             cn: '白泽',
-            ko: '백택',
+            ko: '백택'
           },
           trackerName: {
             en: 'Haku',
@@ -13796,11 +13802,11 @@ const Options = {
             fr: 'Haku',
             ja: 'ハクタク',
             cn: '白泽',
-            ko: '백택',
+            ko: '백택'
           },
           x: 29.0,
           y: 22.5,
-          fateID: 1366,
+          fateID: 1366
         },
         igloo: {
           label: {
@@ -13809,7 +13815,7 @@ const Options = {
             fr: 'Igloo',
             ja: 'イグル',
             cn: '雪屋王',
-            ko: '이글루',
+            ko: '이글루'
           },
           trackerName: {
             en: 'Igloo',
@@ -13817,11 +13823,11 @@ const Options = {
             fr: 'Igloo',
             ja: 'イグルー',
             cn: '雪屋王',
-            ko: '이글루',
+            ko: '이글루'
           },
           x: 17,
           y: 16,
-          fateID: 1357,
+          fateID: 1357
         },
         asag: {
           label: {
@@ -13830,7 +13836,7 @@ const Options = {
             fr: 'Asag',
             ja: 'アサグ',
             cn: '阿萨格',
-            ko: '아사그',
+            ko: '아사그'
           },
           trackerName: {
             en: 'Asag',
@@ -13838,11 +13844,11 @@ const Options = {
             fr: 'Asag',
             ja: 'アサグ',
             cn: '阿萨格',
-            ko: '아사그',
+            ko: '아사그'
           },
           x: 11.3,
           y: 10.5,
-          fateID: 1356,
+          fateID: 1356
         },
         surabhi: {
           label: {
@@ -13851,7 +13857,7 @@ const Options = {
             fr: 'Surabhi',
             ja: 'スラビー',
             cn: '山羊',
-            ko: '염소',
+            ko: '염소'
           },
           trackerName: {
             en: 'Surabhi',
@@ -13859,11 +13865,11 @@ const Options = {
             fr: 'Surabhi',
             ja: 'スラビー',
             cn: '山羊',
-            ko: '수라비',
+            ko: '수라비'
           },
           x: 10.5,
           y: 20.5,
-          fateID: 1352,
+          fateID: 1352
         },
         kingarthro: {
           label: {
@@ -13872,7 +13878,7 @@ const Options = {
             fr: 'Arthro',
             ja: 'アースロ',
             cn: '螃蟹',
-            ko: '게',
+            ko: '게'
           },
           trackerName: {
             en: 'Arthro',
@@ -13880,12 +13886,12 @@ const Options = {
             fr: 'Arthro',
             ja: 'アスロ',
             cn: '螃蟹',
-            ko: '아스로',
+            ko: '아스로'
           },
           x: 8.0,
           y: 15.2,
           fateID: 1360,
-          weather: 'Fog',
+          weather: 'Fog'
         },
         minotaurs: {
           label: {
@@ -13894,7 +13900,7 @@ const Options = {
             fr: 'Minotaures',
             ja: 'ミノタウロス',
             cn: '双牛',
-            ko: '미노타우루스',
+            ko: '미노타우루스'
           },
           trackerName: {
             en: 'Brothers',
@@ -13902,11 +13908,11 @@ const Options = {
             fr: 'Frères',
             ja: 'ミノ',
             cn: '双牛',
-            ko: '형제',
+            ko: '형제'
           },
           x: 13.8,
           y: 18.4,
-          fateID: 1358,
+          fateID: 1358
         },
         holycow: {
           label: {
@@ -13915,7 +13921,7 @@ const Options = {
             fr: 'Vache sacrée',
             ja: '聖牛',
             cn: '圣牛',
-            ko: '소',
+            ko: '소'
           },
           trackerName: {
             en: 'Holy Cow',
@@ -13923,11 +13929,11 @@ const Options = {
             fr: 'Vache',
             ja: '聖牛',
             cn: '圣牛',
-            ko: '신성 소',
+            ko: '신성 소'
           },
           x: 26,
           y: 16,
-          fateID: 1361,
+          fateID: 1361
         },
         hadhayosh: {
           label: {
@@ -13936,7 +13942,7 @@ const Options = {
             fr: 'Hadha',
             ja: 'ハダヨッシュ',
             cn: '贝爷',
-            ko: '하다요쉬',
+            ko: '하다요쉬'
           },
           trackerName: {
             en: 'Behe',
@@ -13944,12 +13950,12 @@ const Options = {
             fr: 'Hadha',
             ja: 'ハダヨ',
             cn: '贝爷',
-            ko: '하다요쉬',
+            ko: '하다요쉬'
           },
           x: 30,
           y: 19,
           fateID: 1362,
-          weather: 'Thunder',
+          weather: 'Thunder'
         },
         horus: {
           label: {
@@ -13958,7 +13964,7 @@ const Options = {
             fr: 'Horus',
             ja: 'ホルス',
             cn: '荷鲁斯',
-            ko: '호루스',
+            ko: '호루스'
           },
           trackerName: {
             en: 'Horus',
@@ -13966,12 +13972,12 @@ const Options = {
             fr: 'Horus',
             ja: 'ホルス',
             cn: '荷鲁斯',
-            ko: '호루스',
+            ko: '호루스'
           },
           x: 26,
           y: 20,
           fateID: 1359,
-          weather: 'Heat Waves',
+          weather: 'Heat Waves'
         },
         mainyu: {
           label: {
@@ -13980,7 +13986,7 @@ const Options = {
             fr: 'Mainyu',
             ja: 'マンユ',
             cn: '大眼',
-            ko: '마이뉴',
+            ko: '마이뉴'
           },
           trackerName: {
             en: 'Mainyu',
@@ -13988,11 +13994,11 @@ const Options = {
             fr: 'Mainyu',
             ja: 'マンユ',
             cn: '大眼',
-            ko: '마이뉴',
+            ko: '마이뉴'
           },
           x: 25,
           y: 24,
-          fateID: 1363,
+          fateID: 1363
         },
         cassie: {
           label: {
@@ -14001,7 +14007,7 @@ const Options = {
             fr: 'Cassie',
             ja: 'キャシ',
             cn: '凯西',
-            ko: '캐시',
+            ko: '캐시'
           },
           trackerName: {
             en: 'Cassie',
@@ -14009,12 +14015,12 @@ const Options = {
             fr: 'Cassie',
             ja: 'キャシー',
             cn: '凯西',
-            ko: '캐시',
+            ko: '캐시'
           },
           weather: 'Blizzards',
           x: 22,
           y: 14,
-          fateID: 1365,
+          fateID: 1365
         },
         louhi: {
           label: {
@@ -14023,7 +14029,7 @@ const Options = {
             fr: 'Louhi',
             ja: 'ロウヒ',
             cn: '娄希',
-            ko: '로우히',
+            ko: '로우히'
           },
           trackerName: {
             en: 'Louhi',
@@ -14031,14 +14037,14 @@ const Options = {
             fr: 'Louhi',
             ja: 'ロウヒ',
             cn: '娄希',
-            ko: '로우히',
+            ko: '로우히'
           },
           x: 36,
           y: 18.5,
           fateID: 1364,
-          time: 'Night',
-        },
-      },
+          time: 'Night'
+        }
+      }
     },
     [zone_id/* default.TheForbiddenLandEurekaPyros */.Z.TheForbiddenLandEurekaPyros]: {
       mapImage: 'pyros.png',
@@ -14056,7 +14062,7 @@ const Options = {
         fr: 'Élémentaire Pyros',
         ja: 'ピューロス・エレメンタル',
         cn: '涌火元灵',
-        ko: '피로스 정령',
+        ko: '피로스 정령'
       },
       nms: {
         northbunny: {
@@ -14065,7 +14071,7 @@ const Options = {
           y: 11.0,
           fateID: 1408,
           bunny: true,
-          respawnMinutes: 8,
+          respawnMinutes: 8
         },
         southbunny: {
           label: bunnyLabel,
@@ -14073,7 +14079,7 @@ const Options = {
           y: 26.0,
           fateID: 1407,
           bunny: true,
-          respawnMinutes: 8,
+          respawnMinutes: 8
         },
         luecosia: {
           label: {
@@ -14082,7 +14088,7 @@ const Options = {
             fr: 'Leuco',
             ja: 'レウコ',
             cn: '惨叫',
-            ko: '레우코시아',
+            ko: '레우코시아'
           },
           trackerName: {
             en: 'Leucosia',
@@ -14090,12 +14096,12 @@ const Options = {
             fr: 'Leucosie',
             ja: 'レウコ',
             cn: '惨叫',
-            ko: '레우',
+            ko: '레우'
           },
           x: 26.8,
           y: 26.3,
           fateID: 1388,
-          time: 'Night',
+          time: 'Night'
         },
         flauros: {
           label: {
@@ -14104,7 +14110,7 @@ const Options = {
             fr: 'Flauros',
             ja: 'フラウロス',
             cn: '雷兽',
-            ko: '플라우로스',
+            ko: '플라우로스'
           },
           trackerName: {
             en: 'Flauros',
@@ -14112,12 +14118,12 @@ const Options = {
             fr: 'Flauros',
             ja: 'フラウロ',
             cn: '雷兽',
-            ko: '플라',
+            ko: '플라'
           },
           x: 28.9,
           y: 29.2,
           fateID: 1389,
-          weather: 'Thunder',
+          weather: 'Thunder'
         },
         sophist: {
           label: {
@@ -14126,7 +14132,7 @@ const Options = {
             fr: 'Sophiste',
             ja: 'ソフィスト',
             cn: '诡辩者',
-            ko: '소피스트',
+            ko: '소피스트'
           },
           trackerName: {
             en: 'Sophist',
@@ -14134,11 +14140,11 @@ const Options = {
             fr: 'Sophiste',
             ja: 'ソフィスト',
             cn: '诡辩者',
-            ko: '소피',
+            ko: '소피'
           },
           x: 31.8,
           y: 31.0,
-          fateID: 1390,
+          fateID: 1390
         },
         graff: {
           label: {
@@ -14147,7 +14153,7 @@ const Options = {
             fr: 'Graff',
             ja: 'グラフアカネ',
             cn: '塔塔露',
-            ko: '인형',
+            ko: '인형'
           },
           trackerName: {
             en: 'Doll',
@@ -14155,11 +14161,11 @@ const Options = {
             fr: 'Graff',
             ja: 'グラフアカネ',
             cn: '塔塔露',
-            ko: '그라',
+            ko: '그라'
           },
           x: 23.5,
           y: 37.2,
-          fateID: 1391,
+          fateID: 1391
         },
         askala: {
           label: {
@@ -14168,7 +14174,7 @@ const Options = {
             fr: 'Ascala',
             ja: 'アスカラ',
             cn: '阿福',
-            ko: '작은 부엉이',
+            ko: '작은 부엉이'
           },
           trackerName: {
             en: 'Owl',
@@ -14176,12 +14182,12 @@ const Options = {
             fr: 'Ascala',
             ja: 'アスカラ',
             cn: '阿福',
-            ko: '아스',
+            ko: '아스'
           },
           x: 19.3,
           y: 29.0,
           fateID: 1392,
-          weather: 'Umbral Wind',
+          weather: 'Umbral Wind'
         },
         batym: {
           label: {
@@ -14190,7 +14196,7 @@ const Options = {
             fr: 'Bathim',
             ja: 'パティム',
             cn: '大公',
-            ko: '대공',
+            ko: '대공'
           },
           trackerName: {
             en: 'Batym',
@@ -14198,12 +14204,12 @@ const Options = {
             fr: 'Bathim',
             ja: 'デューク',
             cn: '大公',
-            ko: '바팀',
+            ko: '바팀'
           },
           x: 18.0,
           y: 14.1,
           fateID: 1393,
-          time: 'Night',
+          time: 'Night'
         },
         aetolus: {
           label: {
@@ -14212,7 +14218,7 @@ const Options = {
             fr: 'Aetolos',
             ja: 'アイトロス',
             cn: '雷鸟',
-            ko: '아이톨로스',
+            ko: '아이톨로스'
           },
           trackerName: {
             en: 'Aetolus',
@@ -14220,11 +14226,11 @@ const Options = {
             fr: 'Aetolos',
             ja: 'アイトロス',
             cn: '雷鸟',
-            ko: '아이',
+            ko: '아이'
           },
           x: 10.0,
           y: 14.0,
-          fateID: 1394,
+          fateID: 1394
         },
         lesath: {
           label: {
@@ -14233,7 +14239,7 @@ const Options = {
             fr: 'Lesath',
             ja: 'レサト',
             cn: '蝎子',
-            ko: '전갈',
+            ko: '전갈'
           },
           trackerName: {
             en: 'Lesath',
@@ -14241,11 +14247,11 @@ const Options = {
             fr: 'Lesath',
             ja: 'レサト',
             cn: '蝎子',
-            ko: '레사트',
+            ko: '레사트'
           },
           x: 13.2,
           y: 11.2,
-          fateID: 1395,
+          fateID: 1395
         },
         eldthurs: {
           label: {
@@ -14254,7 +14260,7 @@ const Options = {
             fr: 'Eldthurs',
             ja: 'エルドスルス',
             cn: '火巨人',
-            ko: '엘드투르스',
+            ko: '엘드투르스'
           },
           trackerName: {
             en: 'Eldthurs',
@@ -14262,11 +14268,11 @@ const Options = {
             fr: 'Eldthurs',
             ja: 'エルドスルス',
             cn: '火巨人',
-            ko: '엘드',
+            ko: '엘드'
           },
           x: 15.3,
           y: 6.8,
-          fateID: 1396,
+          fateID: 1396
         },
         iris: {
           label: {
@@ -14275,7 +14281,7 @@ const Options = {
             fr: 'Iris',
             ja: 'イリス',
             cn: '海燕',
-            ko: '이리스',
+            ko: '이리스'
           },
           trackerName: {
             en: 'Iris',
@@ -14283,11 +14289,11 @@ const Options = {
             fr: 'Iris',
             ja: 'イリス',
             cn: '海燕',
-            ko: '이리스',
+            ko: '이리스'
           },
           x: 21.3,
           y: 12.0,
-          fateID: 1397,
+          fateID: 1397
         },
         lamebrix: {
           label: {
@@ -14296,7 +14302,7 @@ const Options = {
             fr: 'Lamebrix',
             ja: 'レイムプリクス',
             cn: '哥布林',
-            ko: '레임브릭스',
+            ko: '레임브릭스'
           },
           trackerName: {
             en: 'Lamebrix',
@@ -14304,11 +14310,11 @@ const Options = {
             fr: 'Lamebrix',
             ja: 'ゴブ',
             cn: '哥布林',
-            ko: '용병',
+            ko: '용병'
           },
           x: 21.9,
           y: 8.3,
-          fateID: 1398,
+          fateID: 1398
         },
         dux: {
           label: {
@@ -14317,7 +14323,7 @@ const Options = {
             fr: 'Dux',
             ja: 'ドゥクス',
             cn: '雷军',
-            ko: '번개 사령관',
+            ko: '번개 사령관'
           },
           trackerName: {
             en: 'Dux',
@@ -14325,12 +14331,12 @@ const Options = {
             fr: 'Dux',
             ja: 'ドゥクス',
             cn: '雷军',
-            ko: '번개',
+            ko: '번개'
           },
           x: 27.4,
           y: 8.8,
           fateID: 1399,
-          weather: 'Thunder',
+          weather: 'Thunder'
         },
         jack: {
           label: {
@@ -14339,7 +14345,7 @@ const Options = {
             fr: 'Bûcheron',
             ja: 'ジャック',
             cn: '树人',
-            ko: '럼버잭',
+            ko: '럼버잭'
           },
           trackerName: {
             en: 'Jack',
@@ -14347,11 +14353,11 @@ const Options = {
             fr: 'Bûcheron',
             ja: 'ジャック',
             cn: '树人',
-            ko: '럼버잭',
+            ko: '럼버잭'
           },
           x: 30.1,
           y: 11.7,
-          fateID: 1400,
+          fateID: 1400
         },
         glauko: {
           label: {
@@ -14360,7 +14366,7 @@ const Options = {
             fr: 'Glaukô',
             ja: 'グラウコピス',
             cn: '明眸',
-            ko: '큰 부엉이',
+            ko: '큰 부엉이'
           },
           trackerName: {
             en: 'Glaukopis',
@@ -14368,11 +14374,11 @@ const Options = {
             fr: 'Glaukôpis',
             ja: 'グラウコ',
             cn: '明眸',
-            ko: '글라',
+            ko: '글라'
           },
           x: 32.3,
           y: 15.1,
-          fateID: 1401,
+          fateID: 1401
         },
         yingyang: {
           label: {
@@ -14381,7 +14387,7 @@ const Options = {
             fr: 'Yin-Yang',
             ja: 'イン・ヤン',
             cn: '阴·阳',
-            ko: '음양',
+            ko: '음양'
           },
           trackerName: {
             en: 'YY',
@@ -14389,11 +14395,11 @@ const Options = {
             fr: 'Yin-Yang',
             ja: 'インヤン',
             cn: '阴·阳',
-            ko: '음양',
+            ko: '음양'
           },
           x: 11.4,
           y: 34.1,
-          fateID: 1402,
+          fateID: 1402
         },
         skoll: {
           label: {
@@ -14402,7 +14408,7 @@ const Options = {
             fr: 'Sköll',
             ja: 'スコル',
             cn: '狼',
-            ko: '스콜',
+            ko: '스콜'
           },
           trackerName: {
             en: 'Skoll',
@@ -14410,12 +14416,12 @@ const Options = {
             fr: 'Sköll',
             ja: 'スコル',
             cn: '狼',
-            ko: '스콜',
+            ko: '스콜'
           },
           x: 24.3,
           y: 30.1,
           fateID: 1403,
-          weather: 'Blizzards',
+          weather: 'Blizzards'
         },
         penthe: {
           label: {
@@ -14424,7 +14430,7 @@ const Options = {
             fr: 'Penthé',
             ja: 'ペンテ',
             cn: '彭女士',
-            ko: '펜테',
+            ko: '펜테'
           },
           trackerName: {
             en: 'Penny',
@@ -14432,14 +14438,14 @@ const Options = {
             fr: 'Penthé',
             ja: 'レイア',
             cn: '彭女士',
-            ko: '펜테',
+            ko: '펜테'
           },
           x: 35.7,
           y: 5.9,
           fateID: 1404,
-          weather: 'Heat Waves',
-        },
-      },
+          weather: 'Heat Waves'
+        }
+      }
     },
     [zone_id/* default.TheForbiddenLandEurekaHydatos */.Z.TheForbiddenLandEurekaHydatos]: {
       mapImage: 'hydatos.png',
@@ -14457,7 +14463,7 @@ const Options = {
         fr: 'Élémentaire d\'Hydatos',
         ja: 'ヒュダトス・エレメンタル',
         cn: '丰水元灵',
-        ko: '히다토스 정령',
+        ko: '히다토스 정령'
       },
       nms: {
         bunny: {
@@ -14466,7 +14472,7 @@ const Options = {
           y: 21.5,
           fateID: 1425,
           bunny: true,
-          respawnMinutes: 8,
+          respawnMinutes: 8
         },
         khalamari: {
           label: {
@@ -14475,7 +14481,7 @@ const Options = {
             fr: 'Khala',
             ja: 'カラマリ',
             cn: '墨鱼',
-            ko: '칼라마리',
+            ko: '칼라마리'
           },
           trackerName: {
             en: 'Khalamari',
@@ -14483,11 +14489,11 @@ const Options = {
             fr: 'Khalamar',
             ja: 'カラマリ',
             cn: '墨鱼',
-            ko: '칼라',
+            ko: '칼라'
           },
           x: 11.1,
           y: 24.9,
-          fateID: 1412,
+          fateID: 1412
         },
         stegodon: {
           label: {
@@ -14496,7 +14502,7 @@ const Options = {
             fr: 'Stego',
             ja: 'ステゴドン',
             cn: '象',
-            ko: '스테고돈',
+            ko: '스테고돈'
           },
           trackerName: {
             en: 'Stegodon',
@@ -14504,11 +14510,11 @@ const Options = {
             fr: 'Stegodon',
             ja: 'ステゴドン',
             cn: '象',
-            ko: '스테',
+            ko: '스테'
           },
           x: 9.3,
           y: 18.2,
-          fateID: 1413,
+          fateID: 1413
         },
         molech: {
           label: {
@@ -14517,7 +14523,7 @@ const Options = {
             fr: 'Molech',
             ja: 'モレク',
             cn: '摩洛',
-            ko: '몰레크',
+            ko: '몰레크'
           },
           trackerName: {
             en: 'Molech',
@@ -14525,11 +14531,11 @@ const Options = {
             fr: 'Molech',
             ja: 'モレク',
             cn: '摩洛',
-            ko: '몰레크',
+            ko: '몰레크'
           },
           x: 7.8,
           y: 21.9,
-          fateID: 1414,
+          fateID: 1414
         },
         piasa: {
           label: {
@@ -14538,7 +14544,7 @@ const Options = {
             fr: 'Piasa',
             ja: 'ピアサ',
             cn: '皮鸟',
-            ko: '피아사',
+            ko: '피아사'
           },
           trackerName: {
             en: 'Piasa',
@@ -14546,11 +14552,11 @@ const Options = {
             fr: 'Piasa',
             ja: 'ピアサ',
             cn: '皮鸟',
-            ko: '피아사',
+            ko: '피아사'
           },
           x: 7.1,
           y: 14.1,
-          fateID: 1415,
+          fateID: 1415
         },
         frostmane: {
           label: {
@@ -14559,7 +14565,7 @@ const Options = {
             fr: 'Crinière',
             ja: 'フロストメーン',
             cn: '老虎',
-            ko: '서리갈기',
+            ko: '서리갈기'
           },
           trackerName: {
             en: 'Frostmane',
@@ -14567,11 +14573,11 @@ const Options = {
             fr: 'Crinière',
             ja: 'フロスト',
             cn: '老虎',
-            ko: '서리',
+            ko: '서리'
           },
           x: 8.1,
           y: 26.4,
-          fateID: 1416,
+          fateID: 1416
         },
         daphne: {
           label: {
@@ -14580,7 +14586,7 @@ const Options = {
             fr: 'Daphné',
             ja: 'ダフネ',
             cn: '达佛涅',
-            ko: '다프네',
+            ko: '다프네'
           },
           trackerName: {
             en: 'Daphne',
@@ -14588,11 +14594,11 @@ const Options = {
             fr: 'Daphné',
             ja: 'ダフネ',
             cn: '达佛涅',
-            ko: '다프네',
+            ko: '다프네'
           },
           x: 25.6,
           y: 16.2,
-          fateID: 1417,
+          fateID: 1417
         },
         goldemar: {
           label: {
@@ -14601,7 +14607,7 @@ const Options = {
             fr: 'Goldemar',
             ja: 'King',
             cn: '马王',
-            ko: '골데마르',
+            ko: '골데마르'
           },
           trackerName: {
             en: 'Golde',
@@ -14609,12 +14615,12 @@ const Options = {
             fr: 'Golde',
             ja: 'キング・ゴルデマール',
             cn: '马王',
-            ko: '골데마르',
+            ko: '골데마르'
           },
           x: 28.9,
           y: 23.9,
           fateID: 1418,
-          time: 'Night',
+          time: 'Night'
         },
         leuke: {
           label: {
@@ -14623,7 +14629,7 @@ const Options = {
             fr: 'Leuke',
             ja: 'レウケー',
             cn: '琉刻',
-            ko: '레우케',
+            ko: '레우케'
           },
           trackerName: {
             en: 'Leuke',
@@ -14631,11 +14637,11 @@ const Options = {
             fr: 'Leuke',
             ja: 'レウケ',
             cn: '琉刻',
-            ko: '레우케',
+            ko: '레우케'
           },
           x: 37.3,
           y: 27.0,
-          fateID: 1419,
+          fateID: 1419
         },
         barong: {
           label: {
@@ -14644,7 +14650,7 @@ const Options = {
             fr: 'Barong',
             ja: 'バロン',
             cn: '巴龙',
-            ko: '바롱',
+            ko: '바롱'
           },
           trackerName: {
             en: 'Barong',
@@ -14652,11 +14658,11 @@ const Options = {
             fr: 'Barong',
             ja: 'バロン',
             cn: '巴龙',
-            ko: '바롱',
+            ko: '바롱'
           },
           x: 32.2,
           y: 24.2,
-          fateID: 1420,
+          fateID: 1420
         },
         ceto: {
           label: {
@@ -14665,7 +14671,7 @@ const Options = {
             fr: 'Ceto',
             ja: 'ケートー',
             cn: '刻托',
-            ko: '케토',
+            ko: '케토'
           },
           trackerName: {
             en: 'Ceto',
@@ -14673,11 +14679,11 @@ const Options = {
             fr: 'Ceto',
             ja: 'ケート',
             cn: '刻托',
-            ko: '케토',
+            ko: '케토'
           },
           x: 36.1,
           y: 13.4,
-          fateID: 1421,
+          fateID: 1421
         },
         watcher: {
           label: {
@@ -14686,7 +14692,7 @@ const Options = {
             fr: 'Gardien',
             ja: 'Watcher',
             cn: '守望者',
-            ko: '수정룡',
+            ko: '수정룡'
           },
           trackerName: {
             en: 'PW',
@@ -14694,11 +14700,11 @@ const Options = {
             fr: 'Gardien',
             ja: 'ウォッチャ',
             cn: '守望者',
-            ko: '관찰자',
+            ko: '관찰자'
           },
           x: 32.7,
           y: 19.5,
-          fateID: 1423,
+          fateID: 1423
         },
         ovni: {
           label: {
@@ -14707,12 +14713,12 @@ const Options = {
             fr: 'Ovni',
             ja: 'オヴニ',
             cn: 'UFO',
-            ko: '오브니',
+            ko: '오브니'
           },
           x: 26.8,
           y: 29.0,
           fateID: 1424,
-          respawnMinutes: 20,
+          respawnMinutes: 20
         },
         tristitia: {
           label: {
@@ -14721,14 +14727,14 @@ const Options = {
             fr: 'Tristitia',
             ja: 'トリスティシア',
             cn: '光灵鳐',
-            ko: '트리스티샤',
+            ko: '트리스티샤'
           },
           x: 18.7,
           y: 29.7,
           fateID: 1422,
-          respawnMinutes: 20,
-        },
-      },
+          respawnMinutes: 20
+        }
+      }
     },
     [zone_id/* default.TheBozjanSouthernFront */.Z.TheBozjanSouthernFront]: {
       mapImage: 'bozjasouthern.png',
@@ -14750,11 +14756,11 @@ const Options = {
             fr: 'Les yeux de l\'ennemi',
             ja: '術士大隊との会敵',
             cn: '遭遇术师大队',
-            ko: '술사대대 발견',
+            ko: '술사대대 발견'
           },
           x: 20.3,
           y: 26.8,
-          fateID: 1597,
+          fateID: 1597
         },
         robots: {
           label: {
@@ -14763,11 +14769,11 @@ const Options = {
             fr: 'Les araignées de fer',
             ja: '無人魔導兵器との会敵',
             cn: '遭遇无人魔导兵器',
-            ko: '무인 마도 병기 발견',
+            ko: '무인 마도 병기 발견'
           },
           x: 24.8,
           y: 27.5,
-          fateID: 1598,
+          fateID: 1598
         },
         beasts: {
           label: {
@@ -14776,11 +14782,11 @@ const Options = {
             fr: 'Museler le Chien',
             ja: '忠犬との遭遇',
             cn: '发现忠犬',
-            ko: '충견과 조우하다',
+            ko: '충견과 조우하다'
           },
           x: 20.3,
           y: 26.8,
-          fateID: 1599,
+          fateID: 1599
         },
         unrest: {
           label: {
@@ -14789,11 +14795,11 @@ const Options = {
             fr: 'Pas de quartier',
             ja: '術士大隊への奇襲',
             cn: '奇袭术师大队',
-            ko: '술사대대 기습',
+            ko: '술사대대 기습'
           },
           x: 24.8,
           y: 27.5,
-          fateID: 1600,
+          fateID: 1600
         },
         machine: {
           label: {
@@ -14802,11 +14808,11 @@ const Options = {
             fr: 'Machines aux trousses',
             ja: '有人魔導兵器の迎撃',
             cn: '迎击有人魔导兵器',
-            ko: '유인 마도 병기 요격',
+            ko: '유인 마도 병기 요격'
           },
           x: 28.4,
           y: 29.3,
-          fateID: 1601,
+          fateID: 1601
         },
         plants: {
           label: {
@@ -14815,11 +14821,11 @@ const Options = {
             fr: 'Des racines et des crocs',
             ja: '野生生物を排除せよ',
             cn: '排除野生生物',
-            ko: '야생 생물을 제거하라',
+            ko: '야생 생물을 제거하라'
           },
           x: 34.4,
           y: 29.3,
-          fateID: 1602,
+          fateID: 1602
         },
         seeq: {
           label: {
@@ -14828,11 +14834,11 @@ const Options = {
             fr: 'Ménagerie guerrière',
             ja: '豚面の魔獣使い',
             cn: '兽性兽心的驯兽师',
-            ko: '시크족 마수 조련사',
+            ko: '시크족 마수 조련사'
           },
           x: 28.9,
           y: 26.1,
-          fateID: 1603,
+          fateID: 1603
         },
         pets: {
           label: {
@@ -14841,11 +14847,11 @@ const Options = {
             fr: 'Belles plantes',
             ja: '華麗なる珍獣使い',
             cn: '华丽魔女的珍兽使者',
-            ko: '화려한 희귀마수 조련사',
+            ko: '화려한 희귀마수 조련사'
           },
           x: 17.3,
           y: 26.6,
-          fateID: 1604,
+          fateID: 1604
         },
         firstlaw: {
           label: {
@@ -14854,11 +14860,11 @@ const Options = {
             fr: 'Que des numéros dix',
             ja: '労働十号破壊命令',
             cn: '破坏劳动十号',
-            ko: '노동 10호 파괴 명령',
+            ko: '노동 10호 파괴 명령'
           },
           x: 34.4,
           y: 29.3,
-          fateID: 1605,
+          fateID: 1605
         },
         heal: {
           label: {
@@ -14867,11 +14873,11 @@ const Options = {
             fr: 'Miséricorde impériale',
             ja: '恩徳の術士たち',
             cn: '施恩布德的术师队',
-            ko: '은덕의 술사들',
+            ko: '은덕의 술사들'
           },
           x: 28.9,
           y: 26.1,
-          fateID: 1606,
+          fateID: 1606
         },
         mash: {
           label: {
@@ -14880,11 +14886,11 @@ const Options = {
             fr: 'Le retour du chien fidèle',
             ja: '忠犬の逆襲',
             cn: '忠犬的逆袭',
-            ko: '충견의 역습',
+            ko: '충견의 역습'
           },
           x: 31.3,
           y: 22.0,
-          fateID: 1607,
+          fateID: 1607
         },
         alert: {
           label: {
@@ -14893,11 +14899,11 @@ const Options = {
             fr: 'Quand les chocobos voient rouge',
             ja: '豚面と赤い馬鳥',
             cn: '兽性兽心与红色马鸟',
-            ko: '시크족과 붉은 초코보',
+            ko: '시크족과 붉은 초코보'
           },
           x: 27.3,
           y: 17.7,
-          fateID: 1608,
+          fateID: 1608
         },
         unicorn: {
           label: {
@@ -14906,11 +14912,11 @@ const Options = {
             fr: 'La licorne des plaines',
             ja: '潔白の脱走兵',
             cn: '洁白心的逃脱战',
-            ko: '결백한 탈주병',
+            ko: '결백한 탈주병'
           },
           x: 32.3,
           y: 17.0,
-          fateID: 1609,
+          fateID: 1609
         },
         recreation: {
           label: {
@@ -14919,11 +14925,11 @@ const Options = {
             fr: 'La bataille de l\'innovation',
             ja: '敵新兵器を調査せよ',
             cn: '调查敌方新兵器',
-            ko: '적의 신병기를 조사하라',
+            ko: '적의 신병기를 조사하라'
           },
           x: 25.6,
           y: 22.6,
-          fateID: 1610,
+          fateID: 1610
         },
         element: {
           label: {
@@ -14932,11 +14938,11 @@ const Options = {
             fr: 'Couper les vivres',
             ja: '整備場奇襲作戦',
             cn: '奇袭整备场',
-            ko: '정비소 기습 작전',
+            ko: '정비소 기습 작전'
           },
           x: 17.5,
           y: 23.4,
-          fateID: 1611,
+          fateID: 1611
         },
         heavyboots: {
           label: {
@@ -14945,11 +14951,11 @@ const Options = {
             fr: 'Force ouvrière',
             ja: '魔導レイバー破壊命令',
             cn: '破坏魔导劳工',
-            ko: '마도 노동자 파괴 명령',
+            ko: '마도 노동자 파괴 명령'
           },
           x: 31.3,
           y: 22.0,
-          fateID: 1612,
+          fateID: 1612
         },
         camping: {
           label: {
@@ -14958,11 +14964,11 @@ const Options = {
             fr: 'Idéaux irréconciliables',
             ja: '野営地への先制攻撃',
             cn: '进攻野营地',
-            ko: '야영지 선제 공격',
+            ko: '야영지 선제 공격'
           },
           x: 17.5,
           y: 23.4,
-          fateID: 1613,
+          fateID: 1613
         },
         scavengers: {
           label: {
@@ -14971,11 +14977,11 @@ const Options = {
             fr: 'Les dévoreurs d\'âmes',
             ja: '魂喰いの妖異たち',
             cn: '噬魂的妖异',
-            ko: '혼을 먹는 요마들',
+            ko: '혼을 먹는 요마들'
           },
           x: 25.6,
           y: 22.6,
-          fateID: 1614,
+          fateID: 1614
         },
         helpwanted: {
           label: {
@@ -14984,11 +14990,11 @@ const Options = {
             fr: 'Résister ou mourir',
             ja: '術士大隊の猛攻',
             cn: '术师大队的猛攻',
-            ko: '술사대대의 맹공격',
+            ko: '술사대대의 맹공격'
           },
           x: 18.3,
           y: 20.7,
-          fateID: 1615,
+          fateID: 1615
         },
         pyromancer: {
           label: {
@@ -14997,11 +15003,11 @@ const Options = {
             fr: 'Duel brûlant',
             ja: '最強のパイロマンサー',
             cn: '最强的火焰法师',
-            ko: '최강의 불꽃술사',
+            ko: '최강의 불꽃술사'
           },
           x: 18.3,
           y: 20.7,
-          fateID: 1616,
+          fateID: 1616
         },
         rainbow: {
           label: {
@@ -15010,11 +15016,11 @@ const Options = {
             fr: 'De toutes les couleurs',
             ja: '華麗なるお気に入り',
             cn: '华丽魔女与心爱珍兽',
-            ko: '화려한 애완마수',
+            ko: '화려한 애완마수'
           },
           x: 25.1,
           y: 15.0,
-          fateID: 1617,
+          fateID: 1617
         },
         wildbunch: {
           label: {
@@ -15023,11 +15029,11 @@ const Options = {
             fr: 'Sans maîtres ni loi',
             ja: '暴走魔獣の排除',
             cn: '排除失控魔兽',
-            ko: '폭주 마수 처리',
+            ko: '폭주 마수 처리'
           },
           x: 21.0,
           y: 14.3,
-          fateID: 1618,
+          fateID: 1618
         },
         familyotheranimals: {
           label: {
@@ -15036,11 +15042,11 @@ const Options = {
             fr: 'L\'incorruptible',
             ja: '豚面の勧誘者',
             cn: '兽性兽心的劝诱',
-            ko: '포섭하는 시크족',
+            ko: '포섭하는 시크족'
           },
           x: 11.0,
           y: 14.6,
-          fateID: 1619,
+          fateID: 1619
         },
         mechanicalman: {
           label: {
@@ -15049,11 +15055,11 @@ const Options = {
             fr: 'Plan B',
             ja: '魔導レイバーB型破壊命令',
             cn: '破坏魔导劳工B型',
-            ko: '마도 노동자 B형 파괴 명령',
+            ko: '마도 노동자 B형 파괴 명령'
           },
           x: 20.8,
           y: 17.7,
-          fateID: 1620,
+          fateID: 1620
         },
         murder: {
           label: {
@@ -15062,11 +15068,11 @@ const Options = {
             fr: 'Des machines et des hommes',
             ja: '強化兵部隊の襲撃',
             cn: '袭击强化兵部队',
-            ko: '강화병 부대의 습격',
+            ko: '강화병 부대의 습격'
           },
           x: 14.0,
           y: 15.3,
-          fateID: 1621,
+          fateID: 1621
         },
         seeking: {
           label: {
@@ -15075,11 +15081,11 @@ const Options = {
             fr: 'Ceux qui creusent',
             ja: '戦場の盗掘者',
             cn: '战场的偷盗者',
-            ko: '전장의 도굴자',
+            ko: '전장의 도굴자'
           },
           x: 24.8,
           y: 17.1,
-          fateID: 1622,
+          fateID: 1622
         },
         suppliesparty: {
           label: {
@@ -15088,11 +15094,11 @@ const Options = {
             fr: 'Casser la voie',
             ja: '補給物資強奪作戦',
             cn: '补给物资夺取战',
-            ko: '보급 물자 강탈 작전',
+            ko: '보급 물자 강탈 작전'
           },
           x: 21.0,
           y: 14.3,
-          fateID: 1623,
+          fateID: 1623
         },
         demonic: {
           label: {
@@ -15101,11 +15107,11 @@ const Options = {
             fr: 'Par l\'hémoglobine alléchés',
             ja: '血の匂いに誘われて',
             cn: '闻血而来',
-            ko: '피비린내에 이끌려',
+            ko: '피비린내에 이끌려'
           },
           x: 11.1,
           y: 20.2,
-          fateID: 1624,
+          fateID: 1624
         },
         absentfriends: {
           label: {
@@ -15114,11 +15120,11 @@ const Options = {
             fr: 'Miséricorde vengeresse',
             ja: '燃え上がる南方戦線',
             cn: '南方战线的激战',
-            ko: '타오르는 남부 전선',
+            ko: '타오르는 남부 전선'
           },
           x: 13.8,
           y: 18.3,
-          fateID: 1625,
+          fateID: 1625
         },
         steelflame: {
           label: {
@@ -15127,11 +15133,11 @@ const Options = {
             fr: 'Le fer et le feu',
             ja: '続・燃え上がる南方戦線',
             cn: '南方战线的续战',
-            ko: '타오르는 남부 전선 속편',
+            ko: '타오르는 남부 전선 속편'
           },
           x: 13.8,
           y: 18.3,
-          fateID: 1626,
+          fateID: 1626
         },
         dogsofwar: {
           label: {
@@ -15140,11 +15146,11 @@ const Options = {
             fr: 'Brigade canine',
             ja: '戦場の犬を解き放て',
             cn: '释放战场之犬',
-            ko: '전장에 개를 풀어라',
+            ko: '전장에 개를 풀어라'
           },
           x: 14.0,
           y: 15.3,
-          fateID: 1627,
+          fateID: 1627
         },
         warmachines: {
           label: {
@@ -15153,11 +15159,11 @@ const Options = {
             fr: 'Cent mille guerriers de métal',
             ja: 'シシニアスの実験場',
             cn: '西西尼乌斯的实验场',
-            ko: '시시니우스의 실험장',
+            ko: '시시니우스의 실험장'
           },
           x: 11.1,
           y: 20.2,
-          fateID: 1628,
+          fateID: 1628
         },
         castrumlacuslitore: {
           label: {
@@ -15166,14 +15172,14 @@ const Options = {
             fr: 'Castrum',
             ja: 'カストルム',
             cn: '湖岸堡',
-            ko: '공성전',
+            ko: '공성전'
           },
           x: 18.9,
           y: 12.6,
           isCritical: true,
-          ceKey: 0,
-          // TODO: this needs a 60 minute respawn *after* it finishes.
+          ceKey: 0 // TODO: this needs a 60 minute respawn *after* it finishes.
           // respawnMinutes: 60,
+
         },
         killitwithfire: {
           label: {
@@ -15182,12 +15188,12 @@ const Options = {
             fr: 'Grandeur et pestilence',
             ja: 'ピーリフール',
             cn: '皮里福尔',
-            ko: '피어리풀',
+            ko: '피어리풀'
           },
           x: 17.4,
           y: 26.9,
           isCritical: true,
-          ceKey: 1,
+          ceKey: 1
         },
         bayinghounds: {
           label: {
@@ -15196,12 +15202,12 @@ const Options = {
             fr: 'Le chien des enfers',
             ja: 'カニスディルス',
             cn: '恐惧妖犬',
-            ko: '카니스 디루스',
+            ko: '카니스 디루스'
           },
           x: 22.8,
           y: 28.8,
           isCritical: true,
-          ceKey: 2,
+          ceKey: 2
         },
         vigilforthelost: {
           label: {
@@ -15210,13 +15216,13 @@ const Options = {
             fr: 'Vigile de feu',
             ja: 'ヴィジル',
             cn: '守夜',
-            ko: '비질',
+            ko: '비질'
           },
           x: 28.4,
           y: 29.5,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 3,
+          ceKey: 3
         },
         aceshigh: {
           label: {
@@ -15225,14 +15231,14 @@ const Options = {
             fr: 'Force divine',
             ja: 'ガブリエル',
             cn: '加百列',
-            ko: '가브리엘',
+            ko: '가브리엘'
           },
           x: 32.3,
           y: 26.8,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 4,
+          ceKey: 4
         },
         shadowdeathshand: {
           label: {
@@ -15241,12 +15247,12 @@ const Options = {
             fr: 'Les ailes noires de la mort',
             ja: '黒アクババ',
             cn: '阿库巴巴',
-            ko: '아크바바',
+            ko: '아크바바'
           },
           x: 36.5,
           y: 25.8,
           isCritical: true,
-          ceKey: 5,
+          ceKey: 5
         },
         finalfurlong: {
           label: {
@@ -15255,12 +15261,12 @@ const Options = {
             fr: 'Menace spectrale',
             ja: 'スパルトイ',
             cn: '地生人',
-            ko: '스파르토이',
+            ko: '스파르토이'
           },
           x: 33.3,
           y: 17.5,
           isCritical: true,
-          ceKey: 6,
+          ceKey: 6
         },
         choctober: {
           label: {
@@ -15269,13 +15275,13 @@ const Options = {
             fr: 'Une ruée en rouge',
             ja: '赤レッドコメット',
             cn: '红色彗星',
-            ko: '붉은 혜성',
+            ko: '붉은 혜성'
           },
           x: 27.3,
           y: 17.7,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 7,
+          ceKey: 7
         },
         beastofman: {
           label: {
@@ -15284,14 +15290,14 @@ const Options = {
             fr: 'Le Roi bestial',
             ja: '獣王ライアン',
             cn: '兽王莱昂',
-            ko: '마수왕 라이언',
+            ko: '마수왕 라이언'
           },
           x: 23.3,
           y: 20.4,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 8,
+          ceKey: 8
         },
         firesofwar: {
           label: {
@@ -15300,12 +15306,12 @@ const Options = {
             fr: 'Brasier de guerre',
             ja: '火焔百人隊',
             cn: '火焰百夫队',
-            ko: '화염백인대',
+            ko: '화염백인대'
           },
           x: 20.8,
           y: 23.9,
           isCritical: true,
-          ceKey: 9,
+          ceKey: 9
         },
         patriotgames: {
           label: {
@@ -15314,12 +15320,12 @@ const Options = {
             fr: 'Les fusils du patriote',
             ja: 'パトリオット',
             cn: '爱国者',
-            ko: '패트리어트',
+            ko: '패트리어트'
           },
           x: 14.2,
           y: 21.2,
           isCritical: true,
-          ceKey: 10,
+          ceKey: 10
         },
         trampledunderhoof: {
           label: {
@@ -15328,12 +15334,12 @@ const Options = {
             fr: 'L\'œil du malin',
             ja: '邪エアレー',
             cn: '耶鲁',
-            ko: '에알레',
+            ko: '에알레'
           },
           x: 9.9,
           y: 18.1,
           isCritical: true,
-          ceKey: 11,
+          ceKey: 11
         },
         flameswenthigher: {
           label: {
@@ -15342,14 +15348,14 @@ const Options = {
             fr: '"L\'envol du phénix',
             ja: 'サルトヴォアール',
             cn: '萨托瓦尔',
-            ko: '사르토부아르',
+            ko: '사르토부아르'
           },
           x: 18.8,
           y: 15.9,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 12,
+          ceKey: 12
         },
         metalfoxchaos: {
           label: {
@@ -15358,13 +15364,13 @@ const Options = {
             fr: 'Le guerrier de métal',
             ja: 'ダーインスレイヴ',
             cn: '达因斯莱瓦',
-            ko: '다인슬라이프',
+            ko: '다인슬라이프'
           },
           x: 13.8,
           y: 18.3,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 13,
+          ceKey: 13
         },
         riseoftherobots: {
           label: {
@@ -15373,12 +15379,12 @@ const Options = {
             fr: 'Le soulèvement des machines',
             ja: '魔導レイバーX型',
             cn: '魔导劳工X式',
-            ko: '마도 노동자 X형',
+            ko: '마도 노동자 X형'
           },
           x: 21.2,
           y: 17.6,
           isCritical: true,
-          ceKey: 14,
+          ceKey: 14
         },
         wherestrodebehemoth: {
           label: {
@@ -15387,14 +15393,14 @@ const Options = {
             fr: 'Le mastodonte enragé',
             ja: 'チルヴニク',
             cn: '奇尔维尼克',
-            ko: '칠레브니크',
+            ko: '칠레브니크'
           },
           x: 24.2,
           y: 14.9,
           isCritical: true,
-          ceKey: 15,
-        },
-      },
+          ceKey: 15
+        }
+      }
     },
     [zone_id/* default.Zadnor */.Z.Zadnor]: {
       mapImage: 'zadnor.png',
@@ -15413,454 +15419,453 @@ const Options = {
           label: {
             en: 'Beasts',
             de: 'Bestienbändigerin',
-            fr: 'Un jour, je serai la meilleure dresseuse',
+            fr: 'Un jour, je serai la meilleure dresseuse'
           },
           x: 24.1,
           y: 37.4,
-          fateID: 1717,
+          fateID: 1717
         },
         partsandparcel: {
           label: {
             en: 'Parcel',
             de: 'Oboro',
-            fr: 'Les astres du jour et de la nuit',
+            fr: 'Les astres du jour et de la nuit'
           },
           x: 22.8,
           y: 34.2,
-          fateID: 1718,
+          fateID: 1718
         },
         animmoraldilemma: {
           label: {
             en: 'Dilemma',
             de: 'Ketzer Fabineau',
-            fr: 'Malheureuses retrouvailles',
+            fr: 'Malheureuses retrouvailles'
           },
           x: 22.7,
           y: 34.2,
-          fateID: 1719,
+          fateID: 1719
         },
         deadlydivination: {
           label: {
             en: 'Divination',
             de: 'Mörderischer Onmyoji',
-            fr: 'Prêtre pernicieux',
+            fr: 'Prêtre pernicieux'
           },
           x: 24.8,
           y: 31.4,
-          fateID: 1720,
+          fateID: 1720
         },
         awrenchinthereconnaissanceeffort: {
           label: {
             en: 'Wrench',
             de: 'Beobachten verboten',
-            fr: 'Ni vu ni connu',
+            fr: 'Ni vu ni connu'
           },
           x: 29.4,
           y: 35.4,
-          fateID: 1721,
+          fateID: 1721
         },
         anotherpilotepisode: {
           label: {
             en: 'Pilot',
             de: 'Magitek-Soldaten',
-            fr: 'Dabog, soldat augmenté',
+            fr: 'Dabog, soldat augmenté'
           },
           x: 28.0,
           y: 29.2,
-          fateID: 1722,
+          fateID: 1722
         },
         breakingtheice: {
           label: {
             en: 'Ice',
             de: 'Eiskalt',
-            fr: 'Qui s\'y frotte s\'y pique',
+            fr: 'Qui s\'y frotte s\'y pique'
           },
           x: 24.8,
           y: 31.1,
-          fateID: 1723,
+          fateID: 1723
         },
         meetthepuppetmaster: {
           label: {
             en: 'Puppet',
             de: 'Puppen',
-            fr: 'Celui qui tire les ficelles',
+            fr: 'Celui qui tire les ficelles'
           },
           x: 24.1,
           y: 37.4,
-          fateID: 1724,
+          fateID: 1724
         },
         challengeaccepted: {
           label: {
             en: 'Challenge',
             de: 'Größtmöglicher',
-            fr: 'Un problème de taille',
+            fr: 'Un problème de taille'
           },
           x: 7.2,
           y: 28.8,
-          fateID: 1725,
+          fateID: 1725
         },
         thubantheterrible: {
           label: {
             en: 'Th\'uban',
             de: 'Bestien',
-            fr: 'Le dernier dinosaure',
+            fr: 'Le dernier dinosaure'
           },
           x: 8.6,
           y: 34.4,
-          fateID: 1726,
+          fateID: 1726
         },
         anendtoatrocities: {
           label: {
             en: 'Atrocities',
             de: 'Endkampf (Ketzer)',
-            fr: 'L\'immaculée contre le malsain',
+            fr: 'L\'immaculée contre le malsain'
           },
           x: 4.9,
           y: 25.3,
-          fateID: 1727,
+          fateID: 1727
         },
         ajustpursuit: {
           label: {
             en: 'Pursuit',
             de: 'mörderische Meister',
-            fr: 'Recherché dans deux pays',
+            fr: 'Recherché dans deux pays'
           },
           x: 11.6,
           y: 27.6,
-          fateID: 1728,
+          fateID: 1728
         },
         tankingup: {
           label: {
             en: 'Tanking',
             de: 'Seiryu Zwo',
-            fr: 'Y\'a qu\'à se baisser',
+            fr: 'Y\'a qu\'à se baisser'
           },
           x: 8.1,
           y: 24.0,
-          fateID: 1729,
+          fateID: 1729
         },
         supersolderrising: {
           label: {
             en: 'Supersoldier',
             de: 'Magitek-Soldat',
-            fr: 'Guet-apens magitek',
+            fr: 'Guet-apens magitek'
           },
           x: 8.1,
           y: 24.0,
-          fateID: 1730,
+          fateID: 1730
         },
         dementedmentor: {
           label: {
             en: 'Demented',
             de: 'Rettende Hiebe',
-            fr: 'Magie couleur sang',
+            fr: 'Magie couleur sang'
           },
           x: 7.2,
           y: 28.8,
-          fateID: 1731,
+          fateID: 1731
         },
         severthestrings: {
           label: {
             en: 'Sever',
             de: 'Endkampf (Puppenspieler)',
-            fr: 'Ainsi font les petites marionnettes',
+            fr: 'Ainsi font les petites marionnettes'
           },
           x: 11.6,
           y: 27.6,
-          fateID: 1732,
+          fateID: 1732
         },
         thebeastsareback: {
           label: {
             en: 'Back',
             de: 'Allergrößte gibt nicht auf',
-            fr: 'Des bêtes en pagagaille',
+            fr: 'Des bêtes en pagagaille'
           },
           x: 25.4,
           y: 14.3,
-          fateID: 1733,
+          fateID: 1733
         },
         stillonlycountsasone: {
           label: {
             en: 'Still',
             de: 'Schillernde ',
-            fr: 'Clarricie, sans défense ou presque',
+            fr: 'Clarricie, sans défense ou presque'
           },
           x: 14.5,
           y: 10.4,
-          fateID: 1734,
+          fateID: 1734
         },
         seeqandyouwillfind: {
           label: {
             en: 'Seeq',
             de: 'Farbe des Blutes',
-            fr: 'Non, c\'est non !',
+            fr: 'Non, c\'est non !'
           },
           x: 20.3,
           y: 16.5,
-          fateID: 1735,
+          fateID: 1735
         },
         meanspirited: {
           label: {
             en: 'Mean',
             de: 'Onmyoji!',
-            fr: 'Le trésor du clan Urabe',
+            fr: 'Le trésor du clan Urabe'
           },
           x: 25.4,
           y: 14.3,
-          fateID: 1736,
+          fateID: 1736
         },
         arelicunleashed: {
           label: {
             en: 'Relic',
             de: 'Famfrit',
-            fr: 'Sans issue',
+            fr: 'Sans issue'
           },
           x: 25.4,
           y: 14.3,
-          fateID: 1737,
+          fateID: 1737
         },
         whenmagesrage: {
           label: {
             en: 'Mages',
             de: 'Was du heute kannst besorgen',
-            fr: 'Des cailloux, des cailloux, des cailloux !',
+            fr: 'Des cailloux, des cailloux, des cailloux !'
           },
           x: 20.3,
           y: 16.5,
-          fateID: 1738,
+          fateID: 1738
         },
         hypertunedhavoc: {
           label: {
             en: 'Hyper',
             de: 'goldene Gelegenheit',
-            fr: 'Une opportunité en or',
+            fr: 'Une opportunité en or'
           },
           x: 16.6,
           y: 16.8,
-          fateID: 1739,
+          fateID: 1739
         },
         attackofthesupersoldiers: {
           label: {
             en: 'Soldiers',
             de: 'Verstärkung .. Mech-Einheit',
-            fr: 'Il est plus d\'un',
+            fr: 'Il est plus d\'un'
           },
           x: 16.6,
           y: 16.8,
-          fateID: 1740,
+          fateID: 1740
         },
         thestudentbecalmsthemaster: {
           label: {
             en: 'Student',
             de: 'Rettende Hiebe 2',
-            fr: 'L\'élève dépasse le maître',
+            fr: 'L\'élève dépasse le maître'
           },
           x: 14.5,
           y: 10.4,
-          fateID: 1741,
+          fateID: 1741
         },
         attackofthemachines: {
           label: {
             en: 'Machines',
             de: 'Magitek-Maschinen en masse',
-            fr: 'Fabrication en série',
+            fr: 'Fabrication en série'
           },
           x: 12.1,
           y: 13.6,
-          fateID: 1742,
+          fateID: 1742
         },
         dalriada: {
           label: {
             en: 'Dalriada',
             de: 'Dalriada',
-            fr: 'Dal\'riada',
+            fr: 'Dal\'riada'
           },
           x: 25.9,
           y: 8.2,
           isCritical: true,
-          ceKey: 0,
-          // TODO: this needs a 60 minute respawn *after* it finishes.
+          ceKey: 0 // TODO: this needs a 60 minute respawn *after* it finishes.
           // respawnMinutes: 60,
+
         },
         onserpentswings: {
           label: {
             en: 'Serpents',
             de: 'Geistertrupp',
-            fr: 'Zirnitrop',
+            fr: 'Zirnitrop'
           },
           x: 31.4,
           y: 37.4,
           isCritical: true,
-          ceKey: 1,
+          ceKey: 1
         },
         feelingtheburn: {
           label: {
             en: 'Feeling',
             de: 'Schwarzbrands',
-            fr: 'On arrête le progrès',
+            fr: 'On arrête le progrès'
           },
           x: 16.6,
           y: 16.8,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 2,
+          ceKey: 2
         },
         thebrokenblade: {
           label: {
             en: 'Blade',
             de: 'Hyper-Dabog',
-            fr: 'Dabog, l\'hyper-renforcé',
+            fr: 'Dabog, l\'hyper-renforcé'
           },
           x: 26.5,
           y: 35.6,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 3,
+          ceKey: 3
         },
         frombeyondthegrave: {
           label: {
             en: 'Grave',
             de: 'Shemhazai',
-            fr: 'Le Sycophante',
+            fr: 'Le Sycophante'
           },
           x: 20.2,
           y: 37.4,
           isCritical: true,
-          ceKey: 4,
+          ceKey: 4
         },
         withdiremiteandmain: {
           label: {
             en: 'Diremite',
             de: 'Hedetet',
-            fr: 'C\'est dans ma nature',
+            fr: 'C\'est dans ma nature'
           },
           x: 17.0,
           y: 32.1,
           isCritical: true,
-          ceKey: 5,
+          ceKey: 5
         },
         herecomesthecavalry: {
           label: {
             en: 'Cavalry',
             de: 'Halb Pferd',
-            fr: 'Un cavalier qui surgit hors de la nuit',
+            fr: 'Un cavalier qui surgit hors de la nuit'
           },
           x: 6.4,
           y: 37.2,
           isCritical: true,
-          ceKey: 6,
+          ceKey: 6
         },
         headofthesnake: {
           label: {
             en: 'Snake',
             de: 'Menenius',
-            fr: 'Mener par l\'exemple',
+            fr: 'Mener par l\'exemple'
           },
           x: 5.3,
           y: 31.9,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 7,
+          ceKey: 7
         },
         therewouldbeblood: {
           label: {
             en: 'Blood',
             de: 'Hanbi',
-            fr: 'Le Roi des Cendres',
+            fr: 'Le Roi des Cendres'
           },
           x: 13.7,
           y: 26.0,
           isCritical: true,
-          ceKey: 8,
+          ceKey: 8
         },
         nevercrywolf: {
           label: {
             en: 'Wolf',
             de: 'Hrodvitnir',
-            fr: 'Et n\'y Hród\'viens plus !',
+            fr: 'Et n\'y Hród\'viens plus !'
           },
           x: 4.9,
           y: 25.3,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 9,
+          ceKey: 9
         },
         timetoburn: {
           label: {
             en: 'Time',
             de: 'Belias',
-            fr: 'Le Titan',
+            fr: 'Le Titan'
           },
           x: 10.5,
           y: 21.5,
           isCritical: true,
-          ceKey: 10,
+          ceKey: 10
         },
         leanmeanmagitekmachines: {
           label: {
             en: 'Magitek',
             de: 'Gepanzerte Zenturie',
-            fr: 'Réusinage de code',
+            fr: 'Réusinage de code'
           },
           x: 15.2,
           y: 13.0,
           isCritical: true,
-          ceKey: 11,
+          ceKey: 11
         },
         worntoashadow: {
           label: {
             en: 'Shadow',
             de: 'Alkonost',
-            fr: 'Oiseau d\'enfer',
+            fr: 'Oiseau d\'enfer'
           },
           x: 11.8,
           y: 7.6,
           isCritical: true,
-          ceKey: 12,
+          ceKey: 12
         },
         afamiliarface: {
           label: {
             en: 'Familiar',
             de: 'Hashmallim',
-            fr: 'Le Grand Ordonnateur',
+            fr: 'Le Grand Ordonnateur'
           },
           x: 28.0,
           y: 29.2,
           isCritical: true,
           isDuelPrecursor: true,
-          ceKey: 13,
+          ceKey: 13
         },
         lookstodiefor: {
           label: {
             en: 'Looks',
             de: 'Ayda',
-            fr: 'Écaillage en règle',
+            fr: 'Écaillage en règle'
           },
           x: 17.4,
           y: 9.8,
           isCritical: true,
-          ceKey: 14,
+          ceKey: 14
         },
         takingthelyonsshare: {
           label: {
             en: 'Lyon\'s',
             de: 'Revanche: Lyon',
-            fr: 'La revanche de Lyon',
+            fr: 'La revanche de Lyon'
           },
           x: 22.5,
           y: 13.2,
           isCritical: true,
           isDuel: true,
           respawnMinutes: 60,
-          ceKey: 15,
-        },
-      },
-    },
-  },
+          ceKey: 15
+        }
+      }
+    }
+  }
 };
-
 const gWeatherIcons = {
   'Gales': '&#x1F300;',
   'Fog': '&#x2601;',
@@ -15872,12 +15877,12 @@ const gWeatherIcons = {
   'Snow': '&#x26C4;',
   'Thunderstorms': '&#x26A1;',
   'Showers': '&#x2614;',
-  'Gloom': '&#x2639;',
+  'Gloom': '&#x2639;'
 };
 const gNightIcon = '&#x1F319;';
 const gDayIcon = '&#x263C;';
-
 let gTracker;
+
 class EurekaTracker {
   constructor(options) {
     this.options = options;
@@ -15890,15 +15895,13 @@ class EurekaTracker {
 
   TransByParserLang(obj, key) {
     const fromObj = obj[this.options.ParserLanguage] || obj['en'];
-    if (!key)
-      return fromObj;
+    if (!key) return fromObj;
     return fromObj ? fromObj[key] : obj['en'][key];
   }
 
   TransByDispLang(obj, key) {
     const fromObj = obj[this.options.DisplayLanguage] || obj['en'];
-    if (!key)
-      return fromObj;
+    if (!key) return fromObj;
     return fromObj ? fromObj[key] : obj['en'][key];
   }
 
@@ -15911,19 +15914,17 @@ class EurekaTracker {
     const zi = this.zoneInfo;
     const px = zi.mapToPixelXScalar * mx + zi.mapToPixelXConstant;
     const py = zi.mapToPixelYScalar * my + zi.mapToPixelYConstant;
+    style.left = px / zi.mapWidth * 100 + '%';
+    style.top = py / zi.mapHeight * 100 + '%';
+  } // TODO: maybe this should be in a more shared location.
 
-    style.left = (px / zi.mapWidth * 100) + '%';
-    style.top = (py / zi.mapHeight * 100) + '%';
-  }
 
-  // TODO: maybe this should be in a more shared location.
   EntityToMap(coord, sizeFactor, offset) {
     // Relicensed from MIT License, by viion / Vekien
     // https://github.com/xivapi/xivapi-mappy/blob/3ea58cc5431db6808053bd3164a1b7859e3bcee1/Mappy/Helpers/MapHelper.cs#L10-L15
-
     const scale = sizeFactor / 100;
     const val = (coord + offset) * scale;
-    return ((41 / scale) * ((val + 1024) / 2048)) + 1;
+    return 41 / scale * ((val + 1024) / 2048) + 1;
   }
 
   EntityToMapX(x) {
@@ -15947,19 +15948,12 @@ class EurekaTracker {
     const nm = this.nms[nmKey];
     const label = document.createElement('div');
     label.classList.add('nm');
+    if (nm.isCritical) label.classList.add('critical');
+    if (nm.isDuel) label.classList.add('duel'); // Start these off hidden.
 
-    if (nm.isCritical)
-      label.classList.add('critical');
-    if (nm.isDuel)
-      label.classList.add('duel');
-    // Start these off hidden.
-    if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns)
-      label.classList.add('nm-hidden');
-
+    if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns) label.classList.add('nm-hidden');
     label.id = nmKey;
-
     this.SetStyleFromMap(label.style, nm.x, nm.y);
-
     const icon = document.createElement('span');
     icon.classList.add('nm-icon');
     const name = document.createElement('span');
@@ -15973,16 +15967,12 @@ class EurekaTracker {
     const time = document.createElement('span');
     time.classList.add('nm-time');
     time.classList.add('text');
-
-    if (nm.bunny)
-      label.classList.add('bunny');
-
+    if (nm.bunny) label.classList.add('bunny');
     label.appendChild(icon);
     label.appendChild(name);
     label.appendChild(progress);
     label.appendChild(time);
     container.appendChild(label);
-
     nm.element = label;
     nm.progressElement = progress;
     nm.timeElement = time;
@@ -15991,22 +15981,23 @@ class EurekaTracker {
   }
 
   InitNMs() {
-    this.nms = this.zoneInfo.nms;
-    // Anemos has no bunny fates
-    this.nmKeys = Object.keys(this.nms);
+    this.nms = this.zoneInfo.nms; // Anemos has no bunny fates
 
+    this.nmKeys = Object.keys(this.nms);
     const container = document.getElementById('nm-labels');
     container.classList.add(this.zoneInfo.shortName);
 
-    for (const key of this.nmKeys)
-      this.AddElement(container, key);
-
+    for (const key of this.nmKeys) this.AddElement(container, key);
 
     this.fairy = this.zoneInfo.fairy;
+
     if (this.fairy) {
       const fairyName = this.TransByParserLang(this.fairy);
-      this.fairy.regex = regexes/* default.addedCombatantFull */.Z.addedCombatantFull({ name: fairyName });
+      this.fairy.regex = regexes/* default.addedCombatantFull */.Z.addedCombatantFull({
+        name: fairyName
+      });
     }
+
     this.playerElement = document.createElement('div');
     this.playerElement.classList.add('player');
     container.appendChild(this.playerElement);
@@ -16020,67 +16011,58 @@ class EurekaTracker {
   }
 
   OnPlayerChange(e) {
-    if (!this.zoneInfo)
-      return;
+    if (!this.zoneInfo) return;
     this.SetStyleFromEntity(this.playerElement.style, e.detail.pos.x, e.detail.pos.y);
   }
 
   OnChangeZone(e) {
     this.zoneId = e.zoneID;
-
     this.zoneInfo = this.options.ZoneInfo[this.zoneId];
     const container = document.getElementById('container');
+
     if (this.zoneInfo) {
       this.ResetZone();
-
       const aspect = document.getElementById('aspect-ratio');
-      while (aspect.classList.length > 0)
-        aspect.classList.remove(aspect.classList.item(0));
+
+      while (aspect.classList.length > 0) aspect.classList.remove(aspect.classList.item(0));
+
       aspect.classList.add('aspect-ratio-' + this.zoneInfo.shortName);
 
       if (this.zoneInfo.mapImage) {
         document.getElementById('map-image').src = this.zoneInfo.mapImage;
         window.clearInterval(this.updateTimesHandle);
-        this.updateTimesHandle = window.setInterval(() => this.UpdateTimes(),
-            this.options.RefreshRateMs);
+        this.updateTimesHandle = window.setInterval(() => this.UpdateTimes(), this.options.RefreshRateMs);
         container.classList.remove('hide');
       }
+
       this.InitNMs();
       this.ProcessFateQueue();
       this.ProcessCEQueue();
       this.UpdateTimes();
     } else {
-      if (this.updateTimesHandle)
-        window.clearInterval(this.updateTimesHandle);
+      if (this.updateTimesHandle) window.clearInterval(this.updateTimesHandle);
       container.classList.add('hide');
     }
 
     const flags = document.getElementById('flag-labels');
 
-    for (let i = 0; i < flags.children.length; ++i)
-      flags.removeChild(flags.children[i]);
+    for (let i = 0; i < flags.children.length; ++i) flags.removeChild(flags.children[i]);
   }
 
   RespawnTime(nm) {
     let respawnTimeMs = 120 * 60 * 1000;
-    if ('respawnMinutes' in nm)
-      respawnTimeMs = nm.respawnMinutes * 60 * 1000;
-    return respawnTimeMs + (+new Date());
+    if ('respawnMinutes' in nm) respawnTimeMs = nm.respawnMinutes * 60 * 1000;
+    return respawnTimeMs + +new Date();
   }
 
   DebugPrint(str) {
-    if (this.options.Debug)
-      console.log(str);
+    if (this.options.Debug) console.log(str);
   }
 
   OnFatePop(fate) {
     this.DebugPrint(`OnFatePop: ${this.TransByDispLang(fate.label)}`);
     const classList = fate.element.classList;
-    if (fate.isCritical)
-      classList.add('critical-pop');
-    else
-      classList.add('nm-pop');
-
+    if (fate.isCritical) classList.add('critical-pop');else classList.add('nm-pop');
     classList.remove('nm-hidden');
     classList.remove('nm-down');
     classList.remove('critical-down');
@@ -16088,18 +16070,13 @@ class EurekaTracker {
 
     if (fate.bunny) {
       const shouldPlay = this.options.PopNoiseForBunny;
-      if (shouldPlay && this.options.BunnyPopSound && this.options.BunnyPopVolume)
-        this.PlaySound(this.options.BunnyPopSound, this.options.BunnyPopVolume);
+      if (shouldPlay && this.options.BunnyPopSound && this.options.BunnyPopVolume) this.PlaySound(this.options.BunnyPopSound, this.options.BunnyPopVolume);
     } else if (fate.isCritical) {
-      const shouldPlay = fate.isDuelPrecursor && this.options.PopNoiseForDuel ||
-          this.options.PopNoiseForCriticalEngagement;
-      if (shouldPlay && this.options.CriticalPopSound && this.options.CriticalPopVolume)
-        this.PlaySound(this.options.CriticalPopSound, this.options.CriticalPopVolume);
+      const shouldPlay = fate.isDuelPrecursor && this.options.PopNoiseForDuel || this.options.PopNoiseForCriticalEngagement;
+      if (shouldPlay && this.options.CriticalPopSound && this.options.CriticalPopVolume) this.PlaySound(this.options.CriticalPopSound, this.options.CriticalPopVolume);
     } else {
-      const shouldPlay = this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForSkirmish ||
-          !this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForNM;
-      if (shouldPlay && this.options.PopSound && this.options.PopVolume)
-        this.PlaySound(this.options.PopSound, this.options.PopVolume);
+      const shouldPlay = this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForSkirmish || !this.zoneInfo.treatNMsAsSkirmishes && this.options.PopNoiseForNM;
+      if (shouldPlay && this.options.PopSound && this.options.PopVolume) this.PlaySound(this.options.PopSound, this.options.PopVolume);
     }
   }
 
@@ -16111,23 +16088,21 @@ class EurekaTracker {
 
   OnFateUpdate(fate, percent) {
     this.DebugPrint(`OnFateUpdate: ${this.TransByDispLang(fate.label)}: ${percent}%`);
-    if (fate.element.classList.contains('nm-pop') || fate.element.classList.contains('critical-pop'))
-      fate.progressElement.innerText = percent + '%';
+    if (fate.element.classList.contains('nm-pop') || fate.element.classList.contains('critical-pop')) fate.progressElement.innerText = percent + '%';
   }
 
   OnFateKill(fate) {
     this.DebugPrint(`OnFateKill: ${this.TransByDispLang(fate.label)}`);
     this.UpdateTimes();
+
     if (fate.element.classList.contains('nm-pop')) {
-      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes)
-        fate.element.classList.add('nm-hidden');
+      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes) fate.element.classList.add('nm-hidden');
       fate.element.classList.add('nm-down');
       fate.element.classList.remove('nm-pop');
       fate.progressElement.innerText = null;
       return;
     } else if (fate.element.classList.contains('critical-pop')) {
-      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes)
-        fate.element.classList.add('nm-hidden');
+      if (this.zoneInfo.onlyShowInactiveWithExplicitRespawns && !fate.respawnMinutes) fate.element.classList.add('nm-hidden');
       fate.element.classList.add('critical-down');
       fate.element.classList.remove('critical-pop');
       fate.progressElement.innerText = null;
@@ -16136,19 +16111,17 @@ class EurekaTracker {
   }
 
   ProcessFateQueue() {
-    while (this.fateQueue.length !== 0)
-      this.OnFate(this.fateQueue.pop());
+    while (this.fateQueue.length !== 0) this.OnFate(this.fateQueue.pop());
   }
 
   ProcessCEQueue() {
-    while (this.CEQueue.length !== 0)
-      this.OnCE(this.CEQueue.pop());
+    while (this.CEQueue.length !== 0) this.OnCE(this.CEQueue.pop());
   }
 
   UpdateTimes() {
     const nowMs = +new Date();
-
     const primaryWeatherList = this.zoneInfo.primaryWeather;
+
     if (primaryWeatherList) {
       for (let i = 0; i < 5; ++i) {
         document.getElementById('label-weather-icon' + i).innerHTML = '';
@@ -16157,11 +16130,11 @@ class EurekaTracker {
 
       for (let i = 0; i < 5 && i < primaryWeatherList.length; ++i) {
         const primaryWeather = primaryWeatherList[i];
-        if (!primaryWeather)
-          continue;
+        if (!primaryWeather) continue;
         const weather = getWeather(nowMs, this.zoneId);
         const weatherIcon = gWeatherIcons[primaryWeather];
         let weatherStr;
+
         if (weather === primaryWeather) {
           const stopTime = findNextWeatherNot(nowMs, this.zoneId, primaryWeather);
           weatherStr = this.TransByDispLang(this.options.timeStrings.weatherFor)(nowMs, stopTime);
@@ -16169,6 +16142,7 @@ class EurekaTracker {
           const startTime = findNextWeather(nowMs, this.zoneId, primaryWeather);
           weatherStr = this.TransByDispLang(this.options.timeStrings.weatherIn)(nowMs, startTime);
         }
+
         document.getElementById('label-weather-icon' + i).innerHTML = weatherIcon;
         document.getElementById('label-weather-text' + i).innerHTML = weatherStr;
       }
@@ -16178,11 +16152,11 @@ class EurekaTracker {
       const weatherIcon = gWeatherIcons[currentWeather];
       let weatherStr = this.TransByDispLang(this.options.timeStrings.weatherFor)(nowMs, stopTime);
       document.getElementById('label-weather-icon0').innerHTML = weatherIcon;
-      document.getElementById('label-weather-text0').innerHTML = weatherStr;
+      document.getElementById('label-weather-text0').innerHTML = weatherStr; // round up current time
 
-      // round up current time
       let lastTime = nowMs;
       let lastWeather = currentWeather;
+
       for (let i = 1; i < 5; ++i) {
         const startTime = findNextWeatherNot(lastTime, this.zoneId, lastWeather);
         const weather = getWeather(startTime + 1, this.zoneId);
@@ -16198,39 +16172,28 @@ class EurekaTracker {
     const nextDay = findNextNight(nowMs);
     const nextNight = findNextDay(nowMs);
     let timeIcon;
-    if (nextDay > nextNight)
-      timeIcon = gNightIcon;
-    else
-      timeIcon = gDayIcon;
-
+    if (nextDay > nextNight) timeIcon = gNightIcon;else timeIcon = gDayIcon;
     const dayNightMin = Math.ceil((Math.min(nextDay, nextNight) - nowMs) / 1000 / 60);
     const timeStr = this.TransByDispLang(this.options.timeStrings.timeFor)(dayNightMin);
     document.getElementById('label-time-icon').innerHTML = timeIcon;
     document.getElementById('label-time-text').innerHTML = timeStr;
-
     document.getElementById('label-tracker').innerHTML = this.currentTracker;
 
     for (let i = 0; i < this.nmKeys.length; ++i) {
       const nm = this.nms[this.nmKeys[i]];
-
       let respawnMs = null;
-      if (nm.respawnTimeMsLocal)
-        respawnMs = nm.respawnTimeMsLocal;
-      else if (nm.respawnTimeMsTracker)
-        respawnMs = nm.respawnTimeMsTracker;
+      if (nm.respawnTimeMsLocal) respawnMs = nm.respawnTimeMsLocal;else if (nm.respawnTimeMsTracker) respawnMs = nm.respawnTimeMsTracker;
+      const popRespawnMs = respawnMs; // Ignore respawns in the past.
 
-
-      const popRespawnMs = respawnMs;
-
-      // Ignore respawns in the past.
       respawnMs = Math.max(respawnMs, nowMs);
       let respawnIcon = '';
 
       if (nm.weather) {
         const respawnWeather = getWeather(respawnMs, this.zoneId);
+
         if (respawnWeather !== nm.weather) {
-          const weatherStartTime =
-            findNextWeather(respawnMs, this.zoneId, nm.weather);
+          const weatherStartTime = findNextWeather(respawnMs, this.zoneId, nm.weather);
+
           if (weatherStartTime > respawnMs) {
             respawnIcon = gWeatherIcons[nm.weather];
             respawnMs = weatherStartTime;
@@ -16240,8 +16203,10 @@ class EurekaTracker {
 
       if (nm.time === 'Night') {
         const isNight = isNightTime(respawnMs);
+
         if (!isNight) {
           const nextNight = findNextNight(respawnMs);
+
           if (nextNight > respawnMs) {
             respawnIcon = gNightIcon;
             respawnMs = nextNight;
@@ -16250,13 +16215,16 @@ class EurekaTracker {
       }
 
       const remainingMs = respawnMs - nowMs;
+
       if (remainingMs <= 0) {
         let openUntil = null;
+
         if (nm.weather) {
           const weatherStartTime = findNextWeatherNot(nowMs, this.zoneId, nm.weather);
           respawnIcon = gWeatherIcons[nm.weather];
           openUntil = weatherStartTime;
         }
+
         if (nm.time === 'Night') {
           respawnIcon = gNightIcon;
           openUntil = findNextDay(nowMs);
@@ -16264,86 +16232,76 @@ class EurekaTracker {
 
         if (openUntil) {
           const openMin = (openUntil - nowMs) / 1000 / 60;
-          const nmString = respawnIcon + Math.ceil(openMin) +
-            this.TransByDispLang(this.options.timeStrings.minute);
+          const nmString = respawnIcon + Math.ceil(openMin) + this.TransByDispLang(this.options.timeStrings.minute);
           nm.timeElement.innerHTML = nmString;
         } else {
           nm.timeElement.innerText = '';
         }
+
         nm.element.classList.remove('nm-down');
       } else {
         // If still waiting on pop, don't show an icon.
-        if (popRespawnMs > nowMs)
-          respawnIcon = '';
-
+        if (popRespawnMs > nowMs) respawnIcon = '';
         const remainingMinutes = Math.ceil(remainingMs / 1000 / 60);
-        const nmString = respawnIcon + remainingMinutes +
-          this.TransByDispLang(this.options.timeStrings.minute);
-        if (nm.timeElement.innerHTML !== nmString)
-          nm.timeElement.innerHTML = nmString;
-
-        if (!this.zoneInfo.treatNMsAsSkirmishes)
-          nm.element.classList.add('nm-down');
+        const nmString = respawnIcon + remainingMinutes + this.TransByDispLang(this.options.timeStrings.minute);
+        if (nm.timeElement.innerHTML !== nmString) nm.timeElement.innerHTML = nmString;
+        if (!this.zoneInfo.treatNMsAsSkirmishes) nm.element.classList.add('nm-down');
       }
     }
   }
 
   ImportFromTracker(importText) {
     const trackerToNM = {};
+
     for (let i = 0; i < this.nmKeys.length; ++i) {
       const nm = this.nms[this.nmKeys[i]];
-      if (!nm.trackerName)
-        continue;
+      if (!nm.trackerName) continue;
       trackerToNM[this.TransByParserLang(nm.trackerName).toLowerCase()] = nm;
     }
 
     let regex = this.TransByParserLang(this.options.Regex);
     regex = regex['gTimeRegex'];
     const importList = importText.split(' → ');
+
     for (let i = 0; i < importList.length; i++) {
       const m = importList[i].match(regex);
+
       if (!m) {
         console.error('Unknown tracker entry: ' + importList[i]);
         continue;
       }
+
       const name = m[1];
       const time = m[2];
       const nm = trackerToNM[name.toLowerCase()];
-      if (nm)
-        nm.respawnTimeMsTracker = (time * 60 * 1000) + (+new Date());
-      else
-        console.error('Invalid NM Import: ' + name);
+      if (nm) nm.respawnTimeMsTracker = time * 60 * 1000 + +new Date();else console.error('Invalid NM Import: ' + name);
     }
 
     this.UpdateTimes();
   }
 
   OnLog(e) {
-    if (!this.zoneInfo)
-      return;
+    if (!this.zoneInfo) return;
+
     for (const log of e.detail.logs) {
       const gFlagRegex = this.TransByParserLang(this.options.Regex, 'gFlagRegex');
       let match = log.match(gFlagRegex);
-      if (match)
-        this.AddFlag(match[2], match[3], match[1], match[4]);
+      if (match) this.AddFlag(match[2], match[3], match[1], match[4]);
 
       if (this.fairy) {
         if (log.includes(' 03:') || log.includes('00:0839:')) {
           match = log.match(this.fairy.regex);
-          if (match)
-            this.AddFairy(match.groups);
+          if (match) this.AddFairy(match.groups);
         }
       }
 
-      if (!this.zoneInfo.hasTracker)
-        return;
-
+      if (!this.zoneInfo.hasTracker) return;
       const gTrackerRegex = this.TransByParserLang(this.options.Regex, 'gTrackerRegex');
       match = log.match(gTrackerRegex);
-      if (match)
-        this.currentTracker = match[1];
+      if (match) this.currentTracker = match[1];
       const gImportRegex = this.TransByParserLang(this.options.Regex, 'gImportRegex');
       match = log.match(gImportRegex);
+
       if (match) {
         this.ImportFromTracker(match[2]);
         continue;
@@ -16361,33 +16319,41 @@ class EurekaTracker {
     }
 
     switch (e.detail.eventType) {
-    case 'add':
-      for (const key of this.nmKeys) {
-        const nm = this.nms[key];
-        if (e.detail.fateID === nm.fateID) {
-          this.OnFatePop(nm);
-          return;
+      case 'add':
+        for (const key of this.nmKeys) {
+          const nm = this.nms[key];
+
+          if (e.detail.fateID === nm.fateID) {
+            this.OnFatePop(nm);
+            return;
+          }
         }
-      }
-      break;
-    case 'remove':
-      for (const key of this.nmKeys) {
-        const nm = this.nms[key];
-        if (e.detail.fateID === nm.fateID) {
-          this.OnFateKill(nm);
-          return;
+
+        break;
+
+      case 'remove':
+        for (const key of this.nmKeys) {
+          const nm = this.nms[key];
+
+          if (e.detail.fateID === nm.fateID) {
+            this.OnFateKill(nm);
+            return;
+          }
         }
-      }
-      break;
-    case 'update':
-      for (const key of this.nmKeys) {
-        const nm = this.nms[key];
-        if (e.detail.fateID === nm.fateID) {
-          this.OnFateUpdate(nm, e.detail.progress);
-          return;
+
+        break;
+
+      case 'update':
+        for (const key of this.nmKeys) {
+          const nm = this.nms[key];
+
+          if (e.detail.fateID === nm.fateID) {
+            this.OnFateUpdate(nm, e.detail.progress);
+            return;
+          }
         }
-      }
-      break;
+
+        break;
     }
   }
 
@@ -16396,114 +16362,84 @@ class EurekaTracker {
     // this.zoneInfo is loaded, so lets store the events until we're
     // able to process them.
     // TODO: don't make pop noises for CEs that have already started.
-
     if (!this.zoneInfo) {
       this.CEQueue.push(e);
       return;
     }
 
     let nm = null;
+
     for (const key of this.nmKeys) {
       if (e.detail.data.ceKey === this.nms[key].ceKey) {
         nm = this.nms[key];
         break;
       }
     }
-    if (!nm)
-      return;
+
+    if (!nm) return;
 
     switch (e.detail.eventType) {
-    case 'add':
-      this.OnFatePop(nm);
-      break;
-    case 'remove':
-      this.OnFateKill(nm);
-      break;
-    case 'update':
-      if (e.detail.data.status === 3)
-        this.OnFateUpdate(nm, e.detail.data.progress);
-      break;
+      case 'add':
+        this.OnFatePop(nm);
+        break;
+
+      case 'remove':
+        this.OnFateKill(nm);
+        break;
+
+      case 'update':
+        if (e.detail.data.status === 3) this.OnFateUpdate(nm, e.detail.data.progress);
+        break;
     }
   }
 
   SimplifyText(beforeText, afterText) {
     const str = (beforeText + ' ' + afterText).toLowerCase();
-
     const dict = {
-      'train': [
-        'train',
-        'tren',
-        'trian',
-        'tran',
-        'choo choo',
-        'train location',
-      ],
-      'fairy': [
-        'fairy',
-        'elemental',
-        'faerie',
-        'fary',
-        '元灵',
-        '凉粉',
-        '辣条',
-        '冰粉',
-        '酸辣粉',
-      ],
-      'raise': [
-        'raise',
-        'rez',
-        'res ',
-        ' res',
-        'raise plz',
-      ],
-      '999': [
-        '999',
-        '救命',
-        '救救',
-        '狗狗',
-      ],
+      'train': ['train', 'tren', 'trian', 'tran', 'choo choo', 'train location'],
+      'fairy': ['fairy', 'elemental', 'faerie', 'fary', '元灵', '凉粉', '辣条', '冰粉', '酸辣粉'],
+      'raise': ['raise', 'rez', 'res ', ' res', 'raise plz'],
+      '999': ['999', '救命', '救救', '狗狗']
     };
     const keys = Object.keys(dict);
+
     for (let i = 0; i < keys.length; ++i) {
       const key = keys[i];
+
       for (let j = 0; j < dict[key].length; ++j) {
         const m = dict[key][j];
-        if (str.includes(m))
-          return key;
+        if (str.includes(m)) return key;
       }
     }
   }
 
   AddFlag(x, y, beforeText, afterText) {
     const simplify = this.SimplifyText(beforeText, afterText);
+
     if (simplify) {
       beforeText = simplify;
       afterText = '';
     }
-    beforeText = beforeText.replace(/(?: at|@)$/, '');
 
+    beforeText = beforeText.replace(/(?: at|@)$/, '');
     const container = document.getElementById('flag-labels');
     const label = document.createElement('div');
     label.classList.add('flag');
     this.SetStyleFromMap(label.style, x, y);
-
     const icon = document.createElement('span');
     icon.classList.add('flag-icon');
     const name = document.createElement('span');
     name.classList.add('flag-name');
     name.classList.add('text');
     name.innerText = beforeText;
-    if (beforeText !== '' && afterText !== '')
-      name.innerText += ' ';
+    if (beforeText !== '' && afterText !== '') name.innerText += ' ';
     name.innerText += afterText;
     label.appendChild(icon);
     label.appendChild(name);
     container.appendChild(label);
-
     window.setTimeout(() => {
       // Changing zones can also orphan all the labels.
-      if (label.parentElement === container)
-        container.removeChild(label);
+      if (label.parentElement === container) container.removeChild(label);
     }, this.options.FlagTimeoutMs);
   }
 
@@ -16512,28 +16448,27 @@ class EurekaTracker {
     const my = this.EntityToMapY(parseFloat(matches.y));
     this.AddFlag(mx, my, this.TransByParserLang(this.zoneInfo.fairy), '');
   }
+
 }
 
-user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('eureka', Options, (e) => {
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onPlayerChangedEvent', (e) => {
+user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('eureka', Options, e => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onPlayerChangedEvent', e => {
     gTracker.OnPlayerChange(e);
   });
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', e => {
     gTracker.OnChangeZone(e);
   });
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', e => {
     gTracker.OnLog(e);
   });
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onFateEvent', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onFateEvent', e => {
     gTracker.OnFate(e);
   });
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onCEEvent', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onCEEvent', e => {
     gTracker.OnCE(e);
   });
-
   gTracker = new EurekaTracker(Options);
 });
-
 })();
 
 /******/ })()

@@ -3588,42 +3588,41 @@ Line Count: ${this.currentFight.length}
     }
 }
 
-;// CONCATENATED MODULE: ./ui/raidboss/emulator/data/NetworkLogConverterWorker.js
+;// CONCATENATED MODULE: ./node_modules/babel-loader/lib/index.js??ruleSet[1].rules[1].use!./ui/raidboss/emulator/data/NetworkLogConverterWorker.js
 
 
 
 
 
 
-onmessage = async (msg) => {
+onmessage = async msg => {
   const logConverter = new NetworkLogConverter();
   const localLogHandler = new LogEventHandler();
-  const repo = new LogRepository();
+  const repo = new LogRepository(); // Listen for LogEventHandler to dispatch fights and persist them
 
-  // Listen for LogEventHandler to dispatch fights and persist them
   localLogHandler.on('fight', async (day, zoneId, zoneName, lines) => {
     const enc = new Encounter(day, zoneId, zoneName, lines);
     enc.initialize();
+
     if (enc.shouldPersistFight()) {
       postMessage({
         type: 'encounter',
         encounter: enc,
-        name: enc.combatantTracker.getMainCombatantName(),
+        name: enc.combatantTracker.getMainCombatantName()
       });
     }
-  });
+  }); // Convert the message manually due to memory issues with extremely large files
 
-  // Convert the message manually due to memory issues with extremely large files
   const decoder = new TextDecoder('UTF-8');
   let buf = new Uint8Array(msg.data);
   let nextOffset = 0;
   let lines = [];
   let lineCount = 0;
-  for (let currentOffset = nextOffset;
-    nextOffset < buf.length && nextOffset !== -1;
-    currentOffset = nextOffset) {
+
+  for (let currentOffset = nextOffset; nextOffset < buf.length && nextOffset !== -1; currentOffset = nextOffset) {
     nextOffset = buf.indexOf(0x0A, nextOffset + 1);
     const line = decoder.decode(buf.slice(currentOffset, nextOffset)).trim();
+
     if (line.length) {
       ++lineCount;
       lines.push(line);
@@ -3636,30 +3635,29 @@ onmessage = async (msg) => {
         type: 'progress',
         lines: lineCount,
         bytes: nextOffset,
-        totalBytes: buf.length,
+        totalBytes: buf.length
       });
       lines = [];
     }
   }
+
   if (lines.length > 0) {
     lines = logConverter.convertLines(lines, repo);
     localLogHandler.parseLogs(lines);
     lines = [];
   }
+
   postMessage({
     type: 'progress',
     lines: lineCount,
     bytes: buf.length,
-    totalBytes: buf.length,
+    totalBytes: buf.length
   });
   buf = null;
-
   localLogHandler.endFight();
-
   postMessage({
-    type: 'done',
+    type: 'done'
   });
 };
-
 /******/ })()
 ;

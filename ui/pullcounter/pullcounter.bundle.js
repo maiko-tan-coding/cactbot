@@ -11209,140 +11209,107 @@ var zone_id = __webpack_require__(438);
 
 
 
-
-
-
 const Options = {
-  Language: 'en',
-};
-
-// NOTE: do not add more fights to this data structure.
+  Language: 'en'
+}; // NOTE: do not add more fights to this data structure.
 // These exist for testing pullcounter and for backwards compatibility
 // with pullcounter keys.  None of these were translated in the past,
 // and so it's also not worth going back and adding these as there is
 // no backwards compatibility issue for other languages.
 
-const gBossFightTriggers = [
-  {
-    id: 'test',
-    zoneId: zone_id/* default.MiddleLaNoscea */.Z.MiddleLaNoscea,
-    startRegex: /:You bow courteously to the striking dummy/,
-    countdownStarts: true,
-    preventAutoStart: true,
-  },
-  {
-    id: 'o1s',
-    zoneId: zone_id/* default.DeltascapeV10Savage */.Z.DeltascapeV10Savage,
-  },
-  {
-    id: 'o2s',
-    zoneId: zone_id/* default.DeltascapeV20Savage */.Z.DeltascapeV20Savage,
-  },
-  {
-    id: 'o3s',
-    zoneId: zone_id/* default.DeltascapeV30Savage */.Z.DeltascapeV30Savage,
-  },
-  {
-    id: 'o4s-exdeath',
-    zoneId: zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
-    startRegex: /:Exdeath uses Dualcast/,
-    preventAutoStart: true,
-  },
-  {
-    id: 'o4s-neo',
-    zoneId: zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
-    startRegex: /:Neo Exdeath uses Almagest/,
-    preventAutoStart: true,
-  },
-  {
-    id: 'Unending Coil',
-    zoneId: zone_id/* default.TheUnendingCoilOfBahamutUltimate */.Z.TheUnendingCoilOfBahamutUltimate,
-  },
-  {
-    id: 'Shinryu Ex',
-    zoneId: zone_id/* default.TheMinstrelsBalladShinryusDomain */.Z.TheMinstrelsBalladShinryusDomain,
-  },
-  {
-    id: 'o5s',
-    zoneId: zone_id/* default.SigmascapeV10Savage */.Z.SigmascapeV10Savage,
-  },
-  {
-    id: 'o6s',
-    zoneId: zone_id/* default.SigmascapeV20Savage */.Z.SigmascapeV20Savage,
-  },
-  {
-    id: 'o7s',
-    zoneId: zone_id/* default.SigmascapeV30Savage */.Z.SigmascapeV30Savage,
-  },
-  {
-    id: 'o8s-kefka',
-    zoneId: zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
-    startRegex: / 15:........:Kefka:28C2:/,
-    preventAutoStart: true,
-  },
-  {
-    id: 'o8s-god kefka',
-    zoneId: zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
-    startRegex: / 15:........:Kefka:28EC:/,
-    preventAutoStart: true,
-  },
-  {
-    id: 'Byakko Ex',
-    zoneId: zone_id/* default.TheJadeStoaExtreme */.Z.TheJadeStoaExtreme,
-  },
-  {
-    id: 'Tsukuyomi Ex',
-    zoneId: zone_id/* default.TheMinstrelsBalladTsukuyomisPain */.Z.TheMinstrelsBalladTsukuyomisPain,
-  },
-  {
-    id: 'UwU',
-    zoneId: zone_id/* default.TheWeaponsRefrainUltimate */.Z.TheWeaponsRefrainUltimate,
-  },
-  {
-    id: 'Suzaku Ex',
-    zoneId: zone_id/* default.HellsKierExtreme */.Z.HellsKierExtreme,
-  },
-  {
-    id: 'Seiryu Ex',
-    zoneId: zone_id/* default.TheWreathOfSnakesExtreme */.Z.TheWreathOfSnakesExtreme,
-  },
-  {
-    id: 'o9s',
-    zoneId: zone_id/* default.AlphascapeV10Savage */.Z.AlphascapeV10Savage,
-  },
-  {
-    id: 'o10s',
-    zoneId: zone_id/* default.AlphascapeV20Savage */.Z.AlphascapeV20Savage,
-  },
-  {
-    id: 'o11s',
-    zoneId: zone_id/* default.AlphascapeV30Savage */.Z.AlphascapeV30Savage,
-  },
-  {
-    id: 'o12s-door',
-    zoneId: zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
-    startRegex: /:Omega-M:337D:/,
-    preventAutoStart: true,
-  },
-  {
-    id: 'o12s-final',
-    zoneId: zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
-    startRegex: /:Omega:336C:/,
-    preventAutoStart: true,
-  },
-  {
-    zoneId: zone_id/* default.TheBozjanSouthernFront */.Z.TheBozjanSouthernFront,
-    countdownStarts: false,
-    preventAutoStart: true,
-  },
-  {
-    zoneId: zone_id/* default.Zadnor */.Z.Zadnor,
-    countdownStarts: false,
-    preventAutoStart: true,
-  },
-];
-
-
+const gBossFightTriggers = [{
+  id: 'test',
+  zoneId: zone_id/* default.MiddleLaNoscea */.Z.MiddleLaNoscea,
+  startRegex: /:You bow courteously to the striking dummy/,
+  countdownStarts: true,
+  preventAutoStart: true
+}, {
+  id: 'o1s',
+  zoneId: zone_id/* default.DeltascapeV10Savage */.Z.DeltascapeV10Savage
+}, {
+  id: 'o2s',
+  zoneId: zone_id/* default.DeltascapeV20Savage */.Z.DeltascapeV20Savage
+}, {
+  id: 'o3s',
+  zoneId: zone_id/* default.DeltascapeV30Savage */.Z.DeltascapeV30Savage
+}, {
+  id: 'o4s-exdeath',
+  zoneId: zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
+  startRegex: /:Exdeath uses Dualcast/,
+  preventAutoStart: true
+}, {
+  id: 'o4s-neo',
+  zoneId: zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
+  startRegex: /:Neo Exdeath uses Almagest/,
+  preventAutoStart: true
+}, {
+  id: 'Unending Coil',
+  zoneId: zone_id/* default.TheUnendingCoilOfBahamutUltimate */.Z.TheUnendingCoilOfBahamutUltimate
+}, {
+  id: 'Shinryu Ex',
+  zoneId: zone_id/* default.TheMinstrelsBalladShinryusDomain */.Z.TheMinstrelsBalladShinryusDomain
+}, {
+  id: 'o5s',
+  zoneId: zone_id/* default.SigmascapeV10Savage */.Z.SigmascapeV10Savage
+}, {
+  id: 'o6s',
+  zoneId: zone_id/* default.SigmascapeV20Savage */.Z.SigmascapeV20Savage
+}, {
+  id: 'o7s',
+  zoneId: zone_id/* default.SigmascapeV30Savage */.Z.SigmascapeV30Savage
+}, {
+  id: 'o8s-kefka',
+  zoneId: zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
+  startRegex: / 15:........:Kefka:28C2:/,
+  preventAutoStart: true
+}, {
+  id: 'o8s-god kefka',
+  zoneId: zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
+  startRegex: / 15:........:Kefka:28EC:/,
+  preventAutoStart: true
+}, {
+  id: 'Byakko Ex',
+  zoneId: zone_id/* default.TheJadeStoaExtreme */.Z.TheJadeStoaExtreme
+}, {
+  id: 'Tsukuyomi Ex',
+  zoneId: zone_id/* default.TheMinstrelsBalladTsukuyomisPain */.Z.TheMinstrelsBalladTsukuyomisPain
+}, {
+  id: 'UwU',
+  zoneId: zone_id/* default.TheWeaponsRefrainUltimate */.Z.TheWeaponsRefrainUltimate
+}, {
+  id: 'Suzaku Ex',
+  zoneId: zone_id/* default.HellsKierExtreme */.Z.HellsKierExtreme
+}, {
+  id: 'Seiryu Ex',
+  zoneId: zone_id/* default.TheWreathOfSnakesExtreme */.Z.TheWreathOfSnakesExtreme
+}, {
+  id: 'o9s',
+  zoneId: zone_id/* default.AlphascapeV10Savage */.Z.AlphascapeV10Savage
+}, {
+  id: 'o10s',
+  zoneId: zone_id/* default.AlphascapeV20Savage */.Z.AlphascapeV20Savage
+}, {
+  id: 'o11s',
+  zoneId: zone_id/* default.AlphascapeV30Savage */.Z.AlphascapeV30Savage
+}, {
+  id: 'o12s-door',
+  zoneId: zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
+  startRegex: /:Omega-M:337D:/,
+  preventAutoStart: true
+}, {
+  id: 'o12s-final',
+  zoneId: zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
+  startRegex: /:Omega:336C:/,
+  preventAutoStart: true
+}, {
+  zoneId: zone_id/* default.TheBozjanSouthernFront */.Z.TheBozjanSouthernFront,
+  countdownStarts: false,
+  preventAutoStart: true
+}, {
+  zoneId: zone_id/* default.Zadnor */.Z.Zadnor,
+  countdownStarts: false,
+  preventAutoStart: true
+}];
 let gPullCounter;
 
 class PullCounter {
@@ -11352,23 +11319,20 @@ class PullCounter {
     this.bossStarted = false;
     this.party = [];
     this.bosses = [];
-
-    this.resetRegex = regexes/* default.echo */.Z.echo({ line: '.*pullcounter reset.*?' });
-    this.countdownEngageRegex = LocaleRegex.countdownEngage[Options.ParserLanguage] ||
-      LocaleRegex.countdownEngage.en;
-
+    this.resetRegex = regexes/* default.echo */.Z.echo({
+      line: '.*pullcounter reset.*?'
+    });
+    this.countdownEngageRegex = LocaleRegex.countdownEngage[Options.ParserLanguage] || LocaleRegex.countdownEngage.en;
     (0,overlay_plugin_api/* callOverlayHandler */.ae)({
       call: 'cactbotLoadData',
-      overlay: 'pullcounter',
-    }).then((data) => gPullCounter.SetSaveData(data));
-
+      overlay: 'pullcounter'
+    }).then(data => gPullCounter.SetSaveData(data));
     this.ReloadTriggers();
   }
 
   OnFightStart(boss) {
     this.pullCounts[boss.id] = (this.pullCounts[boss.id] || 0) + 1;
     this.bossStarted = true;
-
     this.ShowElementFor(boss.id);
     this.SaveData();
   }
@@ -11382,23 +11346,21 @@ class PullCounter {
     (0,overlay_plugin_api/* callOverlayHandler */.ae)({
       call: 'cactbotSaveData',
       overlay: 'pullcounter',
-      data: JSON.stringify(this.pullCounts),
+      data: JSON.stringify(this.pullCounts)
     });
   }
 
   OnLogEvent(e) {
-    if (this.bossStarted)
-      return;
+    if (this.bossStarted) return;
+
     for (const log of e.detail.logs) {
-      if (this.resetRegex.test(log))
-        this.ResetPullCounter();
+      if (this.resetRegex.test(log)) this.ResetPullCounter();
+
       if (this.countdownEngageRegex.test(log)) {
-        if (this.countdownBoss)
-          this.OnFightStart(this.countdownBoss);
-        else
-          this.AutoStartBossIfNeeded();
+        if (this.countdownBoss) this.OnFightStart(this.countdownBoss);else this.AutoStartBossIfNeeded();
         return;
       }
+
       for (const boss of this.bosses) {
         if (boss.startRegex && boss.startRegex.test(log)) {
           this.OnFightStart(boss);
@@ -11411,22 +11373,18 @@ class PullCounter {
   OnChangeZone(e) {
     this.element.innerText = '';
     this.zoneName = e.zoneName;
-    this.zoneId = e.zoneID;
-
-    // Network log zone names that start with "the" are lowercase.
+    this.zoneId = e.zoneID; // Network log zone names that start with "the" are lowercase.
     // Adjust this here to match saved pull counts for zones which
     // do not have this property and originally used zone names
     // coming from the ffxiv parser plugin.
-
     // TODO: add some backwards compatible way to turn zone names into
     // zone ids when we load that zone and a pull count exists?
     // Proper-case zone names to match ACT.
-    this.zoneName = this.zoneName.split(' ').map((word) => {
-      if (!word || word.length === 0)
-        return '';
+
+    this.zoneName = this.zoneName.split(' ').map(word => {
+      if (!word || word.length === 0) return '';
       return word[0].toUpperCase() + word.substr(1);
     }).join(' ');
-
     this.ReloadTriggers();
   }
 
@@ -11450,18 +11408,15 @@ class PullCounter {
   ReloadTriggers() {
     this.bosses = [];
     this.countdownBoss = null;
-
-    if (!this.zoneName || !this.pullCounts)
-      return;
+    if (!this.zoneName || !this.pullCounts) return;
 
     for (const boss of gBossFightTriggers) {
-      if (this.zoneId !== boss.zoneId)
-        continue;
+      if (this.zoneId !== boss.zoneId) continue;
       this.bosses.push(boss);
+
       if (boss.countdownStarts) {
         // Only one boss can be started with countdown in a zone.
-        if (this.countdownBoss)
-          console.error('Countdown boss conflict: ' + boss.id + ', ' + this.countdownBoss.id);
+        if (this.countdownBoss) console.error('Countdown boss conflict: ' + boss.id + ', ' + this.countdownBoss.id);
         this.countdownBoss = boss;
       }
     }
@@ -11472,30 +11427,27 @@ class PullCounter {
       this.bossStarted = false;
       return;
     }
+
     this.AutoStartBossIfNeeded();
   }
 
   AutoStartBossIfNeeded() {
     // Start an implicit boss fight for this zone in parties of 8 people
     // unless there's a door fight that specifies otherwise.
-    if (this.bosses.length > 1)
-      return;
-    if (this.bossStarted)
-      return;
-    if (this.party.length !== 8)
-      return;
+    if (this.bosses.length > 1) return;
+    if (this.bossStarted) return;
+    if (this.party.length !== 8) return;
 
     if (this.bosses.length === 1) {
       const boss = this.bosses[0];
-      if (boss.preventAutoStart)
-        return;
+      if (boss.preventAutoStart) return;
       this.OnFightStart(boss);
       return;
     }
 
     this.OnFightStart({
       id: this.zoneName,
-      countdownStarts: true,
+      countdownStarts: true
     });
   }
 
@@ -11509,27 +11461,24 @@ class PullCounter {
 
   SetSaveData(e) {
     try {
-      if (e && e.data)
-        this.pullCounts = JSON.parse(e.data);
-      else
-        this.pullCounts = {};
+      if (e && e.data) this.pullCounts = JSON.parse(e.data);else this.pullCounts = {};
     } catch (err) {
       console.error('onSendSaveData parse error: ' + err.message);
     }
+
     this.ReloadTriggers();
   }
+
 }
 
 user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('pullcounter', Options, () => {
   gPullCounter = new PullCounter(document.getElementById('pullcounttext'));
-
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', (e) => gPullCounter.OnLogEvent(e));
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', (e) => gPullCounter.OnChangeZone(e));
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onInCombatChangedEvent', (e) => gPullCounter.OnInCombatChange(e));
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', e => gPullCounter.OnLogEvent(e));
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', e => gPullCounter.OnChangeZone(e));
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onInCombatChangedEvent', e => gPullCounter.OnInCombatChange(e));
   (0,overlay_plugin_api/* addOverlayListener */.PS)('onPartyWipe', () => gPullCounter.OnPartyWipe());
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('PartyChanged', (e) => gPullCounter.OnPartyChange(e));
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('PartyChanged', e => gPullCounter.OnPartyChange(e));
 });
-
 })();
 
 /******/ })()

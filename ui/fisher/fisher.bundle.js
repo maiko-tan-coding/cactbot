@@ -11566,6 +11566,7 @@ class FisherBar extends TimerBar {
     cancelAnimationFrame(this._animationFrame);
     this._animationFrame = null;
   }
+
 }
 
 if (window.customElements) {
@@ -11573,7 +11574,7 @@ if (window.customElements) {
   window.customElements.define('fisher-bar', FisherBar);
 } else {
   document.registerElement('fisher-bar', {
-    prototype: Object.create(FisherBar.prototype),
+    prototype: Object.create(FisherBar.prototype)
   });
 }
 
@@ -11585,9 +11586,7 @@ class FisherUI {
     this.placeEl = element.querySelector('#place-name');
     this.timeEl = element.querySelector('#cast-duration');
     this.arrowEl = element.querySelector('#fisher-arrow');
-
     this.tugNames = ['unknown', 'light', 'medium', 'heavy'];
-
     this.castStart = null;
     this.fishing = false;
     this.animationFrame = false;
@@ -11595,12 +11594,10 @@ class FisherUI {
   }
 
   draw() {
-    const timeMs = (new Date() - this.castStart);
+    const timeMs = new Date() - this.castStart;
     const time = (timeMs / 1000).toFixed(1);
-
     this.timeEl.innerHTML = time;
-    this.arrowEl.style.top = (timeMs / 600) + '%';
-
+    this.arrowEl.style.top = timeMs / 600 + '%';
     this.animationFrame = requestAnimationFrame(this.draw.bind(this));
   }
 
@@ -11612,10 +11609,7 @@ class FisherUI {
     const oldPlace = this.placeEl.innerHTML;
 
     if (!place) {
-      if (oldPlace && oldPlace[0] !== '(')
-        this.placeEl.innerHTML = '(' + oldPlace + ')';
-      else
-        this.placeEl.innerHTML = '------------';
+      if (oldPlace && oldPlace[0] !== '(') this.placeEl.innerHTML = '(' + oldPlace + ')';else this.placeEl.innerHTML = '------------';
     } else {
       this.placeEl.innerHTML = place;
     }
@@ -11623,7 +11617,6 @@ class FisherUI {
 
   startTimers() {
     const barData = {};
-
     const rows = this.element.querySelectorAll('.table-row');
 
     for (let i = 0; i < rows.length; i++) {
@@ -11632,15 +11625,13 @@ class FisherUI {
       const max = row.getAttribute('data-max');
       const bar = document.createElement('fisher-bar');
       let timeouts = [];
+      bar.centertext = row.getAttribute('data-fish'); // Step one: fill until the minimum time
 
-      bar.centertext = row.getAttribute('data-fish');
-
-      // Step one: fill until the minimum time
-      if ((min && min !== 'undefined') && (max && max !== 'undefined')) {
+      if (min && min !== 'undefined' && max && max !== 'undefined') {
         row.opacity = 0.8;
         bar.duration = min / 1000;
-        bar.stylefill = 'fill';
-        // Step two: empty until the maximum time
+        bar.stylefill = 'fill'; // Step two: empty until the maximum time
+
         timeouts.push(setTimeout(() => {
           row.style.opacity = 1;
           bar.stylefill = 'empty';
@@ -11648,27 +11639,22 @@ class FisherUI {
           bar.duration = (max - min) / 1000;
           timeouts.push(setTimeout(() => {
             row.style.opacity = 0.5;
-          }, (max - min)));
+          }, max - min));
         }, min));
       } else {
         bar.duration = 0;
         timeouts = [];
       }
 
-      if (row.getAttribute('data-tug'))
-        bar.fg = this.options.Colors[this.tugNames[row.getAttribute('data-tug')]];
+      if (row.getAttribute('data-tug')) bar.fg = this.options.Colors[this.tugNames[row.getAttribute('data-tug')]];
 
-
-      while (row.lastChild)
-        row.removeChild(row.lastChild);
-
+      while (row.lastChild) row.removeChild(row.lastChild);
 
       row.appendChild(bar);
-
       this.bars.push({
         'row': row,
         'bar': bar,
-        'timeouts': timeouts,
+        'timeouts': timeouts
       });
     }
 
@@ -11679,14 +11665,12 @@ class FisherUI {
     // Stops cast time timer and arrow
     cancelAnimationFrame(this.animationFrame);
     this.animationFrame = null;
-
-    this.bars.forEach((bar) => {
+    this.bars.forEach(bar => {
       // Stops the timed events
-      bar.timeouts.forEach((timeout) => {
+      bar.timeouts.forEach(timeout => {
         clearTimeout(timeout);
-      });
+      }); // Stops the bar
 
-      // Stops the bar
       bar.bar.stop();
     });
   }
@@ -11695,19 +11679,11 @@ class FisherUI {
     // Sort hook times by minimum time, with undefineds being at the end
     const sortedKeys = Object.keys(hookTimes).sort((a, b) => {
       const t = hookTimes;
-
-      if ((!t[a] || !t[a].min) && (!t[b] || !t[b].min))
-        return 0;
-      else if (!t[a] || !t[a].min)
-        return 1;
-      else if (!t[b] || !t[b].min)
-        return -1;
-
+      if ((!t[a] || !t[a].min) && (!t[b] || !t[b].min)) return 0;else if (!t[a] || !t[a].min) return 1;else if (!t[b] || !t[b].min) return -1;
       return t[a].min - t[b].min;
-    });
+    }); // Remove current values from all wells
 
-    // Remove current values from all wells
-    Array.prototype.forEach.call(this.element.querySelectorAll('.well-entry, .table-row'), (node) => {
+    Array.prototype.forEach.call(this.element.querySelectorAll('.well-entry, .table-row'), node => {
       node.parentNode.removeChild(node);
     });
 
@@ -11716,29 +11692,27 @@ class FisherUI {
       const fish = sortedKeys[i];
 
       if (tugTypes[fish] && hookTimes[fish].min && hookTimes[fish].max) {
-        const tug = tugTypes[fish];
-        // Create the element with fish-specific styles
+        const tug = tugTypes[fish]; // Create the element with fish-specific styles
+
         const el = document.createElement('div');
         el.classList.add('well-entry');
         el.setAttribute('data-fish', fish);
         el.style.top = (hookTimes[fish].min / 600).toString() + '%';
         el.style.height = ((hookTimes[fish].max - hookTimes[fish].min) / 600).toString() + '%';
-        el.style.backgroundColor = this.options.Colors[this.tugNames[tug]];
+        el.style.backgroundColor = this.options.Colors[this.tugNames[tug]]; // Put the element in the well
 
-        // Put the element in the well
         const well = this.element.querySelector('#fisher-well-' + this.tugNames[tug]);
         well.appendChild(el);
-      }
+      } // Next, make the row for the table
 
-      // Next, make the row for the table
+
       const row = document.createElement('div');
       row.classList.add('table-row');
       row.setAttribute('data-fish', fish);
       row.setAttribute('data-tug', tugTypes[fish]);
       row.setAttribute('data-min', hookTimes[fish].min);
-      row.setAttribute('data-max', hookTimes[fish].max);
+      row.setAttribute('data-max', hookTimes[fish].max); // Add the row to the table
 
-      // Add the row to the table
       const table = this.element.querySelector('#fisher-table');
       table.appendChild(row);
     }
@@ -11753,11 +11727,10 @@ class FisherUI {
   stopFishing() {
     this.stopTimers();
     this.fishing = false;
-
     this.animationFrame = null;
   }
-}
 
+}
 ;// CONCATENATED MODULE: ./ui/fisher/static-data.ts
 // Auto-generated from gen_fisher_data.py
 // DO NOT EDIT THIS FILE DIRECTLY
@@ -32716,7 +32689,6 @@ const data = {
 
 ;// CONCATENATED MODULE: ./ui/fisher/seabase.js
 
-
 class SeaBase {
   constructor(options) {
     this._dbName = 'seabase';
@@ -32732,16 +32704,14 @@ class SeaBase {
     // However, we want the real capitalization to use for UI so can't
     // lowercase it in the data unless we made another copy.
     const lcVal = val.toLowerCase();
-    return Object.keys(obj).find((key) => {
-      if (Array.isArray(obj[key]))
-        return obj[key].some((subVal) => subVal.toLowerCase() === lcVal);
+    return Object.keys(obj).find(key => {
+      if (Array.isArray(obj[key])) return obj[key].some(subVal => subVal.toLowerCase() === lcVal);
       return obj[key].toLowerCase() === lcVal;
     });
   }
 
   firstIfArray(obj) {
-    if (Array.isArray(obj))
-      return obj[0];
+    if (Array.isArray(obj)) return obj[0];
     return obj;
   }
 
@@ -32749,34 +32719,29 @@ class SeaBase {
     return new Promise((resolve, reject) => {
       const req = window.indexedDB.open(this._dbName, this._dbVersion);
 
-      req.onsuccess = (event) => {
+      req.onsuccess = event => {
         resolve(req.result);
       };
 
-      req.onerror = (event) => {
+      req.onerror = event => {
         reject(req.error);
       };
 
-      req.onupgradeneeded = (event) => {
+      req.onupgradeneeded = event => {
         const db = event.target.result;
         const tx = event.target.transaction;
         let objectStore;
+        if (!db.objectStoreNames.contains(this._storeName)) objectStore = db.createObjectStore(this._storeName, {
+          autoIncrement: true
+        });else objectStore = tx.objectStore(this._storeName);
+        if (!objectStore.indexNames.contains('fish')) objectStore.createIndex('fish', 'fish', {
+          unique: false
+        });
+        if (!objectStore.indexNames.contains('fishbaitchum')) objectStore.createIndex('fishbaitchum', ['fish', 'bait', 'chum'], {
+          unique: false
+        });
 
-        if (!db.objectStoreNames.contains(this._storeName))
-          objectStore = db.createObjectStore(this._storeName, { autoIncrement: true });
-        else
-          objectStore = tx.objectStore(this._storeName);
-
-
-        if (!objectStore.indexNames.contains('fish'))
-          objectStore.createIndex('fish', 'fish', { unique: false });
-
-
-        if (!objectStore.indexNames.contains('fishbaitchum'))
-          objectStore.createIndex('fishbaitchum', ['fish', 'bait', 'chum'], { unique: false });
-
-
-        tx.oncomplete = (event) => {
+        tx.oncomplete = event => {
           resolve(db);
         };
       };
@@ -32791,66 +32756,48 @@ class SeaBase {
     // first, calculate IQR to get a threshold for outliers
     let q1;
     let q3;
-
     times.sort((a, b) => {
       return a - b;
-    });
+    }); // if there's less than 5 items, just assume it's legit
 
-    // if there's less than 5 items, just assume it's legit
     if (times.length < 5) {
       return {
         low: times[0],
-        high: times[times.length - 1],
+        high: times[times.length - 1]
       };
-    }
-
-    // find q2 (median)
+    } // find q2 (median)
     // we only need the index for the median
-    const q2Index = Math.floor(times.length / 2);
 
-    // find q1 (median of first half)
+
+    const q2Index = Math.floor(times.length / 2); // find q1 (median of first half)
+
     const q1Index = Math.floor(q2Index / 2);
+    if (q2Index % 2 || q2Index === 0) q1 = times[q1Index];else q1 = (times[q1Index] + times[q1Index - 1]) / 2; // find q2 (median of second half)
 
-    if (q2Index % 2 || q2Index === 0)
-      q1 = times[q1Index];
-    else
-      q1 = (times[q1Index] + times[q1Index - 1]) / 2;
-
-
-    // find q2 (median of second half)
     const q3Index = q1Index + q2Index;
+    if (q3Index % 2 || q2Index === 0) q3 = times[q3Index];else q3 = (times[q3Index] + times[q3Index - 1]) / 2;
+    const iqr = q3 - q1; // use these to calculate thresholds for outliers
 
-    if (q3Index % 2 || q2Index === 0)
-      q3 = times[q3Index];
-    else
-      q3 = (times[q3Index] + times[q3Index - 1]) / 2;
-
-
-    const iqr = q3 - q1;
-
-    // use these to calculate thresholds for outliers
     return {
       low: q1 - iqr * 1.5,
-      high: q3 + iqr * 1.5,
+      high: q3 + iqr * 1.5
     };
   }
 
   normalizeHooks(times) {
     const thresholds = this.getIQRThresholds(times);
-
     let min;
     let max;
-    let i;
+    let i; // Iterate forward until a suitable minimum
 
-    // Iterate forward until a suitable minimum
     for (i = 0; i < times.length; i++) {
       if (times[i] >= thresholds.low) {
         min = times[i];
         break;
       }
-    }
+    } // Iterate backward until a suitable maximum
 
-    // Iterate backward until a suitable maximum
+
     for (i = times.length - 1; i >= 0; i--) {
       if (times[i] <= thresholds.high) {
         max = times[i];
@@ -32860,32 +32807,27 @@ class SeaBase {
 
     return {
       min: min,
-      max: max,
+      max: max
     };
   }
 
   addCatch(data) {
     // Add a catch to the database
-    let commit = true;
+    let commit = true; // Make sure we have complete data before recording
 
-    // Make sure we have complete data before recording
     const keys = ['fish', 'bait', 'place', 'castTimestamp', 'hookTime', 'reelTime', 'chum', 'snagging'];
 
     for (const index in keys) {
-      if (!Object.prototype.hasOwnProperty.call(data, keys[index]) ||
-          data[keys[index]] === null) {
+      if (!Object.prototype.hasOwnProperty.call(data, keys[index]) || data[keys[index]] === null) {
         commit = false;
         console.log(keys[index] + 'missing in catch');
       }
     }
 
-    if (!commit)
-      return false;
-
-    this.getConnection().then((db) => {
+    if (!commit) return false;
+    this.getConnection().then(db => {
       const tx = db.transaction(this._storeName, 'readwrite');
       const store = tx.objectStore(this._storeName);
-
       store.add(data);
     });
   }
@@ -32897,15 +32839,15 @@ class SeaBase {
     // returned, even if looking up by another name in its list.
     // This lets getPlace("german grammar used only when casting")
     // return the correct place name to display in the ui.
-    let info;
-    // Value can be one of three things
+    let info; // Value can be one of three things
+
     if (typeof value === 'object' && value !== null) {
       // 1. Object with id and/or name
       // If we have one and not the other, fill in the other
       if (value.id && !value.name) {
         info = {
           id: value.id,
-          name: this.firstIfArray(static_data[lookup][this.parserLang][value.id]),
+          name: this.firstIfArray(static_data[lookup][this.parserLang][value.id])
         };
       } else if (!value.id && value.name) {
         // Return the first / primary name regardless of what is passed in
@@ -32913,7 +32855,7 @@ class SeaBase {
         const key = this.findKey(static_data[lookup][this.parserLang], value.name);
         info = {
           id: key,
-          name: this.firstIfArray(static_data[lookup][this.parserLang][key]),
+          name: this.firstIfArray(static_data[lookup][this.parserLang][key])
         };
       } else {
         info = value;
@@ -32924,13 +32866,13 @@ class SeaBase {
       const key = this.findKey(static_data[lookup][this.parserLang], value);
       info = {
         id: key,
-        name: this.firstIfArray(static_data[lookup][this.parserLang][key]),
+        name: this.firstIfArray(static_data[lookup][this.parserLang][key])
       };
     } else {
       // 3. Number with the ID
       info = {
         id: value,
-        name: this.firstIfArray(static_data[lookup][this.parserLang][value]),
+        name: this.firstIfArray(static_data[lookup][this.parserLang][value])
       };
     }
 
@@ -32939,59 +32881,48 @@ class SeaBase {
 
   getFish(fish) {
     const result = this.getInfo('fish', fish);
-    if (!result.id || !result.name)
-      console.log('failed to look up fish: ' + fish);
+    if (!result.id || !result.name) console.log('failed to look up fish: ' + fish);
     return result;
   }
 
   getBait(bait) {
     const result = this.getInfo('tackle', bait);
-    if (!result.id || !result.name)
-      console.log('failed to look up bait: ' + bait);
+    if (!result.id || !result.name) console.log('failed to look up bait: ' + bait);
     return result;
   }
 
   getPlace(place) {
     const result = this.getInfo('places', place);
-    if (!result.id || !result.name)
-      console.log('failed to look up place: ' + place);
+    if (!result.id || !result.name) console.log('failed to look up place: ' + place);
     return result;
   }
 
   getFishForPlace(place) {
     // Get place object
-    const placeObject = this.getPlace(place);
+    const placeObject = this.getPlace(place); // Get fish IDs for place ID
 
-    // Get fish IDs for place ID
-    const fishList = static_data.placefish[placeObject.id];
+    const fishList = static_data.placefish[placeObject.id]; // Get fish names for IDs
 
-    // Get fish names for IDs
     const placeFish = [];
-    for (const fishID in fishList)
-      placeFish.push(this.getFish(fishList[fishID]));
 
+    for (const fishID in fishList) placeFish.push(this.getFish(fishList[fishID]));
 
     return placeFish;
   }
 
   queryHookTimes(index, fish, bait, chum) {
     const times = [];
-
     return new Promise((resolve, reject) => {
-      index.openCursor(IDBKeyRange.only([fish.id.toString(), bait.id, chum ? 1 : 0]))
-        .onsuccess = (event) => {
-          const cursor = event.target.result;
+      index.openCursor(IDBKeyRange.only([fish.id.toString(), bait.id, chum ? 1 : 0])).onsuccess = event => {
+        const cursor = event.target.result;
 
-          if (cursor) {
-            times.push(cursor.value.hookTime);
-            if (times.length < this.options.IQRHookQuantity)
-              cursor.continue();
-            else
-              resolve(times);
-          } else {
-            resolve(times);
-          }
-        };
+        if (cursor) {
+          times.push(cursor.value.hookTime);
+          if (times.length < this.options.IQRHookQuantity) cursor.continue();else resolve(times);
+        } else {
+          resolve(times);
+        }
+      };
     });
   }
 
@@ -33003,14 +32934,15 @@ class SeaBase {
     }
 
     return new Promise((resolve, reject) => {
-      this.getConnection().then((db) => {
+      this.getConnection().then(db => {
         const tx = db.transaction(this._storeName, 'readwrite');
         const store = tx.objectStore(this._storeName);
         const index = store.index('fishbaitchum');
-
-        this.queryHookTimes(index, fish, bait, chum).then((times) => {
-          if (!times.length)
-            resolve({ min: undefined, max: undefined });
+        this.queryHookTimes(index, fish, bait, chum).then(times => {
+          if (!times.length) resolve({
+            min: undefined,
+            max: undefined
+          });
           resolve(this.normalizeHooks(times));
         });
       });
@@ -33019,17 +32951,13 @@ class SeaBase {
 
   queryTug(index, fish) {
     const reelTimes = [];
-
     return new Promise((resolve, reject) => {
-      index.openCursor(IDBKeyRange.only(fish.id.toString())).onsuccess = (event) => {
+      index.openCursor(IDBKeyRange.only(fish.id.toString())).onsuccess = event => {
         const cursor = event.target.result;
 
         if (cursor) {
           reelTimes.push(cursor.value.reelTime);
-          if (reelTimes.length < this.options.IQRTugQuantity)
-            cursor.continue();
-          else
-            resolve(reelTimes);
+          if (reelTimes.length < this.options.IQRTugQuantity) cursor.continue();else resolve(reelTimes);
         } else {
           resolve(reelTimes);
         }
@@ -33039,60 +32967,44 @@ class SeaBase {
 
   getTug(fish) {
     return new Promise((resolve, reject) => {
-      this.getConnection().then((db) => {
+      this.getConnection().then(db => {
         const tx = db.transaction(this._storeName, 'readwrite');
         const store = tx.objectStore(this._storeName);
         const index = store.index('fish');
-
         const tug = static_data.tugs[fish.id];
+
         if (tug) {
           resolve(tug);
         } else {
-          this.queryTug(index, fish).then((reelTimes) => {
-            if (!reelTimes.length)
-              resolve(0);
-
+          this.queryTug(index, fish).then(reelTimes => {
+            if (!reelTimes.length) resolve(0);
             const thresholds = this.getIQRThresholds(reelTimes);
-
             let sum = 0;
             let validValues = 0;
-
-            reelTimes.forEach((time) => {
+            reelTimes.forEach(time => {
               if (time >= thresholds.low && time <= thresholds.high) {
                 sum += time;
                 validValues++;
               }
             });
-
             const average = sum / validValues;
-            let tug;
-
-            // Small: <8000
+            let tug; // Small: <8000
             // Medium: >8000, <10700
             // Large: >10700
             // 1 small, 2 medium, 3 large
-            if (average < 8000)
-              tug = 1;
-            else if (average > 10700)
-              tug = 3;
-            else
-              tug = 2;
 
-
+            if (average < 8000) tug = 1;else if (average > 10700) tug = 3;else tug = 2;
             resolve(tug);
           });
         }
       });
     });
   }
-}
 
+}
 // EXTERNAL MODULE: ./resources/user_config.ts
 var user_config = __webpack_require__(970);
 ;// CONCATENATED MODULE: ./ui/fisher/fisher.js
-
-
-
 
 
 
@@ -33106,37 +33018,43 @@ const Options = {
     'unknown': 'rgba(0, 0, 0, 0.5)',
     'light': 'rgba(99, 212, 152, 0.5)',
     'medium': 'rgba(245, 241, 32, 0.5)',
-    'heavy': 'rgba(250, 15, 19, 0.5)',
-  },
+    'heavy': 'rgba(250, 15, 19, 0.5)'
+  }
 };
-
 let gFisher;
 
 class Fisher {
   constructor(element) {
     this.element = element;
-
     this.zone = null;
     this.job = null;
-
-    this.baseBait = { id: null, name: null };
-    this.moochBait = { id: null, name: null };
-    this.lastCatch = { id: null, name: null };
-    this.place = { id: null, name: null };
+    this.baseBait = {
+      id: null,
+      name: null
+    };
+    this.moochBait = {
+      id: null,
+      name: null
+    };
+    this.lastCatch = {
+      id: null,
+      name: null
+    };
+    this.place = {
+      id: null,
+      name: null
+    };
     this.fishing = false;
     this.mooching = false;
     this.snagging = false;
     this.chum = false;
     this.chumOnCatch = false;
-
     this.placeFish = null;
     this.hookTimes = null;
     this.tugTypes = null;
-
     this.castStart = null;
     this.castEnd = null;
     this.castGet = null;
-
     this.regex = {
       // Localized strings from: https://xivapi.com/LogMessage?pretty=1&columns=ID,Text_de,Text_en,Text_fr,Text_ja&ids=1110,1111,1112,1113,1115,1116,1117,1118,1119,1120,1121,1127,1129,3511,3512,3515,3516,3525
       // 1110: cast
@@ -33157,7 +33075,6 @@ class Fisher {
       // 3515: nocatch (lose lure)
       // 3516: nocatch (anti-bot)
       // 3525: nocatch (inventory full)
-
       'de': {
         // Note, the preposition in German is stored in the cast string, so is ignored here.
         // We could attempt to trim prepositions in the fishing data and then include all
@@ -33173,7 +33090,7 @@ class Fisher {
         'snaggain': /00:08ae:⇒ You gain the effect of Reißen/,
         'snagfade': /00:08b0:You lose the effect of Reßien/,
         'quit': /00:08c3:(?:Du hast das Fischen beendet\.|Das Fischen wurde abgebrochen)/,
-        'discovered': /00:08c3:Die neue Angelstelle ([^\w\s\-\'\u00c4-\u00fc].+ ) wurde in deinem Fischer-Notizbuch vermerkt\./,
+        'discovered': /00:08c3:Die neue Angelstelle ([^\w\s\-\'\u00c4-\u00fc].+ ) wurde in deinem Fischer-Notizbuch vermerkt\./
       },
       'en': {
         'undiscovered': /undiscovered fishing hole/,
@@ -33187,7 +33104,7 @@ class Fisher {
         'snaggain': /00:08ae:⇒ You gain the effect of Snagging/,
         'snagfade': /00:08b0:You lose the effect of Snagging/,
         'quit': /00:08c3:(?:(?:[\w']\.?)(?:[\w'\s]+\.?)? put(?:s?) away (?:your|his|her) rod\.|Fishing canceled)/,
-        'discovered': /00:08c3:(?:Data on ([\w\s'&()]+)) is added to your fishing log\./,
+        'discovered': /00:08c3:(?:Data on ([\w\s'&()]+)) is added to your fishing log\./
       },
       'fr': {
         'undiscovered': /Zone de pêche inconnue/,
@@ -33197,7 +33114,7 @@ class Fisher {
         'nocatch': /00:08c3:(?:L'appât a disparu|Vous avez perdu votre|L'appât a disparu|Le poisson a réussi à se défaire de l'hameçon|Le fil s'est cassé|Vous n'avez pas eu de touche|Vous n'avez pas réussi à ferrer le poisson|Vous arrêtez de pêcher|Le poisson s'est enfui et a emporté avec lui votre|Les poissons sont devenus méfiants|Vous avez pêché .+, mais ne pouvez en posséder davantage et l'avez donc relâché)/,
         'mooch': /00:08c3:Vous essayez de pêcher au vif avec/,
         'quit': /00:08c3:(?:Vous arrêtez de pêcher\.|Pêche interrompue)/,
-        'discovered': /00:08c3:Vous notez le banc de poissons “([\w\s\-\'\(\)\u00b0\u00c0-\u017f]+)” dans votre carnet\./,
+        'discovered': /00:08c3:Vous notez le banc de poissons “([\w\s\-\'\(\)\u00b0\u00c0-\u017f]+)” dans votre carnet\./
       },
       'ja': {
         'undiscovered': /未知の釣り場/,
@@ -33207,7 +33124,7 @@ class Fisher {
         'nocatch': /00:08c3:([\w\s-']+)?(?:いつの間にか釣り餌をとられてしまった……。|いつの間にか.+をロストしてしまった！|いつの間にか釣り餌をとられてしまった……。|釣り針にかかった魚に逃げられてしまった……。|ラインブレイク！！|何もかからなかった……。\n\n釣り餌が釣り場にあってないようだ。|何もかからなかった……。|.+は釣りを中断した。|魚に逃げられ、.+をロストしてしまった……。|魚たちに警戒されてしまったようだ……|.+を釣り上げたが、これ以上持てないためリリースした。)/,
         'mooch': /00:08c3:(?:[\w\s-']+)は釣り上げた.+を慎重に投げ込み、泳がせ釣りを試みた。/,
         'quit': /00:08c3:(?:[\w\s-']+)?(?:は釣りを終えた。|戦闘不能になったため、釣りが中断されました。|は釣りを終えた。|敵から攻撃を受けたため、釣りが中断されました。)/,
-        'discovered': /00:08c3:釣り手帳に新しい釣り場「([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf\d\uff1a]+)」の情報を記録した！/,
+        'discovered': /00:08c3:釣り手帳に新しい釣り場「([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf\d\uff1a]+)」の情報を記録した！/
       },
       'cn': {
         'undiscovered': /未知钓场/,
@@ -33221,7 +33138,7 @@ class Fisher {
         'snaggain': /00:08ae:(⇒ )?(?:[\w\s-'\u4e00-\u9fa5·]+)附加了“.*钓组.*”效果。/,
         'snagfade': /00:08b0:(?:[\w\s-'\u4e00-\u9fa5·]+)的“.*钓组.*”状态效果消失了。/,
         'quit': /00:08c3:(?:[\w\s-'\u4e00-\u9fa5·]+)?(?:收回了鱼线。|陷入了战斗不能状态，钓鱼中断。|收回了鱼线。|受到了敌人的攻击，钓鱼中断。)/,
-        'discovered': /00:08c3:将新钓场.*([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf·]+\d*).*记录到了钓鱼笔记中！/,
+        'discovered': /00:08c3:将新钓场.*([\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9faf·]+\d*).*记录到了钓鱼笔记中！/
       },
       'ko': {
         'undiscovered': /미지의 낚시터/,
@@ -33235,70 +33152,67 @@ class Fisher {
         'snaggain': /00:08ae:(?:⇒ [\w'가-힣]+)(?:이|가) 갈고리 낚시 효과를 받았습니다\./,
         'snagfade': /00:08b0:(?:[\w'가-힣]+)의 갈고리 낚시 효과가 사라졌습니다\./,
         'quit': /00:08c3:(?:(?:[\w'가-힣]+) 님이 낚시를 마쳤습니다.|전투불능이 되어 낚시가 중단되었습니다\.|적의 공격을 받아 낚시가 중단되었습니다\.)/,
-        'discovered': /00:08c3:낚시 수첩에 새로운 낚시터 (?:[\s\d':가-힣]+)의 정보를 기록했습니다!/,
-      },
+        'discovered': /00:08c3:낚시 수첩에 새로운 낚시터 (?:[\s\d':가-힣]+)의 정보를 기록했습니다!/
+      }
     };
-
     this.ui = new FisherUI(element, Options);
     this.seaBase = new SeaBase(Options);
   }
 
   getActiveBait() {
-    if (this.mooching)
-      return this.moochBait;
-
+    if (this.mooching) return this.moochBait;
     return this.baseBait;
   }
 
   updateFishData() {
     // We can only know data for both of these
     if (!this.place || !this.getActiveBait()) {
-      return new Promise(((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         resolve();
-      }));
+      });
     }
 
     const _this = this;
+
     this.hookTimes = {};
-    this.tugTypes = {};
+    this.tugTypes = {}; // Get the list of fish available at this particular place
 
-    // Get the list of fish available at this particular place
-    this.placeFish = this.seaBase.getFishForPlace(this.place);
+    this.placeFish = this.seaBase.getFishForPlace(this.place); // We should update twice for each fish, one for hook times and one for tugs
 
-    // We should update twice for each fish, one for hook times and one for tugs
     let queue = this.placeFish.length * 2;
-
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       for (const index in _this.placeFish) {
-        const fish = _this.placeFish[index];
+        const fish = _this.placeFish[index]; // Get the hook min and max times for the fish/bait/chum combo
 
-        // Get the hook min and max times for the fish/bait/chum combo
-        _this.seaBase.getHookTimes(fish, _this.getActiveBait(), _this.chum)
-          .then((hookTimes) => {
-            _this.hookTimes[fish.name] = hookTimes;
-            queue -= 1;
-            if (!queue) {
-              _this.ui.redrawFish(_this.hookTimes, _this.tugTypes);
-              resolve();
-            }
-          });
-
-        // Get the tug type for the fish
-        _this.seaBase.getTug(fish).then((tug) => {
-          _this.tugTypes[fish.name] = tug;
+        _this.seaBase.getHookTimes(fish, _this.getActiveBait(), _this.chum).then(hookTimes => {
+          _this.hookTimes[fish.name] = hookTimes;
           queue -= 1;
+
           if (!queue) {
             _this.ui.redrawFish(_this.hookTimes, _this.tugTypes);
+
+            resolve();
+          }
+        }); // Get the tug type for the fish
+
+
+        _this.seaBase.getTug(fish).then(tug => {
+          _this.tugTypes[fish.name] = tug;
+          queue -= 1;
+
+          if (!queue) {
+            _this.ui.redrawFish(_this.hookTimes, _this.tugTypes);
+
             resolve();
           }
         });
       }
-    }));
+    });
   }
 
   handleBait(bait) {
-    let name = '';
-    // Mooching: bait is the last fish
+    let name = ''; // Mooching: bait is the last fish
+
     if (this.mooching) {
       this.moochBait = bait;
       name = bait.name;
@@ -33306,6 +33220,7 @@ class Fisher {
       this.baseBait = this.seaBase.getBait(bait);
       name = this.baseBait.name;
     }
+
     this.ui.setBait(name);
   }
 
@@ -33314,28 +33229,27 @@ class Fisher {
     this.castStart = new Date();
     this.castEnd = null;
     this.castGet = null;
-    this.fishing = true;
+    this.fishing = true; // undiscovered fishing hole
 
-    // undiscovered fishing hole
     if (this.regex[Options.ParserLanguage]['undiscovered'].test(place)) {
       // store this for now
       // if we catch anything we'll pull the data then
       // "data on 'x' is added to your fishing log" is printed before the catch
       this.place = place;
-      this.ui.setPlace(this.place);
-      // clear previous fish data (if any)
-      this.ui.redrawFish({}, {});
+      this.ui.setPlace(this.place); // clear previous fish data (if any)
 
+      this.ui.redrawFish({}, {});
       this.ui.startFishing();
       return;
-    }
-    // Set place (set this every cast because it can change during ocean fishing)
-    this.place = this.seaBase.getPlace(place);
-    // This lookup could fail and, for German,
+    } // Set place (set this every cast because it can change during ocean fishing)
+
+
+    this.place = this.seaBase.getPlace(place); // This lookup could fail and, for German,
     // this.place.name may differ from place
     // due to differing cast vs location names.
-    if (this.place.id)
-      this.ui.setPlace(this.place.name);
+
+    if (this.place.id) this.ui.setPlace(this.place.name);
+
     const _this = this;
 
     this.updateFishData().then(() => {
@@ -33359,14 +33273,15 @@ class Fisher {
         'bait': this.getActiveBait().id,
         'place': this.place.id,
         'castTimestamp': +this.castStart,
-        'hookTime': (this.castEnd - this.castStart),
-        'reelTime': (this.castGet - this.castEnd),
+        'hookTime': this.castEnd - this.castStart,
+        'reelTime': this.castGet - this.castEnd,
         'chum': this.chumOnCatch ? 1 : 0,
-        'snagging': this.snagging,
+        'snagging': this.snagging
       });
     }
 
     this.chumOnCatch = false;
+
     if (this.mooching) {
       this.handleBait(this.baseBait);
       this.mooching = false;
@@ -33390,7 +33305,6 @@ class Fisher {
 
   handleMooch() {
     this.mooching = true;
-
     this.handleBait(this.lastCatch);
     this.handleCast(this.place);
   }
@@ -33422,12 +33336,11 @@ class Fisher {
   }
 
   handleDiscover(place) {
-    this.place = this.seaBase.getPlace(place);
-    // This lookup could fail and, for German,
+    this.place = this.seaBase.getPlace(place); // This lookup could fail and, for German,
     // this.place.name may differ from place
     // due to differing cast vs location names.
-    if (this.place.id)
-      this.ui.setPlace(this.place.name);
+
+    if (this.place.id) this.ui.setPlace(this.place.name);
     this.updateFishData();
   }
 
@@ -33436,28 +33349,60 @@ class Fisher {
 
     for (const type in this.regex[Options.ParserLanguage]) {
       result = this.regex[Options.ParserLanguage][type].exec(log);
+
       if (result) {
         switch (type) {
-        // case 'bait': this.handleBait(result[1]); break;
-        case 'cast': this.handleCast(result[1]); break;
-        case 'bite': this.handleBite(); break;
-        case 'catch': this.handleCatch(result[1]); break;
-        case 'nocatch': this.handleNoCatch(); break;
-        case 'mooch': this.handleMooch(); break;
-        case 'snaggain': this.handleSnagGain(); break;
-        case 'snagfade': this.handleSnagFade(); break;
-        case 'chumgain': this.handleChumGain(); break;
-        case 'chumfade': this.handleChumFade(); break;
-        case 'quit': this.handleQuit(); break;
-        case 'discovered': this.handleDiscover(result[1]); break;
+          // case 'bait': this.handleBait(result[1]); break;
+          case 'cast':
+            this.handleCast(result[1]);
+            break;
+
+          case 'bite':
+            this.handleBite();
+            break;
+
+          case 'catch':
+            this.handleCatch(result[1]);
+            break;
+
+          case 'nocatch':
+            this.handleNoCatch();
+            break;
+
+          case 'mooch':
+            this.handleMooch();
+            break;
+
+          case 'snaggain':
+            this.handleSnagGain();
+            break;
+
+          case 'snagfade':
+            this.handleSnagFade();
+            break;
+
+          case 'chumgain':
+            this.handleChumGain();
+            break;
+
+          case 'chumfade':
+            this.handleChumFade();
+            break;
+
+          case 'quit':
+            this.handleQuit();
+            break;
+
+          case 'discovered':
+            this.handleDiscover(result[1]);
+            break;
         }
       }
     }
   }
 
   OnLogEvent(e) {
-    if (this.job === 'FSH')
-      e.detail.logs.forEach(this.parseLine, this);
+    if (this.job === 'FSH') e.detail.logs.forEach(this.parseLine, this);
   }
 
   OnChangeZone(e) {
@@ -33468,32 +33413,29 @@ class Fisher {
 
   OnPlayerChange(e) {
     this.job = e.detail.job;
+
     if (this.job === 'FSH') {
       this.element.style.display = 'block';
-      if (!this.fishing)
-        this.handleBait(e.detail.bait);
+      if (!this.fishing) this.handleBait(e.detail.bait);
     } else {
       this.element.style.display = 'none';
     }
   }
+
 }
 
 user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('fisher', Options, () => {
   gFisher = new Fisher(document.getElementById('fisher'));
-
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onLogEvent', e => {
     gFisher.OnLogEvent(e);
   });
-
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('ChangeZone', e => {
     gFisher.OnChangeZone(e);
   });
-
-  (0,overlay_plugin_api/* addOverlayListener */.PS)('onPlayerChangedEvent', (e) => {
+  (0,overlay_plugin_api/* addOverlayListener */.PS)('onPlayerChangedEvent', e => {
     gFisher.OnPlayerChange(e);
   });
 });
-
 })();
 
 /******/ })()

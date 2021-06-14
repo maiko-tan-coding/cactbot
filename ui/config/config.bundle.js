@@ -2,6 +2,3271 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 687:
+/***/ ((__unused_webpack___webpack_module__, __unused_webpack___webpack_exports__, __webpack_require__) => {
+
+
+// UNUSED EXPORTS: default
+
+// EXTERNAL MODULE: ./resources/overlay_plugin_api.ts
+var overlay_plugin_api = __webpack_require__(906);
+// EXTERNAL MODULE: ./resources/regexes.ts
+var regexes = __webpack_require__(201);
+// EXTERNAL MODULE: ./resources/user_config.ts
+var user_config = __webpack_require__(970);
+// EXTERNAL MODULE: ./resources/zone_info.ts
+var zone_info = __webpack_require__(810);
+// EXTERNAL MODULE: ./resources/zone_id.ts
+var zone_id = __webpack_require__(438);
+;// CONCATENATED MODULE: ./resources/content_list.ts
+
+// Ordered as per duty finder.  This is intended to be used as ordering for
+// any ui that is dealing with multiple zones / triggers.
+//
+// These are not things that cactbot necessarily supports, but things that it
+// theoretically could be supporting in the future with raidboss and oopsy.
+const contentList = [
+    // General (cactbot custom zone id)
+    zone_id/* default.MatchAll */.Z.MatchAll,
+    // Dungeons (A Realm Reborn)
+    zone_id/* default.Sastasha */.Z.Sastasha,
+    zone_id/* default.TheTamTaraDeepcroft */.Z.TheTamTaraDeepcroft,
+    zone_id/* default.CopperbellMines */.Z.CopperbellMines,
+    zone_id/* default.Halatali */.Z.Halatali,
+    zone_id/* default.TheThousandMawsOfTotoRak */.Z.TheThousandMawsOfTotoRak,
+    zone_id/* default.HaukkeManor */.Z.HaukkeManor,
+    zone_id/* default.BrayfloxsLongstop */.Z.BrayfloxsLongstop,
+    zone_id/* default.TheSunkenTempleOfQarn */.Z.TheSunkenTempleOfQarn,
+    zone_id/* default.CuttersCry */.Z.CuttersCry,
+    zone_id/* default.TheStoneVigil */.Z.TheStoneVigil,
+    zone_id/* default.DzemaelDarkhold */.Z.DzemaelDarkhold,
+    zone_id/* default.TheAurumVale */.Z.TheAurumVale,
+    zone_id/* default.TheWanderersPalace */.Z.TheWanderersPalace,
+    zone_id/* default.CastrumMeridianum */.Z.CastrumMeridianum,
+    zone_id/* default.ThePraetorium */.Z.ThePraetorium,
+    zone_id/* default.AmdaporKeep */.Z.AmdaporKeep,
+    zone_id/* default.PharosSirius */.Z.PharosSirius,
+    zone_id/* default.CopperbellMinesHard */.Z.CopperbellMinesHard,
+    zone_id/* default.HaukkeManorHard */.Z.HaukkeManorHard,
+    zone_id/* default.TheLostCityOfAmdapor */.Z.TheLostCityOfAmdapor,
+    zone_id/* default.HalataliHard */.Z.HalataliHard,
+    zone_id/* default.BrayfloxsLongstopHard */.Z.BrayfloxsLongstopHard,
+    zone_id/* default.HullbreakerIsle */.Z.HullbreakerIsle,
+    zone_id/* default.TheTamTaraDeepcroftHard */.Z.TheTamTaraDeepcroftHard,
+    zone_id/* default.TheStoneVigilHard */.Z.TheStoneVigilHard,
+    zone_id/* default.Snowcloak */.Z.Snowcloak,
+    zone_id/* default.SastashaHard */.Z.SastashaHard,
+    zone_id/* default.TheSunkenTempleOfQarnHard */.Z.TheSunkenTempleOfQarnHard,
+    zone_id/* default.TheKeeperOfTheLake */.Z.TheKeeperOfTheLake,
+    zone_id/* default.TheWanderersPalaceHard */.Z.TheWanderersPalaceHard,
+    zone_id/* default.AmdaporKeepHard */.Z.AmdaporKeepHard,
+    // Dungeons (Heavensward)
+    zone_id/* default.TheDuskVigil */.Z.TheDuskVigil,
+    zone_id/* default.SohmAl */.Z.SohmAl,
+    zone_id/* default.TheAery */.Z.TheAery,
+    zone_id/* default.TheVault */.Z.TheVault,
+    zone_id/* default.TheGreatGubalLibrary */.Z.TheGreatGubalLibrary,
+    zone_id/* default.TheAetherochemicalResearchFacility */.Z.TheAetherochemicalResearchFacility,
+    zone_id/* default.Neverreap */.Z.Neverreap,
+    zone_id/* default.TheFractalContinuum */.Z.TheFractalContinuum,
+    zone_id/* default.SaintMociannesArboretum */.Z.SaintMociannesArboretum,
+    zone_id/* default.PharosSiriusHard */.Z.PharosSiriusHard,
+    zone_id/* default.TheAntitower */.Z.TheAntitower,
+    zone_id/* default.TheLostCityOfAmdaporHard */.Z.TheLostCityOfAmdaporHard,
+    zone_id/* default.SohrKhai */.Z.SohrKhai,
+    zone_id/* default.HullbreakerIsleHard */.Z.HullbreakerIsleHard,
+    zone_id/* default.Xelphatol */.Z.Xelphatol,
+    zone_id/* default.TheGreatGubalLibraryHard */.Z.TheGreatGubalLibraryHard,
+    zone_id/* default.BaelsarsWall */.Z.BaelsarsWall,
+    zone_id/* default.SohmAlHard */.Z.SohmAlHard,
+    // Dungeons (Stormblood)
+    zone_id/* default.TheSirensongSea */.Z.TheSirensongSea,
+    zone_id/* default.ShisuiOfTheVioletTides */.Z.ShisuiOfTheVioletTides,
+    zone_id/* default.BardamsMettle */.Z.BardamsMettle,
+    zone_id/* default.DomaCastle */.Z.DomaCastle,
+    zone_id/* default.CastrumAbania */.Z.CastrumAbania,
+    zone_id/* default.AlaMhigo */.Z.AlaMhigo,
+    zone_id/* default.KuganeCastle */.Z.KuganeCastle,
+    zone_id/* default.TheTempleOfTheFist */.Z.TheTempleOfTheFist,
+    zone_id/* default.TheDrownedCityOfSkalla */.Z.TheDrownedCityOfSkalla,
+    zone_id/* default.HellsLid */.Z.HellsLid,
+    zone_id/* default.TheFractalContinuumHard */.Z.TheFractalContinuumHard,
+    zone_id/* default.TheSwallowsCompass */.Z.TheSwallowsCompass,
+    zone_id/* default.TheBurn */.Z.TheBurn,
+    zone_id/* default.SaintMociannesArboretumHard */.Z.SaintMociannesArboretumHard,
+    zone_id/* default.TheGhimlytDark */.Z.TheGhimlytDark,
+    // Dungeons (Shadowbringers)
+    zone_id/* default.HolminsterSwitch */.Z.HolminsterSwitch,
+    zone_id/* default.DohnMheg */.Z.DohnMheg,
+    zone_id/* default.TheQitanaRavel */.Z.TheQitanaRavel,
+    zone_id/* default.MalikahsWell */.Z.MalikahsWell,
+    zone_id/* default.MtGulg */.Z.MtGulg,
+    zone_id/* default.Amaurot */.Z.Amaurot,
+    zone_id/* default.TheTwinning */.Z.TheTwinning,
+    zone_id/* default.AkadaemiaAnyder */.Z.AkadaemiaAnyder,
+    zone_id/* default.TheGrandCosmos */.Z.TheGrandCosmos,
+    zone_id/* default.AnamnesisAnyder */.Z.AnamnesisAnyder,
+    zone_id/* default.TheHeroesGauntlet */.Z.TheHeroesGauntlet,
+    zone_id/* default.MatoyasRelict */.Z.MatoyasRelict,
+    zone_id/* default.Paglthan */.Z.Paglthan,
+    // Guildhests
+    zone_id/* default.BasicTrainingEnemyParties */.Z.BasicTrainingEnemyParties,
+    zone_id/* default.UnderTheArmor */.Z.UnderTheArmor,
+    zone_id/* default.BasicTrainingEnemyStrongholds */.Z.BasicTrainingEnemyStrongholds,
+    zone_id/* default.HeroOnTheHalfShell */.Z.HeroOnTheHalfShell,
+    zone_id/* default.PullingPoisonPosies */.Z.PullingPoisonPosies,
+    zone_id/* default.StingingBack */.Z.StingingBack,
+    zone_id/* default.AllsWellThatEndsInTheWell */.Z.AllsWellThatEndsInTheWell,
+    zone_id/* default.FlickingSticksAndTakingNames */.Z.FlickingSticksAndTakingNames,
+    zone_id/* default.MoreThanAFeeler */.Z.MoreThanAFeeler,
+    zone_id/* default.AnnoyTheVoid */.Z.AnnoyTheVoid,
+    zone_id/* default.ShadowAndClaw */.Z.ShadowAndClaw,
+    zone_id/* default.LongLiveTheQueen */.Z.LongLiveTheQueen,
+    zone_id/* default.WardUp */.Z.WardUp,
+    zone_id/* default.SolemnTrinity */.Z.SolemnTrinity,
+    // Trials (A Realm Reborn)
+    zone_id/* default.TheBowlOfEmbers */.Z.TheBowlOfEmbers,
+    zone_id/* default.TheNavel */.Z.TheNavel,
+    zone_id/* default.TheHowlingEye */.Z.TheHowlingEye,
+    zone_id/* default.CapeWestwind */.Z.CapeWestwind,
+    zone_id/* default.TheChrysalis */.Z.TheChrysalis,
+    zone_id/* default.TheStepsOfFaith */.Z.TheStepsOfFaith,
+    zone_id/* default.ARelicRebornTheChimera */.Z.ARelicRebornTheChimera,
+    zone_id/* default.ARelicRebornTheHydra */.Z.ARelicRebornTheHydra,
+    zone_id/* default.BattleOnTheBigBridge */.Z.BattleOnTheBigBridge,
+    zone_id/* default.TheDragonsNeck */.Z.TheDragonsNeck,
+    zone_id/* default.BattleInTheBigKeep */.Z.BattleInTheBigKeep,
+    zone_id/* default.TheBowlOfEmbersHard */.Z.TheBowlOfEmbersHard,
+    zone_id/* default.TheHowlingEyeHard */.Z.TheHowlingEyeHard,
+    zone_id/* default.TheNavelHard */.Z.TheNavelHard,
+    zone_id/* default.ThornmarchHard */.Z.ThornmarchHard,
+    zone_id/* default.TheWhorleaterHard */.Z.TheWhorleaterHard,
+    zone_id/* default.TheStrikingTreeHard */.Z.TheStrikingTreeHard,
+    zone_id/* default.TheAkhAfahAmphitheatreHard */.Z.TheAkhAfahAmphitheatreHard,
+    zone_id/* default.UrthsFount */.Z.UrthsFount,
+    // High-end Trials (A Realm Reborn)
+    zone_id/* default.TheMinstrelsBalladUltimasBane */.Z.TheMinstrelsBalladUltimasBane,
+    zone_id/* default.TheHowlingEyeExtreme */.Z.TheHowlingEyeExtreme,
+    zone_id/* default.TheNavelExtreme */.Z.TheNavelExtreme,
+    zone_id/* default.TheBowlOfEmbersExtreme */.Z.TheBowlOfEmbersExtreme,
+    zone_id/* default.ThornmarchExtreme */.Z.ThornmarchExtreme,
+    zone_id/* default.TheWhorleaterExtreme */.Z.TheWhorleaterExtreme,
+    zone_id/* default.TheStrikingTreeExtreme */.Z.TheStrikingTreeExtreme,
+    zone_id/* default.TheAkhAfahAmphitheatreExtreme */.Z.TheAkhAfahAmphitheatreExtreme,
+    // Trials (Heavensward)
+    zone_id/* default.ThokAstThokHard */.Z.ThokAstThokHard,
+    zone_id/* default.TheLimitlessBlueHard */.Z.TheLimitlessBlueHard,
+    zone_id/* default.TheSingularityReactor */.Z.TheSingularityReactor,
+    zone_id/* default.TheFinalStepsOfFaith */.Z.TheFinalStepsOfFaith,
+    zone_id/* default.ContainmentBayS1T7 */.Z.ContainmentBayS1T7,
+    zone_id/* default.ContainmentBayP1T6 */.Z.ContainmentBayP1T6,
+    zone_id/* default.ContainmentBayZ1T9 */.Z.ContainmentBayZ1T9,
+    // High-end Trials (Heavensward)
+    zone_id/* default.TheLimitlessBlueExtreme */.Z.TheLimitlessBlueExtreme,
+    zone_id/* default.ThokAstThokExtreme */.Z.ThokAstThokExtreme,
+    zone_id/* default.TheMinstrelsBalladThordansReign */.Z.TheMinstrelsBalladThordansReign,
+    zone_id/* default.TheMinstrelsBalladNidhoggsRage */.Z.TheMinstrelsBalladNidhoggsRage,
+    zone_id/* default.ContainmentBayS1T7Extreme */.Z.ContainmentBayS1T7Extreme,
+    zone_id/* default.ContainmentBayP1T6Extreme */.Z.ContainmentBayP1T6Extreme,
+    zone_id/* default.ContainmentBayZ1T9Extreme */.Z.ContainmentBayZ1T9Extreme,
+    // Trials (Stormblood)
+    zone_id/* default.ThePoolOfTribute */.Z.ThePoolOfTribute,
+    zone_id/* default.Emanation */.Z.Emanation,
+    zone_id/* default.TheRoyalMenagerie */.Z.TheRoyalMenagerie,
+    zone_id/* default.CastrumFluminis */.Z.CastrumFluminis,
+    zone_id/* default.KuganeOhashi */.Z.KuganeOhashi,
+    zone_id/* default.TheGreatHunt */.Z.TheGreatHunt,
+    zone_id/* default.TheJadeStoa */.Z.TheJadeStoa,
+    zone_id/* default.HellsKier */.Z.HellsKier,
+    zone_id/* default.TheWreathOfSnakes */.Z.TheWreathOfSnakes,
+    // High-end Trials (Stormblood)
+    zone_id/* default.ThePoolOfTributeExtreme */.Z.ThePoolOfTributeExtreme,
+    zone_id/* default.EmanationExtreme */.Z.EmanationExtreme,
+    zone_id/* default.TheMinstrelsBalladShinryusDomain */.Z.TheMinstrelsBalladShinryusDomain,
+    zone_id/* default.TheMinstrelsBalladTsukuyomisPain */.Z.TheMinstrelsBalladTsukuyomisPain,
+    zone_id/* default.TheGreatHuntExtreme */.Z.TheGreatHuntExtreme,
+    zone_id/* default.TheJadeStoaExtreme */.Z.TheJadeStoaExtreme,
+    zone_id/* default.HellsKierExtreme */.Z.HellsKierExtreme,
+    zone_id/* default.TheWreathOfSnakesExtreme */.Z.TheWreathOfSnakesExtreme,
+    // Trials (Shadowbringers)
+    zone_id/* default.TheDancingPlague */.Z.TheDancingPlague,
+    zone_id/* default.TheCrownOfTheImmaculate */.Z.TheCrownOfTheImmaculate,
+    zone_id/* default.TheDyingGasp */.Z.TheDyingGasp,
+    zone_id/* default.CinderDrift */.Z.CinderDrift,
+    zone_id/* default.TheSeatOfSacrifice */.Z.TheSeatOfSacrifice,
+    zone_id/* default.CastrumMarinum */.Z.CastrumMarinum,
+    zone_id/* default.TheCloudDeck */.Z.TheCloudDeck,
+    // High-end Trials (Shadowbringers)
+    zone_id/* default.TheDancingPlagueExtreme */.Z.TheDancingPlagueExtreme,
+    zone_id/* default.TheCrownOfTheImmaculateExtreme */.Z.TheCrownOfTheImmaculateExtreme,
+    zone_id/* default.TheMinstrelsBalladHadessElegy */.Z.TheMinstrelsBalladHadessElegy,
+    zone_id/* default.CinderDriftExtreme */.Z.CinderDriftExtreme,
+    zone_id/* default.MemoriaMiseraExtreme */.Z.MemoriaMiseraExtreme,
+    zone_id/* default.TheSeatOfSacrificeExtreme */.Z.TheSeatOfSacrificeExtreme,
+    zone_id/* default.CastrumMarinumExtreme */.Z.CastrumMarinumExtreme,
+    zone_id/* default.TheCloudDeckExtreme */.Z.TheCloudDeckExtreme,
+    zone_id/* default.TheAkhAfahAmphitheatreUnreal */.Z.TheAkhAfahAmphitheatreUnreal,
+    zone_id/* default.TheNavelUnreal */.Z.TheNavelUnreal,
+    zone_id/* default.TheWhorleaterUnreal */.Z.TheWhorleaterUnreal,
+    // Alliance Raids (A Realm Reborn)
+    zone_id/* default.TheLabyrinthOfTheAncients */.Z.TheLabyrinthOfTheAncients,
+    zone_id/* default.SyrcusTower */.Z.SyrcusTower,
+    zone_id/* default.TheWorldOfDarkness */.Z.TheWorldOfDarkness,
+    // Raids (A Realm Reborn)
+    zone_id/* default.TheBindingCoilOfBahamutTurn1 */.Z.TheBindingCoilOfBahamutTurn1,
+    zone_id/* default.TheBindingCoilOfBahamutTurn2 */.Z.TheBindingCoilOfBahamutTurn2,
+    zone_id/* default.TheBindingCoilOfBahamutTurn3 */.Z.TheBindingCoilOfBahamutTurn3,
+    zone_id/* default.TheBindingCoilOfBahamutTurn4 */.Z.TheBindingCoilOfBahamutTurn4,
+    zone_id/* default.TheBindingCoilOfBahamutTurn5 */.Z.TheBindingCoilOfBahamutTurn5,
+    zone_id/* default.TheSecondCoilOfBahamutTurn1 */.Z.TheSecondCoilOfBahamutTurn1,
+    zone_id/* default.TheSecondCoilOfBahamutTurn2 */.Z.TheSecondCoilOfBahamutTurn2,
+    zone_id/* default.TheSecondCoilOfBahamutTurn3 */.Z.TheSecondCoilOfBahamutTurn3,
+    zone_id/* default.TheSecondCoilOfBahamutTurn4 */.Z.TheSecondCoilOfBahamutTurn4,
+    zone_id/* default.TheFinalCoilOfBahamutTurn1 */.Z.TheFinalCoilOfBahamutTurn1,
+    zone_id/* default.TheFinalCoilOfBahamutTurn2 */.Z.TheFinalCoilOfBahamutTurn2,
+    zone_id/* default.TheFinalCoilOfBahamutTurn3 */.Z.TheFinalCoilOfBahamutTurn3,
+    zone_id/* default.TheFinalCoilOfBahamutTurn4 */.Z.TheFinalCoilOfBahamutTurn4,
+    // Savage Raids (A Realm Reborn)
+    zone_id/* default.TheSecondCoilOfBahamutSavageTurn1 */.Z.TheSecondCoilOfBahamutSavageTurn1,
+    zone_id/* default.TheSecondCoilOfBahamutSavageTurn2 */.Z.TheSecondCoilOfBahamutSavageTurn2,
+    zone_id/* default.TheSecondCoilOfBahamutSavageTurn3 */.Z.TheSecondCoilOfBahamutSavageTurn3,
+    zone_id/* default.TheSecondCoilOfBahamutSavageTurn4 */.Z.TheSecondCoilOfBahamutSavageTurn4,
+    // Alliance Raids (Heavensward)
+    zone_id/* default.TheVoidArk */.Z.TheVoidArk,
+    zone_id/* default.TheWeepingCityOfMhach */.Z.TheWeepingCityOfMhach,
+    zone_id/* default.DunScaith */.Z.DunScaith,
+    // Normal Raids (Heavensward)
+    zone_id/* default.AlexanderTheFistOfTheFather */.Z.AlexanderTheFistOfTheFather,
+    zone_id/* default.AlexanderTheCuffOfTheFather */.Z.AlexanderTheCuffOfTheFather,
+    zone_id/* default.AlexanderTheArmOfTheFather */.Z.AlexanderTheArmOfTheFather,
+    zone_id/* default.AlexanderTheBurdenOfTheFather */.Z.AlexanderTheBurdenOfTheFather,
+    zone_id/* default.AlexanderTheFistOfTheSon */.Z.AlexanderTheFistOfTheSon,
+    zone_id/* default.AlexanderTheCuffOfTheSon */.Z.AlexanderTheCuffOfTheSon,
+    zone_id/* default.AlexanderTheArmOfTheSon */.Z.AlexanderTheArmOfTheSon,
+    zone_id/* default.AlexanderTheBurdenOfTheSon */.Z.AlexanderTheBurdenOfTheSon,
+    zone_id/* default.AlexanderTheEyesOfTheCreator */.Z.AlexanderTheEyesOfTheCreator,
+    zone_id/* default.AlexanderTheBreathOfTheCreator */.Z.AlexanderTheBreathOfTheCreator,
+    zone_id/* default.AlexanderTheHeartOfTheCreator */.Z.AlexanderTheHeartOfTheCreator,
+    zone_id/* default.AlexanderTheSoulOfTheCreator */.Z.AlexanderTheSoulOfTheCreator,
+    // Savage Raids (Heavensward)
+    zone_id/* default.AlexanderTheFistOfTheFatherSavage */.Z.AlexanderTheFistOfTheFatherSavage,
+    zone_id/* default.AlexanderTheCuffOfTheFatherSavage */.Z.AlexanderTheCuffOfTheFatherSavage,
+    zone_id/* default.AlexanderTheArmOfTheFatherSavage */.Z.AlexanderTheArmOfTheFatherSavage,
+    zone_id/* default.AlexanderTheBurdenOfTheFatherSavage */.Z.AlexanderTheBurdenOfTheFatherSavage,
+    zone_id/* default.AlexanderTheFistOfTheSonSavage */.Z.AlexanderTheFistOfTheSonSavage,
+    zone_id/* default.AlexanderTheCuffOfTheSonSavage */.Z.AlexanderTheCuffOfTheSonSavage,
+    zone_id/* default.AlexanderTheArmOfTheSonSavage */.Z.AlexanderTheArmOfTheSonSavage,
+    zone_id/* default.AlexanderTheBurdenOfTheSonSavage */.Z.AlexanderTheBurdenOfTheSonSavage,
+    zone_id/* default.AlexanderTheEyesOfTheCreatorSavage */.Z.AlexanderTheEyesOfTheCreatorSavage,
+    zone_id/* default.AlexanderTheBreathOfTheCreatorSavage */.Z.AlexanderTheBreathOfTheCreatorSavage,
+    zone_id/* default.AlexanderTheHeartOfTheCreatorSavage */.Z.AlexanderTheHeartOfTheCreatorSavage,
+    zone_id/* default.AlexanderTheSoulOfTheCreatorSavage */.Z.AlexanderTheSoulOfTheCreatorSavage,
+    // Alliance Raids (Stormblood)
+    zone_id/* default.TheRoyalCityOfRabanastre */.Z.TheRoyalCityOfRabanastre,
+    zone_id/* default.TheRidoranaLighthouse */.Z.TheRidoranaLighthouse,
+    zone_id/* default.TheOrbonneMonastery */.Z.TheOrbonneMonastery,
+    // Normal Raids (Stormblood)
+    zone_id/* default.DeltascapeV10 */.Z.DeltascapeV10,
+    zone_id/* default.DeltascapeV20 */.Z.DeltascapeV20,
+    zone_id/* default.DeltascapeV30 */.Z.DeltascapeV30,
+    zone_id/* default.DeltascapeV40 */.Z.DeltascapeV40,
+    zone_id/* default.SigmascapeV10 */.Z.SigmascapeV10,
+    zone_id/* default.SigmascapeV20 */.Z.SigmascapeV20,
+    zone_id/* default.SigmascapeV30 */.Z.SigmascapeV30,
+    zone_id/* default.SigmascapeV40 */.Z.SigmascapeV40,
+    zone_id/* default.AlphascapeV10 */.Z.AlphascapeV10,
+    zone_id/* default.AlphascapeV20 */.Z.AlphascapeV20,
+    zone_id/* default.AlphascapeV30 */.Z.AlphascapeV30,
+    zone_id/* default.AlphascapeV40 */.Z.AlphascapeV40,
+    // Savage Raids (Stormblood)
+    zone_id/* default.DeltascapeV10Savage */.Z.DeltascapeV10Savage,
+    zone_id/* default.DeltascapeV20Savage */.Z.DeltascapeV20Savage,
+    zone_id/* default.DeltascapeV30Savage */.Z.DeltascapeV30Savage,
+    zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
+    zone_id/* default.SigmascapeV10Savage */.Z.SigmascapeV10Savage,
+    zone_id/* default.SigmascapeV20Savage */.Z.SigmascapeV20Savage,
+    zone_id/* default.SigmascapeV30Savage */.Z.SigmascapeV30Savage,
+    zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
+    zone_id/* default.AlphascapeV10Savage */.Z.AlphascapeV10Savage,
+    zone_id/* default.AlphascapeV20Savage */.Z.AlphascapeV20Savage,
+    zone_id/* default.AlphascapeV30Savage */.Z.AlphascapeV30Savage,
+    zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
+    // Alliance Raids (Shadowbringers)
+    zone_id/* default.TheCopiedFactory */.Z.TheCopiedFactory,
+    zone_id/* default.ThePuppetsBunker */.Z.ThePuppetsBunker,
+    zone_id/* default.TheTowerAtParadigmsBreach */.Z.TheTowerAtParadigmsBreach,
+    // Normal Raids (Shadowbringers)
+    zone_id/* default.EdensGateResurrection */.Z.EdensGateResurrection,
+    zone_id/* default.EdensGateDescent */.Z.EdensGateDescent,
+    zone_id/* default.EdensGateInundation */.Z.EdensGateInundation,
+    zone_id/* default.EdensGateSepulture */.Z.EdensGateSepulture,
+    zone_id/* default.EdensVerseFulmination */.Z.EdensVerseFulmination,
+    zone_id/* default.EdensVerseFuror */.Z.EdensVerseFuror,
+    zone_id/* default.EdensVerseIconoclasm */.Z.EdensVerseIconoclasm,
+    zone_id/* default.EdensVerseRefulgence */.Z.EdensVerseRefulgence,
+    zone_id/* default.EdensPromiseUmbra */.Z.EdensPromiseUmbra,
+    zone_id/* default.EdensPromiseLitany */.Z.EdensPromiseLitany,
+    zone_id/* default.EdensPromiseAnamorphosis */.Z.EdensPromiseAnamorphosis,
+    zone_id/* default.EdensPromiseEternity */.Z.EdensPromiseEternity,
+    // Savage Raids (Shadowbringers)
+    zone_id/* default.EdensGateResurrectionSavage */.Z.EdensGateResurrectionSavage,
+    zone_id/* default.EdensGateDescentSavage */.Z.EdensGateDescentSavage,
+    zone_id/* default.EdensGateInundationSavage */.Z.EdensGateInundationSavage,
+    zone_id/* default.EdensGateSepultureSavage */.Z.EdensGateSepultureSavage,
+    zone_id/* default.EdensVerseFulminationSavage */.Z.EdensVerseFulminationSavage,
+    zone_id/* default.EdensVerseFurorSavage */.Z.EdensVerseFurorSavage,
+    zone_id/* default.EdensVerseIconoclasmSavage */.Z.EdensVerseIconoclasmSavage,
+    zone_id/* default.EdensVerseRefulgenceSavage */.Z.EdensVerseRefulgenceSavage,
+    zone_id/* default.EdensPromiseUmbraSavage */.Z.EdensPromiseUmbraSavage,
+    zone_id/* default.EdensPromiseLitanySavage */.Z.EdensPromiseLitanySavage,
+    zone_id/* default.EdensPromiseAnamorphosisSavage */.Z.EdensPromiseAnamorphosisSavage,
+    zone_id/* default.EdensPromiseEternitySavage */.Z.EdensPromiseEternitySavage,
+    // Ultimate Raids
+    zone_id/* default.TheUnendingCoilOfBahamutUltimate */.Z.TheUnendingCoilOfBahamutUltimate,
+    zone_id/* default.TheWeaponsRefrainUltimate */.Z.TheWeaponsRefrainUltimate,
+    zone_id/* default.TheEpicOfAlexanderUltimate */.Z.TheEpicOfAlexanderUltimate,
+];
+/* harmony default export */ const content_list = (contentList);
+
+;// CONCATENATED MODULE: ./ui/config/general_config.js
+
+user_config/* default.registerOptions */.Z.registerOptions('general', {
+  options: [{
+    id: 'CactbotUserDirectory',
+    name: {
+      en: 'Cactbot user directory',
+      de: 'Cactbot Benutzerverzeichnis',
+      fr: 'Répertoire utilisateur de Cactbot',
+      ja: 'Cactbot ユーザーディレクトリ',
+      cn: 'Cactbot user目录',
+      ko: 'Cactbot 사용자 디렉토리'
+    },
+    type: 'directory',
+    default: ''
+  }, {
+    id: 'ShowDeveloperOptions',
+    name: {
+      en: 'Show developer options',
+      de: 'Zeige Entwickleroptionen',
+      fr: 'Afficher les options développeur',
+      ja: '開発者向けオプション',
+      cn: '显示开发者选项',
+      ko: '개발자 옵션 표시'
+    },
+    type: 'checkbox',
+    default: false
+  }, {
+    id: 'DisplayLanguage',
+    name: {
+      en: 'Display language',
+      de: 'Displaysprache',
+      fr: 'Langue d\'affichage',
+      ja: '表示言語',
+      cn: '显示语言',
+      ko: '주 사용 언어'
+    },
+    type: 'select',
+    options: {
+      en: {
+        'Use FFXIV Plugin Language': 'default',
+        'English (en)': 'en',
+        'Chinese (cn)': 'cn',
+        'German (de)': 'de',
+        'French (fr)': 'fr',
+        'Japanese (ja)': 'ja',
+        'Korean (ko)': 'ko'
+      },
+      de: {
+        'Benutze FFXIV Plugin Sprache': 'default',
+        'Englisch (en)': 'en',
+        'Chinesisch (cn)': 'cn',
+        'Deutsch (de)': 'de',
+        'Französisch (fr)': 'fr',
+        'Japanisch (ja)': 'ja',
+        'Koreanisch (ko)': 'ko'
+      },
+      fr: {
+        'Utiliser la langue du Plugin FFXIV': 'default',
+        'Anglais (en)': 'en',
+        'Chinois (cn)': 'cn',
+        'Allemand (de)': 'de',
+        'Français (fr)': 'fr',
+        'Japonais (ja)': 'ja',
+        'Coréen (ko)': 'ko'
+      },
+      ja: {
+        'FFXIV Pluginの言語設定': 'default',
+        '英語 (en)': 'en',
+        '中国語 (cn)': 'cn',
+        'ドイツ語 (de)': 'de',
+        'フランス語 (fr)': 'fr',
+        '日本語 (ja)': 'ja',
+        '韓国語 (ko)': 'ko'
+      },
+      cn: {
+        '使用最终幻想XIV解析插件设置的语言': 'default',
+        '英语 (en)': 'en',
+        '中文 (cn)': 'cn',
+        '德语 (de)': 'de',
+        '法语 (fr)': 'fr',
+        '日语 (ja)': 'ja',
+        '韩语 (ko)': 'ko'
+      },
+      ko: {
+        'FFXIV Plugin 언어 사용': 'default',
+        '영어 (en)': 'en',
+        '중국어 (cn)': 'cn',
+        '독일어 (de)': 'de',
+        '프랑스어 (fr)': 'fr',
+        '일본어 (ja)': 'ja',
+        '한국어 (ko)': 'ko'
+      }
+    },
+    default: 'default',
+    debug: true,
+    setterFunc: (options, value) => {
+      if (value === 'default') return;
+      options['DisplayLanguage'] = value;
+    }
+  }]
+});
+;// CONCATENATED MODULE: ./ui/eureka/eureka_config.ts
+
+user_config/* default.registerOptions */.Z.registerOptions('eureka', {
+    options: [
+        {
+            id: 'Debug',
+            name: {
+                en: 'Enable debug mode',
+                de: 'Aktiviere Debugmodus',
+                fr: 'Activer le mode debug',
+                ja: 'デバッグモードを有効にする',
+                cn: '启用调试模式',
+                ko: '디버그 모드 활성화',
+            },
+            default: false,
+            type: 'checkbox',
+            debugOnly: true,
+        },
+        {
+            id: 'FlagTimeoutSeconds',
+            name: {
+                en: 'Duration of flags on the map (seconds)',
+                de: 'Zeit der Flaggen auf der Karte (in Sekunden)',
+                fr: 'Durée des drapeaux sur la carte en (s)',
+                ja: 'マップにマーカーの表示時間 (秒)',
+                cn: '地图标志显示时间 (秒)',
+                ko: '지도에 깃발이 표시될 시간 (초)',
+            },
+            type: 'float',
+            default: 90,
+            setterFunc: (options, value) => {
+                if (typeof value !== 'number')
+                    return;
+                options['FlagTimeoutMs'] = value * 1000;
+            },
+        },
+        {
+            id: 'PopNoiseForNM',
+            name: {
+                en: 'Play pop sound for NMs',
+                de: 'Spiele Pop-Sound ab für NMs',
+                fr: 'Jouer un son pour l\'apparition des NMs',
+                ja: 'NM通知機能を有効にする',
+                cn: 'NM出现时播放提示音',
+                ko: '돌발임무 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'PopNoiseForBunny',
+            name: {
+                en: 'Play pop sound for bunny fates',
+                de: 'Spiele Pop-Sound ab für Bunny-Fates',
+                fr: 'Jouer un son pour l\'apparition de l\'aléa des lapins',
+                ja: 'しあわせうさぎ通知機能を有効にする',
+                cn: '幸福兔出现时播放提示音',
+                ko: '토끼 돌발 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'PopNoiseForSkirmish',
+            name: {
+                en: 'Play pop sound for skirmishes',
+                de: 'Spiele Pop-Sound ab für Scharmützel',
+                fr: 'Jouer un son pour l\'apparition des escarmouches',
+                ja: 'スカーミッシュ通知機能を有効にする',
+                cn: '冲突战出现时播放提示音',
+                ko: '돌발 교전 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: false,
+        },
+        {
+            id: 'PopNoiseForCriticalEngagement',
+            name: {
+                en: 'Play pop sound for critical engagements',
+                de: 'Spiele Pop-Sound ab für Kritische Gefechte',
+                fr: 'Jouer un son pour l\'apparition des affrontement cruciaux',
+                ja: 'CE通知機能を有効にする',
+                cn: '紧急遭遇战(CE)出现时播放提示音',
+                ko: '비상 교전(CE) 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'PopNoiseForDuel',
+            name: {
+                en: 'Play pop sound for duels',
+                de: 'Spiele Pop-Sound ab für Duelle',
+                fr: 'Jouer un son pour l\'apparition des duels',
+                ja: '一騎打ち通知機能を有効にする',
+                cn: '一对一决斗出现时播放提示音',
+                ko: '결투 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: false,
+        },
+        {
+            id: 'PopVolume',
+            name: {
+                en: 'Volume of the nm pop sound (0-1)',
+                de: 'Lautstärke des Popsounds bei erscheinen eines NM (0-1)',
+                fr: 'Volume du son d\'apparition d\'un NM (0-1)',
+                ja: 'NM出現音量 (0-1)',
+                cn: 'NM提示音量 (0-1)',
+                ko: '돌발임무 등장 알림 소리 크기 (0-1)',
+            },
+            type: 'float',
+            default: 1,
+            setterFunc: (options, value) => {
+                options['PopVolume'] = value;
+            },
+        },
+        {
+            id: 'BunnyPopVolume',
+            name: {
+                en: 'Volume of the bunny pop sound (0-1)',
+                de: 'Lautstärke des Bunny Pop Sounds (0-1)',
+                fr: 'Volume du son d\'apparition des lapins (0-1)',
+                ja: 'しあわせうさぎ出現音量 (0-1)',
+                cn: '幸福兔提示音量（0-1）',
+                ko: '토끼 돌발 등장 알림 소리 크기 (0-1)',
+            },
+            type: 'float',
+            default: 0.3,
+            setterFunc: (options, value) => {
+                options['BunnyPopVolume'] = value;
+            },
+        },
+        {
+            id: 'CriticalPopVolume',
+            name: {
+                en: 'Volume of the critical engagement pop sound (0-1)',
+                de: 'Lautstärke des Kritischen Gefecht Sounds (0-1)',
+                fr: 'Volume du son d\'apparition des affrontements cruciaux (0-1)',
+                ja: 'CE通知音量 (0-1)',
+                cn: 'critical engagement提示音量（0-1）',
+                ko: '비상 교전(CE) 알림 소리 크기 (0-1)',
+            },
+            type: 'float',
+            default: 0.3,
+            setterFunc: (options, value) => {
+                options['CriticalPopVolume'] = value;
+            },
+        },
+        {
+            id: 'RefreshRateSeconds',
+            name: {
+                en: 'Update rate of nm cooldowns (seconds)',
+                de: 'Aktualisierung der NM cooldowns (in Sekunden)',
+                fr: 'Rafraîchissement du temps de réapparition d\'un NM (s)',
+                ja: 'NMの再沸き時間のリフレッシュ間隔 (秒)',
+                cn: 'NM冷却时间刷新间隔 (秒)',
+                ko: '돌발 소환가능시간 갱신 주기 (초)',
+            },
+            type: 'float',
+            default: 1,
+            setterFunc: (options, value) => {
+                if (typeof value !== 'number')
+                    return;
+                options['RefreshRateMs'] = value * 1000;
+            },
+        },
+    ],
+});
+
+;// CONCATENATED MODULE: ./ui/jobs/jobs_config.ts
+
+user_config/* default.registerOptions */.Z.registerOptions('jobs', {
+    options: [
+        {
+            id: 'JustBuffTracker',
+            name: {
+                en: 'Only show the party buff tracker',
+                de: 'Zeige nur den Gruppen Buff-Tracker',
+                fr: 'Afficher seulement le tracker de buff de l\'équipe',
+                ja: 'シナジー効果のみを表示する',
+                cn: '仅监控团辅技能',
+                ko: '파티 버프만 표시',
+            },
+            type: 'checkbox',
+            default: false,
+        },
+        {
+            id: 'LowerOpacityOutOfCombat',
+            name: {
+                en: 'Lower ui opacity when out of combat',
+                de: 'Veringere die Deckkraft auserhalb des Kampfes',
+                fr: 'Diminiuer l\'opacité de l\'UI hors combat',
+                ja: '非戦闘時にUIを透過する',
+                cn: '非战斗状态时使UI半透明',
+                ko: '전투 중이 아닐 때, UI 투명도 높이기',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'OpacityOutOfCombat',
+            name: {
+                en: 'Opacity of ui when out of combat',
+                de: 'Deckkraft der UI auserhalb des Kampfes',
+                fr: 'Opacité de l\'UI hors combat',
+                ja: '非戦闘時のUI透過度',
+                cn: '非战斗状态时的UI透明度',
+                ko: '전투 중이 아닐 때, UI 투명도',
+            },
+            type: 'float',
+            default: 0.5,
+        },
+        {
+            id: 'PlayCountdownSound',
+            name: {
+                en: 'Enable countdown notification sound',
+                de: 'Aktiviere Countdown Hinweis-Ton',
+                fr: 'Activer la notification sonore du compte à rebours',
+                ja: 'カウントダウンを音声で知らせる',
+                cn: '启用倒计时提示音',
+                ko: '초읽기 알림 소리 켜기',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'HideWellFedAboveSeconds',
+            name: {
+                en: 'Hide cheese icon when food > time (in seconds)',
+                de: 'Verstecke das Käse Icon wenn Bufffood > Zeit (in Sekunden)',
+                fr: 'Masquer l\'icône du fromage lorsque vous êtes repu > durée (en secondes)',
+                ja: '飯効果の時間が不足したらチーズアイコンを表示する (秒)',
+                cn: '食物 Buff 剩余时间不足警报 (秒)',
+                ko: '남은 식사 효과 시간이 이 시간보다 길면, 치즈 아이콘 숨김 (단위: 초)',
+            },
+            type: 'integer',
+            default: 15 * 60,
+        },
+        {
+            id: 'ShowMPTickerOutOfCombat',
+            name: {
+                en: 'Show MP ticker out of combat',
+                de: 'Zeige MP-Ticker auserhalb des Kampfes',
+                fr: 'Afficher le symbole PM hors combat',
+                ja: '非戦闘時にもMPを表示する',
+                cn: '一直显示MP监控',
+                ko: '전투 중이 아닐 때, MP 티커 표시',
+            },
+            type: 'checkbox',
+            default: false,
+        },
+        {
+            id: 'MidHealthThresholdPercent',
+            name: {
+                en: 'Percent of health considered middling',
+                de: 'Prozent der Lebenspunkte (mittelmaß)',
+                fr: 'Pourcentage de vie considéré comme moyenne',
+                ja: '健康なHPとして扱うHP量 (1 = 100%)',
+                cn: '中等血量阈值 (1 = 100%)',
+                ko: '보통 HP로 취급될 HP비율 (1 = 100%)',
+            },
+            type: 'float',
+            default: 0.8,
+        },
+        {
+            id: 'LowHealthThresholdPercent',
+            name: {
+                en: 'Percent of health considered low',
+                de: 'Prozent der Lebenspunkte (gering)',
+                fr: 'Pourcentage de vie considéré comme bas',
+                ja: '危険なHPとして扱うHP量 (1 = 100%)',
+                cn: '危险血量阈值 (1 = 100%)',
+                ko: '낮은 HP로 취급될 HP비율 (1 = 100%)',
+            },
+            type: 'float',
+            default: 0.2,
+        },
+        {
+            id: 'BigBuffShowCooldownSeconds',
+            name: {
+                en: 'Minimum seconds on a cooldown before shown',
+                de: 'Minimum an Sekunden für einen Cooldown vor der Anzeige',
+                fr: 'Nombre minimal de secondes avant l\'affichage du temps de recharge',
+                ja: 'シナジースキルが使用可能前にアイコンを表示する (秒)',
+                cn: '团辅冷却完成预告 (秒)',
+                ko: '재사용 대기시간을 표시할 기준 시간(초 이하)',
+            },
+            type: 'float',
+            default: 20,
+        },
+        {
+            id: 'BigBuffIconWidth',
+            name: {
+                en: 'Width of buff icons (px)',
+                de: 'Weite des Buff Icons (px)',
+                fr: 'Largeur des icônes de buff (pixel)',
+                ja: 'シナジースキルのアイコンの広さ (pixel)',
+                cn: '团辅监控图标宽度 (像素)',
+                ko: '버프 아이콘 너비 (pixel)',
+            },
+            type: 'integer',
+            default: 44,
+        },
+        {
+            id: 'BigBuffIconHeight',
+            name: {
+                en: 'Height of buff icons (px)',
+                de: 'Höhe des Buff Icons (px)',
+                fr: 'Hauteur des icônes de buff (pixel)',
+                ja: 'シナジースキルのアイコンの高さ (pixel)',
+                cn: '团辅监控图标高度 (像素)',
+                ko: '버프 아이콘 높이 (pixel)',
+            },
+            type: 'integer',
+            default: 32,
+        },
+        {
+            id: 'BigBuffBarHeight',
+            name: {
+                en: 'Height of buff timer bars (px)',
+                de: 'Höhe der Buff-Timer Leisten (px)',
+                fr: 'Hauteur des barres de temps de buff (pixel)',
+                ja: 'シナジースキルのタイムバーの高さ (pixel)',
+                cn: '团辅监控计时条高度 (像素)',
+                ko: '버프 타이머 바 높이 (pixel)',
+            },
+            type: 'integer',
+            default: 5,
+        },
+        {
+            id: 'BigBuffTextHeight',
+            name: {
+                en: 'Height of buff text (px)',
+                de: 'Höhe des Buff-Text (px)',
+                fr: 'Hauteur du texte de buff (pixel)',
+                ja: 'シナジースキルのテキストの高さ (pixel)',
+                cn: '团辅监控文字高度 (像素)',
+                ko: '버프 텍스트 높이 (pixel)',
+            },
+            type: 'integer',
+            default: 0,
+        },
+        {
+            id: 'BigBuffBorderSize',
+            name: {
+                en: 'Size of buff borders (px)',
+                de: 'Größe der Buff-Ränder (px)',
+                fr: 'Taille des bordures de buff (pixel)',
+                ja: 'シナジースキルのボーダーの広さ (pixel)',
+                cn: '团辅监控边框尺寸 (像素)',
+                ko: '버프 아이콘 테두리 크기 (pixel)',
+            },
+            type: 'integer',
+            default: 1,
+        },
+        {
+            id: 'GpAlarmPoint',
+            name: {
+                en: 'GP alarm threshold (0 to disable)',
+                de: 'SP Alarm Grenze (0 to disable)',
+                fr: 'Seuil d\'alarme PR (0 pour désactiver)',
+                ja: 'GPが低い時に警告する (０＝無効)',
+                cn: '低采集力提示阈值 (0为禁用)',
+                ko: 'GP 알람 설정값 (0 = 기능 정지)',
+            },
+            type: 'integer',
+            default: 0,
+        },
+        {
+            id: 'GpAlarmSoundVolume',
+            name: {
+                en: 'GP alarm sound (0-1)',
+                de: 'SP Alarm Sound (0-1)',
+                fr: 'Son d\'alarme PR (0-1)',
+                ja: '低いGPの警告音量 (0-1)',
+                cn: '低采集力提示音量 (0-1)',
+                ko: 'GP 알람 소리 크기 (0-1)',
+            },
+            type: 'float',
+            default: 0.8,
+        },
+        {
+            id: 'NotifyExpiredProcsInCombat',
+            name: {
+                en: 'Flash procs boxes of inactive dots/etc. up to n times while in combat. (-1: disabled, 0: infinite)',
+                de: 'Dot/etc. boxen blinken bis zu n mal wenn im Kampf und dot ist nicht aktiv. (-1: deaktiviert, 0: ohne Limit)',
+            },
+            type: 'integer',
+            default: -1,
+        },
+    ],
+});
+
+// EXTERNAL MODULE: ./ui/oopsyraidsy/data/oopsy_manifest.txt + 96 modules
+var oopsy_manifest = __webpack_require__(400);
+;// CONCATENATED MODULE: ./ui/oopsyraidsy/oopsyraidsy_config.js
+
+
+const oopsyHelpers = ['damageWarn', 'damageFail', 'shareWarn', 'shareFail', 'gainsEffectWarn', 'gainsEffectFail']; // This could be a checkbox, but it's possible we could add more things here,
+// like changing fail->warning or who knows what.
+
+const kTriggerOptions = {
+  default: {
+    label: {
+      en: '✔ Defaults',
+      de: '✔ Standards',
+      fr: '✔ Défauts',
+      ja: '✔ 初期設定',
+      cn: '✔ 默认设置',
+      ko: '✔ 기본'
+    }
+  },
+  disabled: {
+    label: {
+      en: '❌ Disabled',
+      de: '❌ Deaktiviert',
+      fr: '❌ Désactivé',
+      ja: '❌ 無効',
+      cn: '❌ 禁用',
+      ko: '❌ 비활성화'
+    }
+  }
+};
+
+class OopsyConfigurator {
+  constructor(cactbotConfigurator) {
+    this.base = cactbotConfigurator;
+    this.lang = this.base.lang;
+    this.optionKey = 'oopsyraidsy';
+  }
+
+  buildUI(container, files) {
+    const fileMap = this.processOopsyFiles(files);
+    const expansionDivs = {};
+
+    for (const key in fileMap) {
+      const info = fileMap[key];
+      const expansion = info.prefix;
+      if (info.triggers.length === 0) continue;
+
+      if (!expansionDivs[expansion]) {
+        const expansionContainer = document.createElement('div');
+        expansionContainer.classList.add('trigger-expansion-container', 'collapsed');
+        container.appendChild(expansionContainer);
+        const expansionHeader = document.createElement('div');
+        expansionHeader.classList.add('trigger-expansion-header');
+
+        expansionHeader.onclick = () => {
+          expansionContainer.classList.toggle('collapsed');
+        };
+
+        expansionHeader.innerText = expansion;
+        expansionContainer.appendChild(expansionHeader);
+        expansionDivs[expansion] = expansionContainer;
+      }
+
+      const triggerContainer = document.createElement('div');
+      triggerContainer.classList.add('trigger-file-container', 'collapsed');
+      expansionDivs[expansion].appendChild(triggerContainer);
+      const headerDiv = document.createElement('div');
+      headerDiv.classList.add('trigger-file-header');
+
+      headerDiv.onclick = () => {
+        triggerContainer.classList.toggle('collapsed');
+      };
+
+      const parts = [info.title, info.type, expansion];
+
+      for (let i = 0; i < parts.length; ++i) {
+        if (!parts[i]) continue;
+        const partDiv = document.createElement('div');
+        partDiv.classList.add('trigger-file-header-part');
+        partDiv.innerText = parts[i];
+        headerDiv.appendChild(partDiv);
+      }
+
+      triggerContainer.appendChild(headerDiv);
+      const triggerOptions = document.createElement('div');
+      triggerOptions.classList.add('trigger-file-options');
+      triggerContainer.appendChild(triggerOptions);
+
+      for (const trigger of info.triggers) {
+        // Build the trigger label.
+        const triggerDiv = document.createElement('div');
+        triggerDiv.innerHTML = trigger.id;
+        triggerDiv.classList.add('trigger');
+        triggerOptions.appendChild(triggerDiv); // Container for the right side ui (select boxes, all of the info).
+
+        const triggerDetails = document.createElement('div');
+        triggerDetails.classList.add('trigger-details');
+        triggerOptions.appendChild(triggerDetails);
+        triggerDetails.appendChild(this.buildTriggerOptions(trigger.id, triggerDiv));
+      }
+    }
+  }
+
+  buildTriggerOptions(id, labelDiv) {
+    const kField = 'Output';
+    const div = document.createElement('div');
+    div.classList.add('trigger-options');
+
+    const updateLabel = input => {
+      if (input.value === 'hidden' || input.value === 'disabled') labelDiv.classList.add('disabled');else labelDiv.classList.remove('disabled');
+    };
+
+    const input = document.createElement('select');
+    div.appendChild(input);
+    const selectValue = this.base.getOption(this.optionKey, 'triggers', id, kField, 'default');
+
+    for (const key in kTriggerOptions) {
+      const elem = document.createElement('option');
+      elem.innerHTML = this.base.translate(kTriggerOptions[key].label);
+      elem.value = key;
+      elem.selected = key === selectValue;
+      input.appendChild(elem);
+      updateLabel(input);
+
+      input.onchange = () => {
+        updateLabel(input);
+        let value = input.value;
+        if (value.includes('default')) value = 'default';
+        this.base.setOption(this.optionKey, 'triggers', id, kField, input.value);
+      };
+    }
+
+    return div;
+  }
+
+  processOopsyFiles(files) {
+    const map = this.base.processFiles(files);
+
+    for (const [key, item] of Object.entries(map)) {
+      item.triggers = [];
+      const triggerSet = item.triggerSet;
+
+      for (const prop of oopsyHelpers) {
+        if (!triggerSet[prop]) continue;
+
+        for (const id in triggerSet[prop]) item.triggers.push({
+          id: id
+        });
+      }
+
+      if (!triggerSet.triggers) continue;
+
+      for (const trigger of triggerSet.triggers) {
+        if (!trigger.id) continue; // Skip triggers that just set data.
+
+        if (!trigger.mistake) continue;
+        item.triggers.push(trigger);
+      }
+    }
+
+    return map;
+  }
+
+}
+
+user_config/* default.registerOptions */.Z.registerOptions('oopsyraidsy', {
+  buildExtraUI: (base, container) => {
+    const builder = new OopsyConfigurator(base);
+    builder.buildUI(container, oopsy_manifest/* default */.Z);
+  },
+  processExtraOptions: (options, savedConfig) => {
+    options['PerTriggerAutoConfig'] = options['PerTriggerAutoConfig'] || {};
+    const triggers = savedConfig.triggers;
+    if (!triggers) return;
+
+    for (const id in triggers) {
+      const output = triggers[id]['Output'];
+      if (!output) continue;
+      options['PerTriggerAutoConfig'][id] = {
+        enabled: output !== 'disabled'
+      };
+    }
+  },
+  options: [{
+    id: 'Debug',
+    name: {
+      en: 'Enable debug mode',
+      de: 'Aktiviere Debugmodus',
+      fr: 'Activer le mode debug',
+      ja: 'デバッグモードを有効にする',
+      cn: '启用调试模式',
+      ko: '디버그 모드 활성화'
+    },
+    type: 'checkbox',
+    debugOnly: true
+  }, {
+    id: 'NumLiveListItemsInCombat',
+    name: {
+      en: 'Number of mistakes to show in combat',
+      de: 'Anzahl der Fehler, die während des Kampfes angezeigt werden',
+      fr: 'Nombre de fautes à afficher en combat',
+      ja: '戦闘中に表示するミスをした回数',
+      cn: '战斗中显示的错误数量',
+      ko: '전투 중 표시할 실수들의 개수'
+    },
+    type: 'integer',
+    default: 5
+  }, {
+    id: 'MinimumTimeForPullMistake',
+    name: {
+      en: 'Minimum time to show early pull (seconds)',
+      de: 'Minimum Zeit in der Early-Pulls angezeigt werden (in Sekunden)',
+      fr: 'Durée minimale pour afficher l\'early pull (secondes)',
+      ja: 'タゲ取るのが早かったら、ミスとして表示する、カウントダウンとの最短時間 (秒)',
+      cn: '显示提前开怪最小时间 (秒)',
+      ko: '풀링이 빠르다고 표시 할 최소 시간 (초)'
+    },
+    type: 'float',
+    default: 0.4
+  }]
+});
+;// CONCATENATED MODULE: ./ui/radar/radar_config.ts
+
+user_config/* default.registerOptions */.Z.registerOptions('radar', {
+    options: [
+        {
+            id: 'BRankEnabled',
+            name: {
+                en: 'B-Rank enabled',
+                de: 'B-Rank aktiviert',
+                fr: 'Rang-B activé',
+                ja: 'ランクBモブ',
+                cn: '开启B怪探测',
+                ko: 'B랭크 표시',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'DetectionRange',
+            name: {
+                en: 'Minimum distance to detect mobs (yalms)',
+                de: 'Minimum Entfernung um Mobs zu erkennen (in Yalms)',
+                fr: 'Distance minimale de détection des mobs (yalms)',
+                ja: '最短探測距離 (ヤルム)',
+                cn: '最短探测距离 (米)',
+                ko: '몬스터를 탐지할 최소 거리 (미터)',
+            },
+            type: 'float',
+            default: 0,
+        },
+        {
+            id: 'TTS',
+            name: {
+                en: 'Announce new mobs with text to speech',
+                de: 'Kündige neue Mobs mit TTS an',
+                fr: 'Annoncer les nouveaux mobs via TTS',
+                ja: '沸きモブを探知したらTTSで知らせる',
+                cn: '使用TTS提醒新发现目标',
+                ko: '새 몬스터를 TTS로 알림',
+            },
+            type: 'checkbox',
+            default: false,
+        },
+        {
+            id: 'PopSoundAlert',
+            name: {
+                en: 'Announce new mobs with a sound',
+                de: 'Kündige neue Mobs mit einem Sound an',
+                fr: 'Annoncer les nouveaux mobs avec un son',
+                ja: '沸きモブを探知したら音声で知らせる',
+                cn: '使用预设提示音提醒新发现目标',
+                ko: '새 몬스터를 소리로 알림',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'PopVolume',
+            name: {
+                en: 'Volume to play pop sound (0-1)',
+                de: 'Lautstärke für den Popsound (0-1)',
+                fr: 'Volume du son lors d\'une apparition (0-1)',
+                ja: 'お知らせ音声の音量 (0-1)',
+                cn: '提示音的音量 (0-1)',
+                ko: '소리 크기 (0-1)',
+            },
+            type: 'float',
+            default: 0.5,
+        },
+        {
+            id: 'Puller',
+            name: {
+                en: 'Show puller of mob',
+                de: 'Zeige den ersten Angreifer eines Mobs an',
+                fr: 'Afficher le puller du mob',
+                ja: '最初にタゲ取った人の名前を表示',
+                cn: '显示目标开怪者的名称',
+                ko: '몬스터를 풀링한 사람 표시',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+        {
+            id: 'Position',
+            name: {
+                en: 'Show position of mob',
+                de: 'Zeige die Position eines Mobs',
+                fr: 'Afficher la position du mob',
+                ja: '沸きモブの位置を表示',
+                cn: '显示目标位置',
+                ko: '몬스터의 위치 표시',
+            },
+            type: 'checkbox',
+            default: true,
+        },
+    ],
+});
+
+// EXTERNAL MODULE: ./resources/util.ts
+var util = __webpack_require__(779);
+;// CONCATENATED MODULE: ./resources/party.ts
+
+const emptyRoleToPartyNames = () => {
+    return {
+        tank: [],
+        healer: [],
+        dps: [],
+        crafter: [],
+        gatherer: [],
+        none: [],
+    };
+};
+class PartyTracker {
+    constructor() {
+        this.details = [];
+        this.partyNames_ = [];
+        this.partyIds_ = [];
+        this.allianceNames_ = [];
+        this.allianceIds_ = [];
+        this.nameToRole_ = {};
+        this.idToName_ = {};
+        this.roleToPartyNames_ = emptyRoleToPartyNames();
+    }
+    // Bind this to PartyChanged events.
+    onPartyChanged(e) {
+        if (!e || !e.party)
+            return;
+        this.reset();
+        this.details = e.party;
+        for (const p of e.party) {
+            this.allianceIds_.push(p.id);
+            this.allianceNames_.push(p.name);
+            const jobName = util/* default.jobEnumToJob */.Z.jobEnumToJob(p.job);
+            const role = util/* default.jobToRole */.Z.jobToRole(jobName);
+            this.idToName_[p.id] = p.name;
+            this.nameToRole_[p.name] = role;
+            if (p.inParty) {
+                this.partyIds_.push(p.id);
+                this.partyNames_.push(p.name);
+                this.roleToPartyNames_[role].push(p.name);
+            }
+        }
+    }
+    reset() {
+        // original event data
+        this.details = [];
+        this.partyNames_ = [];
+        this.partyIds_ = [];
+        this.allianceNames_ = [];
+        this.allianceIds_ = [];
+        this.nameToRole_ = {};
+        this.idToName_ = {};
+        // role -> [names] but only for party
+        this.roleToPartyNames_ = emptyRoleToPartyNames();
+    }
+    // returns an array of the names of players in your immediate party
+    get partyNames() {
+        return this.partyNames_;
+    }
+    get partyIds() {
+        return this.partyIds_;
+    }
+    // returns an array of the names of players in your alliance
+    get allianceNames() {
+        return this.allianceNames_;
+    }
+    // returns an array of the names of tanks in your immediate party
+    get tankNames() {
+        return this.roleToPartyNames_['tank'];
+    }
+    // returns an array of the names of healers in your immediate party
+    get healerNames() {
+        return this.roleToPartyNames_['healer'];
+    }
+    // returns an array of the names of dps players in your immediate party
+    get dpsNames() {
+        return this.roleToPartyNames_['dps'];
+    }
+    // returns true if the named player in your alliance is a particular role
+    isRole(name, role) {
+        return this.nameToRole_[name] === role;
+    }
+    // returns true if the named player in your alliance is a tank
+    isTank(name) {
+        return this.isRole(name, 'tank');
+    }
+    // returns true if the named player in your alliance is a healer
+    isHealer(name) {
+        return this.isRole(name, 'healer');
+    }
+    // returns true if the named player in your alliance is a dps
+    isDPS(name) {
+        return this.isRole(name, 'dps');
+    }
+    // returns true if the named player is in your immediate party
+    inParty(name) {
+        return this.partyNames.includes(name);
+    }
+    // returns true if the named player is in your alliance
+    inAlliance(name) {
+        return this.allianceNames.includes(name);
+    }
+    // for a named player, returns the other tank in your immediate party
+    // if named player is not a tank, or there's not exactly two tanks
+    // in your immediate party, returns null.
+    otherTank(name) {
+        const names = this.tankNames;
+        if (names.length !== 2)
+            return;
+        if (names[0] === name)
+            return names[1];
+        if (names[1] === name)
+            return names[0];
+    }
+    // see: otherTank, but for healers.
+    otherHealer(name) {
+        const names = this.roleToPartyNames_['healer'];
+        if (names.length !== 2)
+            return;
+        if (names[0] === name)
+            return names[1];
+        if (names[1] === name)
+            return names[0];
+    }
+    // returns the job name of the specified party member
+    jobName(name) {
+        var _a;
+        const partyIndex = this.partyNames.indexOf(name);
+        if (partyIndex >= 0)
+            return util/* default.jobEnumToJob */.Z.jobEnumToJob((_a = this.details[partyIndex]) === null || _a === void 0 ? void 0 : _a.job);
+    }
+    nameFromId(id) {
+        return this.idToName_[id];
+    }
+}
+
+// EXTERNAL MODULE: ./resources/responses.ts
+var responses = __webpack_require__(163);
+// EXTERNAL MODULE: ./ui/raidboss/data/raidboss_manifest.txt + 328 modules
+var raidboss_manifest = __webpack_require__(484);
+;// CONCATENATED MODULE: ./ui/raidboss/raidboss_options.ts
+
+// These options are ones that are not auto-defined by raidboss_config.js.
+const defaultRaidbossNonConfigOptions = {
+    PlayerNicks: {},
+    InfoSound: '../../resources/sounds/freesound/percussion_hit.ogg',
+    AlertSound: '../../resources/sounds/BigWigs/Alert.ogg',
+    AlarmSound: '../../resources/sounds/BigWigs/Alarm.ogg',
+    LongSound: '../../resources/sounds/BigWigs/Long.ogg',
+    PullSound: '../../resources/sounds/freesound/sonar.ogg',
+    AudioAllowed: true,
+    DisabledTriggers: {},
+    PerTriggerAutoConfig: {},
+    PerTriggerOptions: {},
+    Triggers: [],
+    IsRemoteRaidboss: false,
+    TransformTts: (t) => t,
+};
+// TODO: figure out how to get this type from raidboss_config??
+// These values are overwritten and are just here for typing.
+const defaultRaidbossConfigOptions = {
+    Debug: false,
+    DefaultAlertOutput: 'textAndSound',
+    AlertsLanguage: undefined,
+    TimelineLanguage: undefined,
+    TimelineEnabled: true,
+    AlertsEnabled: true,
+    ShowTimerBarsAtSeconds: 30,
+    KeepExpiredTimerBarsForSeconds: 0.7,
+    BarExpiresSoonSeconds: 6,
+    MaxNumberOfTimerBars: 6,
+    DisplayAlarmTextForSeconds: 3,
+    DisplayAlertTextForSeconds: 3,
+    DisplayInfoTextForSeconds: 3,
+    AlarmSoundVolume: 1,
+    AlertSoundVolume: 1,
+    InfoSoundVolume: 1,
+    LongSoundVolume: 1,
+    PullSoundVolume: 1,
+    cactbotWormholeStrat: false,
+    cactbote8sUptimeKnockbackStrat: false,
+};
+// See user/raidboss-example.js for documentation.
+const Options = {
+    ...user_config/* default.getDefaultBaseOptions */.Z.getDefaultBaseOptions(),
+    ...defaultRaidbossNonConfigOptions,
+    ...defaultRaidbossConfigOptions,
+};
+/* harmony default export */ const raidboss_options = (Options);
+
+;// CONCATENATED MODULE: ./ui/raidboss/raidboss_config.js
+
+
+
+
+
+
+
+const kOptionKeys = {
+  output: 'Output',
+  duration: 'Duration',
+  beforeSeconds: 'BeforeSeconds',
+  outputStrings: 'OutputStrings'
+}; // No sound only option, because that's silly.
+
+const raidboss_config_kTriggerOptions = {
+  default: {
+    label: {
+      en: '✔ Defaults',
+      de: '✔ Standards',
+      fr: '✔ Défauts',
+      ja: '✔ 初期設定',
+      cn: '✔ 默认设置',
+      ko: '✔ 기본'
+    }
+  },
+  textAndSound: {
+    label: {
+      en: '🆙🔊 Text and Sound',
+      de: '🆙🔊 Text und Ton',
+      fr: '🆙🔊 Texte et son',
+      ja: '🆙🔊 テキストと音声',
+      cn: '🆙🔊 文字显示与提示音',
+      ko: '🆙🔊 텍스트와 소리'
+    }
+  },
+  ttsAndText: {
+    label: {
+      en: '🆙💬 Text and TTS',
+      de: '🆙💬 Text und TTS',
+      fr: '🆙💬 Texte et TTS',
+      ja: '🆙💬 テキストとTTS',
+      cn: '🆙💬 文字显示与TTS',
+      ko: '🆙💬 텍스트와 TTS'
+    }
+  },
+  ttsOnly: {
+    label: {
+      en: '💬 TTS Only',
+      de: '💬 Nur TTS',
+      fr: '💬 TTS Seulement',
+      ja: '💬 TTSのみ',
+      cn: '💬 只使用TTS',
+      ko: '💬 TTS만'
+    }
+  },
+  textOnly: {
+    label: {
+      en: '🆙 Text Only',
+      de: '🆙 Nur Text',
+      fr: '🆙 Texte seulement',
+      ja: '🆙 テキストのみ',
+      cn: '🆙 只使用文字显示',
+      ko: '🆙 텍스트만'
+    }
+  },
+  disabled: {
+    label: {
+      en: '❌ Disabled',
+      de: '❌ Deaktiviert',
+      fr: '❌ Désactivé',
+      ja: '❌ 無効',
+      cn: '❌ 禁用',
+      ko: '❌ 비활성화'
+    }
+  }
+};
+const kDetailKeys = {
+  'triggerRegex': {
+    label: {
+      en: 'regex',
+      de: 'regex',
+      fr: 'regex',
+      ja: '正規表現',
+      cn: '正则表达式',
+      ko: '정규식'
+    },
+    cls: 'regex-text',
+    debugOnly: true
+  },
+  'triggerNetRegex': {
+    label: {
+      en: 'netregex',
+      de: 'netregex',
+      fr: 'netregex',
+      ja: 'ネット正規表現',
+      cn: '网络日志正则表达式'
+    },
+    cls: 'regex-text',
+    debugOnly: true
+  },
+  'timelineRegex': {
+    label: {
+      en: 'timeline',
+      de: 'timeline',
+      fr: 'timeline',
+      ja: 'タイムライン',
+      cn: '时间轴',
+      ko: '타임라인'
+    },
+    cls: 'regex-text',
+    debugOnly: true
+  },
+  'beforeSeconds': {
+    label: {
+      en: 'before (sec)',
+      de: 'Vorher (Sekunden)',
+      fr: 'avant (seconde)',
+      ja: 'その前に (秒)',
+      cn: '提前 (秒)',
+      ko: '앞당김 (초)'
+    },
+    cls: 'before-seconds-text',
+    generatedManually: true
+  },
+  'condition': {
+    label: {
+      en: 'condition',
+      de: 'condition',
+      fr: 'condition',
+      ja: '条件',
+      cn: '条件',
+      ko: '조건'
+    },
+    cls: 'condition-text',
+    debugOnly: true
+  },
+  'duration': {
+    label: {
+      en: 'duration (sec)',
+      de: 'Dauer (Sekunden)',
+      fr: 'Durée (secondes)',
+      ja: '存続時間 (秒)',
+      cn: '持续时间 (秒)',
+      ko: '지속 시간 (초)'
+    },
+    cls: 'duration-text',
+    generatedManually: true
+  },
+  'preRun': {
+    label: {
+      en: 'preRun',
+      de: 'preRun',
+      fr: 'preRun',
+      ja: 'プレ実行',
+      cn: '预运行',
+      ko: '사전 실행'
+    },
+    cls: 'prerun-text',
+    debugOnly: true
+  },
+  'alarmText': {
+    label: {
+      en: 'alarm',
+      de: 'alarm',
+      fr: 'alarme',
+      ja: '警報',
+      cn: '警报文本',
+      ko: '경고'
+    },
+    cls: 'alarm-text'
+  },
+  'alertText': {
+    label: {
+      en: 'alert',
+      de: 'alert',
+      fr: 'alerte',
+      ja: '警告',
+      cn: '警告文本',
+      ko: '주의'
+    },
+    cls: 'alert-text'
+  },
+  'infoText': {
+    label: {
+      en: 'info',
+      de: 'info',
+      fr: 'info',
+      ja: '情報',
+      cn: '信息文本',
+      ko: '안내'
+    },
+    cls: 'info-text'
+  },
+  'tts': {
+    label: {
+      en: 'tts',
+      de: 'tts',
+      fr: 'tts',
+      ja: 'TTS',
+      cn: 'TTS',
+      ko: 'TTS'
+    },
+    cls: 'tts-text'
+  },
+  'sound': {
+    label: {
+      en: 'sound',
+      de: 'sound',
+      fr: 'son',
+      ja: '音声',
+      cn: '提示音',
+      ko: '소리'
+    },
+    cls: 'sound-text'
+  },
+  'run': {
+    label: {
+      en: 'run',
+      de: 'run',
+      fr: 'run',
+      ja: '実行',
+      cn: '运行',
+      ko: '실행'
+    },
+    cls: 'run-text',
+    debugOnly: true
+  }
+};
+const kMiscTranslations = {
+  // Shows up for un-set values.
+  valueDefault: {
+    en: '(default)',
+    de: '(Standard)',
+    fr: '(Défaut)',
+    ja: '(初期値)',
+    cn: '(默认值)',
+    ko: '(기본값)'
+  },
+  // Shown when the UI can't decipher the output of a function.
+  valueIsFunction: {
+    en: '(function)',
+    de: '(Funktion)',
+    fr: '(Fonction)',
+    ja: '(関数)',
+    cn: '(函数)',
+    ko: '(함수)'
+  },
+  // Warning label for triggers without ids or overridden triggers.
+  warning: {
+    en: '⚠️ warning',
+    de: '⚠️ Warnung',
+    fr: '⚠️ Attention',
+    ja: '⚠️ 警告',
+    cn: '⚠️ 警告',
+    ko: '⚠️ 주의'
+  },
+  // Shows up for triggers without ids.
+  missingId: {
+    en: 'missing id field',
+    de: 'Fehlendes ID Feld',
+    fr: 'Champ ID manquant',
+    ja: 'idがありません',
+    cn: '缺少id属性',
+    ko: 'ID 필드값 없음'
+  },
+  // Shows up for triggers that are overridden by other triggers.
+  overriddenByFile: {
+    en: 'overridden by "${file}"',
+    de: 'Überschrieben durch "${file}"',
+    fr: 'Écrasé(e) par "${file}"',
+    ja: '"${file}"に上書きました',
+    cn: '被"${file}"文件覆盖',
+    ko: '"${file}" 파일에서 덮어씌움'
+  },
+  // Opens trigger file on Github.
+  viewTriggerSource: {
+    en: 'View Trigger Source',
+    de: 'Zeige Trigger Quelle',
+    ja: 'トリガーのコードを表示',
+    cn: '显示触发器源码',
+    ko: '트리거 출처 열기'
+  }
+};
+
+const validDurationOrUndefined = val => {
+  val = parseFloat(val);
+  if (!isNaN(val) && val >= 0) return val;
+  return undefined;
+};
+
+const canBeConfigured = trig => !trig.isMissingId && !trig.overriddenByFile;
+
+const addTriggerDetail = (container, labelText, detailText, detailCls) => {
+  const label = document.createElement('div');
+  label.innerText = labelText;
+  label.classList.add('trigger-label');
+  container.appendChild(label);
+  const detail = document.createElement('div');
+  detail.classList.add('trigger-detail');
+  detail.innerText = detailText;
+  container.appendChild(detail);
+  if (detailCls) detail.classList.add(detailCls);
+}; // This is used both for top level Options and for PerTriggerAutoConfig settings.
+// Unfortunately due to poor decisions in the past, PerTriggerOptions has different
+// fields here.  This should be fixed.
+
+
+function setOptionsFromOutputValue(options, value) {
+  if (value === 'default') {// Nothing.
+  } else if (value === 'textAndSound') {
+    options.TextAlertsEnabled = true;
+    options.SoundAlertsEnabled = true;
+    options.SpokenAlertsEnabled = false;
+  } else if (value === 'ttsAndText') {
+    options.TextAlertsEnabled = true;
+    options.SoundAlertsEnabled = true;
+    options.SpokenAlertsEnabled = true;
+  } else if (value === 'ttsOnly') {
+    options.TextAlertsEnabled = false;
+    options.SoundAlertsEnabled = true;
+    options.SpokenAlertsEnabled = true;
+  } else if (value === 'textOnly') {
+    options.TextAlertsEnabled = true;
+    options.SoundAlertsEnabled = false;
+    options.SpokenAlertsEnabled = false;
+  } else if (value === 'disabled') {
+    options.TextAlertsEnabled = false;
+    options.SoundAlertsEnabled = false;
+    options.SpokenAlertsEnabled = false;
+  } else {
+    console.error('unknown output type: ' + value);
+  }
+} // Helper for doing nothing during trigger eval, but still recording any
+// calls to `output.responseOutputStrings = x;` via callback.
+
+
+class DoNothingFuncProxy {
+  constructor(outputStringsCallback) {
+    return new Proxy(this, {
+      set(target, property, value) {
+        if (property === 'responseOutputStrings') {
+          outputStringsCallback(value);
+          return true;
+        } // Ignore other property setting here.
+
+      },
+
+      get(target, name) {
+        return () => {};
+      }
+
+    });
+  }
+
+}
+
+class RaidbossConfigurator {
+  constructor(cactbotConfigurator) {
+    this.base = cactbotConfigurator; // TODO: is it worth adding the complexity to reflect this change in triggers that use it?
+    // This is probably where using something like vue or react would be easier.
+    // For the moment, folks can just reload, for real.
+
+    this.alertsLang = this.base.getOption('raidboss', 'AlertsLanguage', this.base.lang);
+    this.timelineLang = this.base.getOption('raidboss', 'TimelineLanguage', this.base.lang);
+  }
+
+  buildUI(container, raidbossFiles, userOptions) {
+    const fileMap = this.processRaidbossFiles(raidbossFiles, userOptions);
+    const expansionDivs = {};
+
+    for (const key in fileMap) {
+      const info = fileMap[key]; // "expansion" here is technically section, which includes "general triggers"
+      // and one section per user file.
+
+      const expansion = info.section;
+      if (Object.keys(info.triggers).length === 0) continue;
+
+      if (!expansionDivs[expansion]) {
+        const expansionContainer = document.createElement('div');
+        expansionContainer.classList.add('trigger-expansion-container', 'collapsed');
+        container.appendChild(expansionContainer);
+        const expansionHeader = document.createElement('div');
+        expansionHeader.classList.add('trigger-expansion-header');
+
+        expansionHeader.onclick = () => {
+          expansionContainer.classList.toggle('collapsed');
+        };
+
+        expansionHeader.innerText = expansion;
+        expansionContainer.appendChild(expansionHeader);
+        expansionDivs[expansion] = expansionContainer;
+      }
+
+      const triggerContainer = document.createElement('div');
+      triggerContainer.classList.add('trigger-file-container', 'collapsed');
+      expansionDivs[expansion].appendChild(triggerContainer);
+      const headerDiv = document.createElement('div');
+      headerDiv.classList.add('trigger-file-header');
+
+      headerDiv.onclick = () => {
+        triggerContainer.classList.toggle('collapsed');
+      };
+
+      const parts = [info.title, info.type, info.prefix];
+
+      for (let i = 0; i < parts.length; ++i) {
+        if (!parts[i]) continue;
+        const partDiv = document.createElement('div');
+        partDiv.classList.add('trigger-file-header-part');
+        partDiv.innerText = parts[i];
+        headerDiv.appendChild(partDiv);
+      }
+
+      triggerContainer.appendChild(headerDiv);
+      const triggerOptions = document.createElement('div');
+      triggerOptions.classList.add('trigger-file-options');
+      triggerContainer.appendChild(triggerOptions);
+
+      for (const id in info.triggers) {
+        const trig = info.triggers[id]; // Don't construct triggers that won't show anything.
+
+        let hasOutputFunc = false;
+
+        for (const func of responses/* triggerOutputFunctions */.ug) {
+          if (trig[func]) {
+            hasOutputFunc = true;
+            break;
+          }
+        }
+
+        if (!hasOutputFunc && !this.base.developerOptions) continue; // Build the trigger label.
+
+        const triggerDiv = document.createElement('div');
+        triggerDiv.innerHTML = trig.isMissingId ? '(???)' : trig.id;
+        triggerDiv.classList.add('trigger');
+        triggerOptions.appendChild(triggerDiv); // Container for the right side ui (select boxes, all of the info).
+
+        const triggerDetails = document.createElement('div');
+        triggerDetails.classList.add('trigger-details');
+        triggerOptions.appendChild(triggerDetails);
+        if (canBeConfigured(trig)) triggerDetails.appendChild(this.buildTriggerOptions(trig, triggerDiv));
+
+        if (trig.isMissingId) {
+          addTriggerDetail(triggerDetails, this.base.translate(kMiscTranslations.warning), this.base.translate(kMiscTranslations.missingId));
+        }
+
+        if (trig.overriddenByFile) {
+          const baseText = this.base.translate(kMiscTranslations.overriddenByFile);
+          const detailText = baseText.replace('${file}', trig.overriddenByFile);
+          addTriggerDetail(triggerDetails, this.base.translate(kMiscTranslations.warning), detailText);
+        } // Append some details about the trigger so it's more obvious what it is.
+
+
+        for (const detailKey in kDetailKeys) {
+          if (kDetailKeys[detailKey].generatedManually) continue;
+          if (!this.base.developerOptions && kDetailKeys[detailKey].debugOnly) continue;
+          if (!trig[detailKey] && !trig.output[detailKey]) continue;
+          const detailCls = [kDetailKeys[detailKey].cls];
+          let detailText;
+
+          if (trig.output[detailKey]) {
+            detailText = trig.output[detailKey];
+          } else if (typeof trig[detailKey] === 'function') {
+            detailText = this.base.translate(kMiscTranslations.valueIsFunction);
+            detailCls.push('function-text');
+          } else {
+            detailText = trig[detailKey];
+          }
+
+          addTriggerDetail(triggerDetails, this.base.translate(kDetailKeys[detailKey].label), detailText, detailCls);
+        }
+
+        if (!canBeConfigured(trig)) continue; // Add beforeSeconds manually for timeline triggers.
+
+        if (trig.isTimelineTrigger) {
+          const detailKey = 'beforeSeconds';
+          const optionKey = kOptionKeys.beforeSeconds;
+          const label = document.createElement('div');
+          label.innerText = this.base.translate(kDetailKeys[detailKey].label);
+          label.classList.add('trigger-label');
+          triggerDetails.appendChild(label);
+          const div = document.createElement('div');
+          div.classList.add('option-input-container', 'trigger-before-seconds');
+          const input = document.createElement('input');
+          div.appendChild(input);
+          input.type = 'text';
+          input.step = 'any'; // Say "(default)" for more complicated things like functions.
+
+          let defaultValue = kMiscTranslations.valueDefault;
+          if (trig.beforeSeconds === undefined) defaultValue = 0;else if (typeof trig.beforeSeconds === 'number') defaultValue = trig.beforeSeconds;
+          input.placeholder = this.base.translate(defaultValue);
+          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, '');
+
+          const setFunc = () => {
+            const val = validDurationOrUndefined(input.value) || '';
+            this.base.setOption('raidboss', 'triggers', trig.id, optionKey, val);
+          };
+
+          input.onchange = setFunc;
+          input.oninput = setFunc;
+          triggerDetails.appendChild(div);
+        } // Add duration manually with an input to override.
+
+
+        if (hasOutputFunc) {
+          const detailKey = 'duration';
+          const optionKey = kOptionKeys.duration;
+          const label = document.createElement('div');
+          label.innerText = this.base.translate(kDetailKeys[detailKey].label);
+          label.classList.add('trigger-label');
+          triggerDetails.appendChild(label);
+          const div = document.createElement('div');
+          div.classList.add('option-input-container', 'trigger-duration');
+          const input = document.createElement('input');
+          div.appendChild(input);
+          input.type = 'text';
+          input.step = 'any';
+          input.placeholder = this.base.translate(kMiscTranslations.valueDefault);
+          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, '');
+
+          const setFunc = () => {
+            const val = validDurationOrUndefined(input.value) || '';
+            this.base.setOption('raidboss', 'triggers', trig.id, optionKey, val);
+          };
+
+          input.onchange = setFunc;
+          input.oninput = setFunc;
+          triggerDetails.appendChild(div);
+        } // Add output strings manually
+
+
+        const outputStrings = trig.outputStrings || {};
+
+        for (const key in outputStrings) {
+          const optionKey = kOptionKeys.outputStrings;
+          const template = this.base.translate(outputStrings[key]);
+          const label = document.createElement('div');
+          label.innerText = key;
+          label.classList.add('trigger-outputstring-label');
+          triggerDetails.appendChild(label);
+          const div = document.createElement('div');
+          div.classList.add('option-input-container', 'trigger-outputstring');
+          const input = document.createElement('input');
+          div.appendChild(input);
+          input.type = 'text';
+          input.placeholder = template;
+          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, key, '');
+
+          const setFunc = () => this.base.setOption('raidboss', 'triggers', trig.id, optionKey, key, input.value);
+
+          input.onchange = setFunc;
+          input.oninput = setFunc;
+          triggerDetails.appendChild(div);
+        }
+
+        const label = document.createElement('div');
+        triggerDetails.appendChild(label);
+        const div = document.createElement('div');
+        div.classList.add('option-input-container', 'trigger-source');
+        const baseUrl = 'https://github.com/quisquous/cactbot/blob/triggers';
+        const path = key.split('-');
+        let urlFilepath;
+
+        if (path.length === 3) {
+          // 00-misc/general.js
+          urlFilepath = `${path[0]}-${path[1]}/${[...path].slice(2).join('-')}`;
+        } else {
+          // 02-arr/raids/t1.js
+          urlFilepath = `${path[0]}-${path[1]}/${path[2]}/${[...path].slice(3).join('-')}`;
+        }
+
+        const escapedTriggerId = trig.id.replace(/'/g, '\\\'');
+        const uriComponent = encodeURIComponent(`id: '${escapedTriggerId}'`).replace(/'/g, '%27');
+        const urlString = `${baseUrl}/${urlFilepath}.js#:~:text=${uriComponent}`;
+        div.innerHTML = `<a href="${urlString}" target="_blank">(${this.base.translate(kMiscTranslations.viewTriggerSource)})</a>`;
+        triggerDetails.appendChild(div);
+      }
+    }
+  } // This duplicates the raidboss function of the same name.
+
+
+  valueOrFunction(f, data, matches, output) {
+    const result = typeof f === 'function' ? f(data, matches, output) : f;
+    if (result !== Object(result)) return result;
+    if (result[this.alertsLang]) return this.valueOrFunction(result[this.alertsLang]);
+    if (result[this.timelineLang]) return this.valueOrFunction(result[this.timelineLang]); // For partially localized results where this localization doesn't
+    // exist, prefer English over nothing.
+
+    return this.valueOrFunction(result['en']);
+  }
+
+  processTrigger(trig) {
+    // TODO: with some hackiness (e.g. regexes?) we could figure out which
+    // output string came from which alert type (alarm, alert, info, tts).
+    trig.output = new DoNothingFuncProxy(outputStrings => {
+      trig.outputStrings = trig.outputStrings || {};
+      Object.assign(trig.outputStrings, outputStrings);
+    });
+    const kBaseFakeData = {
+      party: new PartyTracker(),
+      lang: this.base.lang,
+      currentHP: 1000,
+      options: this.base.configOptions,
+      ShortName: x => x,
+      StopCombat: () => {},
+      ParseLocaleFloat: parseFloat,
+      CanStun: () => util/* default.canStun */.Z.canStun(this.job),
+      CanSilence: () => util/* default.canSilence */.Z.canSilence(this.job),
+      CanSleep: () => util/* default.canSleep */.Z.canSleep(this.job),
+      CanCleanse: () => util/* default.canCleanse */.Z.canCleanse(this.job),
+      CanFeint: () => util/* default.canFeint */.Z.canFeint(this.job),
+      CanAddle: () => util/* default.canAddle */.Z.canAddle(this.job)
+    };
+    const kFakeData = [{
+      me: 'Tini Poutini',
+      job: 'GNB',
+      role: 'tank'
+    }, {
+      me: 'Potato Chippy',
+      job: 'WHM',
+      role: 'healer'
+    }, {
+      me: 'Tater Tot',
+      job: 'BLM',
+      role: 'dps'
+    }, {
+      me: 'Hash Brown',
+      job: 'DRG',
+      role: 'dps'
+    }, {
+      me: 'Aloo Gobi',
+      job: 'BLU',
+      role: 'dps'
+    }];
+
+    for (let i = 0; i < kFakeData.length; ++i) kFakeData[i] = Object.assign({}, kFakeData[i], kBaseFakeData);
+
+    const kFakeMatches = {
+      // TODO: really should convert all triggers to use regexes.js.
+      // Mooooost triggers use matches[1] to be a name.
+      1: kFakeData[0].me,
+      sourceId: '41234567',
+      source: 'Enemy',
+      id: '1234',
+      ability: 'Ability',
+      targetId: '1234567',
+      target: kFakeData[0].me,
+      flags: '',
+      x: 100,
+      y: 100,
+      z: 0,
+      heading: 0,
+      npcId: undefined,
+      effect: 'Effect',
+      duration: 30,
+      code: '00',
+      line: '',
+      name: 'Name',
+      capture: true
+    };
+    const output = {};
+    const keys = ['alarmText', 'alertText', 'infoText', 'tts', 'sound']; // Try to determine some sample output?
+    // This could get much more complicated if we wanted it to.
+
+    const evalTrigger = (trig, key, idx) => {
+      try {
+        const result = this.valueOrFunction(trig[key], kFakeData[idx], kFakeMatches, trig.output);
+        if (!result) return false; // Super hack:
+
+        if (result.includes('undefined') || result.includes('NaN')) return false;
+        output[key] = result;
+        return true;
+      } catch (e) {
+        // This is all totally bogus.  Many triggers assume fields on data
+        // are properly defined when these calls happen, so will throw errors.
+        // So just silently ignore.
+        return false;
+      }
+    }; // Handle 'response' first.
+
+
+    if (trig.response) {
+      const r = trig.response;
+
+      for (let d = 0; d < kFakeData.length; ++d) {
+        try {
+          // Can't use ValueOrFunction here as r returns a non-localizable object.
+          // FIXME: this hackily replicates some raidboss logic too.
+          let response = r;
+
+          while (typeof response === 'function') {
+            // TODO: check if this has builtInResponseStr first.
+            response = response(kFakeData[d], kFakeMatches, trig.output);
+          }
+
+          if (!response) continue;
+
+          if (!trig.outputStrings) {
+            for (const key of keys) evalTrigger(response, key, d);
+          }
+
+          break;
+        } catch (e) {
+          continue;
+        }
+      }
+    } // Only evaluate fields if there are not outputStrings.
+    // outputStrings will indicate more clearly what the trigger says.
+
+
+    if (!trig.outputStrings) {
+      for (const key of keys) {
+        if (!trig[key]) continue;
+
+        for (let d = 0; d < kFakeData.length; ++d) {
+          if (evalTrigger(trig, key, d)) break;
+        }
+      }
+    }
+
+    trig.output = output;
+    const lang = this.base.lang;
+
+    const getRegex = baseField => {
+      const shortLanguage = lang.charAt(0).toUpperCase() + lang.slice(1);
+      const langSpecificRegex = trig[baseField + shortLanguage] || trig[baseField];
+      if (!langSpecificRegex) return;
+      const baseRegex = regexes/* default.parse */.Z.parse(langSpecificRegex);
+      if (!baseRegex) return;
+      return regexes/* default.parse */.Z.parse(baseRegex);
+    };
+
+    if (trig.isTimelineTrigger) {
+      trig.timelineRegex = getRegex('regex');
+    } else {
+      trig.triggerRegex = getRegex('regex');
+      trig.triggerNetRegex = getRegex('netRegex');
+    }
+
+    return trig;
+  }
+
+  processRaidbossFiles(files, userOptions) {
+    // `files` is map of filename => triggerSet (for trigger files)
+    // `map` is a sorted map of shortened zone key => { various fields, triggerSet }
+    const map = this.base.processFiles(files, userOptions.Triggers);
+    let triggerIdx = 0; // While walking through triggers, record any previous triggers with the same
+    // id so that the ui can disable overriding information.
+
+    const previousTriggerWithId = {};
+
+    for (const item of Object.values(map)) {
+      // TODO: maybe each trigger set needs a zone name, and we should
+      // use that instead of the filename???
+      const rawTriggers = {
+        trigger: [],
+        timeline: []
+      };
+      const triggerSet = item.triggerSet;
+      if (triggerSet.triggers) rawTriggers.trigger.push(...triggerSet.triggers);
+      if (triggerSet.timelineTriggers) rawTriggers.timeline.push(...triggerSet.timelineTriggers);
+      item.triggers = {};
+
+      for (const key in rawTriggers) {
+        for (const trig of rawTriggers[key]) {
+          triggerIdx++;
+
+          if (!trig.id) {
+            // Give triggers with no id some "unique" string so that they can
+            // still be added to the set and show up in the ui.
+            trig.id = `!!NoIdTrigger${triggerIdx}`;
+            trig.isMissingId = true;
+          } // Track if this trigger overrides any previous trigger.
+
+
+          const previous = previousTriggerWithId[trig.id];
+          if (previous) previous.overriddenByFile = triggerSet.filename;
+          previousTriggerWithId[trig.id] = trig;
+          trig.isTimelineTrigger = key === 'timeline'; // Also, if a user has two of the same id in the same triggerSet (?!)
+          // then only the second trigger will show up.
+
+          item.triggers[trig.id] = this.processTrigger(trig);
+        }
+      }
+    }
+
+    return map;
+  }
+
+  buildTriggerOptions(trig, labelDiv) {
+    const optionKey = kOptionKeys.output;
+    const div = document.createElement('div');
+    div.classList.add('trigger-options');
+
+    const updateLabel = input => {
+      if (input.value === 'hidden' || input.value === 'disabled') labelDiv.classList.add('disabled');else labelDiv.classList.remove('disabled');
+    };
+
+    const input = document.createElement('select');
+    div.appendChild(input);
+    const selectValue = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, 'default');
+
+    for (const key in raidboss_config_kTriggerOptions) {
+      // Hide debug only options unless they are selected.
+      // Otherwise, it will look weird to pick something like 'Disabled',
+      // but then not show it when developer options are turned off.
+      if (!this.base.developerOptions && raidboss_config_kTriggerOptions[key].debugOnly && key !== selectValue) continue;
+      const elem = document.createElement('option');
+      elem.innerHTML = this.base.translate(raidboss_config_kTriggerOptions[key].label);
+      elem.value = key;
+      elem.selected = key === selectValue;
+      input.appendChild(elem);
+      updateLabel(input);
+
+      input.onchange = () => {
+        updateLabel(input);
+        let value = input.value;
+        if (value.includes('default')) value = 'default';
+        this.base.setOption('raidboss', 'triggers', trig.id, optionKey, input.value);
+      };
+    }
+
+    return div;
+  }
+
+} // Raidboss needs to do some extra processing of user files.
+
+
+const userFileHandler = (name, files, options, basePath) => {
+  if (!options.Triggers) return;
+
+  for (const set of options.Triggers) {
+    // Annotate triggers with where they came from.  Note, options is passed in repeatedly
+    // as multiple sets of user files add triggers, so only process each file once.
+    if (set.isUserTriggerSet) continue; // `filename` here is just cosmetic for better debug printing to make it more clear
+    // where a trigger or an override is coming from.
+
+    set.filename = `${basePath}${name}`;
+    set.isUserTriggerSet = true; // Convert set.timelineFile to set.timeline.
+
+    if (set.timelineFile) {
+      const lastIndex = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')); // If lastIndex === -1, truncate name to the empty string.
+      // if lastIndex > -1, truncate name after the final slash.
+
+      const dir = name.substring(0, lastIndex + 1);
+      const timelineFile = `${dir}${set.timelineFile}`;
+      delete set.timelineFile;
+
+      if (!(timelineFile in files)) {
+        console.log(`ERROR: '${name}' specifies non-existent timeline file '${timelineFile}'.`);
+        continue;
+      } // set.timeline is processed recursively.
+
+
+      set.timeline = [set.timeline, files[timelineFile]];
+    }
+  }
+};
+
+const templateOptions = {
+  buildExtraUI: (base, container) => {
+    const builder = new RaidbossConfigurator(base);
+    const userOptions = { ...raidboss_options
+    };
+    user_config/* default.loadUserFiles */.Z.loadUserFiles('raidboss', userOptions, () => {
+      builder.buildUI(container, raidboss_manifest/* default */.Z, userOptions);
+    });
+  },
+  processExtraOptions: (options, savedConfig) => {
+    // raidboss will look up this.options.PerTriggerAutoConfig to find these values.
+    const optionName = 'PerTriggerAutoConfig';
+    options[optionName] = options[optionName] || {};
+    const triggers = savedConfig.triggers;
+    if (!triggers) return;
+    const perTrigger = options[optionName];
+    const outputObjs = {};
+    const keys = Object.keys(raidboss_config_kTriggerOptions);
+
+    for (const key of keys) {
+      outputObjs[key] = {};
+      setOptionsFromOutputValue(outputObjs[key], key);
+    }
+
+    for (const id in triggers) {
+      const autoConfig = {};
+      const output = triggers[id][kOptionKeys.output];
+      if (output) Object.assign(autoConfig, outputObjs[output]);
+      const duration = validDurationOrUndefined(triggers[id][kOptionKeys.duration]);
+      if (duration) autoConfig[kOptionKeys.duration] = duration;
+      const beforeSeconds = validDurationOrUndefined(triggers[id][kOptionKeys.beforeSeconds]);
+      if (beforeSeconds) autoConfig[kOptionKeys.beforeSeconds] = beforeSeconds;
+      const outputStrings = triggers[id][kOptionKeys.outputStrings];
+      if (outputStrings) autoConfig[kOptionKeys.outputStrings] = outputStrings;
+      if (output || duration || outputStrings) perTrigger[id] = autoConfig;
+    }
+  },
+  options: [{
+    id: 'Debug',
+    name: {
+      en: 'Enable debug mode',
+      de: 'Aktiviere Debugmodus',
+      fr: 'Activer le mode debug',
+      ja: 'デバッグモードを有効にする',
+      cn: '启用调试模式',
+      ko: '디버그 모드 활성화'
+    },
+    type: 'checkbox',
+    debugOnly: true
+  }, {
+    id: 'DefaultAlertOutput',
+    name: {
+      en: 'Default alert output',
+      de: 'Standard Alert Ausgabe',
+      fr: 'Alerte par défaut',
+      ja: '警告情報出力既定値',
+      cn: '默认警报提示信息输出方式',
+      ko: '기본 알람 출력 방식'
+    },
+    type: 'select',
+    options: {
+      en: {
+        '🆙🔊 Text and Sound': 'textAndSound',
+        '🆙💬 Text and TTS': 'ttsAndText',
+        '💬 TTS Only': 'ttsOnly',
+        '🆙 Text Only': 'textOnly',
+        '❌ Disabled': 'disabled'
+      },
+      de: {
+        '🆙🔊 Text und Ton': 'textAndSound',
+        '🆙💬 Text und TTS': 'ttsAndText',
+        '💬 Nur TTS': 'ttsOnly',
+        '🆙 Nur Text': 'textOnly',
+        '❌ Deaktiviert': 'disabled'
+      },
+      fr: {
+        '🆙🔊 Texte et son': 'textAndSound',
+        '🆙💬 Texte et TTS': 'ttsAndText',
+        '💬 TTS seulement': 'ttsOnly',
+        '🆙 Texte seulement': 'textOnly',
+        '❌ Désactivé': 'disabled'
+      },
+      ja: {
+        '🆙🔊 テキストと音声': 'textAndSound',
+        '🆙💬 テキストとTTS': 'ttsAndText',
+        '💬 TTSのみ': 'ttsOnly',
+        '🆙 テキストのみ': 'textOnly',
+        '❌ 無効': 'disabled'
+      },
+      cn: {
+        '🆙🔊 文字显示与提示音': 'textAndSound',
+        '🆙💬 文字显示与TTS': 'ttsAndText',
+        '💬 只使用TTS': 'ttsOnly',
+        '🆙 只使用文字显示': 'textOnly',
+        '❌ 禁用': 'disabled'
+      },
+      ko: {
+        '🆙🔊 텍스트와 소리': 'textAndSound',
+        '🆙💬 텍스트와 TTS': 'ttsAndText',
+        '💬 TTS만': 'ttsOnly',
+        '🆙 텍스트만': 'textOnly',
+        '❌ 비활성화': 'disabled'
+      }
+    },
+    default: 'textAndSound',
+    setterFunc: setOptionsFromOutputValue
+  }, {
+    id: 'AlertsLanguage',
+    name: {
+      en: 'Alerts language',
+      de: 'Alert Sprache',
+      fr: 'Langue des alertes',
+      ja: '警告情報の言語',
+      cn: '警报提示文字的语言',
+      ko: '알람 언어'
+    },
+    type: 'select',
+    options: {
+      en: {
+        'Use Display Language': 'default',
+        'English (en)': 'en',
+        'Chinese (cn)': 'cn',
+        'German (de)': 'de',
+        'French (fr)': 'fr',
+        'Japanese (ja)': 'ja',
+        'Korean (ko)': 'ko'
+      },
+      fr: {
+        'Utiliser la langue d\'affichage': 'default',
+        'Anglais (en)': 'en',
+        'Chinois (cn)': 'cn',
+        'Allemand (de)': 'de',
+        'Français (fr)': 'fr',
+        'Japonais (ja)': 'ja',
+        'Coréen (ko)': 'ko'
+      },
+      ja: {
+        '表示言語既定値': 'default',
+        '英語 (en)': 'en',
+        '中国語 (cn)': 'cn',
+        'ドイツ語 (de)': 'de',
+        'フランス語 (fr)': 'fr',
+        '日本語 (ja)': 'ja',
+        '韓国語 (ko)': 'ko'
+      },
+      cn: {
+        '使用显示语言': 'default',
+        '英语 (en)': 'en',
+        '汉语 (cn)': 'cn',
+        '德语 (de)': 'de',
+        '法语 (fr)': 'fr',
+        '日语 (ja)': 'ja',
+        '韩语 (ko)': 'ko'
+      },
+      ko: {
+        '주 사용 언어 사용': 'default',
+        '영어 (en)': 'en',
+        '중국어 (cn)': 'cn',
+        '독일어 (de)': 'de',
+        '프랑스어 (fr)': 'fr',
+        '일본어 (ja)': 'ja',
+        '한국어 (ko)': 'ko'
+      }
+    },
+    default: 'default',
+    debug: true,
+    setterFunc: (options, value) => {
+      if (value === 'default') return;
+      options['AlertsLanguage'] = value;
+    }
+  }, {
+    id: 'TimelineLanguage',
+    name: {
+      en: 'Timeline language',
+      de: 'Timeline Sprache',
+      fr: 'Langue de la timeline',
+      ja: 'タイムラインの言語',
+      cn: '时间轴文本的语言',
+      ko: '타임라인 언어'
+    },
+    type: 'select',
+    options: {
+      en: {
+        'Use FFXIV Plugin Language': 'default',
+        'English (en)': 'en',
+        'Chinese (cn)': 'cn',
+        'German (de)': 'de',
+        'French (fr)': 'fr',
+        'Japanese (ja)': 'ja',
+        'Korean (ko)': 'ko'
+      },
+      de: {
+        'Benutze FFXIV Plugin Sprache': 'default',
+        'Englisch (en)': 'en',
+        'Chinesisch (cn)': 'cn',
+        'Deutsch (de)': 'de',
+        'Französisch (fr)': 'fr',
+        'Japanisch (ja)': 'ja',
+        'Koreanisch (ko)': 'ko'
+      },
+      fr: {
+        'Utiliser la langue du Plugin FFXIV': 'default',
+        'Anglais (en)': 'en',
+        'Chinois (cn)': 'cn',
+        'Allemand (de)': 'de',
+        'Français (fr)': 'fr',
+        'Japonais (ja)': 'ja',
+        'Coréen (ko)': 'ko'
+      },
+      ja: {
+        'FFXIV Pluginの言語設定': 'default',
+        '英語 (en)': 'en',
+        '中国語 (cn)': 'cn',
+        'ドイツ語 (de)': 'de',
+        'フランス語 (fr)': 'fr',
+        '日本語 (ja)': 'ja',
+        '韓国語 (ko)': 'ko'
+      },
+      cn: {
+        '使用最终幻想XIV解析插件设置的语言': 'default',
+        '英语 (en)': 'en',
+        '汉语 (cn)': 'cn',
+        '德语 (de)': 'de',
+        '法语 (fr)': 'fr',
+        '日语 (ja)': 'ja',
+        '韩语 (ko)': 'ko'
+      },
+      ko: {
+        'FFXIV Plugin 언어 사용': 'default',
+        '영어 (en)': 'en',
+        '중국어 (cn)': 'cn',
+        '독일어 (de)': 'de',
+        '프랑스어 (fr)': 'fr',
+        '일본어 (ja)': 'ja',
+        '한국어 (ko)': 'ko'
+      }
+    },
+    default: 'default',
+    debug: true,
+    setterFunc: (options, value) => {
+      if (value === 'default') return;
+      options['TimelineLanguage'] = value;
+    }
+  }, {
+    id: 'Skin',
+    name: {
+      en: 'Raidboss Skin',
+      de: 'Raidboss Skin',
+      fr: 'Raidboss Skin',
+      ja: 'Raidbossのスキン',
+      cn: 'Raidboss皮肤',
+      ko: 'Raidboss 스킨'
+    },
+    type: 'select',
+    options: {
+      en: {
+        'Default': 'default',
+        'lippe': 'lippe'
+      },
+      de: {
+        'Default': 'default',
+        'lippe': 'lippe'
+      },
+      fr: {
+        'Défaut': 'default',
+        'lippe': 'lippe'
+      },
+      ja: {
+        '初期設定': 'default',
+        'lippe': 'lippe'
+      },
+      cn: {
+        '默认': 'default',
+        'lippe': 'lippe'
+      },
+      ko: {
+        '기본': 'default',
+        'lippe': 'lippe'
+      }
+    },
+    default: 'default'
+  }, {
+    id: 'TimelineEnabled',
+    name: {
+      en: 'Timeline enabled',
+      de: 'Timeline aktiviert',
+      fr: 'Timeline activée',
+      ja: 'タイムラインを有効にする',
+      cn: '启用时间轴',
+      ko: '타임라인 활성화'
+    },
+    type: 'checkbox',
+    default: true
+  }, {
+    id: 'AlertsEnabled',
+    name: {
+      en: 'Alerts enabled',
+      de: 'Alerts aktiviert',
+      fr: 'Alertes activées',
+      ja: '警告情報を有効にする',
+      cn: '启用提示文本显示',
+      ko: '알람 활성화'
+    },
+    type: 'checkbox',
+    default: true
+  }, {
+    id: 'ShowTimerBarsAtSeconds',
+    name: {
+      en: 'Timer bar show window (seconds)',
+      de: 'Timer-Bar Anzeigedauer (in Sekunden)',
+      fr: 'Fenêtre d\'affichage de la barre de temps (secondes)',
+      ja: 'タイムバーに時間表示 (秒)',
+      cn: '计时条显示时长 (秒)',
+      ko: '타임라인을 표시할 기준 시간 (초 이하)'
+    },
+    type: 'float',
+    default: 30
+  }, {
+    id: 'KeepExpiredTimerBarsForSeconds',
+    name: {
+      en: 'Keep expired timer bar (seconds)',
+      de: 'Behalte abgelaufene Timer-Bar (in Sekunden)',
+      fr: 'Garder la barre de temps expirée (secondes)',
+      ja: '終了したタイムバーが消えるまでの待ち時間 (秒)',
+      cn: '已失效的计时条的淡出时间 (秒)',
+      ko: '만료된 타임라인이 사라지기까지의 시간 (초)'
+    },
+    type: 'float',
+    default: 0.7
+  }, {
+    id: 'BarExpiresSoonSeconds',
+    name: {
+      en: 'Time to recolor timer as expiring soon (seconds)',
+      de: 'Zeit bis ein bald auslaufender Timer umgefärbt wird (in Sekunden)',
+      fr: 'Recolorisation de la barre de temps avant expiration (secondes)',
+      ja: 'タイムバーが終了前に再度色付けの残り時間 (秒)',
+      cn: '倒计时小于该值时当前计时条变色 (秒)',
+      ko: '타임라인의 색상을 바꿀 기준 시간 (초 이하)'
+    },
+    type: 'integer',
+    default: 6
+  }, {
+    id: 'MaxNumberOfTimerBars',
+    name: {
+      en: 'Max number of timer bars',
+      de: 'Max Anzahl an Timer-Bars',
+      fr: 'Nombre max de barres de temps',
+      ja: 'タイムバーの最大数',
+      cn: '计时条最大数量',
+      ko: '표시할 타임라인의 최대 개수'
+    },
+    type: 'integer',
+    default: 6
+  }, {
+    id: 'DisplayAlarmTextForSeconds',
+    name: {
+      en: 'Alarm text display duration (seconds)',
+      de: 'Alarm-Text Anzeigedauer (in Sekunden)',
+      fr: 'Durée d\'affichage du texte d\'alarme (secondes)',
+      ja: '警報テキスト表示時間の長さ (秒)',
+      cn: '警报文字显示持续时间 (秒)',
+      ko: '경고 텍스트를 표시할 시간 (초)'
+    },
+    type: 'float',
+    default: 3
+  }, {
+    id: 'DisplayAlertTextForSeconds',
+    name: {
+      en: 'Alert text display duration (seconds)',
+      de: 'Alert-Text Anzeigedauer (in Sekunden)',
+      fr: 'Durée d\'affichage du texte d\'alerte (secondes)',
+      ja: '警告テキスト表示時間の長さ (秒)',
+      cn: '警告文字显示持续时间 (秒)',
+      ko: '주의 텍스트를 표시할 시간 (초)'
+    },
+    type: 'float',
+    default: 3
+  }, {
+    id: 'DisplayInfoTextForSeconds',
+    name: {
+      en: 'Info text display duration (seconds)',
+      de: 'Info-Text Anzeigedauer (in Sekunden)',
+      fr: 'Durée d\'affichage du texte d\'information (secondes)',
+      ja: '情報テキスト表示時間の長さ (秒)',
+      cn: '信息文字显示持续时间 (秒)',
+      ko: '안내 텍스트를 표시할 시간 (초)'
+    },
+    type: 'float',
+    default: 3
+  }, {
+    id: 'AlarmSoundVolume',
+    name: {
+      en: 'Alarm sound volume (0-1)',
+      de: 'Alarm Lautstärke (0-1)',
+      fr: 'Volume de l\'alarme (0-1)',
+      ja: '警報音声の音量 (0-1)',
+      cn: '警报提示音的音量 (0-1)',
+      ko: '경고 소리 크기 (0-1)'
+    },
+    type: 'float',
+    default: 1
+  }, {
+    id: 'AlertSoundVolume',
+    name: {
+      en: 'Alert sound volume (0-1)',
+      de: 'Alert Lautstärke (0-1)',
+      fr: 'Volume de l\'alerte (0-1)',
+      ja: '警告音声の音量 (0-1)',
+      cn: '警告提示音的音量 (0-1)',
+      ko: '주의 소리 크기 (0-1)'
+    },
+    type: 'float',
+    default: 1
+  }, {
+    id: 'InfoSoundVolume',
+    name: {
+      en: 'Info sound volume (0-1)',
+      de: 'Info Lautstärke (0-1)',
+      fr: 'Volume de l\'info (0-1)',
+      ja: '情報音声の音量 (0-1)',
+      cn: '信息提示音的音量 (0-1)',
+      ko: '안내 소리 크기 (0-1)'
+    },
+    type: 'float',
+    default: 1
+  }, {
+    id: 'LongSoundVolume',
+    name: {
+      en: 'Long sound volume (0-1)',
+      de: 'Langer Ton Lautstärke (0-1)',
+      fr: 'Volume du son long (0-1)',
+      ja: '長い音声の音量 (0-1)',
+      cn: '长提示音的音量 (0-1)',
+      ko: '긴 소리 크기 (0-1)'
+    },
+    type: 'float',
+    default: 1
+  }, {
+    id: 'PullSoundVolume',
+    name: {
+      en: 'Pull sound volume (0-1)',
+      de: 'Pull Lautstärke (0-1)',
+      fr: 'Volume du son de pull (0-1)',
+      ja: 'タゲ取る効果音の音量 (0-1)',
+      cn: '开怪提示音的音量 (0-1)',
+      ko: '풀링 소리 크기 (0-1)'
+    },
+    type: 'float',
+    default: 1
+  }, {
+    id: 'cactbotWormholeStrat',
+    // TODO: maybe need some way to group these kinds of
+    // options if we end up having a lot?
+    name: {
+      en: 'Alex Ultimate: enable cactbot Wormhole strat',
+      de: 'Alex Ultimate: aktiviere cactbot Wormhole Strategie',
+      fr: 'Alex fatal : activer cactbot pour Wormhole strat',
+      ja: '絶アレキサンダー討滅戦：cactbot「次元断絶のマーチ」ギミック',
+      cn: '亚历山大绝境战：cactbot灵泉辅助功能',
+      ko: '절 알렉: cactbot 웜홀 공략방식 활성화'
+    },
+    type: 'checkbox',
+    default: false
+  }, {
+    id: 'cactbote8sUptimeKnockbackStrat',
+    name: {
+      en: 'e8s: enable cactbot Uptime Knockback strat',
+      de: 'e8s: aktiviere cactbot Uptime Knockback Strategie',
+      fr: 'e8s : activer cactbot pour Uptime Knockback strat',
+      ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック',
+      cn: 'E8S: 启用cactbot的击退提示功能',
+      ko: '공명 영웅 4층: cactbot 정확한 타이밍 넉백방지 공략 활성화'
+    },
+    type: 'checkbox',
+    default: false
+  }]
+};
+user_config/* default.registerOptions */.Z.registerOptions('raidboss', templateOptions, userFileHandler);
+;// CONCATENATED MODULE: ./ui/config/config.js
+
+
+
+
+ // Load other config files
+
+
+
+
+
+
+
+
+
+const config_Options = {};
+let gConfig = null; // Text in the butter bar, to prompt the user to reload after a config change.
+
+const kReloadText = {
+  en: 'To apply configuration changes, reload cactbot overlays.',
+  de: 'Um die Änderungen zu aktivieren, aktualisiere bitte die Cactbot Overlays.',
+  fr: 'Afin d\'appliquer les modifications, il faut recharger l\'overlay Cactbot.',
+  ja: '設定を有効にする為、Cactbotオーバーレイを再読み込みしてください',
+  cn: '要应用配置更改，请重新加载cactbot悬浮窗。',
+  ko: '변경사항을 적용하려면, 오버레이를 새로고침 하십시오.'
+}; // Text in the butter bar reload button.
+
+const kReloadButtonText = {
+  en: 'Reload',
+  de: 'Aktualisieren',
+  fr: 'Recharger',
+  ja: '再読み込み',
+  cn: '重新加载',
+  ko: '새로고침'
+}; // Text on the directory choosing button.
+
+const kDirectoryChooseButtonText = {
+  en: 'Choose Directory',
+  de: 'Wähle ein Verzeichnis',
+  fr: 'Choix du répertoire',
+  ja: 'ディレクトリを選択',
+  cn: '选择目录',
+  ko: '디렉토리 선택'
+}; // What to show when a directory hasn't been chosen.
+
+const kDirectoryDefaultText = {
+  en: '(Default)',
+  de: '(Standard)',
+  fr: '(Défaut)',
+  ja: '(初期設定)',
+  cn: '(默认)',
+  ko: '(기본)'
+}; // Translating data folders to a category name.
+
+const kPrefixToCategory = {
+  '00-misc': {
+    en: 'General Triggers',
+    de: 'General Trigger',
+    fr: 'Général Triggers',
+    ja: '汎用',
+    cn: '通用触发器',
+    ko: '공용 트리거'
+  },
+  '02-arr': {
+    en: 'A Realm Reborn (ARR 2.x)',
+    de: 'A Realm Reborn (ARR 2.x)',
+    fr: 'A Realm Reborn (ARR 2.x)',
+    ja: '新生エオルゼア (2.x)',
+    cn: '重生之境 (2.x)',
+    ko: '신생 에오르제아 (2.x)'
+  },
+  '03-hw': {
+    en: 'Heavensward (HW 3.x)',
+    de: 'Heavensward (HW 3.x)',
+    fr: 'Heavensward (HW 3.x)',
+    ja: '蒼天のイシュガルド (3.x)',
+    cn: '苍穹之禁城 (3.x)',
+    ko: '창천의 이슈가르드 (3.x)'
+  },
+  '04-sb': {
+    en: 'Stormblood (SB 4.x)',
+    de: 'Stormblood (SB 4.x)',
+    fr: 'Stormblood (SB 4.x)',
+    ja: '紅蓮のリベレーター (4.x)',
+    cn: '红莲之狂潮 (4.x)',
+    ko: '홍련의 해방자 (4.x)'
+  },
+  '05-shb': {
+    en: 'Shadowbringers (ShB 5.x)',
+    de: 'Shadowbringers (ShB 5.x)',
+    fr: 'Shadowbringers (ShB 5.x)',
+    ja: '漆黒のヴィランズ (5.x)',
+    cn: '暗影之逆焰 (5.x)',
+    ko: '칠흑의 반역자 (5.x)'
+  },
+  'user': {
+    en: 'User Triggers',
+    de: 'Benutzer Trigger',
+    fr: 'Triggers personnalisés',
+    ja: 'ユーザートリガー',
+    cn: '自定义触发器'
+  }
+}; // Translating data subfolders to encounter type.
+
+const kDirectoryToCategory = {
+  alliance: {
+    en: 'Alliance Raid',
+    de: 'Allianz-Raid',
+    fr: 'Raid en Alliance',
+    ja: 'アライアンスレイド',
+    cn: '团队任务',
+    ko: '연합 레이드'
+  },
+  dungeon: {
+    en: 'Dungeon',
+    de: 'Dungeon',
+    fr: 'Donjon',
+    ja: 'ダンジョン',
+    cn: '迷宫挑战',
+    ko: '던전'
+  },
+  eureka: {
+    en: 'Eureka',
+    de: 'Eureka',
+    fr: 'Eurêka',
+    ja: '禁断の地エウレカ',
+    cn: '禁地优雷卡',
+    ko: '에우레카'
+  },
+  raid: {
+    en: 'Raid',
+    de: 'Raid',
+    fr: 'Raid',
+    ja: 'レイド',
+    cn: '大型任务',
+    ko: '레이드'
+  },
+  pvp: {
+    en: 'PVP',
+    de: 'PvP',
+    fr: 'JcJ',
+    ja: 'PvP',
+    cn: 'PvP',
+    ko: 'PvP'
+  },
+  trial: {
+    en: 'Trial',
+    de: 'Prüfung',
+    fr: 'Défi',
+    ja: '討伐・討滅戦',
+    cn: '讨伐歼灭战',
+    ko: '토벌전'
+  },
+  ultimate: {
+    en: 'Ultimate',
+    de: 'Fatale Raids',
+    fr: 'Raid fatal',
+    ja: '絶シリーズ',
+    cn: '绝境战',
+    ko: '절 난이도'
+  }
+}; // TODO: maybe we should also sort all the filenames properly too?
+// TODO: use ZoneId to get this
+
+const fileNameToTitle = filename => {
+  // Strip directory and extension.
+  const file = filename.replace(/^.*\//, '').replace(/\.[jt]s/g, ''); // Remove non-name characters (probably).
+
+  const name = file.replace(/[_-]/g, ' '); // Capitalize the first letter of every word.
+
+  let capitalized = name.replace(/(?:^| )\w/g, c => c.toUpperCase()); // Fully capitalize acronyms like e4n.
+
+  if (/^\w[0-9]+\w$/.test(capitalized)) capitalized = capitalized.toUpperCase();
+  return capitalized;
+};
+
+class CactbotConfigurator {
+  constructor(configOptions, savedConfig) {
+    // Predefined, only for ordering purposes.
+    this.contents = {
+      // top level
+      'general': [],
+      // things most people care about
+      'raidboss': [],
+      'jobs': []
+    };
+    this.configOptions = configOptions; // If the user has set a display language, use that.
+    // Otherwise, use the operating system language as a default for the config tool.
+
+    this.lang = configOptions.DisplayLanguage || configOptions.ShortLocale;
+    this.savedConfig = savedConfig || {};
+    this.developerOptions = this.getOption('general', 'ShowDeveloperOptions', false);
+    const templates = user_config/* default.optionTemplates */.Z.optionTemplates;
+
+    for (const group in templates) {
+      this.contents[group] = this.contents[group] || [];
+      this.contents[group].push(templates[group]);
+    }
+
+    this.buildButterBar();
+    const container = document.getElementById('container');
+    this.buildUI(container, this.contents);
+  }
+
+  async saveConfigData() {
+    // TODO: rate limit this?
+    await (0,overlay_plugin_api/* callOverlayHandler */.ae)({
+      call: 'cactbotSaveData',
+      overlay: 'options',
+      data: this.savedConfig
+    });
+    document.getElementById('butter-margin').classList.remove('hidden');
+  } // Helper translate function.  Takes in an object with language keys
+  // and returns a single entry based on available translations.
+
+
+  translate(textObj) {
+    if (textObj === null || typeof textObj !== 'object' || !textObj['en']) return textObj;
+    const t = textObj[this.lang];
+    if (t) return t;
+    return textObj['en'];
+  } // takes variable args, with the last value being the default value if
+  // any key is missing.
+  // e.g. (foo, bar, baz, 5) with {foo: { bar: { baz: 3 } } } will return
+  // the value 3.  Requires at least two args.
+
+
+  getOption() {
+    const num = arguments.length;
+
+    if (num < 2) {
+      console.error('getOption requires at least two args');
+      return;
+    }
+
+    const defaultValue = arguments[num - 1];
+    let objOrValue = this.savedConfig;
+
+    for (let i = 0; i < num - 1; ++i) {
+      objOrValue = objOrValue[arguments[i]];
+      if (typeof objOrValue === 'undefined') return defaultValue;
+    }
+
+    return objOrValue;
+  } // takes variable args, with the last value being the 'value' to set it to
+  // e.g. (foo, bar, baz, 3) will set {foo: { bar: { baz: 3 } } }.
+  // requires at least two args.
+
+
+  setOption() {
+    const num = arguments.length;
+
+    if (num < 2) {
+      console.error('setOption requires at least two args');
+      return;
+    } // Set keys and create default {} if it doesn't exist.
+
+
+    let obj = this.savedConfig;
+
+    for (let i = 0; i < num - 2; ++i) {
+      const arg = arguments[i];
+      obj[arg] = obj[arg] || {};
+      obj = obj[arg];
+    } // Set the last key to have the final argument's value.
+
+
+    obj[arguments[num - 2]] = arguments[num - 1];
+    this.saveConfigData();
+  }
+
+  buildButterBar() {
+    const container = document.getElementById('butter-bar');
+    const textDiv = document.createElement('div');
+    textDiv.classList.add('reload-text');
+    textDiv.innerText = this.translate(kReloadText);
+    container.appendChild(textDiv);
+    const buttonInput = document.createElement('input');
+    buttonInput.classList.add('reload-button');
+    buttonInput.type = 'button';
+
+    buttonInput.onclick = () => {
+      (0,overlay_plugin_api/* callOverlayHandler */.ae)({
+        call: 'cactbotReloadOverlays'
+      });
+    };
+
+    buttonInput.value = this.translate(kReloadButtonText);
+    container.appendChild(buttonInput);
+  } // Top level UI builder, builds everything.
+
+
+  buildUI(container, contents) {
+    for (const group in contents) {
+      const content = contents[group];
+      if (content.length === 0) continue; // For each overlay options template, build a section for it.
+      // Then iterate through all of its options and build ui for those options.
+      // Give each options template a chance to build special ui.
+
+      const groupDiv = this.buildOverlayGroup(container, group);
+
+      for (let i = 0; i < content.length; ++i) {
+        const options = content[i].options || [];
+
+        for (let j = 0; j < options.length; ++j) {
+          const opt = options[j];
+          if (!this.developerOptions && opt.debugOnly) continue;
+          const buildFunc = {
+            checkbox: this.buildCheckbox,
+            select: this.buildSelect,
+            float: this.buildFloat,
+            integer: this.buildInteger,
+            directory: this.buildDirectory
+          }[opt.type];
+
+          if (!buildFunc) {
+            console.error('unknown type: ' + JSON.stringify(opt));
+            continue;
+          }
+
+          buildFunc.bind(this)(groupDiv, opt, group);
+        }
+
+        const builder = content[i].buildExtraUI;
+        if (builder) builder(this, groupDiv);
+      }
+    }
+  } // Overlay builder for each overlay type (e.g. raidboss, jobs).
+
+
+  buildOverlayGroup(container, group) {
+    const collapser = document.createElement('div');
+    collapser.classList.add('overlay-container');
+    container.appendChild(collapser);
+    const a = document.createElement('a');
+    a.name = group;
+    collapser.appendChild(a);
+    const header = document.createElement('div');
+    header.classList.add('overlay-header');
+    header.innerText = group;
+    a.appendChild(header);
+    const groupDiv = document.createElement('div');
+    groupDiv.classList.add('overlay-options');
+    collapser.appendChild(groupDiv);
+
+    a.onclick = e => {
+      a.parentNode.classList.toggle('collapsed');
+    };
+
+    return groupDiv;
+  }
+
+  buildNameDiv(opt) {
+    const div = document.createElement('div');
+    div.innerHTML = this.translate(opt.name);
+    div.classList.add('option-name');
+    return div;
+  }
+
+  buildCheckbox(parent, opt, group) {
+    const div = document.createElement('div');
+    div.classList.add('option-input-container');
+    const input = document.createElement('input');
+    div.appendChild(input);
+    input.type = 'checkbox';
+    input.checked = this.getOption(group, opt.id, opt.default);
+
+    input.onchange = () => this.setOption(group, opt.id, input.checked);
+
+    parent.appendChild(this.buildNameDiv(opt));
+    parent.appendChild(div);
+  }
+
+  buildDirectory(parent, opt, group) {
+    const div = document.createElement('div');
+    div.classList.add('option-input-container');
+    div.classList.add('input-dir-container');
+    const input = document.createElement('input');
+    input.type = 'submit';
+    input.value = this.translate(kDirectoryChooseButtonText);
+    input.classList.add('input-dir-submit');
+    div.appendChild(input);
+    const label = document.createElement('div');
+    label.classList.add('input-dir-label');
+    div.appendChild(label);
+
+    const setLabel = str => {
+      if (str) label.innerText = str;else label.innerText = this.translate(kDirectoryDefaultText);
+    };
+
+    setLabel(this.getOption(group, opt.id, opt.default));
+    parent.appendChild(this.buildNameDiv(opt));
+    parent.appendChild(div);
+
+    input.onclick = async () => {
+      // Prevent repeated clicks on the folder chooser.
+      // callOverlayHandler is not synchronous.
+      // FIXME: do we need some clearer UI here (like pretending to be modal?)
+      input.disabled = true;
+      const prevValue = label.innerText;
+      label.innerText = '';
+      const result = await (0,overlay_plugin_api/* callOverlayHandler */.ae)({
+        call: 'cactbotChooseDirectory'
+      });
+      input.disabled = false;
+      const dir = result.data ? result.data : '';
+      if (dir !== prevValue) this.setOption(group, opt.id, dir);
+      setLabel(dir);
+    };
+  }
+
+  buildSelect(parent, opt, group) {
+    const div = document.createElement('div');
+    div.classList.add('option-input-container');
+    const input = document.createElement('select');
+    div.appendChild(input);
+    const defaultValue = this.getOption(group, opt.id, opt.default);
+
+    input.onchange = () => this.setOption(group, opt.id, input.value);
+
+    const innerOptions = this.translate(opt.options);
+
+    for (const key in innerOptions) {
+      const elem = document.createElement('option');
+      elem.value = innerOptions[key];
+      elem.innerHTML = key;
+      if (innerOptions[key] === defaultValue) elem.selected = true;
+      input.appendChild(elem);
+    }
+
+    parent.appendChild(this.buildNameDiv(opt));
+    parent.appendChild(div);
+  } // FIXME: this could use some data validation if a user inputs non-floats.
+
+
+  buildFloat(parent, opt, group) {
+    const div = document.createElement('div');
+    div.classList.add('option-input-container');
+    const input = document.createElement('input');
+    div.appendChild(input);
+    input.type = 'text';
+    input.step = 'any';
+    input.value = this.getOption(group, opt.id, parseFloat(opt.default));
+
+    const setFunc = () => this.setOption(group, opt.id, input.value);
+
+    input.onchange = setFunc;
+    input.oninput = setFunc;
+    parent.appendChild(this.buildNameDiv(opt));
+    parent.appendChild(div);
+  } // FIXME: this could use some data validation if a user inputs non-integers.
+
+
+  buildInteger(parent, opt, group) {
+    const div = document.createElement('div');
+    div.classList.add('option-input-container');
+    const input = document.createElement('input');
+    div.appendChild(input);
+    input.type = 'text';
+    input.step = 1;
+    input.value = this.getOption(group, opt.id, parseInt(opt.default));
+
+    const setFunc = () => this.setOption(group, opt.id, input.value);
+
+    input.onchange = setFunc;
+    input.oninput = setFunc;
+    parent.appendChild(this.buildNameDiv(opt));
+    parent.appendChild(div);
+  }
+
+  processFiles(files, userTriggerSets) {
+    const map = {};
+
+    for (const filename in files) {
+      if (!filename.endsWith('.js') && !filename.endsWith('.ts')) continue;
+      let prefixKey = '00-misc';
+
+      for (const str in kPrefixToCategory) {
+        if (!filename.startsWith(str)) continue;
+        prefixKey = str;
+        break;
+      }
+
+      let typeKey = 'general';
+
+      for (const str in kDirectoryToCategory) {
+        if (!filename.includes('/' + str + '/')) continue;
+        typeKey = str;
+        break;
+      }
+
+      const triggerSet = files[filename];
+      let title = fileNameToTitle(filename);
+      let zoneId = undefined; // Make assumptions about trigger structure here to try to get the zoneId out.
+
+      if (triggerSet && 'zoneId' in triggerSet) {
+        zoneId = triggerSet.zoneId; // Use the translatable zone info name, if possible.
+
+        const zoneInfo = zone_info/* default */.Z[zoneId];
+        if (zoneInfo) title = this.translate(zoneInfo.name);
+      }
+
+      const fileKey = filename.replace(/\//g, '-').replace(/.[jt]s$/, '');
+      map[fileKey] = {
+        filename: filename,
+        fileKey: fileKey,
+        prefixKey: prefixKey,
+        prefix: this.translate(kPrefixToCategory[prefixKey]),
+        section: this.translate(kPrefixToCategory[prefixKey]),
+        type: this.translate(kDirectoryToCategory[typeKey]),
+        title: title,
+        triggerSet: triggerSet,
+        zoneId: zoneId
+      };
+    }
+
+    const userMap = {};
+    let userFileIdx = 0;
+
+    for (const triggerSet of userTriggerSets || []) {
+      if (!triggerSet) continue;
+      const fileKey = `user/${triggerSet.filename}/${userFileIdx++}`; // cactbot triggers all use zoneId, but user triggers in the wild
+      // may also use zoneRegex or also have errors and not have either.
+
+      let title = '???';
+      let zoneId = 'undefined';
+
+      if ('zoneId' in triggerSet) {
+        zoneId = triggerSet.zoneId; // Use the translatable zone info name, if possible.
+
+        const zoneInfo = zone_info/* default */.Z[zoneId];
+        if (zoneInfo) title = this.translate(zoneInfo.name);
+      } else if ('zoneRegex' in triggerSet) {
+        // zoneRegex can be a localized object.
+        let zoneRegex = this.translate(triggerSet.zoneRegex);
+        if (typeof zoneRegex === 'string') zoneRegex = regexes/* default.parse */.Z.parse(zoneRegex);
+        if (zoneRegex instanceof RegExp) title = `/${zoneRegex.source}/`;
+      }
+
+      userMap[fileKey] = {
+        filename: triggerSet.filename,
+        fileKey: fileKey,
+        prefixKey: 'user',
+        prefix: this.translate(kPrefixToCategory['user']),
+        section: triggerSet.filename,
+        title: title,
+        type: null,
+        triggerSet: triggerSet,
+        zoneId: zoneId
+      };
+    }
+
+    const sortedEntries = Object.keys(map).sort((keyA, keyB) => {
+      // Sort first by expansion.
+      const entryA = map[keyA];
+      const entryB = map[keyB];
+      const prefixCompare = entryA.prefixKey.localeCompare(entryB.prefixKey);
+      if (prefixCompare !== 0) return prefixCompare; // Then sort by contentList.
+
+      const indexA = content_list.indexOf(entryA.zoneId);
+      const indexB = content_list.indexOf(entryB.zoneId);
+
+      if (indexA === -1 && indexB === -1) {
+        // If we don't know, sort by strings.
+        return keyA.localeCompare(keyB);
+      } else if (indexA === -1) {
+        // Sort B first.
+        return 1;
+      } else if (indexB === -1) {
+        // Sort A first.
+        return -1;
+      } // Default: sort by index in contentList.
+
+
+      return indexA - indexB;
+    }); // Rebuild map with keys in the right order.
+
+    const sortedMap = {};
+
+    for (const key of sortedEntries) sortedMap[key] = map[key]; // Tack on user triggers at the end in the order they were eval'd.
+
+
+    for (const key in userMap) sortedMap[key] = userMap[key];
+
+    return sortedMap;
+  }
+
+}
+user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('config', config_Options, async e => {
+  gConfig = new CactbotConfigurator(config_Options, user_config/* default.savedConfig */.Z.savedConfig);
+});
+
+/***/ }),
+
 /***/ 152:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -10995,3459 +14260,6 @@ const data = {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (data);
 
 
-/***/ }),
-
-/***/ 462:
-/***/ ((__unused_webpack___webpack_module__, __unused_webpack___webpack_exports__, __webpack_require__) => {
-
-
-// UNUSED EXPORTS: default
-
-// EXTERNAL MODULE: ./resources/overlay_plugin_api.ts
-var overlay_plugin_api = __webpack_require__(906);
-// EXTERNAL MODULE: ./resources/regexes.ts
-var regexes = __webpack_require__(201);
-// EXTERNAL MODULE: ./resources/user_config.ts
-var user_config = __webpack_require__(970);
-// EXTERNAL MODULE: ./resources/zone_info.ts
-var zone_info = __webpack_require__(810);
-// EXTERNAL MODULE: ./resources/zone_id.ts
-var zone_id = __webpack_require__(438);
-;// CONCATENATED MODULE: ./resources/content_list.ts
-
-// Ordered as per duty finder.  This is intended to be used as ordering for
-// any ui that is dealing with multiple zones / triggers.
-//
-// These are not things that cactbot necessarily supports, but things that it
-// theoretically could be supporting in the future with raidboss and oopsy.
-const contentList = [
-    // General (cactbot custom zone id)
-    zone_id/* default.MatchAll */.Z.MatchAll,
-    // Dungeons (A Realm Reborn)
-    zone_id/* default.Sastasha */.Z.Sastasha,
-    zone_id/* default.TheTamTaraDeepcroft */.Z.TheTamTaraDeepcroft,
-    zone_id/* default.CopperbellMines */.Z.CopperbellMines,
-    zone_id/* default.Halatali */.Z.Halatali,
-    zone_id/* default.TheThousandMawsOfTotoRak */.Z.TheThousandMawsOfTotoRak,
-    zone_id/* default.HaukkeManor */.Z.HaukkeManor,
-    zone_id/* default.BrayfloxsLongstop */.Z.BrayfloxsLongstop,
-    zone_id/* default.TheSunkenTempleOfQarn */.Z.TheSunkenTempleOfQarn,
-    zone_id/* default.CuttersCry */.Z.CuttersCry,
-    zone_id/* default.TheStoneVigil */.Z.TheStoneVigil,
-    zone_id/* default.DzemaelDarkhold */.Z.DzemaelDarkhold,
-    zone_id/* default.TheAurumVale */.Z.TheAurumVale,
-    zone_id/* default.TheWanderersPalace */.Z.TheWanderersPalace,
-    zone_id/* default.CastrumMeridianum */.Z.CastrumMeridianum,
-    zone_id/* default.ThePraetorium */.Z.ThePraetorium,
-    zone_id/* default.AmdaporKeep */.Z.AmdaporKeep,
-    zone_id/* default.PharosSirius */.Z.PharosSirius,
-    zone_id/* default.CopperbellMinesHard */.Z.CopperbellMinesHard,
-    zone_id/* default.HaukkeManorHard */.Z.HaukkeManorHard,
-    zone_id/* default.TheLostCityOfAmdapor */.Z.TheLostCityOfAmdapor,
-    zone_id/* default.HalataliHard */.Z.HalataliHard,
-    zone_id/* default.BrayfloxsLongstopHard */.Z.BrayfloxsLongstopHard,
-    zone_id/* default.HullbreakerIsle */.Z.HullbreakerIsle,
-    zone_id/* default.TheTamTaraDeepcroftHard */.Z.TheTamTaraDeepcroftHard,
-    zone_id/* default.TheStoneVigilHard */.Z.TheStoneVigilHard,
-    zone_id/* default.Snowcloak */.Z.Snowcloak,
-    zone_id/* default.SastashaHard */.Z.SastashaHard,
-    zone_id/* default.TheSunkenTempleOfQarnHard */.Z.TheSunkenTempleOfQarnHard,
-    zone_id/* default.TheKeeperOfTheLake */.Z.TheKeeperOfTheLake,
-    zone_id/* default.TheWanderersPalaceHard */.Z.TheWanderersPalaceHard,
-    zone_id/* default.AmdaporKeepHard */.Z.AmdaporKeepHard,
-    // Dungeons (Heavensward)
-    zone_id/* default.TheDuskVigil */.Z.TheDuskVigil,
-    zone_id/* default.SohmAl */.Z.SohmAl,
-    zone_id/* default.TheAery */.Z.TheAery,
-    zone_id/* default.TheVault */.Z.TheVault,
-    zone_id/* default.TheGreatGubalLibrary */.Z.TheGreatGubalLibrary,
-    zone_id/* default.TheAetherochemicalResearchFacility */.Z.TheAetherochemicalResearchFacility,
-    zone_id/* default.Neverreap */.Z.Neverreap,
-    zone_id/* default.TheFractalContinuum */.Z.TheFractalContinuum,
-    zone_id/* default.SaintMociannesArboretum */.Z.SaintMociannesArboretum,
-    zone_id/* default.PharosSiriusHard */.Z.PharosSiriusHard,
-    zone_id/* default.TheAntitower */.Z.TheAntitower,
-    zone_id/* default.TheLostCityOfAmdaporHard */.Z.TheLostCityOfAmdaporHard,
-    zone_id/* default.SohrKhai */.Z.SohrKhai,
-    zone_id/* default.HullbreakerIsleHard */.Z.HullbreakerIsleHard,
-    zone_id/* default.Xelphatol */.Z.Xelphatol,
-    zone_id/* default.TheGreatGubalLibraryHard */.Z.TheGreatGubalLibraryHard,
-    zone_id/* default.BaelsarsWall */.Z.BaelsarsWall,
-    zone_id/* default.SohmAlHard */.Z.SohmAlHard,
-    // Dungeons (Stormblood)
-    zone_id/* default.TheSirensongSea */.Z.TheSirensongSea,
-    zone_id/* default.ShisuiOfTheVioletTides */.Z.ShisuiOfTheVioletTides,
-    zone_id/* default.BardamsMettle */.Z.BardamsMettle,
-    zone_id/* default.DomaCastle */.Z.DomaCastle,
-    zone_id/* default.CastrumAbania */.Z.CastrumAbania,
-    zone_id/* default.AlaMhigo */.Z.AlaMhigo,
-    zone_id/* default.KuganeCastle */.Z.KuganeCastle,
-    zone_id/* default.TheTempleOfTheFist */.Z.TheTempleOfTheFist,
-    zone_id/* default.TheDrownedCityOfSkalla */.Z.TheDrownedCityOfSkalla,
-    zone_id/* default.HellsLid */.Z.HellsLid,
-    zone_id/* default.TheFractalContinuumHard */.Z.TheFractalContinuumHard,
-    zone_id/* default.TheSwallowsCompass */.Z.TheSwallowsCompass,
-    zone_id/* default.TheBurn */.Z.TheBurn,
-    zone_id/* default.SaintMociannesArboretumHard */.Z.SaintMociannesArboretumHard,
-    zone_id/* default.TheGhimlytDark */.Z.TheGhimlytDark,
-    // Dungeons (Shadowbringers)
-    zone_id/* default.HolminsterSwitch */.Z.HolminsterSwitch,
-    zone_id/* default.DohnMheg */.Z.DohnMheg,
-    zone_id/* default.TheQitanaRavel */.Z.TheQitanaRavel,
-    zone_id/* default.MalikahsWell */.Z.MalikahsWell,
-    zone_id/* default.MtGulg */.Z.MtGulg,
-    zone_id/* default.Amaurot */.Z.Amaurot,
-    zone_id/* default.TheTwinning */.Z.TheTwinning,
-    zone_id/* default.AkadaemiaAnyder */.Z.AkadaemiaAnyder,
-    zone_id/* default.TheGrandCosmos */.Z.TheGrandCosmos,
-    zone_id/* default.AnamnesisAnyder */.Z.AnamnesisAnyder,
-    zone_id/* default.TheHeroesGauntlet */.Z.TheHeroesGauntlet,
-    zone_id/* default.MatoyasRelict */.Z.MatoyasRelict,
-    zone_id/* default.Paglthan */.Z.Paglthan,
-    // Guildhests
-    zone_id/* default.BasicTrainingEnemyParties */.Z.BasicTrainingEnemyParties,
-    zone_id/* default.UnderTheArmor */.Z.UnderTheArmor,
-    zone_id/* default.BasicTrainingEnemyStrongholds */.Z.BasicTrainingEnemyStrongholds,
-    zone_id/* default.HeroOnTheHalfShell */.Z.HeroOnTheHalfShell,
-    zone_id/* default.PullingPoisonPosies */.Z.PullingPoisonPosies,
-    zone_id/* default.StingingBack */.Z.StingingBack,
-    zone_id/* default.AllsWellThatEndsInTheWell */.Z.AllsWellThatEndsInTheWell,
-    zone_id/* default.FlickingSticksAndTakingNames */.Z.FlickingSticksAndTakingNames,
-    zone_id/* default.MoreThanAFeeler */.Z.MoreThanAFeeler,
-    zone_id/* default.AnnoyTheVoid */.Z.AnnoyTheVoid,
-    zone_id/* default.ShadowAndClaw */.Z.ShadowAndClaw,
-    zone_id/* default.LongLiveTheQueen */.Z.LongLiveTheQueen,
-    zone_id/* default.WardUp */.Z.WardUp,
-    zone_id/* default.SolemnTrinity */.Z.SolemnTrinity,
-    // Trials (A Realm Reborn)
-    zone_id/* default.TheBowlOfEmbers */.Z.TheBowlOfEmbers,
-    zone_id/* default.TheNavel */.Z.TheNavel,
-    zone_id/* default.TheHowlingEye */.Z.TheHowlingEye,
-    zone_id/* default.CapeWestwind */.Z.CapeWestwind,
-    zone_id/* default.TheChrysalis */.Z.TheChrysalis,
-    zone_id/* default.TheStepsOfFaith */.Z.TheStepsOfFaith,
-    zone_id/* default.ARelicRebornTheChimera */.Z.ARelicRebornTheChimera,
-    zone_id/* default.ARelicRebornTheHydra */.Z.ARelicRebornTheHydra,
-    zone_id/* default.BattleOnTheBigBridge */.Z.BattleOnTheBigBridge,
-    zone_id/* default.TheDragonsNeck */.Z.TheDragonsNeck,
-    zone_id/* default.BattleInTheBigKeep */.Z.BattleInTheBigKeep,
-    zone_id/* default.TheBowlOfEmbersHard */.Z.TheBowlOfEmbersHard,
-    zone_id/* default.TheHowlingEyeHard */.Z.TheHowlingEyeHard,
-    zone_id/* default.TheNavelHard */.Z.TheNavelHard,
-    zone_id/* default.ThornmarchHard */.Z.ThornmarchHard,
-    zone_id/* default.TheWhorleaterHard */.Z.TheWhorleaterHard,
-    zone_id/* default.TheStrikingTreeHard */.Z.TheStrikingTreeHard,
-    zone_id/* default.TheAkhAfahAmphitheatreHard */.Z.TheAkhAfahAmphitheatreHard,
-    zone_id/* default.UrthsFount */.Z.UrthsFount,
-    // High-end Trials (A Realm Reborn)
-    zone_id/* default.TheMinstrelsBalladUltimasBane */.Z.TheMinstrelsBalladUltimasBane,
-    zone_id/* default.TheHowlingEyeExtreme */.Z.TheHowlingEyeExtreme,
-    zone_id/* default.TheNavelExtreme */.Z.TheNavelExtreme,
-    zone_id/* default.TheBowlOfEmbersExtreme */.Z.TheBowlOfEmbersExtreme,
-    zone_id/* default.ThornmarchExtreme */.Z.ThornmarchExtreme,
-    zone_id/* default.TheWhorleaterExtreme */.Z.TheWhorleaterExtreme,
-    zone_id/* default.TheStrikingTreeExtreme */.Z.TheStrikingTreeExtreme,
-    zone_id/* default.TheAkhAfahAmphitheatreExtreme */.Z.TheAkhAfahAmphitheatreExtreme,
-    // Trials (Heavensward)
-    zone_id/* default.ThokAstThokHard */.Z.ThokAstThokHard,
-    zone_id/* default.TheLimitlessBlueHard */.Z.TheLimitlessBlueHard,
-    zone_id/* default.TheSingularityReactor */.Z.TheSingularityReactor,
-    zone_id/* default.TheFinalStepsOfFaith */.Z.TheFinalStepsOfFaith,
-    zone_id/* default.ContainmentBayS1T7 */.Z.ContainmentBayS1T7,
-    zone_id/* default.ContainmentBayP1T6 */.Z.ContainmentBayP1T6,
-    zone_id/* default.ContainmentBayZ1T9 */.Z.ContainmentBayZ1T9,
-    // High-end Trials (Heavensward)
-    zone_id/* default.TheLimitlessBlueExtreme */.Z.TheLimitlessBlueExtreme,
-    zone_id/* default.ThokAstThokExtreme */.Z.ThokAstThokExtreme,
-    zone_id/* default.TheMinstrelsBalladThordansReign */.Z.TheMinstrelsBalladThordansReign,
-    zone_id/* default.TheMinstrelsBalladNidhoggsRage */.Z.TheMinstrelsBalladNidhoggsRage,
-    zone_id/* default.ContainmentBayS1T7Extreme */.Z.ContainmentBayS1T7Extreme,
-    zone_id/* default.ContainmentBayP1T6Extreme */.Z.ContainmentBayP1T6Extreme,
-    zone_id/* default.ContainmentBayZ1T9Extreme */.Z.ContainmentBayZ1T9Extreme,
-    // Trials (Stormblood)
-    zone_id/* default.ThePoolOfTribute */.Z.ThePoolOfTribute,
-    zone_id/* default.Emanation */.Z.Emanation,
-    zone_id/* default.TheRoyalMenagerie */.Z.TheRoyalMenagerie,
-    zone_id/* default.CastrumFluminis */.Z.CastrumFluminis,
-    zone_id/* default.KuganeOhashi */.Z.KuganeOhashi,
-    zone_id/* default.TheGreatHunt */.Z.TheGreatHunt,
-    zone_id/* default.TheJadeStoa */.Z.TheJadeStoa,
-    zone_id/* default.HellsKier */.Z.HellsKier,
-    zone_id/* default.TheWreathOfSnakes */.Z.TheWreathOfSnakes,
-    // High-end Trials (Stormblood)
-    zone_id/* default.ThePoolOfTributeExtreme */.Z.ThePoolOfTributeExtreme,
-    zone_id/* default.EmanationExtreme */.Z.EmanationExtreme,
-    zone_id/* default.TheMinstrelsBalladShinryusDomain */.Z.TheMinstrelsBalladShinryusDomain,
-    zone_id/* default.TheMinstrelsBalladTsukuyomisPain */.Z.TheMinstrelsBalladTsukuyomisPain,
-    zone_id/* default.TheGreatHuntExtreme */.Z.TheGreatHuntExtreme,
-    zone_id/* default.TheJadeStoaExtreme */.Z.TheJadeStoaExtreme,
-    zone_id/* default.HellsKierExtreme */.Z.HellsKierExtreme,
-    zone_id/* default.TheWreathOfSnakesExtreme */.Z.TheWreathOfSnakesExtreme,
-    // Trials (Shadowbringers)
-    zone_id/* default.TheDancingPlague */.Z.TheDancingPlague,
-    zone_id/* default.TheCrownOfTheImmaculate */.Z.TheCrownOfTheImmaculate,
-    zone_id/* default.TheDyingGasp */.Z.TheDyingGasp,
-    zone_id/* default.CinderDrift */.Z.CinderDrift,
-    zone_id/* default.TheSeatOfSacrifice */.Z.TheSeatOfSacrifice,
-    zone_id/* default.CastrumMarinum */.Z.CastrumMarinum,
-    zone_id/* default.TheCloudDeck */.Z.TheCloudDeck,
-    // High-end Trials (Shadowbringers)
-    zone_id/* default.TheDancingPlagueExtreme */.Z.TheDancingPlagueExtreme,
-    zone_id/* default.TheCrownOfTheImmaculateExtreme */.Z.TheCrownOfTheImmaculateExtreme,
-    zone_id/* default.TheMinstrelsBalladHadessElegy */.Z.TheMinstrelsBalladHadessElegy,
-    zone_id/* default.CinderDriftExtreme */.Z.CinderDriftExtreme,
-    zone_id/* default.MemoriaMiseraExtreme */.Z.MemoriaMiseraExtreme,
-    zone_id/* default.TheSeatOfSacrificeExtreme */.Z.TheSeatOfSacrificeExtreme,
-    zone_id/* default.CastrumMarinumExtreme */.Z.CastrumMarinumExtreme,
-    zone_id/* default.TheCloudDeckExtreme */.Z.TheCloudDeckExtreme,
-    zone_id/* default.TheAkhAfahAmphitheatreUnreal */.Z.TheAkhAfahAmphitheatreUnreal,
-    zone_id/* default.TheNavelUnreal */.Z.TheNavelUnreal,
-    zone_id/* default.TheWhorleaterUnreal */.Z.TheWhorleaterUnreal,
-    // Alliance Raids (A Realm Reborn)
-    zone_id/* default.TheLabyrinthOfTheAncients */.Z.TheLabyrinthOfTheAncients,
-    zone_id/* default.SyrcusTower */.Z.SyrcusTower,
-    zone_id/* default.TheWorldOfDarkness */.Z.TheWorldOfDarkness,
-    // Raids (A Realm Reborn)
-    zone_id/* default.TheBindingCoilOfBahamutTurn1 */.Z.TheBindingCoilOfBahamutTurn1,
-    zone_id/* default.TheBindingCoilOfBahamutTurn2 */.Z.TheBindingCoilOfBahamutTurn2,
-    zone_id/* default.TheBindingCoilOfBahamutTurn3 */.Z.TheBindingCoilOfBahamutTurn3,
-    zone_id/* default.TheBindingCoilOfBahamutTurn4 */.Z.TheBindingCoilOfBahamutTurn4,
-    zone_id/* default.TheBindingCoilOfBahamutTurn5 */.Z.TheBindingCoilOfBahamutTurn5,
-    zone_id/* default.TheSecondCoilOfBahamutTurn1 */.Z.TheSecondCoilOfBahamutTurn1,
-    zone_id/* default.TheSecondCoilOfBahamutTurn2 */.Z.TheSecondCoilOfBahamutTurn2,
-    zone_id/* default.TheSecondCoilOfBahamutTurn3 */.Z.TheSecondCoilOfBahamutTurn3,
-    zone_id/* default.TheSecondCoilOfBahamutTurn4 */.Z.TheSecondCoilOfBahamutTurn4,
-    zone_id/* default.TheFinalCoilOfBahamutTurn1 */.Z.TheFinalCoilOfBahamutTurn1,
-    zone_id/* default.TheFinalCoilOfBahamutTurn2 */.Z.TheFinalCoilOfBahamutTurn2,
-    zone_id/* default.TheFinalCoilOfBahamutTurn3 */.Z.TheFinalCoilOfBahamutTurn3,
-    zone_id/* default.TheFinalCoilOfBahamutTurn4 */.Z.TheFinalCoilOfBahamutTurn4,
-    // Savage Raids (A Realm Reborn)
-    zone_id/* default.TheSecondCoilOfBahamutSavageTurn1 */.Z.TheSecondCoilOfBahamutSavageTurn1,
-    zone_id/* default.TheSecondCoilOfBahamutSavageTurn2 */.Z.TheSecondCoilOfBahamutSavageTurn2,
-    zone_id/* default.TheSecondCoilOfBahamutSavageTurn3 */.Z.TheSecondCoilOfBahamutSavageTurn3,
-    zone_id/* default.TheSecondCoilOfBahamutSavageTurn4 */.Z.TheSecondCoilOfBahamutSavageTurn4,
-    // Alliance Raids (Heavensward)
-    zone_id/* default.TheVoidArk */.Z.TheVoidArk,
-    zone_id/* default.TheWeepingCityOfMhach */.Z.TheWeepingCityOfMhach,
-    zone_id/* default.DunScaith */.Z.DunScaith,
-    // Normal Raids (Heavensward)
-    zone_id/* default.AlexanderTheFistOfTheFather */.Z.AlexanderTheFistOfTheFather,
-    zone_id/* default.AlexanderTheCuffOfTheFather */.Z.AlexanderTheCuffOfTheFather,
-    zone_id/* default.AlexanderTheArmOfTheFather */.Z.AlexanderTheArmOfTheFather,
-    zone_id/* default.AlexanderTheBurdenOfTheFather */.Z.AlexanderTheBurdenOfTheFather,
-    zone_id/* default.AlexanderTheFistOfTheSon */.Z.AlexanderTheFistOfTheSon,
-    zone_id/* default.AlexanderTheCuffOfTheSon */.Z.AlexanderTheCuffOfTheSon,
-    zone_id/* default.AlexanderTheArmOfTheSon */.Z.AlexanderTheArmOfTheSon,
-    zone_id/* default.AlexanderTheBurdenOfTheSon */.Z.AlexanderTheBurdenOfTheSon,
-    zone_id/* default.AlexanderTheEyesOfTheCreator */.Z.AlexanderTheEyesOfTheCreator,
-    zone_id/* default.AlexanderTheBreathOfTheCreator */.Z.AlexanderTheBreathOfTheCreator,
-    zone_id/* default.AlexanderTheHeartOfTheCreator */.Z.AlexanderTheHeartOfTheCreator,
-    zone_id/* default.AlexanderTheSoulOfTheCreator */.Z.AlexanderTheSoulOfTheCreator,
-    // Savage Raids (Heavensward)
-    zone_id/* default.AlexanderTheFistOfTheFatherSavage */.Z.AlexanderTheFistOfTheFatherSavage,
-    zone_id/* default.AlexanderTheCuffOfTheFatherSavage */.Z.AlexanderTheCuffOfTheFatherSavage,
-    zone_id/* default.AlexanderTheArmOfTheFatherSavage */.Z.AlexanderTheArmOfTheFatherSavage,
-    zone_id/* default.AlexanderTheBurdenOfTheFatherSavage */.Z.AlexanderTheBurdenOfTheFatherSavage,
-    zone_id/* default.AlexanderTheFistOfTheSonSavage */.Z.AlexanderTheFistOfTheSonSavage,
-    zone_id/* default.AlexanderTheCuffOfTheSonSavage */.Z.AlexanderTheCuffOfTheSonSavage,
-    zone_id/* default.AlexanderTheArmOfTheSonSavage */.Z.AlexanderTheArmOfTheSonSavage,
-    zone_id/* default.AlexanderTheBurdenOfTheSonSavage */.Z.AlexanderTheBurdenOfTheSonSavage,
-    zone_id/* default.AlexanderTheEyesOfTheCreatorSavage */.Z.AlexanderTheEyesOfTheCreatorSavage,
-    zone_id/* default.AlexanderTheBreathOfTheCreatorSavage */.Z.AlexanderTheBreathOfTheCreatorSavage,
-    zone_id/* default.AlexanderTheHeartOfTheCreatorSavage */.Z.AlexanderTheHeartOfTheCreatorSavage,
-    zone_id/* default.AlexanderTheSoulOfTheCreatorSavage */.Z.AlexanderTheSoulOfTheCreatorSavage,
-    // Alliance Raids (Stormblood)
-    zone_id/* default.TheRoyalCityOfRabanastre */.Z.TheRoyalCityOfRabanastre,
-    zone_id/* default.TheRidoranaLighthouse */.Z.TheRidoranaLighthouse,
-    zone_id/* default.TheOrbonneMonastery */.Z.TheOrbonneMonastery,
-    // Normal Raids (Stormblood)
-    zone_id/* default.DeltascapeV10 */.Z.DeltascapeV10,
-    zone_id/* default.DeltascapeV20 */.Z.DeltascapeV20,
-    zone_id/* default.DeltascapeV30 */.Z.DeltascapeV30,
-    zone_id/* default.DeltascapeV40 */.Z.DeltascapeV40,
-    zone_id/* default.SigmascapeV10 */.Z.SigmascapeV10,
-    zone_id/* default.SigmascapeV20 */.Z.SigmascapeV20,
-    zone_id/* default.SigmascapeV30 */.Z.SigmascapeV30,
-    zone_id/* default.SigmascapeV40 */.Z.SigmascapeV40,
-    zone_id/* default.AlphascapeV10 */.Z.AlphascapeV10,
-    zone_id/* default.AlphascapeV20 */.Z.AlphascapeV20,
-    zone_id/* default.AlphascapeV30 */.Z.AlphascapeV30,
-    zone_id/* default.AlphascapeV40 */.Z.AlphascapeV40,
-    // Savage Raids (Stormblood)
-    zone_id/* default.DeltascapeV10Savage */.Z.DeltascapeV10Savage,
-    zone_id/* default.DeltascapeV20Savage */.Z.DeltascapeV20Savage,
-    zone_id/* default.DeltascapeV30Savage */.Z.DeltascapeV30Savage,
-    zone_id/* default.DeltascapeV40Savage */.Z.DeltascapeV40Savage,
-    zone_id/* default.SigmascapeV10Savage */.Z.SigmascapeV10Savage,
-    zone_id/* default.SigmascapeV20Savage */.Z.SigmascapeV20Savage,
-    zone_id/* default.SigmascapeV30Savage */.Z.SigmascapeV30Savage,
-    zone_id/* default.SigmascapeV40Savage */.Z.SigmascapeV40Savage,
-    zone_id/* default.AlphascapeV10Savage */.Z.AlphascapeV10Savage,
-    zone_id/* default.AlphascapeV20Savage */.Z.AlphascapeV20Savage,
-    zone_id/* default.AlphascapeV30Savage */.Z.AlphascapeV30Savage,
-    zone_id/* default.AlphascapeV40Savage */.Z.AlphascapeV40Savage,
-    // Alliance Raids (Shadowbringers)
-    zone_id/* default.TheCopiedFactory */.Z.TheCopiedFactory,
-    zone_id/* default.ThePuppetsBunker */.Z.ThePuppetsBunker,
-    zone_id/* default.TheTowerAtParadigmsBreach */.Z.TheTowerAtParadigmsBreach,
-    // Normal Raids (Shadowbringers)
-    zone_id/* default.EdensGateResurrection */.Z.EdensGateResurrection,
-    zone_id/* default.EdensGateDescent */.Z.EdensGateDescent,
-    zone_id/* default.EdensGateInundation */.Z.EdensGateInundation,
-    zone_id/* default.EdensGateSepulture */.Z.EdensGateSepulture,
-    zone_id/* default.EdensVerseFulmination */.Z.EdensVerseFulmination,
-    zone_id/* default.EdensVerseFuror */.Z.EdensVerseFuror,
-    zone_id/* default.EdensVerseIconoclasm */.Z.EdensVerseIconoclasm,
-    zone_id/* default.EdensVerseRefulgence */.Z.EdensVerseRefulgence,
-    zone_id/* default.EdensPromiseUmbra */.Z.EdensPromiseUmbra,
-    zone_id/* default.EdensPromiseLitany */.Z.EdensPromiseLitany,
-    zone_id/* default.EdensPromiseAnamorphosis */.Z.EdensPromiseAnamorphosis,
-    zone_id/* default.EdensPromiseEternity */.Z.EdensPromiseEternity,
-    // Savage Raids (Shadowbringers)
-    zone_id/* default.EdensGateResurrectionSavage */.Z.EdensGateResurrectionSavage,
-    zone_id/* default.EdensGateDescentSavage */.Z.EdensGateDescentSavage,
-    zone_id/* default.EdensGateInundationSavage */.Z.EdensGateInundationSavage,
-    zone_id/* default.EdensGateSepultureSavage */.Z.EdensGateSepultureSavage,
-    zone_id/* default.EdensVerseFulminationSavage */.Z.EdensVerseFulminationSavage,
-    zone_id/* default.EdensVerseFurorSavage */.Z.EdensVerseFurorSavage,
-    zone_id/* default.EdensVerseIconoclasmSavage */.Z.EdensVerseIconoclasmSavage,
-    zone_id/* default.EdensVerseRefulgenceSavage */.Z.EdensVerseRefulgenceSavage,
-    zone_id/* default.EdensPromiseUmbraSavage */.Z.EdensPromiseUmbraSavage,
-    zone_id/* default.EdensPromiseLitanySavage */.Z.EdensPromiseLitanySavage,
-    zone_id/* default.EdensPromiseAnamorphosisSavage */.Z.EdensPromiseAnamorphosisSavage,
-    zone_id/* default.EdensPromiseEternitySavage */.Z.EdensPromiseEternitySavage,
-    // Ultimate Raids
-    zone_id/* default.TheUnendingCoilOfBahamutUltimate */.Z.TheUnendingCoilOfBahamutUltimate,
-    zone_id/* default.TheWeaponsRefrainUltimate */.Z.TheWeaponsRefrainUltimate,
-    zone_id/* default.TheEpicOfAlexanderUltimate */.Z.TheEpicOfAlexanderUltimate,
-];
-/* harmony default export */ const content_list = (contentList);
-
-;// CONCATENATED MODULE: ./ui/config/general_config.js
-
-
-user_config/* default.registerOptions */.Z.registerOptions('general', {
-  options: [
-    {
-      id: 'CactbotUserDirectory',
-      name: {
-        en: 'Cactbot user directory',
-        de: 'Cactbot Benutzerverzeichnis',
-        fr: 'Répertoire utilisateur de Cactbot',
-        ja: 'Cactbot ユーザーディレクトリ',
-        cn: 'Cactbot user目录',
-        ko: 'Cactbot 사용자 디렉토리',
-      },
-      type: 'directory',
-      default: '',
-    },
-    {
-      id: 'ShowDeveloperOptions',
-      name: {
-        en: 'Show developer options',
-        de: 'Zeige Entwickleroptionen',
-        fr: 'Afficher les options développeur',
-        ja: '開発者向けオプション',
-        cn: '显示开发者选项',
-        ko: '개발자 옵션 표시',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
-      id: 'DisplayLanguage',
-      name: {
-        en: 'Display language',
-        de: 'Displaysprache',
-        fr: 'Langue d\'affichage',
-        ja: '表示言語',
-        cn: '显示语言',
-        ko: '주 사용 언어',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Use FFXIV Plugin Language': 'default',
-          'English (en)': 'en',
-          'Chinese (cn)': 'cn',
-          'German (de)': 'de',
-          'French (fr)': 'fr',
-          'Japanese (ja)': 'ja',
-          'Korean (ko)': 'ko',
-        },
-        de: {
-          'Benutze FFXIV Plugin Sprache': 'default',
-          'Englisch (en)': 'en',
-          'Chinesisch (cn)': 'cn',
-          'Deutsch (de)': 'de',
-          'Französisch (fr)': 'fr',
-          'Japanisch (ja)': 'ja',
-          'Koreanisch (ko)': 'ko',
-        },
-        fr: {
-          'Utiliser la langue du Plugin FFXIV': 'default',
-          'Anglais (en)': 'en',
-          'Chinois (cn)': 'cn',
-          'Allemand (de)': 'de',
-          'Français (fr)': 'fr',
-          'Japonais (ja)': 'ja',
-          'Coréen (ko)': 'ko',
-        },
-        ja: {
-          'FFXIV Pluginの言語設定': 'default',
-          '英語 (en)': 'en',
-          '中国語 (cn)': 'cn',
-          'ドイツ語 (de)': 'de',
-          'フランス語 (fr)': 'fr',
-          '日本語 (ja)': 'ja',
-          '韓国語 (ko)': 'ko',
-        },
-        cn: {
-          '使用最终幻想XIV解析插件设置的语言': 'default',
-          '英语 (en)': 'en',
-          '中文 (cn)': 'cn',
-          '德语 (de)': 'de',
-          '法语 (fr)': 'fr',
-          '日语 (ja)': 'ja',
-          '韩语 (ko)': 'ko',
-        },
-        ko: {
-          'FFXIV Plugin 언어 사용': 'default',
-          '영어 (en)': 'en',
-          '중국어 (cn)': 'cn',
-          '독일어 (de)': 'de',
-          '프랑스어 (fr)': 'fr',
-          '일본어 (ja)': 'ja',
-          '한국어 (ko)': 'ko',
-        },
-      },
-      default: 'default',
-      debug: true,
-      setterFunc: (options, value) => {
-        if (value === 'default')
-          return;
-        options['DisplayLanguage'] = value;
-      },
-    },
-  ],
-});
-
-;// CONCATENATED MODULE: ./ui/eureka/eureka_config.ts
-
-user_config/* default.registerOptions */.Z.registerOptions('eureka', {
-    options: [
-        {
-            id: 'Debug',
-            name: {
-                en: 'Enable debug mode',
-                de: 'Aktiviere Debugmodus',
-                fr: 'Activer le mode debug',
-                ja: 'デバッグモードを有効にする',
-                cn: '启用调试模式',
-                ko: '디버그 모드 활성화',
-            },
-            default: false,
-            type: 'checkbox',
-            debugOnly: true,
-        },
-        {
-            id: 'FlagTimeoutSeconds',
-            name: {
-                en: 'Duration of flags on the map (seconds)',
-                de: 'Zeit der Flaggen auf der Karte (in Sekunden)',
-                fr: 'Durée des drapeaux sur la carte en (s)',
-                ja: 'マップにマーカーの表示時間 (秒)',
-                cn: '地图标志显示时间 (秒)',
-                ko: '지도에 깃발이 표시될 시간 (초)',
-            },
-            type: 'float',
-            default: 90,
-            setterFunc: (options, value) => {
-                if (typeof value !== 'number')
-                    return;
-                options['FlagTimeoutMs'] = value * 1000;
-            },
-        },
-        {
-            id: 'PopNoiseForNM',
-            name: {
-                en: 'Play pop sound for NMs',
-                de: 'Spiele Pop-Sound ab für NMs',
-                fr: 'Jouer un son pour l\'apparition des NMs',
-                ja: 'NM通知機能を有効にする',
-                cn: 'NM出现时播放提示音',
-                ko: '돌발임무 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'PopNoiseForBunny',
-            name: {
-                en: 'Play pop sound for bunny fates',
-                de: 'Spiele Pop-Sound ab für Bunny-Fates',
-                fr: 'Jouer un son pour l\'apparition de l\'aléa des lapins',
-                ja: 'しあわせうさぎ通知機能を有効にする',
-                cn: '幸福兔出现时播放提示音',
-                ko: '토끼 돌발 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'PopNoiseForSkirmish',
-            name: {
-                en: 'Play pop sound for skirmishes',
-                de: 'Spiele Pop-Sound ab für Scharmützel',
-                fr: 'Jouer un son pour l\'apparition des escarmouches',
-                ja: 'スカーミッシュ通知機能を有効にする',
-                cn: '冲突战出现时播放提示音',
-                ko: '돌발 교전 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: false,
-        },
-        {
-            id: 'PopNoiseForCriticalEngagement',
-            name: {
-                en: 'Play pop sound for critical engagements',
-                de: 'Spiele Pop-Sound ab für Kritische Gefechte',
-                fr: 'Jouer un son pour l\'apparition des affrontement cruciaux',
-                ja: 'CE通知機能を有効にする',
-                cn: '紧急遭遇战(CE)出现时播放提示音',
-                ko: '비상 교전(CE) 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'PopNoiseForDuel',
-            name: {
-                en: 'Play pop sound for duels',
-                de: 'Spiele Pop-Sound ab für Duelle',
-                fr: 'Jouer un son pour l\'apparition des duels',
-                ja: '一騎打ち通知機能を有効にする',
-                cn: '一对一决斗出现时播放提示音',
-                ko: '결투 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: false,
-        },
-        {
-            id: 'PopVolume',
-            name: {
-                en: 'Volume of the nm pop sound (0-1)',
-                de: 'Lautstärke des Popsounds bei erscheinen eines NM (0-1)',
-                fr: 'Volume du son d\'apparition d\'un NM (0-1)',
-                ja: 'NM出現音量 (0-1)',
-                cn: 'NM提示音量 (0-1)',
-                ko: '돌발임무 등장 알림 소리 크기 (0-1)',
-            },
-            type: 'float',
-            default: 1,
-            setterFunc: (options, value) => {
-                options['PopVolume'] = value;
-            },
-        },
-        {
-            id: 'BunnyPopVolume',
-            name: {
-                en: 'Volume of the bunny pop sound (0-1)',
-                de: 'Lautstärke des Bunny Pop Sounds (0-1)',
-                fr: 'Volume du son d\'apparition des lapins (0-1)',
-                ja: 'しあわせうさぎ出現音量 (0-1)',
-                cn: '幸福兔提示音量（0-1）',
-                ko: '토끼 돌발 등장 알림 소리 크기 (0-1)',
-            },
-            type: 'float',
-            default: 0.3,
-            setterFunc: (options, value) => {
-                options['BunnyPopVolume'] = value;
-            },
-        },
-        {
-            id: 'CriticalPopVolume',
-            name: {
-                en: 'Volume of the critical engagement pop sound (0-1)',
-                de: 'Lautstärke des Kritischen Gefecht Sounds (0-1)',
-                fr: 'Volume du son d\'apparition des affrontements cruciaux (0-1)',
-                ja: 'CE通知音量 (0-1)',
-                cn: 'critical engagement提示音量（0-1）',
-                ko: '비상 교전(CE) 알림 소리 크기 (0-1)',
-            },
-            type: 'float',
-            default: 0.3,
-            setterFunc: (options, value) => {
-                options['CriticalPopVolume'] = value;
-            },
-        },
-        {
-            id: 'RefreshRateSeconds',
-            name: {
-                en: 'Update rate of nm cooldowns (seconds)',
-                de: 'Aktualisierung der NM cooldowns (in Sekunden)',
-                fr: 'Rafraîchissement du temps de réapparition d\'un NM (s)',
-                ja: 'NMの再沸き時間のリフレッシュ間隔 (秒)',
-                cn: 'NM冷却时间刷新间隔 (秒)',
-                ko: '돌발 소환가능시간 갱신 주기 (초)',
-            },
-            type: 'float',
-            default: 1,
-            setterFunc: (options, value) => {
-                if (typeof value !== 'number')
-                    return;
-                options['RefreshRateMs'] = value * 1000;
-            },
-        },
-    ],
-});
-
-;// CONCATENATED MODULE: ./ui/jobs/jobs_config.ts
-
-user_config/* default.registerOptions */.Z.registerOptions('jobs', {
-    options: [
-        {
-            id: 'JustBuffTracker',
-            name: {
-                en: 'Only show the party buff tracker',
-                de: 'Zeige nur den Gruppen Buff-Tracker',
-                fr: 'Afficher seulement le tracker de buff de l\'équipe',
-                ja: 'シナジー効果のみを表示する',
-                cn: '仅监控团辅技能',
-                ko: '파티 버프만 표시',
-            },
-            type: 'checkbox',
-            default: false,
-        },
-        {
-            id: 'LowerOpacityOutOfCombat',
-            name: {
-                en: 'Lower ui opacity when out of combat',
-                de: 'Veringere die Deckkraft auserhalb des Kampfes',
-                fr: 'Diminiuer l\'opacité de l\'UI hors combat',
-                ja: '非戦闘時にUIを透過する',
-                cn: '非战斗状态时使UI半透明',
-                ko: '전투 중이 아닐 때, UI 투명도 높이기',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'OpacityOutOfCombat',
-            name: {
-                en: 'Opacity of ui when out of combat',
-                de: 'Deckkraft der UI auserhalb des Kampfes',
-                fr: 'Opacité de l\'UI hors combat',
-                ja: '非戦闘時のUI透過度',
-                cn: '非战斗状态时的UI透明度',
-                ko: '전투 중이 아닐 때, UI 투명도',
-            },
-            type: 'float',
-            default: 0.5,
-        },
-        {
-            id: 'PlayCountdownSound',
-            name: {
-                en: 'Enable countdown notification sound',
-                de: 'Aktiviere Countdown Hinweis-Ton',
-                fr: 'Activer la notification sonore du compte à rebours',
-                ja: 'カウントダウンを音声で知らせる',
-                cn: '启用倒计时提示音',
-                ko: '초읽기 알림 소리 켜기',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'HideWellFedAboveSeconds',
-            name: {
-                en: 'Hide cheese icon when food > time (in seconds)',
-                de: 'Verstecke das Käse Icon wenn Bufffood > Zeit (in Sekunden)',
-                fr: 'Masquer l\'icône du fromage lorsque vous êtes repu > durée (en secondes)',
-                ja: '飯効果の時間が不足したらチーズアイコンを表示する (秒)',
-                cn: '食物 Buff 剩余时间不足警报 (秒)',
-                ko: '남은 식사 효과 시간이 이 시간보다 길면, 치즈 아이콘 숨김 (단위: 초)',
-            },
-            type: 'integer',
-            default: 15 * 60,
-        },
-        {
-            id: 'ShowMPTickerOutOfCombat',
-            name: {
-                en: 'Show MP ticker out of combat',
-                de: 'Zeige MP-Ticker auserhalb des Kampfes',
-                fr: 'Afficher le symbole PM hors combat',
-                ja: '非戦闘時にもMPを表示する',
-                cn: '一直显示MP监控',
-                ko: '전투 중이 아닐 때, MP 티커 표시',
-            },
-            type: 'checkbox',
-            default: false,
-        },
-        {
-            id: 'MidHealthThresholdPercent',
-            name: {
-                en: 'Percent of health considered middling',
-                de: 'Prozent der Lebenspunkte (mittelmaß)',
-                fr: 'Pourcentage de vie considéré comme moyenne',
-                ja: '健康なHPとして扱うHP量 (1 = 100%)',
-                cn: '中等血量阈值 (1 = 100%)',
-                ko: '보통 HP로 취급될 HP비율 (1 = 100%)',
-            },
-            type: 'float',
-            default: 0.8,
-        },
-        {
-            id: 'LowHealthThresholdPercent',
-            name: {
-                en: 'Percent of health considered low',
-                de: 'Prozent der Lebenspunkte (gering)',
-                fr: 'Pourcentage de vie considéré comme bas',
-                ja: '危険なHPとして扱うHP量 (1 = 100%)',
-                cn: '危险血量阈值 (1 = 100%)',
-                ko: '낮은 HP로 취급될 HP비율 (1 = 100%)',
-            },
-            type: 'float',
-            default: 0.2,
-        },
-        {
-            id: 'BigBuffShowCooldownSeconds',
-            name: {
-                en: 'Minimum seconds on a cooldown before shown',
-                de: 'Minimum an Sekunden für einen Cooldown vor der Anzeige',
-                fr: 'Nombre minimal de secondes avant l\'affichage du temps de recharge',
-                ja: 'シナジースキルが使用可能前にアイコンを表示する (秒)',
-                cn: '团辅冷却完成预告 (秒)',
-                ko: '재사용 대기시간을 표시할 기준 시간(초 이하)',
-            },
-            type: 'float',
-            default: 20,
-        },
-        {
-            id: 'BigBuffIconWidth',
-            name: {
-                en: 'Width of buff icons (px)',
-                de: 'Weite des Buff Icons (px)',
-                fr: 'Largeur des icônes de buff (pixel)',
-                ja: 'シナジースキルのアイコンの広さ (pixel)',
-                cn: '团辅监控图标宽度 (像素)',
-                ko: '버프 아이콘 너비 (pixel)',
-            },
-            type: 'integer',
-            default: 44,
-        },
-        {
-            id: 'BigBuffIconHeight',
-            name: {
-                en: 'Height of buff icons (px)',
-                de: 'Höhe des Buff Icons (px)',
-                fr: 'Hauteur des icônes de buff (pixel)',
-                ja: 'シナジースキルのアイコンの高さ (pixel)',
-                cn: '团辅监控图标高度 (像素)',
-                ko: '버프 아이콘 높이 (pixel)',
-            },
-            type: 'integer',
-            default: 32,
-        },
-        {
-            id: 'BigBuffBarHeight',
-            name: {
-                en: 'Height of buff timer bars (px)',
-                de: 'Höhe der Buff-Timer Leisten (px)',
-                fr: 'Hauteur des barres de temps de buff (pixel)',
-                ja: 'シナジースキルのタイムバーの高さ (pixel)',
-                cn: '团辅监控计时条高度 (像素)',
-                ko: '버프 타이머 바 높이 (pixel)',
-            },
-            type: 'integer',
-            default: 5,
-        },
-        {
-            id: 'BigBuffTextHeight',
-            name: {
-                en: 'Height of buff text (px)',
-                de: 'Höhe des Buff-Text (px)',
-                fr: 'Hauteur du texte de buff (pixel)',
-                ja: 'シナジースキルのテキストの高さ (pixel)',
-                cn: '团辅监控文字高度 (像素)',
-                ko: '버프 텍스트 높이 (pixel)',
-            },
-            type: 'integer',
-            default: 0,
-        },
-        {
-            id: 'BigBuffBorderSize',
-            name: {
-                en: 'Size of buff borders (px)',
-                de: 'Größe der Buff-Ränder (px)',
-                fr: 'Taille des bordures de buff (pixel)',
-                ja: 'シナジースキルのボーダーの広さ (pixel)',
-                cn: '团辅监控边框尺寸 (像素)',
-                ko: '버프 아이콘 테두리 크기 (pixel)',
-            },
-            type: 'integer',
-            default: 1,
-        },
-        {
-            id: 'GpAlarmPoint',
-            name: {
-                en: 'GP alarm threshold (0 to disable)',
-                de: 'SP Alarm Grenze (0 to disable)',
-                fr: 'Seuil d\'alarme PR (0 pour désactiver)',
-                ja: 'GPが低い時に警告する (０＝無効)',
-                cn: '低采集力提示阈值 (0为禁用)',
-                ko: 'GP 알람 설정값 (0 = 기능 정지)',
-            },
-            type: 'integer',
-            default: 0,
-        },
-        {
-            id: 'GpAlarmSoundVolume',
-            name: {
-                en: 'GP alarm sound (0-1)',
-                de: 'SP Alarm Sound (0-1)',
-                fr: 'Son d\'alarme PR (0-1)',
-                ja: '低いGPの警告音量 (0-1)',
-                cn: '低采集力提示音量 (0-1)',
-                ko: 'GP 알람 소리 크기 (0-1)',
-            },
-            type: 'float',
-            default: 0.8,
-        },
-        {
-            id: 'NotifyExpiredProcsInCombat',
-            name: {
-                en: 'Flash procs boxes of inactive dots/etc. up to n times while in combat. (-1: disabled, 0: infinite)',
-                de: 'Dot/etc. boxen blinken bis zu n mal wenn im Kampf und dot ist nicht aktiv. (-1: deaktiviert, 0: ohne Limit)',
-            },
-            type: 'integer',
-            default: -1,
-        },
-    ],
-});
-
-// EXTERNAL MODULE: ./ui/oopsyraidsy/data/oopsy_manifest.txt + 96 modules
-var oopsy_manifest = __webpack_require__(184);
-;// CONCATENATED MODULE: ./ui/oopsyraidsy/oopsyraidsy_config.js
-
-
-
-const oopsyHelpers = [
-  'damageWarn',
-  'damageFail',
-  'shareWarn',
-  'shareFail',
-  'gainsEffectWarn',
-  'gainsEffectFail',
-];
-
-// This could be a checkbox, but it's possible we could add more things here,
-// like changing fail->warning or who knows what.
-const kTriggerOptions = {
-  default: {
-    label: {
-      en: '✔ Defaults',
-      de: '✔ Standards',
-      fr: '✔ Défauts',
-      ja: '✔ 初期設定',
-      cn: '✔ 默认设置',
-      ko: '✔ 기본',
-    },
-  },
-  disabled: {
-    label: {
-      en: '❌ Disabled',
-      de: '❌ Deaktiviert',
-      fr: '❌ Désactivé',
-      ja: '❌ 無効',
-      cn: '❌ 禁用',
-      ko: '❌ 비활성화',
-    },
-  },
-};
-
-class OopsyConfigurator {
-  constructor(cactbotConfigurator) {
-    this.base = cactbotConfigurator;
-    this.lang = this.base.lang;
-    this.optionKey = 'oopsyraidsy';
-  }
-
-  buildUI(container, files) {
-    const fileMap = this.processOopsyFiles(files);
-
-    const expansionDivs = {};
-
-    for (const key in fileMap) {
-      const info = fileMap[key];
-      const expansion = info.prefix;
-
-      if (info.triggers.length === 0)
-        continue;
-
-      if (!expansionDivs[expansion]) {
-        const expansionContainer = document.createElement('div');
-        expansionContainer.classList.add('trigger-expansion-container', 'collapsed');
-        container.appendChild(expansionContainer);
-
-        const expansionHeader = document.createElement('div');
-        expansionHeader.classList.add('trigger-expansion-header');
-        expansionHeader.onclick = () => {
-          expansionContainer.classList.toggle('collapsed');
-        };
-        expansionHeader.innerText = expansion;
-        expansionContainer.appendChild(expansionHeader);
-
-        expansionDivs[expansion] = expansionContainer;
-      }
-
-      const triggerContainer = document.createElement('div');
-      triggerContainer.classList.add('trigger-file-container', 'collapsed');
-      expansionDivs[expansion].appendChild(triggerContainer);
-
-      const headerDiv = document.createElement('div');
-      headerDiv.classList.add('trigger-file-header');
-      headerDiv.onclick = () => {
-        triggerContainer.classList.toggle('collapsed');
-      };
-
-      const parts = [info.title, info.type, expansion];
-      for (let i = 0; i < parts.length; ++i) {
-        if (!parts[i])
-          continue;
-        const partDiv = document.createElement('div');
-        partDiv.classList.add('trigger-file-header-part');
-        partDiv.innerText = parts[i];
-        headerDiv.appendChild(partDiv);
-      }
-
-      triggerContainer.appendChild(headerDiv);
-
-      const triggerOptions = document.createElement('div');
-      triggerOptions.classList.add('trigger-file-options');
-      triggerContainer.appendChild(triggerOptions);
-
-      for (const trigger of info.triggers) {
-        // Build the trigger label.
-        const triggerDiv = document.createElement('div');
-        triggerDiv.innerHTML = trigger.id;
-        triggerDiv.classList.add('trigger');
-        triggerOptions.appendChild(triggerDiv);
-
-        // Container for the right side ui (select boxes, all of the info).
-        const triggerDetails = document.createElement('div');
-        triggerDetails.classList.add('trigger-details');
-        triggerOptions.appendChild(triggerDetails);
-
-        triggerDetails.appendChild(this.buildTriggerOptions(trigger.id, triggerDiv));
-      }
-    }
-  }
-
-  buildTriggerOptions(id, labelDiv) {
-    const kField = 'Output';
-    const div = document.createElement('div');
-    div.classList.add('trigger-options');
-
-    const updateLabel = (input) => {
-      if (input.value === 'hidden' || input.value === 'disabled')
-        labelDiv.classList.add('disabled');
-      else
-        labelDiv.classList.remove('disabled');
-    };
-
-    const input = document.createElement('select');
-    div.appendChild(input);
-
-    const selectValue = this.base.getOption(this.optionKey, 'triggers', id, kField, 'default');
-
-    for (const key in kTriggerOptions) {
-      const elem = document.createElement('option');
-      elem.innerHTML = this.base.translate(kTriggerOptions[key].label);
-      elem.value = key;
-      elem.selected = key === selectValue;
-      input.appendChild(elem);
-
-      updateLabel(input);
-
-      input.onchange = () => {
-        updateLabel(input);
-        let value = input.value;
-        if (value.includes('default'))
-          value = 'default';
-        this.base.setOption(this.optionKey, 'triggers', id, kField, input.value);
-      };
-    }
-
-    return div;
-  }
-
-  processOopsyFiles(files) {
-    const map = this.base.processFiles(files);
-
-    for (const [key, item] of Object.entries(map)) {
-      item.triggers = [];
-      const triggerSet = item.triggerSet;
-      for (const prop of oopsyHelpers) {
-        if (!triggerSet[prop])
-          continue;
-        for (const id in triggerSet[prop])
-          item.triggers.push({ id: id });
-      }
-
-      if (!triggerSet.triggers)
-        continue;
-
-      for (const trigger of triggerSet.triggers) {
-        if (!trigger.id)
-          continue;
-        // Skip triggers that just set data.
-        if (!trigger.mistake)
-          continue;
-        item.triggers.push(trigger);
-      }
-    }
-    return map;
-  }
-}
-
-user_config/* default.registerOptions */.Z.registerOptions('oopsyraidsy', {
-  buildExtraUI: (base, container) => {
-    const builder = new OopsyConfigurator(base);
-    builder.buildUI(container, oopsy_manifest/* default */.Z);
-  },
-  processExtraOptions: (options, savedConfig) => {
-    options['PerTriggerAutoConfig'] = options['PerTriggerAutoConfig'] || {};
-    const triggers = savedConfig.triggers;
-    if (!triggers)
-      return;
-
-    for (const id in triggers) {
-      const output = triggers[id]['Output'];
-      if (!output)
-        continue;
-
-      options['PerTriggerAutoConfig'][id] = {
-        enabled: output !== 'disabled',
-      };
-    }
-  },
-  options: [
-    {
-      id: 'Debug',
-      name: {
-        en: 'Enable debug mode',
-        de: 'Aktiviere Debugmodus',
-        fr: 'Activer le mode debug',
-        ja: 'デバッグモードを有効にする',
-        cn: '启用调试模式',
-        ko: '디버그 모드 활성화',
-      },
-      type: 'checkbox',
-      debugOnly: true,
-    },
-    {
-      id: 'NumLiveListItemsInCombat',
-      name: {
-        en: 'Number of mistakes to show in combat',
-        de: 'Anzahl der Fehler, die während des Kampfes angezeigt werden',
-        fr: 'Nombre de fautes à afficher en combat',
-        ja: '戦闘中に表示するミスをした回数',
-        cn: '战斗中显示的错误数量',
-        ko: '전투 중 표시할 실수들의 개수',
-      },
-      type: 'integer',
-      default: 5,
-    },
-    {
-      id: 'MinimumTimeForPullMistake',
-      name: {
-        en: 'Minimum time to show early pull (seconds)',
-        de: 'Minimum Zeit in der Early-Pulls angezeigt werden (in Sekunden)',
-        fr: 'Durée minimale pour afficher l\'early pull (secondes)',
-        ja: 'タゲ取るのが早かったら、ミスとして表示する、カウントダウンとの最短時間 (秒)',
-        cn: '显示提前开怪最小时间 (秒)',
-        ko: '풀링이 빠르다고 표시 할 최소 시간 (초)',
-      },
-      type: 'float',
-      default: 0.4,
-    },
-  ],
-});
-
-;// CONCATENATED MODULE: ./ui/radar/radar_config.ts
-
-user_config/* default.registerOptions */.Z.registerOptions('radar', {
-    options: [
-        {
-            id: 'BRankEnabled',
-            name: {
-                en: 'B-Rank enabled',
-                de: 'B-Rank aktiviert',
-                fr: 'Rang-B activé',
-                ja: 'ランクBモブ',
-                cn: '开启B怪探测',
-                ko: 'B랭크 표시',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'DetectionRange',
-            name: {
-                en: 'Minimum distance to detect mobs (yalms)',
-                de: 'Minimum Entfernung um Mobs zu erkennen (in Yalms)',
-                fr: 'Distance minimale de détection des mobs (yalms)',
-                ja: '最短探測距離 (ヤルム)',
-                cn: '最短探测距离 (米)',
-                ko: '몬스터를 탐지할 최소 거리 (미터)',
-            },
-            type: 'float',
-            default: 0,
-        },
-        {
-            id: 'TTS',
-            name: {
-                en: 'Announce new mobs with text to speech',
-                de: 'Kündige neue Mobs mit TTS an',
-                fr: 'Annoncer les nouveaux mobs via TTS',
-                ja: '沸きモブを探知したらTTSで知らせる',
-                cn: '使用TTS提醒新发现目标',
-                ko: '새 몬스터를 TTS로 알림',
-            },
-            type: 'checkbox',
-            default: false,
-        },
-        {
-            id: 'PopSoundAlert',
-            name: {
-                en: 'Announce new mobs with a sound',
-                de: 'Kündige neue Mobs mit einem Sound an',
-                fr: 'Annoncer les nouveaux mobs avec un son',
-                ja: '沸きモブを探知したら音声で知らせる',
-                cn: '使用预设提示音提醒新发现目标',
-                ko: '새 몬스터를 소리로 알림',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'PopVolume',
-            name: {
-                en: 'Volume to play pop sound (0-1)',
-                de: 'Lautstärke für den Popsound (0-1)',
-                fr: 'Volume du son lors d\'une apparition (0-1)',
-                ja: 'お知らせ音声の音量 (0-1)',
-                cn: '提示音的音量 (0-1)',
-                ko: '소리 크기 (0-1)',
-            },
-            type: 'float',
-            default: 0.5,
-        },
-        {
-            id: 'Puller',
-            name: {
-                en: 'Show puller of mob',
-                de: 'Zeige den ersten Angreifer eines Mobs an',
-                fr: 'Afficher le puller du mob',
-                ja: '最初にタゲ取った人の名前を表示',
-                cn: '显示目标开怪者的名称',
-                ko: '몬스터를 풀링한 사람 표시',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-        {
-            id: 'Position',
-            name: {
-                en: 'Show position of mob',
-                de: 'Zeige die Position eines Mobs',
-                fr: 'Afficher la position du mob',
-                ja: '沸きモブの位置を表示',
-                cn: '显示目标位置',
-                ko: '몬스터의 위치 표시',
-            },
-            type: 'checkbox',
-            default: true,
-        },
-    ],
-});
-
-// EXTERNAL MODULE: ./resources/util.ts
-var util = __webpack_require__(779);
-;// CONCATENATED MODULE: ./resources/party.ts
-
-const emptyRoleToPartyNames = () => {
-    return {
-        tank: [],
-        healer: [],
-        dps: [],
-        crafter: [],
-        gatherer: [],
-        none: [],
-    };
-};
-class PartyTracker {
-    constructor() {
-        this.details = [];
-        this.partyNames_ = [];
-        this.partyIds_ = [];
-        this.allianceNames_ = [];
-        this.allianceIds_ = [];
-        this.nameToRole_ = {};
-        this.idToName_ = {};
-        this.roleToPartyNames_ = emptyRoleToPartyNames();
-    }
-    // Bind this to PartyChanged events.
-    onPartyChanged(e) {
-        if (!e || !e.party)
-            return;
-        this.reset();
-        this.details = e.party;
-        for (const p of e.party) {
-            this.allianceIds_.push(p.id);
-            this.allianceNames_.push(p.name);
-            const jobName = util/* default.jobEnumToJob */.Z.jobEnumToJob(p.job);
-            const role = util/* default.jobToRole */.Z.jobToRole(jobName);
-            this.idToName_[p.id] = p.name;
-            this.nameToRole_[p.name] = role;
-            if (p.inParty) {
-                this.partyIds_.push(p.id);
-                this.partyNames_.push(p.name);
-                this.roleToPartyNames_[role].push(p.name);
-            }
-        }
-    }
-    reset() {
-        // original event data
-        this.details = [];
-        this.partyNames_ = [];
-        this.partyIds_ = [];
-        this.allianceNames_ = [];
-        this.allianceIds_ = [];
-        this.nameToRole_ = {};
-        this.idToName_ = {};
-        // role -> [names] but only for party
-        this.roleToPartyNames_ = emptyRoleToPartyNames();
-    }
-    // returns an array of the names of players in your immediate party
-    get partyNames() {
-        return this.partyNames_;
-    }
-    get partyIds() {
-        return this.partyIds_;
-    }
-    // returns an array of the names of players in your alliance
-    get allianceNames() {
-        return this.allianceNames_;
-    }
-    // returns an array of the names of tanks in your immediate party
-    get tankNames() {
-        return this.roleToPartyNames_['tank'];
-    }
-    // returns an array of the names of healers in your immediate party
-    get healerNames() {
-        return this.roleToPartyNames_['healer'];
-    }
-    // returns an array of the names of dps players in your immediate party
-    get dpsNames() {
-        return this.roleToPartyNames_['dps'];
-    }
-    // returns true if the named player in your alliance is a particular role
-    isRole(name, role) {
-        return this.nameToRole_[name] === role;
-    }
-    // returns true if the named player in your alliance is a tank
-    isTank(name) {
-        return this.isRole(name, 'tank');
-    }
-    // returns true if the named player in your alliance is a healer
-    isHealer(name) {
-        return this.isRole(name, 'healer');
-    }
-    // returns true if the named player in your alliance is a dps
-    isDPS(name) {
-        return this.isRole(name, 'dps');
-    }
-    // returns true if the named player is in your immediate party
-    inParty(name) {
-        return this.partyNames.includes(name);
-    }
-    // returns true if the named player is in your alliance
-    inAlliance(name) {
-        return this.allianceNames.includes(name);
-    }
-    // for a named player, returns the other tank in your immediate party
-    // if named player is not a tank, or there's not exactly two tanks
-    // in your immediate party, returns null.
-    otherTank(name) {
-        const names = this.tankNames;
-        if (names.length !== 2)
-            return;
-        if (names[0] === name)
-            return names[1];
-        if (names[1] === name)
-            return names[0];
-    }
-    // see: otherTank, but for healers.
-    otherHealer(name) {
-        const names = this.roleToPartyNames_['healer'];
-        if (names.length !== 2)
-            return;
-        if (names[0] === name)
-            return names[1];
-        if (names[1] === name)
-            return names[0];
-    }
-    // returns the job name of the specified party member
-    jobName(name) {
-        var _a;
-        const partyIndex = this.partyNames.indexOf(name);
-        if (partyIndex >= 0)
-            return util/* default.jobEnumToJob */.Z.jobEnumToJob((_a = this.details[partyIndex]) === null || _a === void 0 ? void 0 : _a.job);
-    }
-    nameFromId(id) {
-        return this.idToName_[id];
-    }
-}
-
-// EXTERNAL MODULE: ./resources/responses.ts
-var responses = __webpack_require__(163);
-// EXTERNAL MODULE: ./ui/raidboss/data/raidboss_manifest.txt + 328 modules
-var raidboss_manifest = __webpack_require__(556);
-;// CONCATENATED MODULE: ./ui/raidboss/raidboss_options.ts
-
-// These options are ones that are not auto-defined by raidboss_config.js.
-const defaultRaidbossNonConfigOptions = {
-    PlayerNicks: {},
-    InfoSound: '../../resources/sounds/freesound/percussion_hit.ogg',
-    AlertSound: '../../resources/sounds/BigWigs/Alert.ogg',
-    AlarmSound: '../../resources/sounds/BigWigs/Alarm.ogg',
-    LongSound: '../../resources/sounds/BigWigs/Long.ogg',
-    PullSound: '../../resources/sounds/freesound/sonar.ogg',
-    AudioAllowed: true,
-    DisabledTriggers: {},
-    PerTriggerAutoConfig: {},
-    PerTriggerOptions: {},
-    Triggers: [],
-    IsRemoteRaidboss: false,
-    TransformTts: (t) => t,
-};
-// TODO: figure out how to get this type from raidboss_config??
-// These values are overwritten and are just here for typing.
-const defaultRaidbossConfigOptions = {
-    Debug: false,
-    DefaultAlertOutput: 'textAndSound',
-    AlertsLanguage: undefined,
-    TimelineLanguage: undefined,
-    TimelineEnabled: true,
-    AlertsEnabled: true,
-    ShowTimerBarsAtSeconds: 30,
-    KeepExpiredTimerBarsForSeconds: 0.7,
-    BarExpiresSoonSeconds: 6,
-    MaxNumberOfTimerBars: 6,
-    DisplayAlarmTextForSeconds: 3,
-    DisplayAlertTextForSeconds: 3,
-    DisplayInfoTextForSeconds: 3,
-    AlarmSoundVolume: 1,
-    AlertSoundVolume: 1,
-    InfoSoundVolume: 1,
-    LongSoundVolume: 1,
-    PullSoundVolume: 1,
-    cactbotWormholeStrat: false,
-    cactbote8sUptimeKnockbackStrat: false,
-};
-// See user/raidboss-example.js for documentation.
-const Options = {
-    ...user_config/* default.getDefaultBaseOptions */.Z.getDefaultBaseOptions(),
-    ...defaultRaidbossNonConfigOptions,
-    ...defaultRaidbossConfigOptions,
-};
-/* harmony default export */ const raidboss_options = (Options);
-
-;// CONCATENATED MODULE: ./ui/raidboss/raidboss_config.js
-
-
-
-
-
-
-
-
-const kOptionKeys = {
-  output: 'Output',
-  duration: 'Duration',
-  beforeSeconds: 'BeforeSeconds',
-  outputStrings: 'OutputStrings',
-};
-
-// No sound only option, because that's silly.
-const raidboss_config_kTriggerOptions = {
-  default: {
-    label: {
-      en: '✔ Defaults',
-      de: '✔ Standards',
-      fr: '✔ Défauts',
-      ja: '✔ 初期設定',
-      cn: '✔ 默认设置',
-      ko: '✔ 기본',
-    },
-  },
-  textAndSound: {
-    label: {
-      en: '🆙🔊 Text and Sound',
-      de: '🆙🔊 Text und Ton',
-      fr: '🆙🔊 Texte et son',
-      ja: '🆙🔊 テキストと音声',
-      cn: '🆙🔊 文字显示与提示音',
-      ko: '🆙🔊 텍스트와 소리',
-    },
-  },
-  ttsAndText: {
-    label: {
-      en: '🆙💬 Text and TTS',
-      de: '🆙💬 Text und TTS',
-      fr: '🆙💬 Texte et TTS',
-      ja: '🆙💬 テキストとTTS',
-      cn: '🆙💬 文字显示与TTS',
-      ko: '🆙💬 텍스트와 TTS',
-    },
-  },
-  ttsOnly: {
-    label: {
-      en: '💬 TTS Only',
-      de: '💬 Nur TTS',
-      fr: '💬 TTS Seulement',
-      ja: '💬 TTSのみ',
-      cn: '💬 只使用TTS',
-      ko: '💬 TTS만',
-    },
-  },
-  textOnly: {
-    label: {
-      en: '🆙 Text Only',
-      de: '🆙 Nur Text',
-      fr: '🆙 Texte seulement',
-      ja: '🆙 テキストのみ',
-      cn: '🆙 只使用文字显示',
-      ko: '🆙 텍스트만',
-    },
-  },
-  disabled: {
-    label: {
-      en: '❌ Disabled',
-      de: '❌ Deaktiviert',
-      fr: '❌ Désactivé',
-      ja: '❌ 無効',
-      cn: '❌ 禁用',
-      ko: '❌ 비활성화',
-    },
-  },
-};
-
-const kDetailKeys = {
-  'triggerRegex': {
-    label: {
-      en: 'regex',
-      de: 'regex',
-      fr: 'regex',
-      ja: '正規表現',
-      cn: '正则表达式',
-      ko: '정규식',
-    },
-    cls: 'regex-text',
-    debugOnly: true,
-  },
-  'triggerNetRegex': {
-    label: {
-      en: 'netregex',
-      de: 'netregex',
-      fr: 'netregex',
-      ja: 'ネット正規表現',
-      cn: '网络日志正则表达式',
-    },
-    cls: 'regex-text',
-    debugOnly: true,
-  },
-  'timelineRegex': {
-    label: {
-      en: 'timeline',
-      de: 'timeline',
-      fr: 'timeline',
-      ja: 'タイムライン',
-      cn: '时间轴',
-      ko: '타임라인',
-    },
-    cls: 'regex-text',
-    debugOnly: true,
-  },
-  'beforeSeconds': {
-    label: {
-      en: 'before (sec)',
-      de: 'Vorher (Sekunden)',
-      fr: 'avant (seconde)',
-      ja: 'その前に (秒)',
-      cn: '提前 (秒)',
-      ko: '앞당김 (초)',
-    },
-    cls: 'before-seconds-text',
-    generatedManually: true,
-  },
-  'condition': {
-    label: {
-      en: 'condition',
-      de: 'condition',
-      fr: 'condition',
-      ja: '条件',
-      cn: '条件',
-      ko: '조건',
-    },
-    cls: 'condition-text',
-    debugOnly: true,
-  },
-  'duration': {
-    label: {
-      en: 'duration (sec)',
-      de: 'Dauer (Sekunden)',
-      fr: 'Durée (secondes)',
-      ja: '存続時間 (秒)',
-      cn: '持续时间 (秒)',
-      ko: '지속 시간 (초)',
-    },
-    cls: 'duration-text',
-    generatedManually: true,
-  },
-  'preRun': {
-    label: {
-      en: 'preRun',
-      de: 'preRun',
-      fr: 'preRun',
-      ja: 'プレ実行',
-      cn: '预运行',
-      ko: '사전 실행',
-    },
-    cls: 'prerun-text',
-    debugOnly: true,
-  },
-  'alarmText': {
-    label: {
-      en: 'alarm',
-      de: 'alarm',
-      fr: 'alarme',
-      ja: '警報',
-      cn: '警报文本',
-      ko: '경고',
-    },
-    cls: 'alarm-text',
-  },
-  'alertText': {
-    label: {
-      en: 'alert',
-      de: 'alert',
-      fr: 'alerte',
-      ja: '警告',
-      cn: '警告文本',
-      ko: '주의',
-    },
-    cls: 'alert-text',
-  },
-  'infoText': {
-    label: {
-      en: 'info',
-      de: 'info',
-      fr: 'info',
-      ja: '情報',
-      cn: '信息文本',
-      ko: '안내',
-    },
-    cls: 'info-text',
-  },
-  'tts': {
-    label: {
-      en: 'tts',
-      de: 'tts',
-      fr: 'tts',
-      ja: 'TTS',
-      cn: 'TTS',
-      ko: 'TTS',
-    },
-    cls: 'tts-text',
-  },
-  'sound': {
-    label: {
-      en: 'sound',
-      de: 'sound',
-      fr: 'son',
-      ja: '音声',
-      cn: '提示音',
-      ko: '소리',
-    },
-    cls: 'sound-text',
-  },
-  'run': {
-    label: {
-      en: 'run',
-      de: 'run',
-      fr: 'run',
-      ja: '実行',
-      cn: '运行',
-      ko: '실행',
-    },
-    cls: 'run-text',
-    debugOnly: true,
-  },
-};
-
-const kMiscTranslations = {
-  // Shows up for un-set values.
-  valueDefault: {
-    en: '(default)',
-    de: '(Standard)',
-    fr: '(Défaut)',
-    ja: '(初期値)',
-    cn: '(默认值)',
-    ko: '(기본값)',
-  },
-  // Shown when the UI can't decipher the output of a function.
-  valueIsFunction: {
-    en: '(function)',
-    de: '(Funktion)',
-    fr: '(Fonction)',
-    ja: '(関数)',
-    cn: '(函数)',
-    ko: '(함수)',
-  },
-  // Warning label for triggers without ids or overridden triggers.
-  warning: {
-    en: '⚠️ warning',
-    de: '⚠️ Warnung',
-    fr: '⚠️ Attention',
-    ja: '⚠️ 警告',
-    cn: '⚠️ 警告',
-    ko: '⚠️ 주의',
-  },
-  // Shows up for triggers without ids.
-  missingId: {
-    en: 'missing id field',
-    de: 'Fehlendes ID Feld',
-    fr: 'Champ ID manquant',
-    ja: 'idがありません',
-    cn: '缺少id属性',
-    ko: 'ID 필드값 없음',
-  },
-  // Shows up for triggers that are overridden by other triggers.
-  overriddenByFile: {
-    en: 'overridden by "${file}"',
-    de: 'Überschrieben durch "${file}"',
-    fr: 'Écrasé(e) par "${file}"',
-    ja: '"${file}"に上書きました',
-    cn: '被"${file}"文件覆盖',
-    ko: '"${file}" 파일에서 덮어씌움',
-  },
-  // Opens trigger file on Github.
-  viewTriggerSource: {
-    en: 'View Trigger Source',
-    de: 'Zeige Trigger Quelle',
-    ja: 'トリガーのコードを表示',
-    cn: '显示触发器源码',
-    ko: '트리거 출처 열기',
-  },
-};
-
-const validDurationOrUndefined = (val) => {
-  val = parseFloat(val);
-  if (!isNaN(val) && val >= 0)
-    return val;
-  return undefined;
-};
-
-const canBeConfigured = (trig) => !trig.isMissingId && !trig.overriddenByFile;
-
-const addTriggerDetail = (container, labelText, detailText, detailCls) => {
-  const label = document.createElement('div');
-  label.innerText = labelText;
-  label.classList.add('trigger-label');
-  container.appendChild(label);
-
-  const detail = document.createElement('div');
-  detail.classList.add('trigger-detail');
-  detail.innerText = detailText;
-  container.appendChild(detail);
-
-  if (detailCls)
-    detail.classList.add(detailCls);
-};
-
-// This is used both for top level Options and for PerTriggerAutoConfig settings.
-// Unfortunately due to poor decisions in the past, PerTriggerOptions has different
-// fields here.  This should be fixed.
-function setOptionsFromOutputValue(options, value) {
-  if (value === 'default') {
-    // Nothing.
-  } else if (value === 'textAndSound') {
-    options.TextAlertsEnabled = true;
-    options.SoundAlertsEnabled = true;
-    options.SpokenAlertsEnabled = false;
-  } else if (value === 'ttsAndText') {
-    options.TextAlertsEnabled = true;
-    options.SoundAlertsEnabled = true;
-    options.SpokenAlertsEnabled = true;
-  } else if (value === 'ttsOnly') {
-    options.TextAlertsEnabled = false;
-    options.SoundAlertsEnabled = true;
-    options.SpokenAlertsEnabled = true;
-  } else if (value === 'textOnly') {
-    options.TextAlertsEnabled = true;
-    options.SoundAlertsEnabled = false;
-    options.SpokenAlertsEnabled = false;
-  } else if (value === 'disabled') {
-    options.TextAlertsEnabled = false;
-    options.SoundAlertsEnabled = false;
-    options.SpokenAlertsEnabled = false;
-  } else {
-    console.error('unknown output type: ' + value);
-  }
-}
-
-// Helper for doing nothing during trigger eval, but still recording any
-// calls to `output.responseOutputStrings = x;` via callback.
-class DoNothingFuncProxy {
-  constructor(outputStringsCallback) {
-    return new Proxy(this, {
-      set(target, property, value) {
-        if (property === 'responseOutputStrings') {
-          outputStringsCallback(value);
-          return true;
-        }
-
-        // Ignore other property setting here.
-      },
-
-      get(target, name) {
-        return () => {};
-      },
-    });
-  }
-}
-
-class RaidbossConfigurator {
-  constructor(cactbotConfigurator) {
-    this.base = cactbotConfigurator;
-
-    // TODO: is it worth adding the complexity to reflect this change in triggers that use it?
-    // This is probably where using something like vue or react would be easier.
-    // For the moment, folks can just reload, for real.
-    this.alertsLang = this.base.getOption('raidboss', 'AlertsLanguage', this.base.lang);
-    this.timelineLang = this.base.getOption('raidboss', 'TimelineLanguage', this.base.lang);
-  }
-
-  buildUI(container, raidbossFiles, userOptions) {
-    const fileMap = this.processRaidbossFiles(raidbossFiles, userOptions);
-
-    const expansionDivs = {};
-
-    for (const key in fileMap) {
-      const info = fileMap[key];
-      // "expansion" here is technically section, which includes "general triggers"
-      // and one section per user file.
-      const expansion = info.section;
-
-      if (Object.keys(info.triggers).length === 0)
-        continue;
-
-      if (!expansionDivs[expansion]) {
-        const expansionContainer = document.createElement('div');
-        expansionContainer.classList.add('trigger-expansion-container', 'collapsed');
-        container.appendChild(expansionContainer);
-
-        const expansionHeader = document.createElement('div');
-        expansionHeader.classList.add('trigger-expansion-header');
-        expansionHeader.onclick = () => {
-          expansionContainer.classList.toggle('collapsed');
-        };
-        expansionHeader.innerText = expansion;
-        expansionContainer.appendChild(expansionHeader);
-
-        expansionDivs[expansion] = expansionContainer;
-      }
-
-      const triggerContainer = document.createElement('div');
-      triggerContainer.classList.add('trigger-file-container', 'collapsed');
-      expansionDivs[expansion].appendChild(triggerContainer);
-
-      const headerDiv = document.createElement('div');
-      headerDiv.classList.add('trigger-file-header');
-      headerDiv.onclick = () => {
-        triggerContainer.classList.toggle('collapsed');
-      };
-
-      const parts = [info.title, info.type, info.prefix];
-      for (let i = 0; i < parts.length; ++i) {
-        if (!parts[i])
-          continue;
-        const partDiv = document.createElement('div');
-        partDiv.classList.add('trigger-file-header-part');
-        partDiv.innerText = parts[i];
-        headerDiv.appendChild(partDiv);
-      }
-
-      triggerContainer.appendChild(headerDiv);
-
-      const triggerOptions = document.createElement('div');
-      triggerOptions.classList.add('trigger-file-options');
-      triggerContainer.appendChild(triggerOptions);
-
-      for (const id in info.triggers) {
-        const trig = info.triggers[id];
-
-        // Don't construct triggers that won't show anything.
-        let hasOutputFunc = false;
-        for (const func of responses/* triggerOutputFunctions */.ug) {
-          if (trig[func]) {
-            hasOutputFunc = true;
-            break;
-          }
-        }
-        if (!hasOutputFunc && !this.base.developerOptions)
-          continue;
-
-        // Build the trigger label.
-        const triggerDiv = document.createElement('div');
-        triggerDiv.innerHTML = trig.isMissingId ? '(???)' : trig.id;
-
-        triggerDiv.classList.add('trigger');
-        triggerOptions.appendChild(triggerDiv);
-
-        // Container for the right side ui (select boxes, all of the info).
-        const triggerDetails = document.createElement('div');
-        triggerDetails.classList.add('trigger-details');
-        triggerOptions.appendChild(triggerDetails);
-
-        if (canBeConfigured(trig))
-          triggerDetails.appendChild(this.buildTriggerOptions(trig, triggerDiv));
-
-        if (trig.isMissingId) {
-          addTriggerDetail(triggerDetails,
-              this.base.translate(kMiscTranslations.warning),
-              this.base.translate(kMiscTranslations.missingId));
-        }
-        if (trig.overriddenByFile) {
-          const baseText = this.base.translate(kMiscTranslations.overriddenByFile);
-          const detailText = baseText.replace('${file}', trig.overriddenByFile);
-          addTriggerDetail(triggerDetails,
-              this.base.translate(kMiscTranslations.warning),
-              detailText);
-        }
-
-        // Append some details about the trigger so it's more obvious what it is.
-        for (const detailKey in kDetailKeys) {
-          if (kDetailKeys[detailKey].generatedManually)
-            continue;
-          if (!this.base.developerOptions && kDetailKeys[detailKey].debugOnly)
-            continue;
-          if (!trig[detailKey] && !trig.output[detailKey])
-            continue;
-
-          const detailCls = [kDetailKeys[detailKey].cls];
-          let detailText;
-          if (trig.output[detailKey]) {
-            detailText = trig.output[detailKey];
-          } else if (typeof trig[detailKey] === 'function') {
-            detailText = this.base.translate(kMiscTranslations.valueIsFunction);
-            detailCls.push('function-text');
-          } else {
-            detailText = trig[detailKey];
-          }
-
-          addTriggerDetail(triggerDetails,
-              this.base.translate(kDetailKeys[detailKey].label),
-              detailText,
-              detailCls);
-        }
-
-        if (!canBeConfigured(trig))
-          continue;
-
-        // Add beforeSeconds manually for timeline triggers.
-        if (trig.isTimelineTrigger) {
-          const detailKey = 'beforeSeconds';
-          const optionKey = kOptionKeys.beforeSeconds;
-
-          const label = document.createElement('div');
-          label.innerText = this.base.translate(kDetailKeys[detailKey].label);
-          label.classList.add('trigger-label');
-          triggerDetails.appendChild(label);
-
-          const div = document.createElement('div');
-          div.classList.add('option-input-container', 'trigger-before-seconds');
-
-          const input = document.createElement('input');
-          div.appendChild(input);
-          input.type = 'text';
-          input.step = 'any';
-
-          // Say "(default)" for more complicated things like functions.
-          let defaultValue = kMiscTranslations.valueDefault;
-          if (trig.beforeSeconds === undefined)
-            defaultValue = 0;
-          else if (typeof trig.beforeSeconds === 'number')
-            defaultValue = trig.beforeSeconds;
-
-          input.placeholder = this.base.translate(defaultValue);
-          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, '');
-          const setFunc = () => {
-            const val = validDurationOrUndefined(input.value) || '';
-            this.base.setOption('raidboss', 'triggers', trig.id, optionKey, val);
-          };
-          input.onchange = setFunc;
-          input.oninput = setFunc;
-
-          triggerDetails.appendChild(div);
-        }
-
-        // Add duration manually with an input to override.
-        if (hasOutputFunc) {
-          const detailKey = 'duration';
-          const optionKey = kOptionKeys.duration;
-
-          const label = document.createElement('div');
-          label.innerText = this.base.translate(kDetailKeys[detailKey].label);
-          label.classList.add('trigger-label');
-          triggerDetails.appendChild(label);
-
-          const div = document.createElement('div');
-          div.classList.add('option-input-container', 'trigger-duration');
-
-          const input = document.createElement('input');
-          div.appendChild(input);
-          input.type = 'text';
-          input.step = 'any';
-          input.placeholder = this.base.translate(kMiscTranslations.valueDefault);
-          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, '');
-          const setFunc = () => {
-            const val = validDurationOrUndefined(input.value) || '';
-            this.base.setOption('raidboss', 'triggers', trig.id, optionKey, val);
-          };
-          input.onchange = setFunc;
-          input.oninput = setFunc;
-
-          triggerDetails.appendChild(div);
-        }
-
-        // Add output strings manually
-        const outputStrings = trig.outputStrings || {};
-
-        for (const key in outputStrings) {
-          const optionKey = kOptionKeys.outputStrings;
-          const template = this.base.translate(outputStrings[key]);
-
-          const label = document.createElement('div');
-          label.innerText = key;
-          label.classList.add('trigger-outputstring-label');
-          triggerDetails.appendChild(label);
-
-          const div = document.createElement('div');
-          div.classList.add('option-input-container', 'trigger-outputstring');
-
-          const input = document.createElement('input');
-          div.appendChild(input);
-          input.type = 'text';
-          input.placeholder = template;
-          input.value = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, key, '');
-          const setFunc = () => this.base.setOption('raidboss', 'triggers', trig.id, optionKey, key, input.value);
-          input.onchange = setFunc;
-          input.oninput = setFunc;
-
-          triggerDetails.appendChild(div);
-        }
-
-        const label = document.createElement('div');
-        triggerDetails.appendChild(label);
-
-        const div = document.createElement('div');
-        div.classList.add('option-input-container', 'trigger-source');
-        const baseUrl = 'https://github.com/quisquous/cactbot/blob/triggers';
-        const path = key.split('-');
-        let urlFilepath;
-        if (path.length === 3) {
-          // 00-misc/general.js
-          urlFilepath = `${path[0]}-${path[1]}/${[...path].slice(2).join('-')}`;
-        } else {
-          // 02-arr/raids/t1.js
-          urlFilepath = `${path[0]}-${path[1]}/${path[2]}/${[...path].slice(3).join('-')}`;
-        }
-        const escapedTriggerId = trig.id.replace(/'/g, '\\\'');
-        const uriComponent = encodeURIComponent(`id: '${escapedTriggerId}'`).replace(/'/g, '%27');
-        const urlString = `${baseUrl}/${urlFilepath}.js#:~:text=${uriComponent}`;
-        div.innerHTML = `<a href="${urlString}" target="_blank">(${this.base.translate(kMiscTranslations.viewTriggerSource)})</a>`;
-
-        triggerDetails.appendChild(div);
-      }
-    }
-  }
-
-  // This duplicates the raidboss function of the same name.
-  valueOrFunction(f, data, matches, output) {
-    const result = (typeof f === 'function') ? f(data, matches, output) : f;
-    if (result !== Object(result))
-      return result;
-    if (result[this.alertsLang])
-      return this.valueOrFunction(result[this.alertsLang]);
-    if (result[this.timelineLang])
-      return this.valueOrFunction(result[this.timelineLang]);
-    // For partially localized results where this localization doesn't
-    // exist, prefer English over nothing.
-    return this.valueOrFunction(result['en']);
-  }
-
-  processTrigger(trig) {
-    // TODO: with some hackiness (e.g. regexes?) we could figure out which
-    // output string came from which alert type (alarm, alert, info, tts).
-    trig.output = new DoNothingFuncProxy((outputStrings) => {
-      trig.outputStrings = trig.outputStrings || {};
-      Object.assign(trig.outputStrings, outputStrings);
-    });
-
-    const kBaseFakeData = {
-      party: new PartyTracker(),
-      lang: this.base.lang,
-      currentHP: 1000,
-      options: this.base.configOptions,
-      ShortName: (x) => x,
-      StopCombat: () => {},
-      ParseLocaleFloat: parseFloat,
-      CanStun: () => util/* default.canStun */.Z.canStun(this.job),
-      CanSilence: () => util/* default.canSilence */.Z.canSilence(this.job),
-      CanSleep: () => util/* default.canSleep */.Z.canSleep(this.job),
-      CanCleanse: () => util/* default.canCleanse */.Z.canCleanse(this.job),
-      CanFeint: () => util/* default.canFeint */.Z.canFeint(this.job),
-      CanAddle: () => util/* default.canAddle */.Z.canAddle(this.job),
-    };
-
-    const kFakeData = [
-      {
-        me: 'Tini Poutini',
-        job: 'GNB',
-        role: 'tank',
-      },
-      {
-        me: 'Potato Chippy',
-        job: 'WHM',
-        role: 'healer',
-      },
-      {
-        me: 'Tater Tot',
-        job: 'BLM',
-        role: 'dps',
-      },
-      {
-        me: 'Hash Brown',
-        job: 'DRG',
-        role: 'dps',
-      },
-      {
-        me: 'Aloo Gobi',
-        job: 'BLU',
-        role: 'dps',
-      },
-    ];
-
-    for (let i = 0; i < kFakeData.length; ++i)
-      kFakeData[i] = Object.assign({}, kFakeData[i], kBaseFakeData);
-
-
-    const kFakeMatches = {
-      // TODO: really should convert all triggers to use regexes.js.
-      // Mooooost triggers use matches[1] to be a name.
-      1: kFakeData[0].me,
-
-      sourceId: '41234567',
-      source: 'Enemy',
-      id: '1234',
-      ability: 'Ability',
-      targetId: '1234567',
-      target: kFakeData[0].me,
-      flags: '',
-      x: 100,
-      y: 100,
-      z: 0,
-      heading: 0,
-      npcId: undefined,
-      effect: 'Effect',
-      duration: 30,
-      code: '00',
-      line: '',
-      name: 'Name',
-      capture: true,
-    };
-
-
-    const output = {};
-    const keys = ['alarmText', 'alertText', 'infoText', 'tts', 'sound'];
-
-    // Try to determine some sample output?
-    // This could get much more complicated if we wanted it to.
-    const evalTrigger = (trig, key, idx) => {
-      try {
-        const result = this.valueOrFunction(trig[key], kFakeData[idx], kFakeMatches, trig.output);
-        if (!result)
-          return false;
-
-        // Super hack:
-        if (result.includes('undefined') || result.includes('NaN'))
-          return false;
-
-        output[key] = result;
-        return true;
-      } catch (e) {
-        // This is all totally bogus.  Many triggers assume fields on data
-        // are properly defined when these calls happen, so will throw errors.
-        // So just silently ignore.
-        return false;
-      }
-    };
-
-    // Handle 'response' first.
-    if (trig.response) {
-      const r = trig.response;
-      for (let d = 0; d < kFakeData.length; ++d) {
-        try {
-          // Can't use ValueOrFunction here as r returns a non-localizable object.
-          // FIXME: this hackily replicates some raidboss logic too.
-          let response = r;
-          while (typeof response === 'function') {
-            // TODO: check if this has builtInResponseStr first.
-            response = response(kFakeData[d], kFakeMatches, trig.output);
-          }
-          if (!response)
-            continue;
-
-          if (!trig.outputStrings) {
-            for (const key of keys)
-              evalTrigger(response, key, d);
-          }
-          break;
-        } catch (e) {
-          continue;
-        }
-      }
-    }
-
-    // Only evaluate fields if there are not outputStrings.
-    // outputStrings will indicate more clearly what the trigger says.
-    if (!trig.outputStrings) {
-      for (const key of keys) {
-        if (!trig[key])
-          continue;
-        for (let d = 0; d < kFakeData.length; ++d) {
-          if (evalTrigger(trig, key, d))
-            break;
-        }
-      }
-    }
-
-    trig.output = output;
-
-    const lang = this.base.lang;
-
-    const getRegex = (baseField) => {
-      const shortLanguage = lang.charAt(0).toUpperCase() + lang.slice(1);
-      const langSpecificRegex = trig[baseField + shortLanguage] || trig[baseField];
-      if (!langSpecificRegex)
-        return;
-      const baseRegex = regexes/* default.parse */.Z.parse(langSpecificRegex);
-      if (!baseRegex)
-        return;
-      return regexes/* default.parse */.Z.parse(baseRegex);
-    };
-
-    if (trig.isTimelineTrigger) {
-      trig.timelineRegex = getRegex('regex');
-    } else {
-      trig.triggerRegex = getRegex('regex');
-      trig.triggerNetRegex = getRegex('netRegex');
-    }
-
-    return trig;
-  }
-
-  processRaidbossFiles(files, userOptions) {
-    // `files` is map of filename => triggerSet (for trigger files)
-    // `map` is a sorted map of shortened zone key => { various fields, triggerSet }
-    const map = this.base.processFiles(files, userOptions.Triggers);
-    let triggerIdx = 0;
-
-    // While walking through triggers, record any previous triggers with the same
-    // id so that the ui can disable overriding information.
-    const previousTriggerWithId = {};
-
-    for (const item of Object.values(map)) {
-      // TODO: maybe each trigger set needs a zone name, and we should
-      // use that instead of the filename???
-      const rawTriggers = {
-        trigger: [],
-        timeline: [],
-      };
-      const triggerSet = item.triggerSet;
-      if (triggerSet.triggers)
-        rawTriggers.trigger.push(...triggerSet.triggers);
-      if (triggerSet.timelineTriggers)
-        rawTriggers.timeline.push(...triggerSet.timelineTriggers);
-
-      item.triggers = {};
-      for (const key in rawTriggers) {
-        for (const trig of rawTriggers[key]) {
-          triggerIdx++;
-          if (!trig.id) {
-            // Give triggers with no id some "unique" string so that they can
-            // still be added to the set and show up in the ui.
-            trig.id = `!!NoIdTrigger${triggerIdx}`;
-            trig.isMissingId = true;
-          }
-
-          // Track if this trigger overrides any previous trigger.
-          const previous = previousTriggerWithId[trig.id];
-          if (previous)
-            previous.overriddenByFile = triggerSet.filename;
-          previousTriggerWithId[trig.id] = trig;
-
-          trig.isTimelineTrigger = key === 'timeline';
-          // Also, if a user has two of the same id in the same triggerSet (?!)
-          // then only the second trigger will show up.
-          item.triggers[trig.id] = this.processTrigger(trig);
-        }
-      }
-    }
-    return map;
-  }
-
-  buildTriggerOptions(trig, labelDiv) {
-    const optionKey = kOptionKeys.output;
-    const div = document.createElement('div');
-    div.classList.add('trigger-options');
-
-    const updateLabel = (input) => {
-      if (input.value === 'hidden' || input.value === 'disabled')
-        labelDiv.classList.add('disabled');
-      else
-        labelDiv.classList.remove('disabled');
-    };
-
-    const input = document.createElement('select');
-    div.appendChild(input);
-
-    const selectValue = this.base.getOption('raidboss', 'triggers', trig.id, optionKey, 'default');
-
-    for (const key in raidboss_config_kTriggerOptions) {
-      // Hide debug only options unless they are selected.
-      // Otherwise, it will look weird to pick something like 'Disabled',
-      // but then not show it when developer options are turned off.
-      if (!this.base.developerOptions && raidboss_config_kTriggerOptions[key].debugOnly && key !== selectValue)
-        continue;
-      const elem = document.createElement('option');
-      elem.innerHTML = this.base.translate(raidboss_config_kTriggerOptions[key].label);
-      elem.value = key;
-      elem.selected = key === selectValue;
-      input.appendChild(elem);
-
-      updateLabel(input);
-
-      input.onchange = () => {
-        updateLabel(input);
-        let value = input.value;
-        if (value.includes('default'))
-          value = 'default';
-        this.base.setOption('raidboss', 'triggers', trig.id, optionKey, input.value);
-      };
-    }
-
-    return div;
-  }
-}
-
-// Raidboss needs to do some extra processing of user files.
-const userFileHandler = (name, files, options, basePath) => {
-  if (!options.Triggers)
-    return;
-
-  for (const set of options.Triggers) {
-    // Annotate triggers with where they came from.  Note, options is passed in repeatedly
-    // as multiple sets of user files add triggers, so only process each file once.
-    if (set.isUserTriggerSet)
-      continue;
-
-    // `filename` here is just cosmetic for better debug printing to make it more clear
-    // where a trigger or an override is coming from.
-    set.filename = `${basePath}${name}`;
-    set.isUserTriggerSet = true;
-
-    // Convert set.timelineFile to set.timeline.
-    if (set.timelineFile) {
-      const lastIndex = Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\'));
-      // If lastIndex === -1, truncate name to the empty string.
-      // if lastIndex > -1, truncate name after the final slash.
-      const dir = name.substring(0, lastIndex + 1);
-
-      const timelineFile = `${dir}${set.timelineFile}`;
-      delete set.timelineFile;
-
-      if (!(timelineFile in files)) {
-        console.log(`ERROR: '${name}' specifies non-existent timeline file '${timelineFile}'.`);
-        continue;
-      }
-
-      // set.timeline is processed recursively.
-      set.timeline = [set.timeline, files[timelineFile]];
-    }
-  }
-};
-
-const templateOptions = {
-  buildExtraUI: (base, container) => {
-    const builder = new RaidbossConfigurator(base);
-    const userOptions = { ...raidboss_options };
-    user_config/* default.loadUserFiles */.Z.loadUserFiles('raidboss', userOptions, () => {
-      builder.buildUI(container, raidboss_manifest/* default */.Z, userOptions);
-    });
-  },
-  processExtraOptions: (options, savedConfig) => {
-    // raidboss will look up this.options.PerTriggerAutoConfig to find these values.
-    const optionName = 'PerTriggerAutoConfig';
-
-    options[optionName] = options[optionName] || {};
-    const triggers = savedConfig.triggers;
-    if (!triggers)
-      return;
-
-    const perTrigger = options[optionName];
-
-    const outputObjs = {};
-    const keys = Object.keys(raidboss_config_kTriggerOptions);
-    for (const key of keys) {
-      outputObjs[key] = {};
-      setOptionsFromOutputValue(outputObjs[key], key);
-    }
-
-    for (const id in triggers) {
-      const autoConfig = {};
-
-      const output = triggers[id][kOptionKeys.output];
-      if (output)
-        Object.assign(autoConfig, outputObjs[output]);
-
-      const duration = validDurationOrUndefined(triggers[id][kOptionKeys.duration]);
-      if (duration)
-        autoConfig[kOptionKeys.duration] = duration;
-
-      const beforeSeconds = validDurationOrUndefined(triggers[id][kOptionKeys.beforeSeconds]);
-      if (beforeSeconds)
-        autoConfig[kOptionKeys.beforeSeconds] = beforeSeconds;
-
-      const outputStrings = triggers[id][kOptionKeys.outputStrings];
-      if (outputStrings)
-        autoConfig[kOptionKeys.outputStrings] = outputStrings;
-
-      if (output || duration || outputStrings)
-        perTrigger[id] = autoConfig;
-    }
-  },
-  options: [
-    {
-      id: 'Debug',
-      name: {
-        en: 'Enable debug mode',
-        de: 'Aktiviere Debugmodus',
-        fr: 'Activer le mode debug',
-        ja: 'デバッグモードを有効にする',
-        cn: '启用调试模式',
-        ko: '디버그 모드 활성화',
-      },
-      type: 'checkbox',
-      debugOnly: true,
-    },
-    {
-      id: 'DefaultAlertOutput',
-      name: {
-        en: 'Default alert output',
-        de: 'Standard Alert Ausgabe',
-        fr: 'Alerte par défaut',
-        ja: '警告情報出力既定値',
-        cn: '默认警报提示信息输出方式',
-        ko: '기본 알람 출력 방식',
-      },
-      type: 'select',
-      options: {
-        en: {
-          '🆙🔊 Text and Sound': 'textAndSound',
-          '🆙💬 Text and TTS': 'ttsAndText',
-          '💬 TTS Only': 'ttsOnly',
-          '🆙 Text Only': 'textOnly',
-          '❌ Disabled': 'disabled',
-        },
-        de: {
-          '🆙🔊 Text und Ton': 'textAndSound',
-          '🆙💬 Text und TTS': 'ttsAndText',
-          '💬 Nur TTS': 'ttsOnly',
-          '🆙 Nur Text': 'textOnly',
-          '❌ Deaktiviert': 'disabled',
-        },
-        fr: {
-          '🆙🔊 Texte et son': 'textAndSound',
-          '🆙💬 Texte et TTS': 'ttsAndText',
-          '💬 TTS seulement': 'ttsOnly',
-          '🆙 Texte seulement': 'textOnly',
-          '❌ Désactivé': 'disabled',
-        },
-        ja: {
-          '🆙🔊 テキストと音声': 'textAndSound',
-          '🆙💬 テキストとTTS': 'ttsAndText',
-          '💬 TTSのみ': 'ttsOnly',
-          '🆙 テキストのみ': 'textOnly',
-          '❌ 無効': 'disabled',
-        },
-        cn: {
-          '🆙🔊 文字显示与提示音': 'textAndSound',
-          '🆙💬 文字显示与TTS': 'ttsAndText',
-          '💬 只使用TTS': 'ttsOnly',
-          '🆙 只使用文字显示': 'textOnly',
-          '❌ 禁用': 'disabled',
-        },
-        ko: {
-          '🆙🔊 텍스트와 소리': 'textAndSound',
-          '🆙💬 텍스트와 TTS': 'ttsAndText',
-          '💬 TTS만': 'ttsOnly',
-          '🆙 텍스트만': 'textOnly',
-          '❌ 비활성화': 'disabled',
-        },
-      },
-      default: 'textAndSound',
-      setterFunc: setOptionsFromOutputValue,
-    },
-    {
-      id: 'AlertsLanguage',
-      name: {
-        en: 'Alerts language',
-        de: 'Alert Sprache',
-        fr: 'Langue des alertes',
-        ja: '警告情報の言語',
-        cn: '警报提示文字的语言',
-        ko: '알람 언어',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Use Display Language': 'default',
-          'English (en)': 'en',
-          'Chinese (cn)': 'cn',
-          'German (de)': 'de',
-          'French (fr)': 'fr',
-          'Japanese (ja)': 'ja',
-          'Korean (ko)': 'ko',
-        },
-        fr: {
-          'Utiliser la langue d\'affichage': 'default',
-          'Anglais (en)': 'en',
-          'Chinois (cn)': 'cn',
-          'Allemand (de)': 'de',
-          'Français (fr)': 'fr',
-          'Japonais (ja)': 'ja',
-          'Coréen (ko)': 'ko',
-        },
-        ja: {
-          '表示言語既定値': 'default',
-          '英語 (en)': 'en',
-          '中国語 (cn)': 'cn',
-          'ドイツ語 (de)': 'de',
-          'フランス語 (fr)': 'fr',
-          '日本語 (ja)': 'ja',
-          '韓国語 (ko)': 'ko',
-        },
-        cn: {
-          '使用显示语言': 'default',
-          '英语 (en)': 'en',
-          '汉语 (cn)': 'cn',
-          '德语 (de)': 'de',
-          '法语 (fr)': 'fr',
-          '日语 (ja)': 'ja',
-          '韩语 (ko)': 'ko',
-        },
-        ko: {
-          '주 사용 언어 사용': 'default',
-          '영어 (en)': 'en',
-          '중국어 (cn)': 'cn',
-          '독일어 (de)': 'de',
-          '프랑스어 (fr)': 'fr',
-          '일본어 (ja)': 'ja',
-          '한국어 (ko)': 'ko',
-        },
-      },
-      default: 'default',
-      debug: true,
-      setterFunc: (options, value) => {
-        if (value === 'default')
-          return;
-        options['AlertsLanguage'] = value;
-      },
-    },
-    {
-      id: 'TimelineLanguage',
-      name: {
-        en: 'Timeline language',
-        de: 'Timeline Sprache',
-        fr: 'Langue de la timeline',
-        ja: 'タイムラインの言語',
-        cn: '时间轴文本的语言',
-        ko: '타임라인 언어',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Use FFXIV Plugin Language': 'default',
-          'English (en)': 'en',
-          'Chinese (cn)': 'cn',
-          'German (de)': 'de',
-          'French (fr)': 'fr',
-          'Japanese (ja)': 'ja',
-          'Korean (ko)': 'ko',
-        },
-        de: {
-          'Benutze FFXIV Plugin Sprache': 'default',
-          'Englisch (en)': 'en',
-          'Chinesisch (cn)': 'cn',
-          'Deutsch (de)': 'de',
-          'Französisch (fr)': 'fr',
-          'Japanisch (ja)': 'ja',
-          'Koreanisch (ko)': 'ko',
-        },
-        fr: {
-          'Utiliser la langue du Plugin FFXIV': 'default',
-          'Anglais (en)': 'en',
-          'Chinois (cn)': 'cn',
-          'Allemand (de)': 'de',
-          'Français (fr)': 'fr',
-          'Japonais (ja)': 'ja',
-          'Coréen (ko)': 'ko',
-        },
-        ja: {
-          'FFXIV Pluginの言語設定': 'default',
-          '英語 (en)': 'en',
-          '中国語 (cn)': 'cn',
-          'ドイツ語 (de)': 'de',
-          'フランス語 (fr)': 'fr',
-          '日本語 (ja)': 'ja',
-          '韓国語 (ko)': 'ko',
-        },
-        cn: {
-          '使用最终幻想XIV解析插件设置的语言': 'default',
-          '英语 (en)': 'en',
-          '汉语 (cn)': 'cn',
-          '德语 (de)': 'de',
-          '法语 (fr)': 'fr',
-          '日语 (ja)': 'ja',
-          '韩语 (ko)': 'ko',
-        },
-        ko: {
-          'FFXIV Plugin 언어 사용': 'default',
-          '영어 (en)': 'en',
-          '중국어 (cn)': 'cn',
-          '독일어 (de)': 'de',
-          '프랑스어 (fr)': 'fr',
-          '일본어 (ja)': 'ja',
-          '한국어 (ko)': 'ko',
-        },
-      },
-      default: 'default',
-      debug: true,
-      setterFunc: (options, value) => {
-        if (value === 'default')
-          return;
-        options['TimelineLanguage'] = value;
-      },
-    },
-    {
-      id: 'Skin',
-      name: {
-        en: 'Raidboss Skin',
-        de: 'Raidboss Skin',
-        fr: 'Raidboss Skin',
-        ja: 'Raidbossのスキン',
-        cn: 'Raidboss皮肤',
-        ko: 'Raidboss 스킨',
-      },
-      type: 'select',
-      options: {
-        en: {
-          'Default': 'default',
-          'lippe': 'lippe',
-        },
-        de: {
-          'Default': 'default',
-          'lippe': 'lippe',
-        },
-        fr: {
-          'Défaut': 'default',
-          'lippe': 'lippe',
-        },
-        ja: {
-          '初期設定': 'default',
-          'lippe': 'lippe',
-        },
-        cn: {
-          '默认': 'default',
-          'lippe': 'lippe',
-        },
-        ko: {
-          '기본': 'default',
-          'lippe': 'lippe',
-        },
-      },
-      default: 'default',
-    },
-    {
-      id: 'TimelineEnabled',
-      name: {
-        en: 'Timeline enabled',
-        de: 'Timeline aktiviert',
-        fr: 'Timeline activée',
-        ja: 'タイムラインを有効にする',
-        cn: '启用时间轴',
-        ko: '타임라인 활성화',
-      },
-      type: 'checkbox',
-      default: true,
-    },
-    {
-      id: 'AlertsEnabled',
-      name: {
-        en: 'Alerts enabled',
-        de: 'Alerts aktiviert',
-        fr: 'Alertes activées',
-        ja: '警告情報を有効にする',
-        cn: '启用提示文本显示',
-        ko: '알람 활성화',
-      },
-      type: 'checkbox',
-      default: true,
-    },
-    {
-      id: 'ShowTimerBarsAtSeconds',
-      name: {
-        en: 'Timer bar show window (seconds)',
-        de: 'Timer-Bar Anzeigedauer (in Sekunden)',
-        fr: 'Fenêtre d\'affichage de la barre de temps (secondes)',
-        ja: 'タイムバーに時間表示 (秒)',
-        cn: '计时条显示时长 (秒)',
-        ko: '타임라인을 표시할 기준 시간 (초 이하)',
-      },
-      type: 'float',
-      default: 30,
-    },
-    {
-      id: 'KeepExpiredTimerBarsForSeconds',
-      name: {
-        en: 'Keep expired timer bar (seconds)',
-        de: 'Behalte abgelaufene Timer-Bar (in Sekunden)',
-        fr: 'Garder la barre de temps expirée (secondes)',
-        ja: '終了したタイムバーが消えるまでの待ち時間 (秒)',
-        cn: '已失效的计时条的淡出时间 (秒)',
-        ko: '만료된 타임라인이 사라지기까지의 시간 (초)',
-      },
-      type: 'float',
-      default: 0.7,
-    },
-    {
-      id: 'BarExpiresSoonSeconds',
-      name: {
-        en: 'Time to recolor timer as expiring soon (seconds)',
-        de: 'Zeit bis ein bald auslaufender Timer umgefärbt wird (in Sekunden)',
-        fr: 'Recolorisation de la barre de temps avant expiration (secondes)',
-        ja: 'タイムバーが終了前に再度色付けの残り時間 (秒)',
-        cn: '倒计时小于该值时当前计时条变色 (秒)',
-        ko: '타임라인의 색상을 바꿀 기준 시간 (초 이하)',
-      },
-      type: 'integer',
-      default: 6,
-    },
-    {
-      id: 'MaxNumberOfTimerBars',
-      name: {
-        en: 'Max number of timer bars',
-        de: 'Max Anzahl an Timer-Bars',
-        fr: 'Nombre max de barres de temps',
-        ja: 'タイムバーの最大数',
-        cn: '计时条最大数量',
-        ko: '표시할 타임라인의 최대 개수',
-      },
-      type: 'integer',
-      default: 6,
-    },
-    {
-      id: 'DisplayAlarmTextForSeconds',
-      name: {
-        en: 'Alarm text display duration (seconds)',
-        de: 'Alarm-Text Anzeigedauer (in Sekunden)',
-        fr: 'Durée d\'affichage du texte d\'alarme (secondes)',
-        ja: '警報テキスト表示時間の長さ (秒)',
-        cn: '警报文字显示持续时间 (秒)',
-        ko: '경고 텍스트를 표시할 시간 (초)',
-      },
-      type: 'float',
-      default: 3,
-    },
-    {
-      id: 'DisplayAlertTextForSeconds',
-      name: {
-        en: 'Alert text display duration (seconds)',
-        de: 'Alert-Text Anzeigedauer (in Sekunden)',
-        fr: 'Durée d\'affichage du texte d\'alerte (secondes)',
-        ja: '警告テキスト表示時間の長さ (秒)',
-        cn: '警告文字显示持续时间 (秒)',
-        ko: '주의 텍스트를 표시할 시간 (초)',
-      },
-      type: 'float',
-      default: 3,
-    },
-    {
-      id: 'DisplayInfoTextForSeconds',
-      name: {
-        en: 'Info text display duration (seconds)',
-        de: 'Info-Text Anzeigedauer (in Sekunden)',
-        fr: 'Durée d\'affichage du texte d\'information (secondes)',
-        ja: '情報テキスト表示時間の長さ (秒)',
-        cn: '信息文字显示持续时间 (秒)',
-        ko: '안내 텍스트를 표시할 시간 (초)',
-      },
-      type: 'float',
-      default: 3,
-    },
-    {
-      id: 'AlarmSoundVolume',
-      name: {
-        en: 'Alarm sound volume (0-1)',
-        de: 'Alarm Lautstärke (0-1)',
-        fr: 'Volume de l\'alarme (0-1)',
-        ja: '警報音声の音量 (0-1)',
-        cn: '警报提示音的音量 (0-1)',
-        ko: '경고 소리 크기 (0-1)',
-      },
-      type: 'float',
-      default: 1,
-    },
-    {
-      id: 'AlertSoundVolume',
-      name: {
-        en: 'Alert sound volume (0-1)',
-        de: 'Alert Lautstärke (0-1)',
-        fr: 'Volume de l\'alerte (0-1)',
-        ja: '警告音声の音量 (0-1)',
-        cn: '警告提示音的音量 (0-1)',
-        ko: '주의 소리 크기 (0-1)',
-      },
-      type: 'float',
-      default: 1,
-    },
-    {
-      id: 'InfoSoundVolume',
-      name: {
-        en: 'Info sound volume (0-1)',
-        de: 'Info Lautstärke (0-1)',
-        fr: 'Volume de l\'info (0-1)',
-        ja: '情報音声の音量 (0-1)',
-        cn: '信息提示音的音量 (0-1)',
-        ko: '안내 소리 크기 (0-1)',
-      },
-      type: 'float',
-      default: 1,
-    },
-    {
-      id: 'LongSoundVolume',
-      name: {
-        en: 'Long sound volume (0-1)',
-        de: 'Langer Ton Lautstärke (0-1)',
-        fr: 'Volume du son long (0-1)',
-        ja: '長い音声の音量 (0-1)',
-        cn: '长提示音的音量 (0-1)',
-        ko: '긴 소리 크기 (0-1)',
-      },
-      type: 'float',
-      default: 1,
-    },
-    {
-      id: 'PullSoundVolume',
-      name: {
-        en: 'Pull sound volume (0-1)',
-        de: 'Pull Lautstärke (0-1)',
-        fr: 'Volume du son de pull (0-1)',
-        ja: 'タゲ取る効果音の音量 (0-1)',
-        cn: '开怪提示音的音量 (0-1)',
-        ko: '풀링 소리 크기 (0-1)',
-      },
-      type: 'float',
-      default: 1,
-    },
-    {
-      id: 'cactbotWormholeStrat',
-      // TODO: maybe need some way to group these kinds of
-      // options if we end up having a lot?
-      name: {
-        en: 'Alex Ultimate: enable cactbot Wormhole strat',
-        de: 'Alex Ultimate: aktiviere cactbot Wormhole Strategie',
-        fr: 'Alex fatal : activer cactbot pour Wormhole strat',
-        ja: '絶アレキサンダー討滅戦：cactbot「次元断絶のマーチ」ギミック',
-        cn: '亚历山大绝境战：cactbot灵泉辅助功能',
-        ko: '절 알렉: cactbot 웜홀 공략방식 활성화',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-    {
-      id: 'cactbote8sUptimeKnockbackStrat',
-      name: {
-        en: 'e8s: enable cactbot Uptime Knockback strat',
-        de: 'e8s: aktiviere cactbot Uptime Knockback Strategie',
-        fr: 'e8s : activer cactbot pour Uptime Knockback strat',
-        ja: 'エデン零式共鳴編４層：cactbot「ヘヴンリーストライク (ノックバック)」ギミック',
-        cn: 'E8S: 启用cactbot的击退提示功能',
-        ko: '공명 영웅 4층: cactbot 정확한 타이밍 넉백방지 공략 활성화',
-      },
-      type: 'checkbox',
-      default: false,
-    },
-  ],
-};
-
-user_config/* default.registerOptions */.Z.registerOptions('raidboss', templateOptions, userFileHandler);
-
-;// CONCATENATED MODULE: ./ui/config/config.js
-
-
-
-
-
-
-// Load other config files
-
-
-
-
-
-
-
-
-
-
-const config_Options = {};
-let gConfig = null;
-
-// Text in the butter bar, to prompt the user to reload after a config change.
-const kReloadText = {
-  en: 'To apply configuration changes, reload cactbot overlays.',
-  de: 'Um die Änderungen zu aktivieren, aktualisiere bitte die Cactbot Overlays.',
-  fr: 'Afin d\'appliquer les modifications, il faut recharger l\'overlay Cactbot.',
-  ja: '設定を有効にする為、Cactbotオーバーレイを再読み込みしてください',
-  cn: '要应用配置更改，请重新加载cactbot悬浮窗。',
-  ko: '변경사항을 적용하려면, 오버레이를 새로고침 하십시오.',
-};
-
-// Text in the butter bar reload button.
-const kReloadButtonText = {
-  en: 'Reload',
-  de: 'Aktualisieren',
-  fr: 'Recharger',
-  ja: '再読み込み',
-  cn: '重新加载',
-  ko: '새로고침',
-};
-
-// Text on the directory choosing button.
-const kDirectoryChooseButtonText = {
-  en: 'Choose Directory',
-  de: 'Wähle ein Verzeichnis',
-  fr: 'Choix du répertoire',
-  ja: 'ディレクトリを選択',
-  cn: '选择目录',
-  ko: '디렉토리 선택',
-};
-
-// What to show when a directory hasn't been chosen.
-const kDirectoryDefaultText = {
-  en: '(Default)',
-  de: '(Standard)',
-  fr: '(Défaut)',
-  ja: '(初期設定)',
-  cn: '(默认)',
-  ko: '(기본)',
-};
-
-// Translating data folders to a category name.
-const kPrefixToCategory = {
-  '00-misc': {
-    en: 'General Triggers',
-    de: 'General Trigger',
-    fr: 'Général Triggers',
-    ja: '汎用',
-    cn: '通用触发器',
-    ko: '공용 트리거',
-  },
-  '02-arr': {
-    en: 'A Realm Reborn (ARR 2.x)',
-    de: 'A Realm Reborn (ARR 2.x)',
-    fr: 'A Realm Reborn (ARR 2.x)',
-    ja: '新生エオルゼア (2.x)',
-    cn: '重生之境 (2.x)',
-    ko: '신생 에오르제아 (2.x)',
-  },
-  '03-hw': {
-    en: 'Heavensward (HW 3.x)',
-    de: 'Heavensward (HW 3.x)',
-    fr: 'Heavensward (HW 3.x)',
-    ja: '蒼天のイシュガルド (3.x)',
-    cn: '苍穹之禁城 (3.x)',
-    ko: '창천의 이슈가르드 (3.x)',
-  },
-  '04-sb': {
-    en: 'Stormblood (SB 4.x)',
-    de: 'Stormblood (SB 4.x)',
-    fr: 'Stormblood (SB 4.x)',
-    ja: '紅蓮のリベレーター (4.x)',
-    cn: '红莲之狂潮 (4.x)',
-    ko: '홍련의 해방자 (4.x)',
-  },
-  '05-shb': {
-    en: 'Shadowbringers (ShB 5.x)',
-    de: 'Shadowbringers (ShB 5.x)',
-    fr: 'Shadowbringers (ShB 5.x)',
-    ja: '漆黒のヴィランズ (5.x)',
-    cn: '暗影之逆焰 (5.x)',
-    ko: '칠흑의 반역자 (5.x)',
-  },
-  'user': {
-    en: 'User Triggers',
-    de: 'Benutzer Trigger',
-    fr: 'Triggers personnalisés',
-    ja: 'ユーザートリガー',
-    cn: '自定义触发器',
-  },
-};
-
-// Translating data subfolders to encounter type.
-const kDirectoryToCategory = {
-  alliance: {
-    en: 'Alliance Raid',
-    de: 'Allianz-Raid',
-    fr: 'Raid en Alliance',
-    ja: 'アライアンスレイド',
-    cn: '团队任务',
-    ko: '연합 레이드',
-  },
-  dungeon: {
-    en: 'Dungeon',
-    de: 'Dungeon',
-    fr: 'Donjon',
-    ja: 'ダンジョン',
-    cn: '迷宫挑战',
-    ko: '던전',
-  },
-  eureka: {
-    en: 'Eureka',
-    de: 'Eureka',
-    fr: 'Eurêka',
-    ja: '禁断の地エウレカ',
-    cn: '禁地优雷卡',
-    ko: '에우레카',
-  },
-  raid: {
-    en: 'Raid',
-    de: 'Raid',
-    fr: 'Raid',
-    ja: 'レイド',
-    cn: '大型任务',
-    ko: '레이드',
-  },
-  pvp: {
-    en: 'PVP',
-    de: 'PvP',
-    fr: 'JcJ',
-    ja: 'PvP',
-    cn: 'PvP',
-    ko: 'PvP',
-  },
-  trial: {
-    en: 'Trial',
-    de: 'Prüfung',
-    fr: 'Défi',
-    ja: '討伐・討滅戦',
-    cn: '讨伐歼灭战',
-    ko: '토벌전',
-  },
-  ultimate: {
-    en: 'Ultimate',
-    de: 'Fatale Raids',
-    fr: 'Raid fatal',
-    ja: '絶シリーズ',
-    cn: '绝境战',
-    ko: '절 난이도',
-  },
-};
-
-// TODO: maybe we should also sort all the filenames properly too?
-// TODO: use ZoneId to get this
-const fileNameToTitle = (filename) => {
-  // Strip directory and extension.
-  const file = filename.replace(/^.*\//, '').replace(/\.[jt]s/g, '');
-  // Remove non-name characters (probably).
-  const name = file.replace(/[_-]/g, ' ');
-  // Capitalize the first letter of every word.
-  let capitalized = name.replace(/(?:^| )\w/g, (c) => c.toUpperCase());
-
-  // Fully capitalize acronyms like e4n.
-  if (/^\w[0-9]+\w$/.test(capitalized))
-    capitalized = capitalized.toUpperCase();
-
-  return capitalized;
-};
-
-class CactbotConfigurator {
-  constructor(configOptions, savedConfig) {
-    // Predefined, only for ordering purposes.
-    this.contents = {
-      // top level
-      'general': [],
-
-      // things most people care about
-      'raidboss': [],
-      'jobs': [],
-    };
-    this.configOptions = configOptions;
-    // If the user has set a display language, use that.
-    // Otherwise, use the operating system language as a default for the config tool.
-    this.lang = configOptions.DisplayLanguage || configOptions.ShortLocale;
-    this.savedConfig = savedConfig || {};
-    this.developerOptions = this.getOption('general', 'ShowDeveloperOptions', false);
-
-    const templates = user_config/* default.optionTemplates */.Z.optionTemplates;
-    for (const group in templates) {
-      this.contents[group] = this.contents[group] || [];
-      this.contents[group].push(templates[group]);
-    }
-
-    this.buildButterBar();
-
-    const container = document.getElementById('container');
-    this.buildUI(container, this.contents);
-  }
-
-  async saveConfigData() {
-    // TODO: rate limit this?
-    await (0,overlay_plugin_api/* callOverlayHandler */.ae)({
-      call: 'cactbotSaveData',
-      overlay: 'options',
-      data: this.savedConfig,
-    });
-
-    document.getElementById('butter-margin').classList.remove('hidden');
-  }
-
-  // Helper translate function.  Takes in an object with language keys
-  // and returns a single entry based on available translations.
-  translate(textObj) {
-    if (textObj === null || typeof textObj !== 'object' || !textObj['en'])
-      return textObj;
-    const t = textObj[this.lang];
-    if (t)
-      return t;
-    return textObj['en'];
-  }
-
-  // takes variable args, with the last value being the default value if
-  // any key is missing.
-  // e.g. (foo, bar, baz, 5) with {foo: { bar: { baz: 3 } } } will return
-  // the value 3.  Requires at least two args.
-  getOption() {
-    const num = arguments.length;
-    if (num < 2) {
-      console.error('getOption requires at least two args');
-      return;
-    }
-
-    const defaultValue = arguments[num - 1];
-    let objOrValue = this.savedConfig;
-    for (let i = 0; i < num - 1; ++i) {
-      objOrValue = objOrValue[arguments[i]];
-      if (typeof objOrValue === 'undefined')
-        return defaultValue;
-    }
-
-    return objOrValue;
-  }
-
-  // takes variable args, with the last value being the 'value' to set it to
-  // e.g. (foo, bar, baz, 3) will set {foo: { bar: { baz: 3 } } }.
-  // requires at least two args.
-  setOption() {
-    const num = arguments.length;
-    if (num < 2) {
-      console.error('setOption requires at least two args');
-      return;
-    }
-
-    // Set keys and create default {} if it doesn't exist.
-    let obj = this.savedConfig;
-    for (let i = 0; i < num - 2; ++i) {
-      const arg = arguments[i];
-      obj[arg] = obj[arg] || {};
-      obj = obj[arg];
-    }
-    // Set the last key to have the final argument's value.
-    obj[arguments[num - 2]] = arguments[num - 1];
-    this.saveConfigData();
-  }
-
-  buildButterBar() {
-    const container = document.getElementById('butter-bar');
-
-    const textDiv = document.createElement('div');
-    textDiv.classList.add('reload-text');
-    textDiv.innerText = this.translate(kReloadText);
-    container.appendChild(textDiv);
-
-    const buttonInput = document.createElement('input');
-    buttonInput.classList.add('reload-button');
-    buttonInput.type = 'button';
-    buttonInput.onclick = () => {
-      (0,overlay_plugin_api/* callOverlayHandler */.ae)({ call: 'cactbotReloadOverlays' });
-    };
-    buttonInput.value = this.translate(kReloadButtonText);
-    container.appendChild(buttonInput);
-  }
-
-  // Top level UI builder, builds everything.
-  buildUI(container, contents) {
-    for (const group in contents) {
-      const content = contents[group];
-      if (content.length === 0)
-        continue;
-
-      // For each overlay options template, build a section for it.
-      // Then iterate through all of its options and build ui for those options.
-      // Give each options template a chance to build special ui.
-      const groupDiv = this.buildOverlayGroup(container, group);
-      for (let i = 0; i < content.length; ++i) {
-        const options = content[i].options || [];
-        for (let j = 0; j < options.length; ++j) {
-          const opt = options[j];
-          if (!this.developerOptions && opt.debugOnly)
-            continue;
-          const buildFunc = {
-            checkbox: this.buildCheckbox,
-            select: this.buildSelect,
-            float: this.buildFloat,
-            integer: this.buildInteger,
-            directory: this.buildDirectory,
-          }[opt.type];
-          if (!buildFunc) {
-            console.error('unknown type: ' + JSON.stringify(opt));
-            continue;
-          }
-
-          buildFunc.bind(this)(groupDiv, opt, group);
-        }
-
-        const builder = content[i].buildExtraUI;
-        if (builder)
-          builder(this, groupDiv);
-      }
-    }
-  }
-
-  // Overlay builder for each overlay type (e.g. raidboss, jobs).
-  buildOverlayGroup(container, group) {
-    const collapser = document.createElement('div');
-    collapser.classList.add('overlay-container');
-    container.appendChild(collapser);
-
-    const a = document.createElement('a');
-    a.name = group;
-    collapser.appendChild(a);
-
-    const header = document.createElement('div');
-    header.classList.add('overlay-header');
-    header.innerText = group;
-    a.appendChild(header);
-
-    const groupDiv = document.createElement('div');
-    groupDiv.classList.add('overlay-options');
-    collapser.appendChild(groupDiv);
-
-    a.onclick = (e) => {
-      a.parentNode.classList.toggle('collapsed');
-    };
-
-    return groupDiv;
-  }
-
-  buildNameDiv(opt) {
-    const div = document.createElement('div');
-    div.innerHTML = this.translate(opt.name);
-    div.classList.add('option-name');
-    return div;
-  }
-
-  buildCheckbox(parent, opt, group) {
-    const div = document.createElement('div');
-    div.classList.add('option-input-container');
-
-    const input = document.createElement('input');
-    div.appendChild(input);
-    input.type = 'checkbox';
-    input.checked = this.getOption(group, opt.id, opt.default);
-    input.onchange = () => this.setOption(group, opt.id, input.checked);
-
-    parent.appendChild(this.buildNameDiv(opt));
-    parent.appendChild(div);
-  }
-
-  buildDirectory(parent, opt, group) {
-    const div = document.createElement('div');
-    div.classList.add('option-input-container');
-    div.classList.add('input-dir-container');
-
-    const input = document.createElement('input');
-    input.type = 'submit';
-    input.value = this.translate(kDirectoryChooseButtonText);
-    input.classList.add('input-dir-submit');
-    div.appendChild(input);
-
-    const label = document.createElement('div');
-    label.classList.add('input-dir-label');
-    div.appendChild(label);
-
-    const setLabel = (str) => {
-      if (str)
-        label.innerText = str;
-      else
-        label.innerText = this.translate(kDirectoryDefaultText);
-    };
-    setLabel(this.getOption(group, opt.id, opt.default));
-
-    parent.appendChild(this.buildNameDiv(opt));
-    parent.appendChild(div);
-
-    input.onclick = async () => {
-      // Prevent repeated clicks on the folder chooser.
-      // callOverlayHandler is not synchronous.
-      // FIXME: do we need some clearer UI here (like pretending to be modal?)
-      input.disabled = true;
-
-      const prevValue = label.innerText;
-      label.innerText = '';
-
-      const result = await (0,overlay_plugin_api/* callOverlayHandler */.ae)({
-        call: 'cactbotChooseDirectory',
-      });
-
-      input.disabled = false;
-      const dir = result.data ? result.data : '';
-      if (dir !== prevValue)
-        this.setOption(group, opt.id, dir);
-      setLabel(dir);
-    };
-  }
-
-  buildSelect(parent, opt, group) {
-    const div = document.createElement('div');
-    div.classList.add('option-input-container');
-
-    const input = document.createElement('select');
-    div.appendChild(input);
-
-    const defaultValue = this.getOption(group, opt.id, opt.default);
-    input.onchange = () => this.setOption(group, opt.id, input.value);
-
-    const innerOptions = this.translate(opt.options);
-    for (const key in innerOptions) {
-      const elem = document.createElement('option');
-      elem.value = innerOptions[key];
-      elem.innerHTML = key;
-      if (innerOptions[key] === defaultValue)
-        elem.selected = true;
-      input.appendChild(elem);
-    }
-
-    parent.appendChild(this.buildNameDiv(opt));
-    parent.appendChild(div);
-  }
-
-  // FIXME: this could use some data validation if a user inputs non-floats.
-  buildFloat(parent, opt, group) {
-    const div = document.createElement('div');
-    div.classList.add('option-input-container');
-
-    const input = document.createElement('input');
-    div.appendChild(input);
-    input.type = 'text';
-    input.step = 'any';
-    input.value = this.getOption(group, opt.id, parseFloat(opt.default));
-    const setFunc = () => this.setOption(group, opt.id, input.value);
-    input.onchange = setFunc;
-    input.oninput = setFunc;
-
-    parent.appendChild(this.buildNameDiv(opt));
-    parent.appendChild(div);
-  }
-
-  // FIXME: this could use some data validation if a user inputs non-integers.
-  buildInteger(parent, opt, group) {
-    const div = document.createElement('div');
-    div.classList.add('option-input-container');
-
-    const input = document.createElement('input');
-    div.appendChild(input);
-    input.type = 'text';
-    input.step = 1;
-    input.value = this.getOption(group, opt.id, parseInt(opt.default));
-    const setFunc = () => this.setOption(group, opt.id, input.value);
-    input.onchange = setFunc;
-    input.oninput = setFunc;
-
-    parent.appendChild(this.buildNameDiv(opt));
-    parent.appendChild(div);
-  }
-
-  processFiles(files, userTriggerSets) {
-    const map = {};
-    for (const filename in files) {
-      if (!filename.endsWith('.js') && !filename.endsWith('.ts'))
-        continue;
-
-      let prefixKey = '00-misc';
-      for (const str in kPrefixToCategory) {
-        if (!filename.startsWith(str))
-          continue;
-        prefixKey = str;
-        break;
-      }
-
-      let typeKey = 'general';
-      for (const str in kDirectoryToCategory) {
-        if (!filename.includes('/' + str + '/'))
-          continue;
-        typeKey = str;
-        break;
-      }
-
-      const triggerSet = files[filename];
-      let title = fileNameToTitle(filename);
-      let zoneId = undefined;
-
-      // Make assumptions about trigger structure here to try to get the zoneId out.
-      if (triggerSet && 'zoneId' in triggerSet) {
-        zoneId = triggerSet.zoneId;
-        // Use the translatable zone info name, if possible.
-        const zoneInfo = zone_info/* default */.Z[zoneId];
-        if (zoneInfo)
-          title = this.translate(zoneInfo.name);
-      }
-
-      const fileKey = filename.replace(/\//g, '-').replace(/.[jt]s$/, '');
-      map[fileKey] = {
-        filename: filename,
-        fileKey: fileKey,
-        prefixKey: prefixKey,
-        prefix: this.translate(kPrefixToCategory[prefixKey]),
-        section: this.translate(kPrefixToCategory[prefixKey]),
-        type: this.translate(kDirectoryToCategory[typeKey]),
-        title: title,
-        triggerSet: triggerSet,
-        zoneId: zoneId,
-      };
-    }
-
-    const userMap = {};
-    let userFileIdx = 0;
-    for (const triggerSet of userTriggerSets || []) {
-      if (!triggerSet)
-        continue;
-      const fileKey = `user/${triggerSet.filename}/${userFileIdx++}`;
-
-      // cactbot triggers all use zoneId, but user triggers in the wild
-      // may also use zoneRegex or also have errors and not have either.
-      let title = '???';
-      let zoneId = 'undefined';
-      if ('zoneId' in triggerSet) {
-        zoneId = triggerSet.zoneId;
-        // Use the translatable zone info name, if possible.
-        const zoneInfo = zone_info/* default */.Z[zoneId];
-        if (zoneInfo)
-          title = this.translate(zoneInfo.name);
-      } else if ('zoneRegex' in triggerSet) {
-        // zoneRegex can be a localized object.
-        let zoneRegex = this.translate(triggerSet.zoneRegex);
-        if (typeof zoneRegex === 'string')
-          zoneRegex = regexes/* default.parse */.Z.parse(zoneRegex);
-        if (zoneRegex instanceof RegExp)
-          title = `/${zoneRegex.source}/`;
-      }
-
-      userMap[fileKey] = {
-        filename: triggerSet.filename,
-        fileKey: fileKey,
-        prefixKey: 'user',
-        prefix: this.translate(kPrefixToCategory['user']),
-        section: triggerSet.filename,
-        title: title,
-        type: null,
-        triggerSet: triggerSet,
-        zoneId: zoneId,
-      };
-    }
-
-    const sortedEntries = Object.keys(map).sort((keyA, keyB) => {
-      // Sort first by expansion.
-      const entryA = map[keyA];
-      const entryB = map[keyB];
-      const prefixCompare = entryA.prefixKey.localeCompare(entryB.prefixKey);
-      if (prefixCompare !== 0)
-        return prefixCompare;
-
-      // Then sort by contentList.
-      const indexA = content_list.indexOf(entryA.zoneId);
-      const indexB = content_list.indexOf(entryB.zoneId);
-
-      if (indexA === -1 && indexB === -1) {
-        // If we don't know, sort by strings.
-        return keyA.localeCompare(keyB);
-      } else if (indexA === -1) {
-        // Sort B first.
-        return 1;
-      } else if (indexB === -1) {
-        // Sort A first.
-        return -1;
-      }
-      // Default: sort by index in contentList.
-      return indexA - indexB;
-    });
-
-    // Rebuild map with keys in the right order.
-    const sortedMap = {};
-    for (const key of sortedEntries)
-      sortedMap[key] = map[key];
-
-    // Tack on user triggers at the end in the order they were eval'd.
-    for (const key in userMap)
-      sortedMap[key] = userMap[key];
-
-    return sortedMap;
-  }
-}
-
-user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('config', config_Options, async (e) => {
-  gConfig = new CactbotConfigurator(
-      config_Options,
-      user_config/* default.savedConfig */.Z.savedConfig);
-});
-
-
 /***/ })
 
 /******/ 	});
@@ -14584,7 +14396,7 @@ user_config/* default.getUserConfigLocation */.Z.getUserConfigLocation('config',
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890,727], () => (__webpack_require__(462)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890,727], () => (__webpack_require__(687)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
