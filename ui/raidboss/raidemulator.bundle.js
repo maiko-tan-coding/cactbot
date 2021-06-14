@@ -17255,8 +17255,15 @@ class PopupText {
                 if (resp.tts)
                     result = triggerHelper.valueOrFunction(resp.tts);
             }
-            result !== null && result !== void 0 ? result : (result = triggerHelper.defaultTTSText);
-            triggerHelper.ttsText = result === null || result === void 0 ? void 0 : result.toString();
+            // Allow false or null to disable tts entirely
+            // Undefined will fall back to defaultTTSText
+            if (result !== undefined) {
+                if (result)
+                    triggerHelper.ttsText = result === null || result === void 0 ? void 0 : result.toString();
+            }
+            else {
+                triggerHelper.ttsText = triggerHelper.defaultTTSText;
+            }
         }
     }
     _onTriggerInternalPlayAudio(triggerHelper) {
