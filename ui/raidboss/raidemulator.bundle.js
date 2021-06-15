@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 395:
+/***/ 838:
 /***/ ((__unused_webpack___webpack_module__, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
@@ -5374,6 +5374,7 @@ class PopupText {
         this.triggerSets = [];
         this.zoneName = '';
         this.zoneId = -1;
+        this.dataInitializers = [];
         this.options = options;
         this.timelineLoader = timelineLoader;
         this.ProcessDataFiles(raidbossDataFiles);
@@ -5475,7 +5476,6 @@ class PopupText {
         var _a, _b, _c;
         if (!this.triggerSets || !this.me || !this.zoneName || !this.timelineLoader.IsReady())
             return;
-        this.Reset();
         // Drop the triggers and timelines from the previous zone, so we can add new ones.
         this.triggers = [];
         this.netTriggers = [];
@@ -5553,13 +5553,20 @@ class PopupText {
                 else
                     console.log('Loading user triggers for zone');
             }
+            const setFilename = (_a = set.filename) !== null && _a !== void 0 ? _a : 'Unknown';
+            if (set.initData) {
+                this.dataInitializers.push({
+                    file: setFilename,
+                    func: set.initData,
+                });
+            }
             // Adjust triggers for the parser language.
             if (set.triggers && this.options.AlertsEnabled) {
                 for (const trigger of set.triggers) {
                     // Add an additional resolved regex here to save
                     // time later.  This will clobber each time we
                     // load this, but that's ok.
-                    trigger.filename = (_a = set.filename) !== null && _a !== void 0 ? _a : 'Unknown';
+                    trigger.filename = setFilename;
                     const id = trigger.id;
                     if (!isRegexTrigger(trigger) && !isNetRegexTrigger(trigger)) {
                         console.error(`Trigger ${id}: has no regex property specified`);
@@ -5633,6 +5640,7 @@ class PopupText {
         this.triggers = allTriggers.filter(isRegexTrigger);
         this.netTriggers = allTriggers.filter(isNetRegexTrigger);
         const timelineTriggers = allTriggers.filter(isRaidbossLooseTimelineTrigger);
+        this.Reset();
         this.timelineLoader.SetTimelines(timelineFiles, timelines, replacements, timelineTriggers, timelineStyles);
     }
     ProcessTrigger(trigger) {
@@ -5690,6 +5698,20 @@ class PopupText {
         this.data = this.getDataObject();
         this.StopTimers();
         this.triggerSuppress = {};
+        for (const initObj of this.dataInitializers) {
+            const init = initObj.func;
+            const data = init();
+            if (typeof data === 'object') {
+                this.data = {
+                    ...data,
+                    ...this.data,
+                };
+            }
+            else {
+                console.log(`Error in file: ${initObj.file}: these triggers may not work;
+        initData function returned invalid object: ${init.toString()}`);
+            }
+        }
     }
     StopTimers() {
         this.timers = {};
@@ -7741,50 +7763,56 @@ class RaidEmulatorTimeline extends Timeline {
     }
 }
 
-;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorTimelineController.js
+;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorTimelineController.ts
 
 
 class RaidEmulatorTimelineController extends TimelineController {
-  bindTo(emulator) {
-    this.emulator = emulator;
-    if (this.activeTimeline) this.activeTimeline.bindTo(emulator);
-  } // Override
-
-
-  SetActiveTimeline(timelineFiles, timelines, replacements, triggers, styles) {
-    this.activeTimeline = null;
-    let text = ''; // Get the text from each file in |timelineFiles|.
-
-    for (let i = 0; i < timelineFiles.length; ++i) {
-      const name = timelineFiles[i];
-      if (name in this.timelines) text = text + '\n' + this.timelines[name];else console.warn('Timeline file not found: ' + name);
-    } // Append text from each block in |timelines|.
-
-
-    for (let i = 0; i < timelines.length; ++i) text = text + '\n' + timelines[i];
-
-    if (text) {
-      this.activeTimeline = new RaidEmulatorTimeline(text, replacements, triggers, styles, this.options);
-      if (this.emulator) this.activeTimeline.bindTo(this.emulator);
+    constructor() {
+        super(...arguments);
+        this.activeTimeline = null;
     }
-
-    this.ui.SetTimeline(this.activeTimeline);
-  } // Override
-
-
-  OnLogEvent(e) {
-    if (!this.activeTimeline) return;
-    e.detail.logs.forEach(line => {
-      this.activeTimeline.emulatedTimeOffset = line.offset;
-      this.ui.emulatedTimeOffset = line.offset;
-      this.activeTimeline.OnLogLine(line.properCaseConvertedLine || line.convertedLine, line.timestamp); // Only call _OnUpdateTimer if we have a timebase from the previous call to OnLogLine
-      // This avoids spamming the console with a ton of messages
-
-      if (this.activeTimeline.timebase) this.activeTimeline._OnUpdateTimer(line.timestamp);
-    });
-  }
-
+    bindTo(emulator) {
+        this.emulator = emulator;
+        if (this.activeTimeline)
+            this.activeTimeline.bindTo(emulator);
+    }
+    // Override
+    SetActiveTimeline(timelineFiles, timelines, replacements, triggers, styles) {
+        this.activeTimeline = null;
+        let text = '';
+        // Get the text from each file in |timelineFiles|.
+        for (const timelineFile of timelineFiles) {
+            const name = this.timelines[timelineFile];
+            if (name)
+                text = `${text}\n${name}`;
+            else
+                console.log(`Timeline file not found: ${timelineFile}`);
+        }
+        // Append text from each block in |timelines|.
+        for (const timeline of timelines)
+            text = `${text}\n${timeline}`;
+        if (text) {
+            this.activeTimeline =
+                new RaidEmulatorTimeline(text, replacements, triggers, styles, this.options);
+            if (this.emulator)
+                this.activeTimeline.bindTo(this.emulator);
+        }
+        this.ui.SetTimeline(this.activeTimeline);
+    }
+    // Override
+    OnLogEvent(e) {
+        if (!this.activeTimeline)
+            return;
+        for (const line of e.detail.logs) {
+            this.activeTimeline.OnLogLine(line.properCaseConvertedLine || line.convertedLine, line.timestamp);
+            // Only call _OnUpdateTimer if we have a timebase from the previous call to OnLogLine
+            // This avoids spamming the console with a ton of messages
+            if (this.activeTimeline.timebase)
+                this.activeTimeline._OnUpdateTimer(line.timestamp);
+        }
+    }
 }
+
 ;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/StubbedPopupText.ts
 
 class StubbedPopupText extends PopupText {
@@ -8134,24 +8162,25 @@ class RaidEmulatorTimelineUI extends TimelineUI {
     }
 }
 
-;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorAnalysisTimelineUI.js
+;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorAnalysisTimelineUI.ts
 
 class RaidEmulatorAnalysisTimelineUI extends RaidEmulatorTimelineUI {
-  constructor(options) {
-    super(options);
-    this.$barContainer = document.createElement('div');
-    this.$progressTemplate = document.querySelector('template.progress').content.firstElementChild;
-  } // Stub out these methods for performance
-
-
-  updateBar(bar, currentLogTime) {}
-
-  OnAddTimer(fightNow, e, channeling) {} // Override
-
-
-  OnRemoveTimer(e, expired) {}
-
+    constructor(options) {
+        super(options);
+        // Use orphaned child div to prevent DOM updates
+        this.$barContainer = document.createElement('div');
+    }
+    updateBar(_bar, _currentLogTime) {
+        // Stubbed out for performance
+    }
+    OnAddTimer(_fightNow, _e, _channeling) {
+        // Stubbed out for performance
+    }
+    OnRemoveTimer(_e, _expired) {
+        // Stubbed out for performance
+    }
 }
+
 ;// CONCATENATED MODULE: ./ui/raidboss/emulator/data/AnalyzedEncounter.js
 
 
@@ -20281,7 +20310,7 @@ module.exports = function (content, workerConstructor, workerOptions, url) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890], () => (__webpack_require__(395)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890], () => (__webpack_require__(838)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -13616,6 +13616,7 @@ class PopupText {
         this.triggerSets = [];
         this.zoneName = '';
         this.zoneId = -1;
+        this.dataInitializers = [];
         this.options = options;
         this.timelineLoader = timelineLoader;
         this.ProcessDataFiles(raidbossDataFiles);
@@ -13717,7 +13718,6 @@ class PopupText {
         var _a, _b, _c;
         if (!this.triggerSets || !this.me || !this.zoneName || !this.timelineLoader.IsReady())
             return;
-        this.Reset();
         // Drop the triggers and timelines from the previous zone, so we can add new ones.
         this.triggers = [];
         this.netTriggers = [];
@@ -13795,13 +13795,20 @@ class PopupText {
                 else
                     console.log('Loading user triggers for zone');
             }
+            const setFilename = (_a = set.filename) !== null && _a !== void 0 ? _a : 'Unknown';
+            if (set.initData) {
+                this.dataInitializers.push({
+                    file: setFilename,
+                    func: set.initData,
+                });
+            }
             // Adjust triggers for the parser language.
             if (set.triggers && this.options.AlertsEnabled) {
                 for (const trigger of set.triggers) {
                     // Add an additional resolved regex here to save
                     // time later.  This will clobber each time we
                     // load this, but that's ok.
-                    trigger.filename = (_a = set.filename) !== null && _a !== void 0 ? _a : 'Unknown';
+                    trigger.filename = setFilename;
                     const id = trigger.id;
                     if (!isRegexTrigger(trigger) && !isNetRegexTrigger(trigger)) {
                         console.error(`Trigger ${id}: has no regex property specified`);
@@ -13875,6 +13882,7 @@ class PopupText {
         this.triggers = allTriggers.filter(isRegexTrigger);
         this.netTriggers = allTriggers.filter(isNetRegexTrigger);
         const timelineTriggers = allTriggers.filter(isRaidbossLooseTimelineTrigger);
+        this.Reset();
         this.timelineLoader.SetTimelines(timelineFiles, timelines, replacements, timelineTriggers, timelineStyles);
     }
     ProcessTrigger(trigger) {
@@ -13932,6 +13940,20 @@ class PopupText {
         this.data = this.getDataObject();
         this.StopTimers();
         this.triggerSuppress = {};
+        for (const initObj of this.dataInitializers) {
+            const init = initObj.func;
+            const data = init();
+            if (typeof data === 'object') {
+                this.data = {
+                    ...data,
+                    ...this.data,
+                };
+            }
+            else {
+                console.log(`Error in file: ${initObj.file}: these triggers may not work;
+        initData function returned invalid object: ${init.toString()}`);
+            }
+        }
     }
     StopTimers() {
         this.timers = {};
