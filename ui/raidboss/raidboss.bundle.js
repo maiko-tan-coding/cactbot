@@ -13329,18 +13329,18 @@ var not_reached = __webpack_require__(500);
 
 
 
+const isRaidbossLooseTimelineTrigger = (trigger) => {
+    return 'isTimelineTrigger' in trigger;
+};
 const isNetRegexTrigger = (trigger) => {
-    if (trigger)
+    if (trigger && !isRaidbossLooseTimelineTrigger(trigger))
         return 'netRegex' in trigger;
     return false;
 };
 const isRegexTrigger = (trigger) => {
-    if (trigger)
+    if (trigger && !isRaidbossLooseTimelineTrigger(trigger))
         return 'regex' in trigger;
     return false;
-};
-const isRaidbossLooseTimelineTrigger = (trigger) => {
-    return 'isTimelineTrigger' in trigger;
 };
 // There should be (at most) six lines of instructions.
 const raidbossInstructions = {
@@ -13564,9 +13564,14 @@ class TriggerOutputProxy {
         var _a;
         if (!template)
             return;
-        const value = (_a = template[this.displayLang]) !== null && _a !== void 0 ? _a : template['en'];
+        let value;
+        if (typeof template === 'string')
+            // user config
+            value = template;
+        else
+            value = (_a = template[this.displayLang]) !== null && _a !== void 0 ? _a : template['en'];
         if (typeof value !== 'string') {
-            console.error(`Trigger ${id} has invalid outputString ${name}.`);
+            console.error(`Trigger ${id} has invalid outputString ${name}.`, JSON.stringify(template));
             return;
         }
         return value.replace(/\${\s*([^}\s]+)\s*}/g, (_fullMatch, key) => {

@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 281:
+/***/ 395:
 /***/ ((__unused_webpack___webpack_module__, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
@@ -5087,18 +5087,18 @@ var zone_id = __webpack_require__(438);
 
 
 
+const isRaidbossLooseTimelineTrigger = (trigger) => {
+    return 'isTimelineTrigger' in trigger;
+};
 const isNetRegexTrigger = (trigger) => {
-    if (trigger)
+    if (trigger && !isRaidbossLooseTimelineTrigger(trigger))
         return 'netRegex' in trigger;
     return false;
 };
 const isRegexTrigger = (trigger) => {
-    if (trigger)
+    if (trigger && !isRaidbossLooseTimelineTrigger(trigger))
         return 'regex' in trigger;
     return false;
-};
-const isRaidbossLooseTimelineTrigger = (trigger) => {
-    return 'isTimelineTrigger' in trigger;
 };
 // There should be (at most) six lines of instructions.
 const raidbossInstructions = {
@@ -5322,9 +5322,14 @@ class TriggerOutputProxy {
         var _a;
         if (!template)
             return;
-        const value = (_a = template[this.displayLang]) !== null && _a !== void 0 ? _a : template['en'];
+        let value;
+        if (typeof template === 'string')
+            // user config
+            value = template;
+        else
+            value = (_a = template[this.displayLang]) !== null && _a !== void 0 ? _a : template['en'];
         if (typeof value !== 'string') {
-            console.error(`Trigger ${id} has invalid outputString ${name}.`);
+            console.error(`Trigger ${id} has invalid outputString ${name}.`, JSON.stringify(template));
             return;
         }
         return value.replace(/\${\s*([^}\s]+)\s*}/g, (_fullMatch, key) => {
@@ -7702,40 +7707,40 @@ class TimelineLoader {
     }
 }
 
-;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorTimeline.js
+;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorTimeline.ts
 
 class RaidEmulatorTimeline extends Timeline {
-  constructor(text, replacements, triggers, styles, options) {
-    super(text, replacements, triggers, styles, options);
-    this.emulatedStatus = 'pause';
-  }
-
-  bindTo(emulator) {
-    this.emulator = emulator;
-    emulator.on('play', () => {
-      this.emulatedStatus = 'play';
-    });
-    emulator.on('pause', () => {
-      this.emulatedStatus = 'pause';
-    });
-  }
-
-  emulatedSync(currentLogTime) {
-    if (!currentLogTime) return; // This is a bit complicated due to jumps in timelines. If we've already got a timebase,
-    // fightNow needs to be calculated based off of that instead of initialOffset
-    // timebase = 0 when not set
-
-    const baseTimestamp = this.timebase || this.emulator.currentEncounter.encounter.initialTimestamp;
-    const fightNow = (currentLogTime - baseTimestamp) / 1000;
-    this.SyncTo(fightNow, currentLogTime);
-
-    this._OnUpdateTimer(currentLogTime);
-  } // Override
-
-
-  _ScheduleUpdate(fightNow) {}
-
+    constructor(text, replacements, triggers, styles, options) {
+        super(text, replacements, triggers, styles, options);
+        this.emulatedStatus = 'pause';
+    }
+    bindTo(emulator) {
+        this.emulator = emulator;
+        emulator.on('play', () => {
+            this.emulatedStatus = 'play';
+        });
+        emulator.on('pause', () => {
+            this.emulatedStatus = 'pause';
+        });
+    }
+    emulatedSync(currentLogTime) {
+        var _a, _b, _c;
+        if (!currentLogTime)
+            return;
+        // This is a bit complicated due to jumps in timelines. If we've already got a timebase,
+        // fightNow needs to be calculated based off of that instead of initialOffset
+        // timebase = 0 when not set
+        const baseTimestamp = this.timebase || ((_c = (_b = (_a = this.emulator) === null || _a === void 0 ? void 0 : _a.currentEncounter) === null || _b === void 0 ? void 0 : _b.encounter) === null || _c === void 0 ? void 0 : _c.initialTimestamp) ||
+            currentLogTime;
+        const fightNow = (currentLogTime - baseTimestamp) / 1000;
+        this.SyncTo(fightNow, currentLogTime);
+        this._OnUpdateTimer(currentLogTime);
+    }
+    _ScheduleUpdate(_fightNow) {
+        // Override
+    }
 }
+
 ;// CONCATENATED MODULE: ./ui/raidboss/emulator/overrides/RaidEmulatorTimelineController.js
 
 
@@ -8157,7 +8162,11 @@ class RaidEmulatorAnalysisTimelineUI extends RaidEmulatorTimelineUI {
 
 
 
+
 class AnalyzedEncounter extends EventBus_EventBus {
+  /**
+   * @param {Encounter} encounter
+   */
   constructor(options, encounter, emulator) {
     super();
     this.options = options;
@@ -20272,7 +20281,7 @@ module.exports = function (content, workerConstructor, workerOptions, url) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890], () => (__webpack_require__(281)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [890], () => (__webpack_require__(395)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
