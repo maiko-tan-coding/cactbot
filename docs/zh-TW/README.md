@@ -242,17 +242,23 @@ If you are writing triggers or timelines and want to test them, you can use the 
 
 This currently can only be loaded in a browser and not as an overlay. This will work in current version of Chrome, and should work in other browsers as well but this is less tested.
 
-Instructions:
+If you want the emulator to use your ACT settings and user triggers, you will need to enable the OverlayPlugin WS Server via the following instructions:
 
 1. Start ACT.
-1. Make sure the WS Server is started via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
-1. Select `Cactbot Raidboss (Combined Alerts and Timelines)` from the URL Generator list.
-1. Edit the url to say `raidemulator.html` instead of `raidboss.html`.
-1. Copy and paste this edited url into Chrome.
+1. Start the WS Server via Plugins -> OverlayPlugin WSServer -> Stream/Local Overlay.
+
+If you're developing triggers for the cactbot repository, you can start a local development server via `npm run start` and load the overlay in Chrome via `http://127.0.0.1:8080/ui/raidboss/raidemulator.html?OVERLAY_WS=ws://127.0.0.1:10501/ws`
+
+If you're developing user triggers, you can load the overlay in Chrome via `https://quisquous.github.io/cactbot/ui/raidboss/raidemulator.html?OVERLAY_WS=ws://127.0.0.1:10501/ws`
+
+If you're trying to reproduce an issue, you can load the overlay in Chrome via `https://quisquous.github.io/cactbot/ui/raidboss/raidemulator.html`. You don't need the WS Server running in this case.
+
+Once you've got the overlay loaded, you can follow these instructions to use the emulator.
+
 1. Drag and drop a [network log](/docs/FAQ-Troubleshooting.md#how-to-find-a-network-log) onto the page.
 1. Select the zone and encounter, and then click `Load Encounter`.
 
-If the emulator is not working, check the console log in the inspector for errors. No buttons will work until it is connected to ACT via websocket.
+If the emulator is not working, check the console log in the inspector for errors.
 
 ![raidboss emulator screenshot](screenshots/raidboss_emulator.png)
 
@@ -290,7 +296,7 @@ It has more fleshed out support for some jobs but is *strongly* a Work In Progre
 | <img src="./resources/ffxiv/jobs/whm-large.png" width="30px" /><br> White Mage  |                                            Shows Heal&Blood Lily amount, time to next Lily, DoTs remaining time, and shows Assize&Lucid Dreaming cooldown.                                             |
 |   <img src="./resources/ffxiv/jobs/sch-large.png" width="30px" /><br> Scholar   |                                     Shows Aetherflow stacks, Fairy gauge amount/time remaining, DoTs remaining time, and shows Aetherflow&Lucid Dreaming cooldown.                                     |
 | <img src="./resources/ffxiv/jobs/ast-large.png" width="30px" /><br> Astrologian |                                    Shows Seals amount, notify who or whether to play the current card, DoTs remaining time, and shows Draw&Lucid Dreaming cooldown.                                    |
-|    <img src="./resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> Monk     |                                           Shows chakra count, <del>remaining greased lightning time</del> and form time, and tracks monk buffs and debuffs.                                            |
+|    <img src="./resources/ffxiv/jobs/mnk-large.png" width="30px" /><br> Monk     |                                                                  Shows chakra count and form time, and tracks monk buffs and debuffs.                                                                  |
 |   <img src="./resources/ffxiv/jobs/drg-large.png" width="30px" /><br> Dragoon   |                                           Shows blood&eye amount, remaining Disembowel time, jump cooldown, and Lance Charge&Dragon Sight duration/cooldown.                                           |
 |    <img src="./resources/ffxiv/jobs/nin-large.png" width="30px" /><br> Ninja    |                                   Shows Ninki amount, Huton remaining time, Trick Attack duration&cooldown, Bunshin&Mudras cooldown, and shows combo time remaining.                                   |
 |   <img src="./resources/ffxiv/jobs/sam-large.png" width="30px" /><br> Samurai   |                                    Shows Kenki amount, Meditation stacks, Shifu&Jinpu&Higanbana duration, Tsubame-gaeshi cooldown, and shows combo time remaining.                                     |
@@ -314,7 +320,7 @@ To use this module, point cactbot at **ui/eureka/eureka.html** or use the `Cactb
 
 This module provides automatic tracking of NMs that are popped or have been killed.  It shows gales/night timers and any local tracker link that has been pasted in chat.  Any flags in chat are also temporarily included on the map.
 
-It currently does not read the tracker information directly.  However, if you click on the left/red "Copy killed NMs" button in the tracker to copy the list of currently dead NMs, you can paste it in game, e.g. `/echo ? NMs on cooldown: Serket (7m) > Julika (24m) > Poly (54m)`
+It currently does not read the tracker information directly.  However, if you click on the left/red "Copy killed NMs" button in the tracker to copy the list of currently dead NMs, you can paste it in game, e.g. `/echo NMs on cooldown: Serket (7m) → Julika (24m) → Poly (54m)`
 
 If you do not see the emoji, make sure you have installed [this Windows update](https://support.microsoft.com/en-us/help/2729094/an-update-for-the-segoe-ui-symbol-font-in-windows-7-and-in-windows-ser).
 
@@ -354,7 +360,7 @@ The [xephero](ui/dps/xephero) dps meter is based on the same dps meter built for
 
 ![xephero screenshot](../../screenshots/xephero.png)
 
-The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and updated for Stormblood jobs and recolored to match [fflogs](http://fflogs.com).
+The [rdmty](ui/dps/rdmty) dps meter is based on the same dps meter for miniparse, and recolored to match [fflogs](http://fflogs.com).
 
 ![rdmty screenshot](screenshots/rdmty.png)
 
