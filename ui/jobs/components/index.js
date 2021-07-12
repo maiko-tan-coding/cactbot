@@ -4,7 +4,7 @@ import { setup as setupDrk, reset as resetDrk } from './drk';
 import { setup as setupGnb, reset as resetGnb } from './gnb';
 import { setup as setupWhm, reset as resetWhm } from './whm';
 import { setup as setupSch, reset as resetSch } from './sch';
-import { setup as setupAst, reset as resetAst } from './ast';
+import AstComponent, { setup as setupAst, reset as resetAst } from './ast';
 import { setup as setupMnk, reset as resetMnk } from './mnk';
 import { setup as setupDrg, reset as resetDrg } from './drg';
 import { setup as setupNin, reset as resetNin } from './nin';
@@ -12,7 +12,7 @@ import { setup as setupSam, reset as resetSam } from './sam';
 import { setup as setupBrd, reset as resetBrd } from './brd';
 import { setup as setupMch, reset as resetMch } from './mch';
 import { setup as setupDnc, reset as resetDnc } from './dnc';
-import { setup as setupBlm, reset as resetBlm } from './blm';
+import BlmComponent, { setup as setupBlm, reset as resetBlm } from './blm';
 import { setup as setupSmn, reset as resetSmn } from './smn';
 import { setup as setupRdm, reset as resetRdm } from './rdm';
 import { setup as setupBlu, reset as resetBlu } from './blu';
@@ -61,5 +61,12 @@ export function getReset(job) {
     'SMN': resetSmn,
     'RDM': resetRdm,
     'BLU': resetBlu,
+  }[job.toUpperCase()];
+}
+
+export function getComponent(job) {
+  return {
+    'AST': AstComponent,
+    'BLM': BlmComponent,
   }[job.toUpperCase()];
 }
